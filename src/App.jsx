@@ -6,6 +6,7 @@ import AdminAppBar from './components/admin/AppBar';
 import AdminHomePage from './pages/admin/HomePage';
 import CustomerAppBar from './components/customer/AppBar/AppBar';
 import CustomerHomePage from './pages/customer/HomePage';
+import { Cart } from './pages/customer/Cart';
 
 function App() {
   const authUser = null;
@@ -44,6 +45,8 @@ function App() {
         {authUser === null && <Route path="/login" element={<LoginPage />} />}
         <Route path="/" element={<CustomerHomePage />} />
         <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/cart" element={<Cart />} />
+        {/* <Route path="/cart/shipment" element={<Checkout />} /> */}
       </Routes>
     </>
   );
