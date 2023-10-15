@@ -23,6 +23,8 @@ export const updateCart =
         });
         return constant.success;
       }
+      if (allValues.length >= 20)
+        throw new Error('Number of item in cart reach limit (20)');
       await api.post(`/cart/${userId}`, { values: [updatedItem] }, config);
       await dispatch({
         type: constant.addProductToCart,

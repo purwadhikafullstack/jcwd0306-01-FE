@@ -14,7 +14,7 @@ function CartButton() {
       onMouseEnter={() => setShowCart(true)}
       onMouseLeave={() => setShowCart(false)}
     >
-      {cart ? (
+      {cart.length ? (
         <span
           className="text-light text-center position-absolute bg-danger z-2 text-decoration-none rounded-pill"
           style={{
