@@ -5,13 +5,16 @@ const config = {
   headers: { Authorization: `Bearer ${localStorage.getItem('auth')}` },
 };
 
+const findIndexinCart = (arr = [], item = {}) => {
+  const index = arr.findIndex((val) => val.productId === item.productId);
+  return index;
+};
+
 export const updateCart =
   (allValues = [], updatedItem = {}, userId = 0) =>
   async (dispatch) => {
     try {
-      const index = allValues.findIndex(
-        (val) => val.productId === updatedItem.productId
-      );
+      const index = findIndexinCart(allValues, updatedItem);
       const temp = [...allValues];
       if (index !== -1) {
         temp[index].quantity += updatedItem.quantity;

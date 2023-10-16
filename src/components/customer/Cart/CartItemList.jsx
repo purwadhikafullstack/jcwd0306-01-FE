@@ -45,7 +45,7 @@ export function CartItemList({ cart, product }) {
   }, [quantity, isChecked]);
 
   return (
-    <div key={product.productId}>
+    <div key={`product-${product.productId}`}>
       <div className="w-100 position-relative d-flex align-items-center">
         <input
           type="checkbox"

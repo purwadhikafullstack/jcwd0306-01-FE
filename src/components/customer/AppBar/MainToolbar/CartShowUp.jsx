@@ -22,7 +22,13 @@ export function CartShowUp({ showCart, setShowCart }) {
         zIndex: 2,
       }}
     >
-      <Row className="m-0 p-2">Keranjang ({cart.length})</Row>
+      <Row className="m-0 p-2">
+        {cart.length === 0 ? (
+          <span className="text-center">Empty</span>
+        ) : (
+          `Your Cart (${cart.length})`
+        )}
+      </Row>
       {cartItems.map((item) => (
         <Row
           className="m-0 px-1 py-2 border-top border-secondary-subtle"

@@ -49,13 +49,14 @@ function Cart() {
         <Col lg={7} md={7} className="d-flex flex-column gap-3">
           <div>
             <button
-              onClick={() => {
+              onClick={(e) => {
                 addItem(1);
                 addItem(2);
                 addItem(3);
                 addItem(4);
                 addItem(5);
                 addItem(6);
+                e.target.disabled = true;
               }}
             >
               Dummy Add Item to Card
@@ -65,7 +66,7 @@ function Cart() {
           <CartHeader />
           <StackBorder />
           {cart.length
-            ? cart.map((product, index) => (
+            ? cart.map((product) => (
                 <CartItemList product={product} cart={cart} />
               ))
             : 'No Items on Cart'}
