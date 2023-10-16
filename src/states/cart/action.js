@@ -35,6 +35,7 @@ export const updateCart =
       });
       return constant.success;
     } catch (err) {
+      if (err?.response?.data) return `This item is not available`;
       return err?.message;
     }
   };

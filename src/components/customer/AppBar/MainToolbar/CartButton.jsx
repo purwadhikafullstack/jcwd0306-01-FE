@@ -8,9 +8,8 @@ function CartButton() {
   const [showCart, setShowCart] = useState(false);
   const cart = useSelector((state) => state.cart);
   return (
-    <a
+    <div
       className="position-relative"
-      href="/cart"
       onMouseEnter={() => setShowCart(true)}
       onMouseLeave={() => setShowCart(false)}
     >
@@ -19,7 +18,7 @@ function CartButton() {
           className="text-light text-center position-absolute bg-danger z-2 text-decoration-none rounded-pill"
           style={{
             top: '1px',
-            right: '5px',
+            right: '0px',
             minWidth: '11px',
             height: '15px',
             fontSize: '11px',
@@ -29,11 +28,13 @@ function CartButton() {
           {cart.reduce((acc, val) => acc + val.quantity, 0)}
         </span>
       ) : null}
-      <IconButton color="text">
-        <ShoppingCartOutlined />
-      </IconButton>
+      <a href="/cart">
+        <IconButton color="text">
+          <ShoppingCartOutlined />
+        </IconButton>
+      </a>
       <CartShowUp showCart={showCart} setShowCart={setShowCart} />
-    </a>
+    </div>
   );
 }
 

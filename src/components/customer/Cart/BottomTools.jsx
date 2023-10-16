@@ -18,6 +18,7 @@ function BottomTools({
 }) {
   const dispatch = useDispatch();
   const [show, setShow] = useState('');
+
   return (
     <Row className="mx-0 my-2">
       <Col xs={12} md={5}>
@@ -65,6 +66,7 @@ function BottomTools({
             <input
               type="number"
               min={1}
+              max={stock}
               style={{
                 maxWidth: '50px',
                 border: 'none',

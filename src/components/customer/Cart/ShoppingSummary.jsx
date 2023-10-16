@@ -7,15 +7,31 @@ import '../../GlobalCSS.css';
 
 export function ShoppingSummary() {
   const { transactionItems } = useLocation();
-
   const nav = useNavigate();
   const cart = useSelector((state) => state.cart);
-  const totalPrice = cart
-    .filter((item) => item.isChecked)
-    .reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const totalDiscount = cart
-    .filter((item) => item.isChecked)
-    .reduce((acc, item) => acc + item.discount * item.quantity, 0);
+  const summaryTransaction = new Map([
+    [`totalPrice`, 0],
+    [`totalDiscount`, 0],
+  ]);
+
+  cart.forEach((item) => {
+    if (item.isChecked) {
+      summaryTransaction.set(
+        `totalPrice`,
+        summaryTransaction.get(`totalPrice`) +
+          item.Product.price * item.quantity
+      );
+      summaryTransaction.set(
+        `totalDiscount`,
+        summaryTransaction.get(`totalDiscount`) +
+          item.Product.discount * item.quantity
+      );
+    }
+  });
+
+  const totalPrice = summaryTransaction.get(`totalPrice`);
+  const totalDiscount = summaryTransaction.get(`totalDiscount`);
+
   const handleProceed = () => {
     if (window.location.pathname === `/cart`)
       return nav('/cart/shipment', {

@@ -12,7 +12,12 @@ function Alert() {
   };
 
   return (
-    <Snackbar open={alert.open} autoHideDuration={5000} onClose={handleClose}>
+    <Snackbar
+      open={alert.open}
+      autoHideDuration={5000}
+      onClose={handleClose}
+      anchorOrigin={{ vertical: `top`, horizontal: `center` }}
+    >
       <MuiAlert
         onClose={handleClose}
         severity={alert.status}

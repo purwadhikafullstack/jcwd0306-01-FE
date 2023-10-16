@@ -8,7 +8,7 @@ import checkBoxHandler from '../../../utils/checkBoxHandler';
 export function CartItemList({ cart, product }) {
   const [quantity, setQuantity] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
-  const stock = 200;
+  const { stock } = product;
   const dispatch = useDispatch();
   const editQuantity = async (number) => {
     setQuantity(quantity + number);
@@ -19,9 +19,11 @@ export function CartItemList({ cart, product }) {
   };
 
   const handleChangeQuantity = (e) => {
-    if (e.target.value < 2) return setQuantity(1);
-    if (e.target.value > stock) return setQuantity(stock);
-    return setQuantity(e.target.value);
+    if (Number(e.target.value) < 2) return setQuantity(1);
+    if (Number(e.target.value) > stock) {
+      return setQuantity(stock);
+    }
+    setQuantity(e.target.value);
   };
 
   useEffect(() => {
@@ -49,7 +51,7 @@ export function CartItemList({ cart, product }) {
       <div className="w-100 position-relative d-flex align-items-center">
         <input
           type="checkbox"
-          id={`checkbox-${product.productName}`}
+          id={`checkbox-${product.Product.name}`}
           name="cart-item-checkboxes"
           defaultChecked={product.isChecked}
           onChange={handleCheck}
@@ -61,13 +63,13 @@ export function CartItemList({ cart, product }) {
             width="100px"
           />
           <div className="d-flex flex-column gap-2">
-            <div>{product.productName}</div>
+            <div>{product.Product.name}</div>
             <div>Color / Variant / Stock: {stock} </div>
             <div>
               {quantity} item{quantity > 1 ? 's' : null} (
-              {product.weight * quantity} gram)
+              {product.Product.weight * quantity} gram)
             </div>
-            <div>Rp{product.price.toLocaleString(`id-ID`)}</div>
+            <div>Rp{product.Product.price.toLocaleString(`id-ID`)}</div>
           </div>
         </div>
       </div>
