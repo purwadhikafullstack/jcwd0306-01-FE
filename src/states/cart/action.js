@@ -40,8 +40,8 @@ export const deleteFromCart =
   (allValues = [], productId = 0 || [], userId = 0) =>
   async (dispatch) => {
     try {
+      const temp = typeof productId === `object` ? [] : [...allValues];
       const index = allValues.findIndex((val) => val.productId === productId);
-      const temp = [...allValues];
       if (index !== -1) {
         temp.splice(index, 1);
       }
@@ -57,13 +57,3 @@ export const deleteFromCart =
       return err?.message;
     }
   };
-
-export const resetCart = () => async (dispatch) => {
-  try {
-    await dispatch({ type: constant.resetCart });
-    // delete all items from API
-    return constant.success;
-  } catch (err) {
-    return err?.message;
-  }
-};

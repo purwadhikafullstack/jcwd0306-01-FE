@@ -1,8 +1,8 @@
 .card-summary {
   border-radius: 44px !important;
   border: 6px solid gainsboro;
-  position: sticky;
-  top: 5vh;
+  position: sticky !important;
+  top: 145px;
 }
 
 input::-webkit-outer-spin-button,

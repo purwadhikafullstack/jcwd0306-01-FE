@@ -5,11 +5,17 @@ import { StackBorder } from './StackBorder';
 import './Cart.css';
 import '../../GlobalCSS.css';
 
-export function ShoppingSummary({ summaryTransaction }) {
+export function ShoppingSummary() {
   const { transactionItems } = useLocation();
 
   const nav = useNavigate();
   const cart = useSelector((state) => state.cart);
+  const totalPrice = cart
+    .filter((item) => item.isChecked)
+    .reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const totalDiscount = cart
+    .filter((item) => item.isChecked)
+    .reduce((acc, item) => acc + item.discount * item.quantity, 0);
   const handleProceed = () => {
     if (window.location.pathname === `/cart`)
       return nav('/cart/shipment', {
@@ -28,14 +34,14 @@ export function ShoppingSummary({ summaryTransaction }) {
           <ListGroup.Item className="px-0">
             <span>Total Price:</span>
             <span className="float-end text-right">
-              Rp{summaryTransaction.totalPrice.toLocaleString(`id-ID`)}
+              Rp{totalPrice.toLocaleString(`id-ID`)}
             </span>
           </ListGroup.Item>
           <ListGroup.Item className="px-0">
             <span>Discount:</span>
             <span className="float-end text-right">
               Rp
-              {summaryTransaction.totalDiscount.toLocaleString(`id-ID`)}
+              {totalDiscount.toLocaleString(`id-ID`)}
             </span>
           </ListGroup.Item>
           <StackBorder />
@@ -43,9 +49,7 @@ export function ShoppingSummary({ summaryTransaction }) {
             <span>Grand total:</span>
             <span className="float-end text-right">
               Rp
-              {(
-                summaryTransaction.totalDiscount + summaryTransaction.totalPrice
-              ).toLocaleString(`id-ID`)}
+              {(totalDiscount + totalPrice).toLocaleString(`id-ID`)}
             </span>
           </ListGroup.Item>
           <ListGroup.Item className="px-0">Promo Code: takada</ListGroup.Item>

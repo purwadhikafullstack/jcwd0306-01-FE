@@ -1,14 +1,15 @@
 import '../../components/customer/Cart/Cart.css';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
-import { Alert, AlertTitle } from '@mui/material';
+import { useEffect } from 'react';
 import { updateCart } from '../../states/cart/action';
 import { CartItemList } from '../../components/customer/Cart/CartItemList';
 import { StackBorder } from '../../components/customer/Cart/StackBorder';
 import { CartHeader } from '../../components/customer/Cart/CartHeader';
 import { ShoppingSummary } from '../../components/customer/Cart/ShoppingSummary';
 import { setAlertActionCreator } from '../../states/alert/action';
+import checkBoxHandler from '../../utils/checkBoxHandler';
+import { MobileShoppingSummary } from '../../components/customer/Cart/MobileShoppingSummary';
 
 function Cart() {
   const cart = useSelector((state) => state.cart);
@@ -34,16 +35,18 @@ function Cart() {
         setAlertActionCreator({ val: { status: 'error', message: result } })
       );
   }
-  const [summaryTransaction, setSummaryTransaction] = useState({
-    totalPrice: 0,
-    totalDiscount: 0,
-    items: [],
-  });
+
+  useEffect(() => {
+    checkBoxHandler(`cart-item-checkboxes`, `check-all-products`);
+  }, [cart]);
 
   return (
-    <Container className="mx-auto p-0 mt-3">
-      <Row className="m-0 d-flex justify-content-center">
-        <Col lg={7} className="d-flex flex-column gap-3">
+    <Container className="mx-auto p-0 mt-3" fluid="lg">
+      <Row
+        className="m-0 d-flex justify-content-center"
+        style={{ minHeight: '77vh' }}
+      >
+        <Col lg={7} md={7} className="d-flex flex-column gap-3">
           <div>
             <button
               onClick={() => {
@@ -63,20 +66,17 @@ function Cart() {
           <StackBorder />
           {cart.length
             ? cart.map((product, index) => (
-                <CartItemList
-                  product={product}
-                  index={index}
-                  summaryTransaction={summaryTransaction}
-                  setSummaryTransaction={setSummaryTransaction}
-                  cart={cart}
-                />
+                <CartItemList product={product} cart={cart} />
               ))
             : 'No Items on Cart'}
         </Col>
-        <Col lg={4} className="position-relative d-none d-md-block">
-          <ShoppingSummary summaryTransaction={summaryTransaction} />
+        <Col lg={4} md={4} className="position-relative d-none d-md-block">
+          <ShoppingSummary />
         </Col>
       </Row>
+      <div className="sticky-bottom d-sm-block d-md-none bg-white px-2 pt-1 pb-3 border-top border-secondary-subtle">
+        <MobileShoppingSummary />
+      </div>
     </Container>
   );
 }

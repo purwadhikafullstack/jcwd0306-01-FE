@@ -5,14 +5,9 @@ import { updateCart } from '../../../states/cart/action';
 import BottomTools from './BottomTools';
 import checkBoxHandler from '../../../utils/checkBoxHandler';
 
-export function CartItemList({
-  cart,
-  product,
-  setSummaryTransaction,
-  summaryTransaction,
-}) {
+export function CartItemList({ cart, product }) {
   const [quantity, setQuantity] = useState(0);
-  const [isChecked, setIsChecked] = useState(product.isChecked);
+  const [isChecked, setIsChecked] = useState(false);
   const stock = 200;
   const dispatch = useDispatch();
   const editQuantity = async (number) => {
@@ -20,46 +15,33 @@ export function CartItemList({
   };
   const handleCheck = (e) => {
     setIsChecked(e.target.checked);
-    const price = summaryTransaction.totalPrice;
-    const discount = summaryTransaction.totalDiscount;
-    const addPrice = product.price * product.quantity;
-    const addDiscount = product.discount * product.quantity;
-    if (e.target.checked)
-      setSummaryTransaction({
-        ...summaryTransaction,
-        totalPrice: price + addPrice,
-        totalDiscount: discount + addDiscount,
-      });
-    if (!e.target.checked)
-      setSummaryTransaction({
-        ...summaryTransaction,
-        totalPrice: price - addPrice,
-        totalDiscount: discount - addDiscount,
-      });
     checkBoxHandler(`cart-item-checkboxes`, `check-all-products`);
   };
 
   const handleChangeQuantity = (e) => {
     if (e.target.value < 2) return setQuantity(1);
     if (e.target.value > stock) return setQuantity(stock);
-    setQuantity(e.target.value);
+    return setQuantity(e.target.value);
   };
 
   useEffect(() => {
     setQuantity(product.quantity);
-  }, [product.quantity]);
+    setIsChecked(product.isChecked);
+  }, [product]);
 
   useEffect(() => {
     const temp = { ...product };
     temp.quantity = quantity - product.quantity;
-    temp.isChecked = isChecked;
-    const updateItem = setTimeout(async () => {
-      await dispatch(updateCart(cart, temp, 1));
-    }, 700);
-
-    return () => {
-      clearTimeout(updateItem);
-    };
+    if (temp.quantity !== 0 || temp.isChecked !== isChecked) {
+      // if no changes then dont update state and DB
+      temp.isChecked = isChecked;
+      const updateItem = setTimeout(async () => {
+        await dispatch(updateCart(cart, temp, 1));
+      }, 500);
+      return () => {
+        clearTimeout(updateItem);
+      };
+    }
   }, [quantity, isChecked]);
 
   return (
@@ -69,7 +51,7 @@ export function CartItemList({
           type="checkbox"
           id={`checkbox-${product.productName}`}
           name="cart-item-checkboxes"
-          checked={isChecked}
+          defaultChecked={product.isChecked}
           onChange={handleCheck}
         />
         <div className="d-flex gap-2">
