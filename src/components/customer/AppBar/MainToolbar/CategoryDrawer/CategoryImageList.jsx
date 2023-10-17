@@ -6,60 +6,10 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-
-const categories = [
-  {
-    id: 1,
-    name: 'Smartphone',
-  },
-  {
-    id: 2,
-    name: 'Laptop',
-  },
-  {
-    id: 3,
-    name: 'Smartwatch',
-  },
-  {
-    id: 4,
-    name: 'Mini PC',
-  },
-  {
-    id: 5,
-    name: 'Smartband',
-  },
-  {
-    id: 6,
-    name: 'Komputer',
-  },
-  {
-    id: 7,
-    name: 'Smartphone',
-  },
-  {
-    id: 8,
-    name: 'Laptop',
-  },
-  {
-    id: 9,
-    name: 'Smartwatch',
-  },
-  {
-    id: 10,
-    name: 'Mini PC',
-  },
-  {
-    id: 11,
-    name: 'Smartband',
-  },
-  {
-    id: 12,
-    name: 'Komputer',
-  },
-];
+import { useSelector } from 'react-redux';
 
 function CategoryImageList() {
-  //   const categories = useSelector((states) => states.categories);
+  const categories = useSelector((states) => states.categories);
   const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
 
@@ -82,10 +32,9 @@ function CategoryImageList() {
           sx={{ p: 0, borderRadius: 1, overflow: 'clip', boxShadow: 3 }}
         >
           <img
-            // src={`${import.meta.env.VITE_API_BASE_URL}/api/categories/${
-            //   category.id
-            // }/image`}
-            src="https://source.unsplash.com/random"
+            src={`${import.meta.env.VITE_API_BASE_URL}/categories/${
+              category.id
+            }/image`}
             alt={category.name}
             loading="lazy"
           />

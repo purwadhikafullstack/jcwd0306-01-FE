@@ -1,12 +1,19 @@
 import { AppBar as MuiAppBar } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import TopToolBar from './TopToolbar/TopToolbar';
 import BottomToolbar from './BottomToolbar/BottomToolbar';
 import MainToolbar from './MainToolbar/MainToolbar';
 import CategoryDrawer from './MainToolbar/CategoryDrawer/CategoryDrawer';
+import { asyncGetCategories } from '../../../states/categories/action';
 
 function AppBar() {
+  const dispatch = useDispatch();
   const [isCategoryDrawerOpen, setIsCategoryDrawerOpen] = useState(false);
+
+  useEffect(() => {
+    dispatch(asyncGetCategories());
+  }, [dispatch]);
 
   return (
     <>
