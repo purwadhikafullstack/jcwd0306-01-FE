@@ -28,7 +28,7 @@ export function ModalEditAndAddAddress({ open, setOpen }) {
             autoFocus
             margin="dense"
             id="address-label"
-            label="Address Label (e.g. Central Tower)"
+            label="Address Label (e.g. Central Tower or Rumah Kakak)"
             type="text"
             fullWidth
             variant="standard"
