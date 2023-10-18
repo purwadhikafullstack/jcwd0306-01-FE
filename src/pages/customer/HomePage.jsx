@@ -1,6 +1,20 @@
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Stack } from '@mui/material';
+import { asyncGetCategories } from '../../states/categories/action';
+import ContainerCategoryTab from '../../components/customer/HomePage/ContainerCategoryTab';
+
 function HomePage() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(asyncGetCategories());
+  }, [dispatch]);
+
   return (
-    <div className="vh-100 vw-100 d-flex align-items-center justify-content-center" />
+    <Stack>
+      <ContainerCategoryTab />
+    </Stack>
   );
 }
 
