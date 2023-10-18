@@ -1,22 +1,22 @@
 import { Button, Card, ListGroup } from 'react-bootstrap';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { StackBorder } from './StackBorder';
 import './Cart.css';
 import '../../GlobalCSS.css';
+import { cartCalculator } from './cartCalculator';
 
-export function ShoppingSummary({ summaryTransaction }) {
-  const { transactionItems } = useLocation();
-
-  const nav = useNavigate();
+export function ShoppingSummary({ address }) {
+  const directBuyItem = useLocation().state;
   const cart = useSelector((state) => state.cart);
-  const handleProceed = () => {
-    if (window.location.pathname === `/cart`)
-      return nav('/cart/shipment', {
-        transactionItems: [cart.filter((item) => item.isChecked)],
-      });
-    // send to API create transaction
-  };
+  const summaryTransaction = new Map([
+    [`totalPrice`, 0],
+    [`totalDiscount`, 0],
+    [`totalItems`, 0],
+  ]);
+  cartCalculator(cart, summaryTransaction, directBuyItem);
+  const totalPrice = summaryTransaction.get(`totalPrice`);
+  const totalDiscount = summaryTransaction.get(`totalDiscount`);
 
   return (
     <Card className="p-1 card-summary">
@@ -28,14 +28,14 @@ export function ShoppingSummary({ summaryTransaction }) {
           <ListGroup.Item className="px-0">
             <span>Total Price:</span>
             <span className="float-end text-right">
-              Rp{summaryTransaction.totalPrice.toLocaleString(`id-ID`)}
+              Rp{totalPrice.toLocaleString(`id-ID`)}
             </span>
           </ListGroup.Item>
           <ListGroup.Item className="px-0">
             <span>Discount:</span>
             <span className="float-end text-right">
               Rp
-              {summaryTransaction.totalDiscount.toLocaleString(`id-ID`)}
+              {totalDiscount.toLocaleString(`id-ID`)}
             </span>
           </ListGroup.Item>
           <StackBorder />
@@ -43,16 +43,18 @@ export function ShoppingSummary({ summaryTransaction }) {
             <span>Grand total:</span>
             <span className="float-end text-right">
               Rp
-              {(
-                summaryTransaction.totalDiscount + summaryTransaction.totalPrice
-              ).toLocaleString(`id-ID`)}
+              {(totalDiscount + totalPrice).toLocaleString(`id-ID`)}
             </span>
           </ListGroup.Item>
           <ListGroup.Item className="px-0">Promo Code: takada</ListGroup.Item>
         </ListGroup>
-        <Button className="normal-button" onClick={handleProceed}>
-          {window.location.pathname === '/cart' ? 'Proceed' : 'Payment Option'}
-        </Button>
+        <a href="/cart/shipment">
+          <Button className="normal-button">
+            {window.location.pathname === '/cart'
+              ? 'Proceed'
+              : 'Payment Option'}
+          </Button>
+        </a>
       </Card.Body>
     </Card>
   );

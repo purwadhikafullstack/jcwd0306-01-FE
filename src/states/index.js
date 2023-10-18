@@ -4,6 +4,7 @@ import thunk from 'redux-thunk';
 import alertReducer from './alert/reducer';
 import categoriesReducer from './categories/reducer';
 import cartReducer from './cart/reducer';
+import { addressReducer, selectedAddressReducer } from './userAddress/reducer';
 
 const store = configureStore({
   reducer: {
@@ -11,6 +12,8 @@ const store = configureStore({
     alert: alertReducer,
     categories: categoriesReducer,
     cart: cartReducer,
+    address: addressReducer,
+    selectedAddress: selectedAddressReducer,
   },
   middleware: [thunk],
 });
