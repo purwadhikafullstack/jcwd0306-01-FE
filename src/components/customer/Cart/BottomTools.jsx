@@ -18,9 +18,15 @@ function BottomTools({
 }) {
   const dispatch = useDispatch();
   const [show, setShow] = useState('');
+  const userSelector = { id: 5 };
 
   return (
-    <Row className="mx-0 my-2">
+    <Row
+      className="m-0"
+      style={{
+        display: window.location.pathname === '/cart' ? 'flex' : 'none',
+      }}
+    >
       <Col xs={12} md={5}>
         Write a note
       </Col>
@@ -37,7 +43,9 @@ function BottomTools({
           </button>
           <ConfirmationModal
             action={async () => {
-              await dispatch(deleteFromCart(cart, product.productId, 1));
+              await dispatch(
+                deleteFromCart(cart, product.productId, userSelector.id)
+              );
               setShow(false);
             }}
             setShow={setShow}

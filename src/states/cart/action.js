@@ -46,9 +46,7 @@ export const deleteFromCart =
     try {
       const temp = typeof productId === `object` ? [] : [...allValues];
       const index = allValues.findIndex((val) => val.productId === productId);
-      if (index !== -1) {
-        temp.splice(index, 1);
-      }
+      temp.splice(index, 1);
       await api.delete(`/cart/${userId}`, {
         params: { productId },
       });

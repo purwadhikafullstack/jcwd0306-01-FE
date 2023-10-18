@@ -11,6 +11,7 @@ import CustomerHomePage from './pages/customer/HomePage';
 import { Cart } from './pages/customer/Cart';
 import api from './constants/api';
 import { constant } from './constants/constant';
+import { Checkout } from './pages/customer/Checkout';
 
 function App() {
   const authUser = null;
@@ -22,7 +23,7 @@ function App() {
 
   // TEMPORARY AJA, nunggu login jadi
   const fetchCartItem = async () => {
-    const { data } = await api.get(`/cart/1`);
+    const { data } = await api.get(`/cart/5`);
     dispatch({ type: constant.updateProductOnCart, payload: data });
   };
   useEffect(() => {
@@ -60,7 +61,7 @@ function App() {
         <Route path="/" element={<CustomerHomePage />} />
         <Route path="*" element={<Navigate to="/" />} />
         <Route path="/cart" element={<Cart />} />
-        {/* <Route path="/cart/shipment" element={<Checkout />} /> */}
+        <Route path="/cart/shipment" element={<Checkout />} />
       </Routes>
     </>
   );

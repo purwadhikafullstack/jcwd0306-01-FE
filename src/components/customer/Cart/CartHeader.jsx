@@ -7,6 +7,7 @@ function CartHeader() {
   const dispatch = useDispatch();
   const [show, setShow] = useState('');
   const cart = useSelector((state) => state.cart);
+  const userSelector = { id: 5 };
 
   const toggleCheck = async (e) => {
     const statusChecked = e.target.checked;
@@ -28,7 +29,7 @@ function CartHeader() {
       deleteFromCart(
         cart,
         cart.map((val) => val.productId),
-        1
+        userSelector.id
       )
     );
     setShow('');

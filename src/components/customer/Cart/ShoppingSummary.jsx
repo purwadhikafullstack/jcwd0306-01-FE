@@ -1,44 +1,22 @@
 import { Button, Card, ListGroup } from 'react-bootstrap';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { StackBorder } from './StackBorder';
 import './Cart.css';
 import '../../GlobalCSS.css';
+import { cartCalculator } from './cartCalculator';
 
-export function ShoppingSummary() {
-  const { transactionItems } = useLocation();
-  const nav = useNavigate();
+export function ShoppingSummary({ address }) {
+  const directBuyItem = useLocation().state;
   const cart = useSelector((state) => state.cart);
   const summaryTransaction = new Map([
     [`totalPrice`, 0],
     [`totalDiscount`, 0],
+    [`totalItems`, 0],
   ]);
-
-  cart.forEach((item) => {
-    if (item.isChecked) {
-      summaryTransaction.set(
-        `totalPrice`,
-        summaryTransaction.get(`totalPrice`) +
-          item.Product.price * item.quantity
-      );
-      summaryTransaction.set(
-        `totalDiscount`,
-        summaryTransaction.get(`totalDiscount`) +
-          item.Product.discount * item.quantity
-      );
-    }
-  });
-
+  cartCalculator(cart, summaryTransaction, directBuyItem);
   const totalPrice = summaryTransaction.get(`totalPrice`);
   const totalDiscount = summaryTransaction.get(`totalDiscount`);
-
-  const handleProceed = () => {
-    if (window.location.pathname === `/cart`)
-      return nav('/cart/shipment', {
-        transactionItems: [cart.filter((item) => item.isChecked)],
-      });
-    // send to API create transaction
-  };
 
   return (
     <Card className="p-1 card-summary">
@@ -70,9 +48,13 @@ export function ShoppingSummary() {
           </ListGroup.Item>
           <ListGroup.Item className="px-0">Promo Code: takada</ListGroup.Item>
         </ListGroup>
-        <Button className="normal-button" onClick={handleProceed}>
-          {window.location.pathname === '/cart' ? 'Proceed' : 'Payment Option'}
-        </Button>
+        <a href="/cart/shipment">
+          <Button className="normal-button">
+            {window.location.pathname === '/cart'
+              ? 'Proceed'
+              : 'Payment Option'}
+          </Button>
+        </a>
       </Card.Body>
     </Card>
   );

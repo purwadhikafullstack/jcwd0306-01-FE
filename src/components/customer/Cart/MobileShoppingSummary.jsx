@@ -1,12 +1,15 @@
 import { Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import '../../GlobalCSS.css';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useState } from 'react';
 import MobileShoppingSummaryDialog from './MobileShoppingSummaryDialog';
+import { cartCalculator } from './cartCalculator';
 
-export function MobileShoppingSummary() {
+export function MobileShoppingSummary({ address }) {
   const [show, setShow] = useState(false);
+  const directBuyItem = useLocation().state;
   const cart = useSelector((state) => state.cart).filter(
     (item) => item.isChecked
   );
@@ -15,25 +18,7 @@ export function MobileShoppingSummary() {
     [`totalDiscount`, 0],
     [`totalItems`, 0],
   ]);
-  cart.forEach((item) => {
-    if (item.isChecked) {
-      summaryTransaction.set(
-        `totalPrice`,
-        summaryTransaction.get(`totalPrice`) +
-          item.Product.price * item.quantity
-      );
-      summaryTransaction.set(
-        `totalDiscount`,
-        summaryTransaction.get(`totalDiscount`) +
-          item.Product.discount * item.quantity
-      );
-      summaryTransaction.set(
-        `totalItems`,
-        summaryTransaction.get(`totalItems`) + item.quantity
-      );
-    }
-  });
-
+  cartCalculator(cart, summaryTransaction, directBuyItem);
   const totalPrice = summaryTransaction.get(`totalPrice`);
   const totalDiscount = summaryTransaction.get(`totalDiscount`);
 
@@ -63,7 +48,9 @@ export function MobileShoppingSummary() {
             <KeyboardArrowUpIcon />
           </div>
         </div>
-        <Button className="normal-button">Proceed</Button>
+        <a href="/cart/shipment">
+          <Button className="normal-button">Proceed</Button>
+        </a>
       </div>
     </div>
   );

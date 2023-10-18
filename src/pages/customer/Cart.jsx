@@ -20,7 +20,7 @@ function Cart() {
     <Container className="mx-auto p-0 mt-3" fluid="lg">
       <Row
         className="m-0 d-flex justify-content-center"
-        style={{ minHeight: '77vh' }}
+        style={{ minHeight: '82vh' }}
       >
         <Col lg={7} md={7} className="d-flex flex-column gap-3">
           <CartHeader />
@@ -31,11 +31,11 @@ function Cart() {
               ))
             : 'No Items on Cart'}
         </Col>
-        <Col lg={4} md={4} className="position-relative d-none d-md-block">
+        <Col lg={4} md={5} className="position-relative d-none d-md-block">
           <ShoppingSummary />
         </Col>
       </Row>
-      <div className="sticky-bottom d-sm-block d-md-none bg-white px-2 pt-1 pb-3 border-top border-secondary-subtle">
+      <div className="sticky-bottom d-sm-block d-md-none bg-white px-2 pt-1 pb-3 border-top border-secondary-subtle h-100">
         <MobileShoppingSummary />
       </div>
     </Container>
