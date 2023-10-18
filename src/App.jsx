@@ -12,6 +12,8 @@ import { Cart } from './pages/customer/Cart';
 import api from './constants/api';
 import { constant } from './constants/constant';
 import { Checkout } from './pages/customer/Checkout';
+import { Register } from './pages/register';
+import { Verify } from './pages/verify';
 
 function App() {
   const authUser = null;
@@ -61,6 +63,8 @@ function App() {
         <Route path="/" element={<CustomerHomePage />} />
         <Route path="*" element={<Navigate to="/" />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/verify" element={<Verify />} />
         <Route path="/cart/shipment" element={<Checkout />} />
       </Routes>
     </>
