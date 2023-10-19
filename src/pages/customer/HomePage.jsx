@@ -1,10 +1,11 @@
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import LogoutUser from '../../components/LogoutUser';
 
 function HomePage() {
   const nav = useNavigate();
   return (
-    <div className="vh-100 vw-100 d-flex align-items-center justify-content-center">
+    <div className="vh-100 vw-100 d-flex align-items-center justify-content-center flex-column">
       <Button
         onClick={() => {
           nav(`/cart/shipment`, {
@@ -23,6 +24,7 @@ function HomePage() {
       >
         Dummy Direct Buy
       </Button>
+      <LogoutUser />
     </div>
   );
 }

@@ -2,12 +2,19 @@ import { Box, Button, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-import api from '../constants/api';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import google from '../assets/google.png';
+import line from '../assets/line 2.png';
+import { asyncSetAuthUser } from '../states/authUser/action';
 
 const apiUrl = import.meta.env.VITE_FE_BASE_URL;
 
 function LoginPage() {
   const nav = useNavigate();
+  const dispatch = useDispatch();
+  const [isButtonDisabled, setButtonDisabled] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -17,18 +24,29 @@ function LoginPage() {
       email: Yup.string().email('Invalid email address').required('Required'),
       password: Yup.string()
         .min(8, 'at least 8 characters')
-        .required('Required')
-        .minUppercase(1, 'at least 1 capital letter')
-        .minNumbers(1, 'at least 1 number'),
+        .required('Required'),
+      // .minUppercase(1, 'at least 1 capital letter')
+      // .minNumbers(1, 'at least 1 number'),
     }),
     onSubmit: async () => {
       try {
-        await api.post('/user/login', formik.values);
+        setButtonDisabled(true);
+        // await api.post('/user/login', formik.values);
+
+        // dispatch here
+        const authData = {
+          email: formik.values.email,
+          password: formik.values.password,
+        };
+
+        dispatch(asyncSetAuthUser(authData));
 
         alert('success login');
-        return nav('/');
+        nav('/');
       } catch (err) {
         console.log(err?.message);
+      } finally {
+        setButtonDisabled(false);
       }
     },
   });
@@ -73,7 +91,7 @@ function LoginPage() {
             fontWeight="400"
             fontSize={12}
           >
-            don't have account yet?&nbsp;&nbsp;
+            don`t have account yet?&nbsp;&nbsp;
             <a
               href={`${apiUrl}/register`}
               style={{ color: 'green', textDecoration: 'none' }}
@@ -81,6 +99,49 @@ function LoginPage() {
               Register
             </a>
           </Typography>
+
+          <Box
+            display="flex"
+            mt={2}
+            alignItems="center"
+            p={1}
+            border="1px solid grey"
+            borderRadius={5}
+            sx={{ cursor: 'pointer' }}
+            onClick={() => alert('hello')}
+          >
+            <img
+              src={google}
+              alt=""
+              style={{ maxWidth: '100%', height: 'auto', width: '30px' }}
+            />
+            <Typography flex={1} textAlign="center">
+              Google
+            </Typography>
+          </Box>
+          <Box display="flex" justifyContent="center" mt={2}>
+            <img
+              src={line}
+              alt=""
+              style={{
+                maxWidth: '100%',
+                height: 'auto',
+                width: '80px',
+                marginRight: '8px',
+              }}
+            />
+            <span style={{ fontSize: '13px' }}>atau login dengan</span>
+            <img
+              src={line}
+              alt=""
+              style={{
+                maxWidth: '100%',
+                height: 'auto',
+                width: '80px',
+                marginLeft: '5px',
+              }}
+            />
+          </Box>
 
           <TextField
             onChange={(e) => inputHandler(e, 'email')}
@@ -116,6 +177,7 @@ function LoginPage() {
             style={{ marginTop: '10px', width: '100%', height: '50px' }}
             size="large"
             onClick={formik.handleSubmit}
+            disabled={isButtonDisabled}
           >
             Sign In
           </Button>
@@ -125,4 +187,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export { LoginPage };

@@ -1,8 +1,8 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-// import google from '../assets/google.png';
-// import line from '../assets/line 2.png';
+import google from '../assets/google.png';
+import line from '../assets/line 2.png';
 import api from '../constants/api';
 // import { setAlertActionCreator } from '../states/alert/action';
 // import GGLogo from '../assets/GadgetGallery Logo 2.png';
@@ -103,7 +103,7 @@ function Register() {
               Sign In
             </a>
           </Typography>
-          {/* <Box
+          <Box
             display="flex"
             mt={2}
             alignItems="center"
@@ -121,8 +121,8 @@ function Register() {
             <Typography flex={1} textAlign="center">
               Google
             </Typography>
-          </Box> */}
-          {/* <Box display="flex" justifyContent="center" mt={2}>
+          </Box>
+          <Box display="flex" justifyContent="center" mt={2}>
             <img
               src={line}
               alt=""
@@ -144,7 +144,7 @@ function Register() {
                 marginLeft: '5px',
               }}
             />
-          </Box> */}
+          </Box>
           <TextField
             onChange={(e) => inputHandler(e, 'email')}
             id="outlined-basic"
