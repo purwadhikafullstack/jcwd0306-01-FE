@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import LoginPage from './pages/LoginPage';
+import { LoginPage } from './pages/LoginPage';
 import Alert from './components/Alert';
 import LoadingBar from './components/LoadingBar';
 import AdminAppBar from './components/admin/AppBar';
