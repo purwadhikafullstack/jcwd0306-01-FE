@@ -26,12 +26,12 @@ export function CartItemList({ cart, product }) {
     if (Number(e.target.value) > stock) {
       return setQuantity(stock);
     }
-    setQuantity(e.target.value);
+    return setQuantity(e.target.value);
   };
 
   useEffect(() => {
-    setQuantity(product.quantity);
-    setIsChecked(product.isChecked);
+    setQuantity(product?.quantity);
+    setIsChecked(product?.isChecked);
   }, [product]);
 
   useEffect(() => {
@@ -50,14 +50,14 @@ export function CartItemList({ cart, product }) {
   }, [quantity, isChecked]);
 
   return (
-    <div key={`product-${product.productId}`}>
+    <div>
       <div className="w-100 position-relative d-flex align-items-center">
         {window.location.pathname === `/cart` ? (
           <input
             type="checkbox"
-            id={`checkbox-${product.Product.name}`}
+            id={`checkbox-${product?.Product?.name}`}
             name="cart-item-checkboxes"
-            defaultChecked={product.isChecked}
+            defaultChecked={product?.isChecked}
             onChange={handleCheck}
           />
         ) : null}
@@ -69,7 +69,7 @@ export function CartItemList({ cart, product }) {
           />
           <div className="d-flex flex-column gap-2">
             <div>
-              <b>{product.Product.name}</b>
+              <b>{product?.Product?.name}</b>
             </div>
             <div>Color / Variant / Stock: {stock} </div>
             <div>
@@ -77,7 +77,7 @@ export function CartItemList({ cart, product }) {
               {product.Product.weight * quantity} gram)
             </div>
             <div>
-              <b>Rp{product.Product.price.toLocaleString(`id-ID`)}</b>
+              <b>Rp{product?.Product?.price.toLocaleString(`id-ID`)}</b>
             </div>
           </div>
         </div>

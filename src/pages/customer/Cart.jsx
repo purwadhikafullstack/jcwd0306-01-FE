@@ -27,7 +27,11 @@ function Cart() {
           <StackBorder />
           {cart.length
             ? cart.map((product) => (
-                <CartItemList product={product} cart={cart} />
+                <CartItemList
+                  product={product}
+                  cart={cart}
+                  key={product.productId}
+                />
               ))
             : 'No Items on Cart'}
         </Col>

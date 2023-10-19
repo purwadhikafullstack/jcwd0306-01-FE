@@ -6,6 +6,8 @@ export function ListAddress({
   handleListItemClick,
   index,
   destination,
+  setAddressToEdit,
+  setOpen,
 }) {
   return (
     <ListItemButton
@@ -46,7 +48,12 @@ export function ListAddress({
         <div className="mt-1">
           <Button
             style={{ fontSize: '0.8em' }}
-            onClick={(e) => console.log(`click`)}
+            onClick={() => {
+              const tempAddress = { ...destination };
+              tempAddress.index = index;
+              setAddressToEdit(tempAddress);
+              setOpen('EDIT ADDRESS');
+            }}
           >
             Edit
           </Button>
@@ -55,7 +62,7 @@ export function ListAddress({
               fontSize: '0.8em',
               display: destination?.isDefault ? 'none' : 'inline',
             }}
-            onClick={(e) => console.log(`click`)}
+            onClick={() => console.log(`click`)}
           >
             Set as Main Address
           </Button>

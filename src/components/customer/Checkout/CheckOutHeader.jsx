@@ -11,6 +11,7 @@ export function CheckOutHeader({
   setAddress,
 }) {
   const [showModal, setShowModal] = useState('');
+  const [addressToEdit, setAddressToEdit] = useState({});
 
   return (
     <>
@@ -18,7 +19,11 @@ export function CheckOutHeader({
       <div className="border-bottom border-secondary-subtle">
         <div>Shipping address</div>
         <hr />
-        <Address address={address} />
+        {address?.id ? (
+          <Address address={address} />
+        ) : (
+          <div className="mb-3">No address found</div>
+        )}
       </div>
       <div className="d-flex gap-2">
         <Button
@@ -37,8 +42,13 @@ export function CheckOutHeader({
         addresses={addresses}
         setAddress={setAddress}
         setAddresses={setAddresses}
+        setAddressToEdit={setAddressToEdit}
       />
-      <ModalEditAndAddAddress open={showModal} setOpen={setShowModal} />
+      <ModalEditAndAddAddress
+        open={showModal}
+        setOpen={setShowModal}
+        addressToEdit={addressToEdit}
+      />
     </>
   );
 }

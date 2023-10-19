@@ -30,7 +30,7 @@ export function CartShowUp({ showCart, setShowCart }) {
         </a>
       </Row>
       {cart.map((item) => (
-        <CartItemLine item={item} />
+        <CartItemLine item={item} key={item.productId} />
       ))}
     </Card>
   );

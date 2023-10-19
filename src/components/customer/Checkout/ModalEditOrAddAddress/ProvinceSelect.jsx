@@ -1,51 +1,63 @@
-import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useEffect, useState } from 'react';
 import api from '../../../../constants/api';
 
-export default function ProvinceSelect() {
+function provinceSetter(e, value, addressFormik) {
+  addressFormik.setFieldValue('cityId', 0);
+  addressFormik.setFieldValue('City', { name: '' });
+  if (value === null) {
+    addressFormik.setFieldValue('provinceId', 0);
+    addressFormik.setFieldValue('Province', { name: '' });
+    return;
+  }
+  addressFormik.setFieldValue('provinceId', value?.id);
+  addressFormik.setFieldValue('Province', { name: e.target.innerText });
+}
+
+export default function ProvinceSelect({ addressFormik }) {
   const [provinces, setProvinces] = useState([]);
-  [];
-  const fetchProvinces = async (provinceName) => {
+  const [searchProvince, setSearchProvince] = useState('');
+  const [val, setVal] = useState({ id: 0, name: '' });
+  const fetchProvinces = async (provinceName = '') => {
     const { data } = await api.get(`/province?name=${provinceName}`);
     setProvinces(data);
   };
 
   useEffect(() => {
-    fetchProvinces();
-  }, []);
+    const fetch = setTimeout(() => {
+      fetchProvinces(searchProvince);
+    }, 500);
+
+    return () => clearTimeout(fetch);
+  }, [searchProvince]);
+  useEffect(() => {
+    const { provinceId } = addressFormik.values;
+    setVal({
+      id: provinceId,
+      name: addressFormik.values.Province?.name,
+    });
+  }, [addressFormik.values.provinceId]);
+
   return (
     <Autocomplete
-      id="country-select-demo"
+      id="province-select"
       sx={{ width: 300 }}
-      options={countries}
+      options={provinces}
       autoHighlight
-      getOptionLabel={(option) => option.label}
-      renderOption={(props, option) => (
-        <Box
-          component="li"
-          sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
-          {...props}
-        >
-          <img
-            loading="lazy"
-            width="20"
-            srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
-            src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-            alt=""
-          />
-          {option.label} ({option.code}) +{option.phone}
-        </Box>
-      )}
+      getOptionLabel={(option) => option.name}
+      isOptionEqualToValue={(option, value) => option.id === value?.id}
+      value={val.id !== 0 ? val : null}
+      onChange={(e, value) => provinceSetter(e, value, addressFormik)}
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Choose a country"
+          label="Choose a province"
           inputProps={{
             ...params.inputProps,
             autoComplete: 'new-password', // disable autocomplete and autofill
           }}
+          onChange={(e) => setSearchProvince(e.target.value)}
         />
       )}
     />

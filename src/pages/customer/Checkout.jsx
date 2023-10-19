@@ -53,8 +53,13 @@ export function Checkout() {
           {directBuyItem?.productId ? (
             <CartItemList product={directBuyItem} />
           ) : (
-            cart.map((product) => (
-              <CartItemList product={product} cart={cart} />
+            cart.map((product, index) => (
+              <CartItemList
+                product={product}
+                cart={cart}
+                index={index}
+                key={product.productId}
+              />
             ))
           )}
         </Col>
