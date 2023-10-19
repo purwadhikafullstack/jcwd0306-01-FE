@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Stack } from '@mui/material';
 import { useSearchParams } from 'react-router-dom';
 import { asyncGetCategories } from '../../states/categories/action';
 import ContainerCategoryTab from '../../components/customer/HomePage/ContainerCategoryTab';
 import { asyncGetProducts } from '../../states/products/action';
+import Footer from '../../components/customer/Footer/Footer';
 
 function HomePage() {
   const dispatch = useDispatch();
@@ -35,9 +35,12 @@ function HomePage() {
   ]);
 
   return (
-    <Stack>
-      <ContainerCategoryTab />
-    </Stack>
+    <>
+      <main>
+        <ContainerCategoryTab />
+      </main>
+      <Footer />
+    </>
   );
 }
 
