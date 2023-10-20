@@ -13,7 +13,9 @@ function GGLogo({ sx = {} }) {
         ...sx,
       }}
     >
-      <Link to="/">GG</Link>
+      <Link to="/" className="gg-logo">
+        GG
+      </Link>
     </Box>
   );
 }

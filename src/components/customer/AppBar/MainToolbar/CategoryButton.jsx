@@ -9,8 +9,8 @@ function CategoryButton({ setIsCategoryDrawerOpen }) {
   if (isMdUp) {
     return (
       <Button
-        variant="text"
-        color="text"
+        variant="outlined"
+        color="primary"
         sx={{ textTransform: 'none' }}
         onClick={() => setIsCategoryDrawerOpen((prevState) => !prevState)}
       >
