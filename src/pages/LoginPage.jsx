@@ -7,6 +7,8 @@ import { useState } from 'react';
 import google from '../assets/google.png';
 import line from '../assets/line 2.png';
 import { asyncSetAuthUser } from '../states/authUser/action';
+import { constant } from '../constants/constant';
+import api from '../constants/api';
 
 const apiUrl = import.meta.env.VITE_FE_BASE_URL;
 
@@ -31,7 +33,9 @@ function LoginPage() {
     onSubmit: async () => {
       try {
         setButtonDisabled(true);
-        // await api.post('/user/login', formik.values);
+        const data = await api.post('/user/login', formik.values);
+        const payloadValue = data.data.data.user;
+        // console.log('data', data.data.data.user);
 
         // dispatch here
         const authData = {
@@ -39,7 +43,11 @@ function LoginPage() {
           password: formik.values.password,
         };
 
-        dispatch(asyncSetAuthUser(authData));
+        // dispatch(asyncSetAuthUser(authData));
+        dispatch({
+          type: constant.login,
+          payload: { ...payloadValue },
+        });
 
         alert('success login');
         nav('/');

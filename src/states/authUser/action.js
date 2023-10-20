@@ -1,4 +1,5 @@
 import api from '../../constants/api';
+import { constant } from '../../constants/constant';
 
 const ActionType = {
   SET_AUTH_USER: 'SET_AUTH_USER',
@@ -8,7 +9,7 @@ const ActionType = {
 
 function setAuthUserActionCreator(authUser) {
   return {
-    type: ActionType.SET_AUTH_USER,
+    type: constant.login,
     payload: {
       authUser,
     },
@@ -34,10 +35,11 @@ function asyncSetAuthUser({ email, password }) {
   return async (dispatch) => {
     // Get User Login
     const { data } = await api.post('/user/login', { email, password });
-    console.log('data user login', data.data.token);
+    const authUser = data.data.user;
+    // console.log('data user login', data.data.token);
     localStorage.setItem('token', data.data.token);
     window.location.reload();
-    dispatch(setAuthUserActionCreator(data.data.user));
+    dispatch(setAuthUserActionCreator(authUser));
   };
 }
 

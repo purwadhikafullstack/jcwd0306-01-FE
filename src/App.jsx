@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { LoginPage } from './pages/LoginPage';
 import Alert from './components/Alert';
@@ -22,6 +22,9 @@ function App() {
   const location = useLocation();
   const pathLocation = location.pathname.split('/')[1];
   const dispatch = useDispatch();
+
+  // calling reducer
+  const userSelector = useSelector((state) => state.authUser);
 
   // TEMPORARY AJA, nunggu login jadi
   const fetchCartItem = async () => {
