@@ -45,7 +45,7 @@ function asyncSetAuthUser({ email, password }) {
 
 function asyncUnsetAuthUser() {
   return (dispatch) => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('auth');
     dispatch(unsetAuthUserActionCreator());
   };
 }

@@ -43,6 +43,8 @@ function LoginPage() {
           password: formik.values.password,
         };
 
+        localStorage.setItem('auth', data.data.data.token);
+
         // dispatch(asyncSetAuthUser(authData));
         dispatch({
           type: constant.login,
