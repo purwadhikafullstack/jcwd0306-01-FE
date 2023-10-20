@@ -29,8 +29,9 @@ export function CartShowUp({ showCart, setShowCart }) {
           )}
         </a>
       </Row>
-      {cart.map((item) => (
-        <CartItemLine item={item} />
+      {cart.map((item, idx) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <CartItemLine key={idx} item={item} />
       ))}
     </Card>
   );
