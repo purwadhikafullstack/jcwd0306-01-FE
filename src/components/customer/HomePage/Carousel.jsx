@@ -10,6 +10,7 @@ function Carousel() {
       height="50vw"
       animation="slide"
       duration={1000}
+      navButtonsWrapperProps={{ className: 'carousel_nav-buttons-wrapper' }}
       navButtonsProps={{ className: 'carousel_nav-buttons' }}
       indicatorContainerProps={{ className: 'carousel_indicator-container' }}
       activeIndicatorIconButtonProps={{
@@ -22,7 +23,10 @@ function Carousel() {
         borderRadius: 2,
         '& *': { maxHeight: '20rem' },
         '&:hover button.carousel_nav-buttons': { opacity: 1 },
-        '& button.carousel_nav-buttons': {
+        '& div.carousel_nav-buttons-wrapper:hover button': {
+          bgcolor: 'white',
+        },
+        '& div.carousel_nav-buttons-wrapper button.carousel_nav-buttons': {
           color: 'GrayText',
           bgcolor: 'white',
           '&:hover': { bgcolor: 'white' },
