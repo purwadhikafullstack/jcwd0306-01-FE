@@ -9,15 +9,25 @@ import AccountButton from './AccountButton';
 import NotificationButton from './NotificationButton';
 import MessageButton from './MessageButton';
 import GGLogo from '../../../GGLogo';
+import checkLocationPathName from '../checkLocationPathName';
 
 function MainToolbar({ setIsCategoryDrawerOpen }) {
   // const authUser = useSelector((states) => states.authUser);
   const authUser = null;
   const theme = useTheme();
+  const isCartPage = checkLocationPathName();
 
   return (
-    <Toolbar sx={{ gap: 2 }}>
+    <Toolbar
+      sx={{
+        gap: 2,
+        [theme.breakpoints.down('sm')]: {
+          display: isCartPage ? `none` : `flex`,
+        },
+      }}
+    >
       {/* Show GadgetGallery Logo */}
+
       <GadgetGalleryLogo
         sx={{
           fontSize: '2rem',

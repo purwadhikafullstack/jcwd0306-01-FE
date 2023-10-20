@@ -1,7 +1,10 @@
 import { ExpandMoreOutlined, PlaceOutlined } from '@mui/icons-material';
-import { Box, Button } from '@mui/material';
+import { Box, Button, useTheme } from '@mui/material';
+import checkLocationPathName from '../checkLocationPathName';
 
 function CustomerAddressButton() {
+  const isCartPage = checkLocationPathName();
+  const theme = useTheme();
   return (
     <Button
       color="text"
@@ -12,6 +15,9 @@ function CustomerAddressButton() {
         textTransform: 'none',
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
+        [theme.breakpoints.down('sm')]: {
+          display: isCartPage ? `none` : `flex`,
+        },
       }}
     >
       <Box component="span" sx={{ color: 'text.secondary', mr: 1 }}>

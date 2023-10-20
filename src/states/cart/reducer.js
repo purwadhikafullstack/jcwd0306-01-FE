@@ -11,6 +11,7 @@ function cartReducer(state = initState, action = {}) {
   )
     return [...action.payload];
   if (action.type === constant.resetCart) return initState;
+  if (action.type === constant.logout) return initState;
 
   return state;
 }

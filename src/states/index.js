@@ -7,6 +7,8 @@ import cartReducer from './cart/reducer';
 import productsReducer from './products/reducer';
 import productPaginationReducer from './productPagination/reducer';
 import carouselsReducer from './carousels/reducer';
+import { addressReducer, selectedAddressReducer } from './userAddress/reducer';
+import authUserReducer from './authUser/reducer';
 
 const store = configureStore({
   reducer: {
@@ -17,6 +19,9 @@ const store = configureStore({
     cart: cartReducer,
     products: productsReducer,
     productPagination: productPaginationReducer,
+    address: addressReducer,
+    selectedAddress: selectedAddressReducer,
+    authUser: authUserReducer,
   },
   middleware: [thunk],
 });

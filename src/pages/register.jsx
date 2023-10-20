@@ -1,62 +1,43 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { useState } from 'react';
 import google from '../assets/google.png';
 import line from '../assets/line 2.png';
-import { asyncSetAuthUser } from '../states/authUser/action';
-import { constant } from '../constants/constant';
 import api from '../constants/api';
+// import { setAlertActionCreator } from '../states/alert/action';
+// import GGLogo from '../assets/GadgetGallery Logo 2.png';
 
 const apiUrl = import.meta.env.VITE_FE_BASE_URL;
 
-function LoginPage() {
-  const nav = useNavigate();
-  const dispatch = useDispatch();
-  const [isButtonDisabled, setButtonDisabled] = useState(false);
-
+function Register() {
   const formik = useFormik({
     initialValues: {
       email: '',
+      firstName: '',
+      lastName: '',
       password: '',
     },
     validationSchema: Yup.object().shape({
-      email: Yup.string().email('Invalid email address').required('Required'),
-      password: Yup.string()
-        .min(8, 'at least 8 characters')
-        .required('Required'),
-      // .minUppercase(1, 'at least 1 capital letter')
-      // .minNumbers(1, 'at least 1 number'),
+      email: Yup.string().email('invalid email format').required('required'),
     }),
     onSubmit: async () => {
       try {
-        setButtonDisabled(true);
-        const data = await api.post('/user/login', formik.values);
-        const payloadValue = data.data.data.user;
-        // console.log('data', data.data.data.user);
+        // console.log('formik', values);
+        await api.post('/user/register', formik.values);
 
-        // dispatch here
-        const authData = {
-          email: formik.values.email,
-          password: formik.values.password,
-        };
+        alert('please check email');
 
-        localStorage.setItem('auth', data.data.data.token);
-
-        // dispatch(asyncSetAuthUser(authData));
-        dispatch({
-          type: constant.login,
-          payload: { ...payloadValue },
-        });
-
-        alert('success login');
-        nav('/');
+        // setAlertActionCreator({
+        //   val: {
+        //     status: 'success',
+        //     message: 'please check your email for verification',
+        //   },
+        // });
       } catch (err) {
-        console.log(err?.message);
-      } finally {
-        setButtonDisabled(false);
+        // setAlertActionCreator({
+        //   val: { status: 'error', message: err?.message },
+        // });
+        alert(err?.message);
       }
     },
   });
@@ -65,6 +46,7 @@ function LoginPage() {
     const { value } = e.target;
     formik.setFieldValue(fieldName, value);
   }
+
   return (
     <>
       <Box
@@ -80,6 +62,17 @@ function LoginPage() {
       </Box>
 
       <Box display="flex" mt="4rem" justifyContent="space-evenly">
+        {/* <Box>
+          <img
+            src={GGLogo}
+            alt=""
+            style={{ maxWidth: '100%', height: 'auto', width: '200px' }}
+          />
+          <Typography variant="h5">Jual Beli Gadget Terpercaya</Typography>
+          <Typography>
+            Gabung dan rasakan kemudahan bertransaksi di GadgetGallery!
+          </Typography>
+        </Box> */}
         <Box
           maxWidth="100%"
           height="auto"
@@ -93,30 +86,30 @@ function LoginPage() {
             justifyContent="center"
             fontWeight="500"
           >
-            Sign In
+            Register
           </Typography>
           <Typography
             display="flex"
             justifyContent="center"
             fontWeight="400"
             fontSize={12}
+            mt={2}
           >
-            don`t have account yet?&nbsp;&nbsp;
+            Already have an acount?&nbsp;&nbsp;
             <a
-              href={`${apiUrl}/register`}
+              href={`${apiUrl}/login`}
               style={{ color: 'green', textDecoration: 'none' }}
             >
-              Register
+              Sign In
             </a>
           </Typography>
-
           <Box
             display="flex"
             mt={2}
             alignItems="center"
             p={1}
             border="1px solid grey"
-            borderRadius={5}
+            borderRadius={3}
             sx={{ cursor: 'pointer' }}
             onClick={() => alert('hello')}
           >
@@ -140,7 +133,7 @@ function LoginPage() {
                 marginRight: '8px',
               }}
             />
-            <span style={{ fontSize: '13px' }}>atau login dengan</span>
+            <span style={{ fontSize: '13px' }}>atau daftar dengan</span>
             <img
               src={line}
               alt=""
@@ -152,7 +145,6 @@ function LoginPage() {
               }}
             />
           </Box>
-
           <TextField
             onChange={(e) => inputHandler(e, 'email')}
             id="outlined-basic"
@@ -163,6 +155,37 @@ function LoginPage() {
               marginTop: '10px',
               height: '40px',
               maxWidth: '100%',
+              width: '500px',
+            }}
+          />
+          <TextField
+            onChange={(e) => inputHandler(e, 'firstName')}
+            id="outlined-basic"
+            label="First Name"
+            variant="outlined"
+            size="small"
+            defaultValue=""
+            style={{
+              marginTop: '10px',
+              height: '40px',
+              maxWidth: '100%',
+              width: '500px',
+              display: 'none',
+            }}
+          />
+
+          <TextField
+            onChange={(e) => inputHandler(e, 'lastName')}
+            id="outlined-basic"
+            label="Last Name"
+            variant="outlined"
+            size="small"
+            defaultValue=""
+            style={{
+              marginTop: '10px',
+              height: '40px',
+              maxWidth: '100%',
+              display: 'none',
               width: '500px',
             }}
           />
@@ -179,6 +202,7 @@ function LoginPage() {
               marginTop: '10px',
               height: '40px',
               maxWidth: '100%',
+              display: 'none',
               width: '500px',
             }}
           />
@@ -187,9 +211,8 @@ function LoginPage() {
             style={{ marginTop: '10px', width: '100%', height: '50px' }}
             size="large"
             onClick={formik.handleSubmit}
-            disabled={isButtonDisabled}
           >
-            Sign In
+            Register
           </Button>
         </Box>
       </Box>
@@ -197,4 +220,4 @@ function LoginPage() {
   );
 }
 
-export { LoginPage };
+export { Register };

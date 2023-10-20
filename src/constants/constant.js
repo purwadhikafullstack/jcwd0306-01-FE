@@ -4,4 +4,10 @@ export const constant = {
   deleteProductFromCart: 'DELETE_FROM_CART',
   resetCart: 'RESET_CART',
   success: 'SUCCESS',
+  addAddress: 'ADD_ADDRESS',
+  updateAddress: 'UPADATE_ADDRESS',
+  deleteAddress: 'DELETE_ADDRESS',
+  selectAddress: 'SELECT_ADDRESS',
+  logout: 'LOGOUT',
+  login: 'LOGIN',
 };

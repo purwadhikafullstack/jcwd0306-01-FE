@@ -5,13 +5,16 @@ const config = {
   headers: { Authorization: `Bearer ${localStorage.getItem('auth')}` },
 };
 
+const findIndexinCart = (arr = [], item = {}) => {
+  const index = arr.findIndex((val) => val.productId === item.productId);
+  return index;
+};
+
 export const updateCart =
   (allValues = [], updatedItem = {}, userId = 0) =>
   async (dispatch) => {
     try {
-      const index = allValues.findIndex(
-        (val) => val.productId === updatedItem.productId
-      );
+      const index = findIndexinCart(allValues, updatedItem);
       const temp = [...allValues];
       if (index !== -1) {
         temp[index].quantity += updatedItem.quantity;
@@ -32,6 +35,7 @@ export const updateCart =
       });
       return constant.success;
     } catch (err) {
+      if (err?.response?.data) return `This item is not available`;
       return err?.message;
     }
   };
@@ -40,11 +44,9 @@ export const deleteFromCart =
   (allValues = [], productId = 0 || [], userId = 0) =>
   async (dispatch) => {
     try {
+      const temp = typeof productId === `object` ? [] : [...allValues];
       const index = allValues.findIndex((val) => val.productId === productId);
-      const temp = [...allValues];
-      if (index !== -1) {
-        temp.splice(index, 1);
-      }
+      temp.splice(index, 1);
       await api.delete(`/cart/${userId}`, {
         params: { productId },
       });
@@ -57,13 +59,3 @@ export const deleteFromCart =
       return err?.message;
     }
   };
-
-export const resetCart = () => async (dispatch) => {
-  try {
-    await dispatch({ type: constant.resetCart });
-    // delete all items from API
-    return constant.success;
-  } catch (err) {
-    return err?.message;
-  }
-};
