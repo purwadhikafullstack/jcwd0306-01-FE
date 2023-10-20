@@ -5,12 +5,15 @@ import { asyncGetCategories } from '../../states/categories/action';
 import ContainerCategoryTab from '../../components/customer/HomePage/ContainerCategoryTab';
 import { asyncGetProducts } from '../../states/products/action';
 import Footer from '../../components/customer/Footer/Footer';
+import { asyncGetCarousels } from '../../states/carousels/action';
+import Carousel from '../../components/customer/HomePage/Carousel';
 
 function HomePage() {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
+    dispatch(asyncGetCarousels());
     dispatch(asyncGetCategories());
     dispatch(
       asyncGetProducts({
@@ -37,6 +40,7 @@ function HomePage() {
   return (
     <>
       <main>
+        <Carousel />
         <ContainerCategoryTab />
       </main>
       <Footer />

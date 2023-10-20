@@ -6,11 +6,13 @@ import categoriesReducer from './categories/reducer';
 import cartReducer from './cart/reducer';
 import productsReducer from './products/reducer';
 import productPaginationReducer from './productPagination/reducer';
+import carouselsReducer from './carousels/reducer';
 
 const store = configureStore({
   reducer: {
     loadingBar: loadingBarReducer,
     alert: alertReducer,
+    carousels: carouselsReducer,
     categories: categoriesReducer,
     cart: cartReducer,
     products: productsReducer,

@@ -15,9 +15,9 @@ function FirstPart() {
         variant="rounded"
         sx={{
           maxWidth: '8rem',
-          width: '20vw',
           maxHeight: '8rem',
-          height: '20vw',
+          width: '100%',
+          height: '100%',
         }}
       />
       <Typography variant="caption">

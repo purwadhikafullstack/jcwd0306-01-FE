@@ -32,7 +32,7 @@ function MoreProductsButton() {
         sx={{
           textTransform: 'none',
           mx: 'auto',
-          px: '5rem',
+          px: { sm: '5rem' },
           py: '0.8rem',
         }}
       >
