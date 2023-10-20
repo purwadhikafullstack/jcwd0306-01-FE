@@ -13,7 +13,9 @@ function GadgetGalleryLogo({ sx = {} }) {
         ...sx,
       }}
     >
-      <Link to="/">GadgetGallery</Link>
+      <Link to="/" className="gg-logo">
+        GadgetGallery
+      </Link>
     </Box>
   );
 }

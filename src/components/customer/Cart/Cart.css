@@ -1,0 +1,18 @@
+.card-summary {
+  border-radius: 44px !important;
+  border: 6px solid gainsboro;
+  position: sticky !important;
+  top: 145px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@media screen and (max-width=576) {
+  .container.p-sm-0 {
+    padding: 0 !important;
+  }
+}
