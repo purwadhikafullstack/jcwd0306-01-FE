@@ -1,14 +1,27 @@
 import { InputAdornment, TextField } from '@mui/material';
 import { useEffect } from 'react';
 import { SearchOutlined } from '@mui/icons-material';
+import { useDispatch } from 'react-redux';
 import useCustomSearchParams from '../../../../hooks/useCustomSearchParams';
+import { asyncGetProducts } from '../../../../states/products/action';
 
 function SearchInput() {
-  //   const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [searchParams, updateQueryParams] = useCustomSearchParams();
 
   const handleSearch = () => {
-    // dispatch(asyncGetProducts({ name: searchParams.get('name') }));
+    dispatch(
+      asyncGetProducts({
+        getType: 'REPLACE',
+        name: searchParams.get('name'),
+        categoryId: searchParams.get('categoryId'),
+        sortBy: searchParams.get('sortBy'),
+        orderBy: searchParams.get('orderBy'),
+        isPaginated: searchParams.get('isPaginated'),
+        page: searchParams.get('page'),
+        perPage: searchParams.get('perPage'),
+      })
+    );
   };
 
   useEffect(() => {
@@ -18,11 +31,11 @@ function SearchInput() {
 
   return (
     <TextField
+      onChange={({ target }) => updateQueryParams({ name: target.value })}
       size="small"
       variant="outlined"
       placeholder="Cari di GadgetGallery"
       value={searchParams.get('name') || ''}
-      onChange={({ target }) => updateQueryParams({ name: target.value })}
       sx={{
         flexGrow: 1,
         '&:focus': {

@@ -19,7 +19,6 @@ function CategoryImageList() {
       gap={10}
       variant="masonry"
       sx={{
-        mx: { md: 5, lg: 'auto' },
         maxWidth: theme.breakpoints.values.lg,
         [theme.breakpoints.up('lg')]: { mx: 'auto' },
         [theme.breakpoints.down('lg')]: { mx: 5 },
