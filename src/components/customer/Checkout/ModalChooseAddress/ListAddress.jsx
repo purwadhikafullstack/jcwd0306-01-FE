@@ -19,7 +19,7 @@ export function ListAddress({
       }}
       disableTouchRipple
     >
-      <div className="d-flex flex-column position-relative">
+      <div className="d-flex flex-column position-relative w-100">
         <Button
           className="position-absolute"
           style={{

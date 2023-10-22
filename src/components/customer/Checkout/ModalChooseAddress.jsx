@@ -19,6 +19,7 @@ export default function ModalChooseAddress({
   setAddress,
   setAddresses,
   setAddressToEdit,
+  setShippingMethod,
 }) {
   const handleClose = () => setOpen('');
   const theme = useTheme();
@@ -52,6 +53,7 @@ export default function ModalChooseAddress({
             handleClose={handleClose}
             setAddressToEdit={setAddressToEdit}
             setOpen={setOpen}
+            setShippingMethod={setShippingMethod}
           />
         </DialogContent>
       </Dialog>

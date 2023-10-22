@@ -6,7 +6,7 @@ import './Cart.css';
 import '../../GlobalCSS.css';
 import { cartCalculator } from './cartCalculator';
 
-export function ShoppingSummary({ address }) {
+export function ShoppingSummary({ address, disableButton }) {
   const directBuyItem = useLocation().state;
   const cart = useSelector((state) => state.cart);
   const summaryTransaction = new Map([
@@ -48,13 +48,14 @@ export function ShoppingSummary({ address }) {
           </ListGroup.Item>
           <ListGroup.Item className="px-0">Promo Code: takada</ListGroup.Item>
         </ListGroup>
-        <a href="/cart/shipment">
-          <Button className="normal-button">
+
+        <Button disabled={disableButton} className="normal-button">
+          <a href="/cart/shipment" className="text-white text-decoration-none">
             {window.location.pathname === '/cart'
               ? 'Proceed'
               : 'Payment Option'}
-          </Button>
-        </a>
+          </a>
+        </Button>
       </Card.Body>
     </Card>
   );

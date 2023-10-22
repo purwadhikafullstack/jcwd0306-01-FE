@@ -1,4 +1,6 @@
 import * as Yup from 'yup';
+import { object } from 'prop-types';
+import api from '../../../../constants/api';
 
 export const addressInitialValues = {
   receiverName: '',
@@ -21,7 +23,7 @@ export const addressInitialValues = {
 export const addressValidationSchema = Yup.object().shape({
   receiverName: Yup.string().min(3).required(),
   receiverPhone: Yup.string()
-    .min(8)
+    .min(5)
     .matches(/^\d+$/, { message: 'Only numbers allowed' })
     .required(),
   postalCode: Yup.number().min(10000).required(),
@@ -34,6 +36,59 @@ export const addressValidationSchema = Yup.object().shape({
   detail: Yup.string().min(3).required(),
 });
 
-export function addNewAddress(values) {
-  console.log(values);
+export async function addNewAddress(
+  values,
+  userId,
+  addresses,
+  setAddresses,
+  setAddress,
+  config = {}
+) {
+  values.userId = userId;
+  const result = await api.post(`/user_address/new/${userId}`, values, config);
+  const temp = [...addresses];
+  temp.unshift(result.data);
+  setAddresses(temp);
+  setAddress({ ...values, id: result.id });
+}
+
+const checkChanges = (initialValues, updateValues) => {
+  if (JSON.stringify(initialValues) !== JSON.stringify(updateValues))
+    return true;
+  return false;
+};
+
+export async function updateAddress(
+  values,
+  userId,
+  addresses,
+  setAddresses,
+  addressToEdit,
+  config = {}
+) {
+  if (checkChanges(addressToEdit, values)) {
+    const { data } = await api.patch(
+      `/user_address/${userId}/${values.id}`,
+      values,
+      config
+    );
+    const temp = [...addresses];
+    temp.splice(values.index, 1, data);
+    setAddresses(temp);
+  }
+}
+
+export async function addressSubmit(
+  values,
+  userId,
+  addresses,
+  setAddresses,
+  setAddress,
+  addressToEdit
+) {
+  if (values.id) {
+    await updateAddress(values, userId, addresses, setAddresses, addressToEdit);
+  } else {
+    await addNewAddress(values, userId, addresses, setAddresses, setAddress);
+  }
 }

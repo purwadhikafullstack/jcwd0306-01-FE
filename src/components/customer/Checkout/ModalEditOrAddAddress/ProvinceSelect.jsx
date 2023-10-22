@@ -12,7 +12,7 @@ function provinceSetter(e, value, addressFormik) {
     return;
   }
   addressFormik.setFieldValue('provinceId', value?.id);
-  addressFormik.setFieldValue('Province', { name: e.target.innerText });
+  addressFormik.setFieldValue('Province', { name: value?.name });
 }
 
 export default function ProvinceSelect({ addressFormik }) {
@@ -48,7 +48,9 @@ export default function ProvinceSelect({ addressFormik }) {
       getOptionLabel={(option) => option.name}
       isOptionEqualToValue={(option, value) => option.id === value?.id}
       value={val.id !== 0 ? val : null}
-      onChange={(e, value) => provinceSetter(e, value, addressFormik)}
+      onChange={(e, value) => {
+        provinceSetter(e, value, addressFormik);
+      }}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -58,6 +60,7 @@ export default function ProvinceSelect({ addressFormik }) {
             autoComplete: 'new-password', // disable autocomplete and autofill
           }}
           onChange={(e) => setSearchProvince(e.target.value)}
+          onClick={() => setSearchProvince('')}
         />
       )}
     />

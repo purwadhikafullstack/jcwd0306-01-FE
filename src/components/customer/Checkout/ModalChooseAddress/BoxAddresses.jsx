@@ -9,11 +9,13 @@ export function BoxAddresses({
   handleClose,
   setAddressToEdit,
   setOpen,
+  setShippingMethod,
 }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const handleListItemClick = (event, index, destination) => {
     setSelectedIndex(index);
     setAddress(destination);
+    setShippingMethod({});
     handleClose();
   };
 

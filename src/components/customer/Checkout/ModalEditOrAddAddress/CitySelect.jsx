@@ -3,6 +3,16 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { useEffect, useState } from 'react';
 import api from '../../../../constants/api';
 
+function citySetter(e, value, addressFormik) {
+  if (value === null) {
+    addressFormik.setFieldValue('cityId', 0);
+    addressFormik.setFieldValue('City', { name: '' });
+    return;
+  }
+  addressFormik.setFieldValue('cityId', value?.id);
+  addressFormik.setFieldValue('City', { name: value?.name });
+}
+
 export default function CitySelect({ addressFormik }) {
   const [cities, setCities] = useState([]);
   const [searchCity, setSearchCity] = useState('');
@@ -35,15 +45,7 @@ export default function CitySelect({ addressFormik }) {
       autoHighlight
       disabled={!addressFormik.values.provinceId}
       getOptionLabel={(option) => option.name}
-      onChange={(e, value) => {
-        if (value === null) {
-          addressFormik.setFieldValue('cityId', 0);
-          addressFormik.setFieldValue('City', { name: '' });
-          return;
-        }
-        addressFormik.setFieldValue('cityId', value?.id);
-        addressFormik.setFieldValue('City', { name: e.target.innerText });
-      }}
+      onChange={(e, value) => citySetter(e, value, addressFormik)}
       isOptionEqualToValue={(option, value) => option.id === value?.id}
       renderInput={(params) => (
         <TextField
@@ -58,6 +60,7 @@ export default function CitySelect({ addressFormik }) {
             autoComplete: 'new-password', // disable autocomplete and autofill
           }}
           onChange={(e) => setSearchCity(e.target.value)}
+          onClick={() => setSearchCity('')}
           disabled={!addressFormik.values.provinceId}
         />
       )}
