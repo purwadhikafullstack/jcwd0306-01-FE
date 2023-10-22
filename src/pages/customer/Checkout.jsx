@@ -1,6 +1,6 @@
 import '../../components/customer/Cart/Cart.css';
 import { Col, Container, Row } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { CartItemList } from '../../components/customer/Cart/CartItemList';
@@ -9,14 +9,21 @@ import { ShoppingSummary } from '../../components/customer/Cart/ShoppingSummary'
 import { MobileShoppingSummary } from '../../components/customer/Cart/MobileShoppingSummary';
 import { CheckOutHeader } from '../../components/customer/Checkout/CheckOutHeader';
 import api from '../../constants/api';
+import { fetchPaymentOptions } from '../../components/customer/Checkout/fetchPaymentOptions';
+import { setAlertActionCreator } from '../../states/alert/action';
 
 export function Checkout() {
   const cart = useSelector((state) => state.cart).filter(
     (item) => item.isChecked
   );
   const userSelector = { id: 5 };
+  const dispatch = useDispatch();
   const [addresses, setAddresses] = useState([]);
   const [address, setAddress] = useState({});
+  const [shippingOptions, setShippingOptions] = useState([]);
+  const [shippingMethod, setShippingMethod] = useState({});
+  const [originWarehouse, setOriginWarehouse] = useState({});
+  const [disableButton, setDisableButton] = useState(false);
   const defaultAddress = addresses.find((destination) => destination.isDefault);
   const addressSelector = useSelector((state) => state.selectedAddress);
   const directBuyItem = useLocation().state;
@@ -34,6 +41,23 @@ export function Checkout() {
   }, [defaultAddress?.id, addressSelector]);
 
   useEffect(() => {
+    try {
+      fetchPaymentOptions(
+        address,
+        cart,
+        setShippingOptions,
+        setOriginWarehouse,
+        setDisableButton,
+        dispatch
+      );
+    } catch (error) {
+      setAlertActionCreator({
+        val: { status: 'error', message: error?.message },
+      });
+    }
+  }, [address]);
+
+  useEffect(() => {
     fetchAddresses();
   }, []);
   return (
@@ -48,22 +72,38 @@ export function Checkout() {
             setAddresses={setAddresses}
             address={address}
             setAddress={setAddress}
+            cart={cart}
+            shippingOptions={shippingOptions}
+            shippingMethod={shippingMethod}
+            setShippingMethod={setShippingMethod}
+            originWarehouse={originWarehouse}
+            disableButton={disableButton}
+            setDisableButton={setDisableButton}
           />
           <StackBorder />
           {directBuyItem?.productId ? (
-            <CartItemList product={directBuyItem} />
+            <CartItemList product={directBuyItem} address={address} />
           ) : (
-            cart.map((product) => (
-              <CartItemList product={product} cart={cart} />
+            cart.map((product, index) => (
+              <CartItemList
+                product={product}
+                cart={cart}
+                index={index}
+                key={product.productId}
+                address={address}
+              />
             ))
           )}
         </Col>
         <Col lg={4} md={5} className="position-relative d-none d-md-block">
-          <ShoppingSummary address={address} />
+          <ShoppingSummary address={address} disableButton={disableButton} />
         </Col>
       </Row>
       <div className="sticky-bottom d-sm-block d-md-none bg-white px-2 pt-1 pb-3 border-top border-secondary-subtle">
-        <MobileShoppingSummary address={address} />
+        <MobileShoppingSummary
+          address={address}
+          disableButton={disableButton}
+        />
       </div>
     </Container>
   );

@@ -5,7 +5,7 @@ import { updateCart } from '../../../states/cart/action';
 import BottomTools from './BottomTools';
 import checkBoxHandler from '../../../utils/checkBoxHandler';
 
-export function CartItemList({ cart, product }) {
+export function CartItemList({ cart, product, address }) {
   const [quantity, setQuantity] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
   const { stock } = product;
@@ -26,12 +26,12 @@ export function CartItemList({ cart, product }) {
     if (Number(e.target.value) > stock) {
       return setQuantity(stock);
     }
-    setQuantity(e.target.value);
+    return setQuantity(e.target.value);
   };
 
   useEffect(() => {
-    setQuantity(product.quantity);
-    setIsChecked(product.isChecked);
+    setQuantity(product?.quantity);
+    setIsChecked(product?.isChecked);
   }, [product]);
 
   useEffect(() => {
@@ -50,34 +50,38 @@ export function CartItemList({ cart, product }) {
   }, [quantity, isChecked]);
 
   return (
-    <div key={`product-${product.productId}`}>
-      <div className="w-100 position-relative d-flex align-items-center">
-        {window.location.pathname === `/cart` ? (
-          <input
-            type="checkbox"
-            id={`checkbox-${product.Product.name}`}
-            name="cart-item-checkboxes"
-            defaultChecked={product.isChecked}
-            onChange={handleCheck}
-          />
-        ) : null}
-        <div className="d-flex gap-2">
-          <img
-            src="https://t3.ftcdn.net/jpg/04/46/38/74/360_F_446387449_OIIQ3VlDKbMQTM63yVJNpks6UecfVAhD.jpg"
-            alt=""
-            width="100px"
-          />
-          <div className="d-flex flex-column gap-2">
-            <div>
-              <b>{product.Product.name}</b>
-            </div>
-            <div>Color / Variant / Stock: {stock} </div>
-            <div>
-              {quantity} item{quantity > 1 ? 's' : null} (
-              {product.Product.weight * quantity} gram)
-            </div>
-            <div>
-              <b>Rp{product.Product.price.toLocaleString(`id-ID`)}</b>
+    <>
+      <div>
+        <div className="d-flex justify-content-between">
+          <div className="d-flex align-items-center">
+            {window.location.pathname === `/cart` ? (
+              <input
+                type="checkbox"
+                id={`checkbox-${product?.Product?.name}`}
+                name="cart-item-checkboxes"
+                defaultChecked={product?.isChecked}
+                onChange={handleCheck}
+              />
+            ) : null}
+            <div className="d-flex gap-2">
+              <img
+                src="https://t3.ftcdn.net/jpg/04/46/38/74/360_F_446387449_OIIQ3VlDKbMQTM63yVJNpks6UecfVAhD.jpg"
+                alt=""
+                width="100px"
+              />
+              <div className="d-flex flex-column gap-2 flex-grow-1">
+                <div>
+                  <b>{product?.Product?.name}</b>
+                </div>
+                <div>Color / Variant / Stock: {stock} </div>
+                <div>
+                  {quantity} item{quantity > 1 ? 's' : null} (
+                  {product.Product.weight * quantity} gram)
+                </div>
+                <div>
+                  <b>Rp{product?.Product?.price.toLocaleString(`id-ID`)}</b>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -93,6 +97,6 @@ export function CartItemList({ cart, product }) {
         />
       </div>
       <StackBorder />
-    </div>
+    </>
   );
 }

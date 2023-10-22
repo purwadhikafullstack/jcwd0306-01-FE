@@ -7,7 +7,7 @@ import { useState } from 'react';
 import MobileShoppingSummaryDialog from './MobileShoppingSummaryDialog';
 import { cartCalculator } from './cartCalculator';
 
-export function MobileShoppingSummary({ address }) {
+export function MobileShoppingSummary({ address, disableButton }) {
   const [show, setShow] = useState(false);
   const directBuyItem = useLocation().state;
   const cart = useSelector((state) => state.cart).filter(
@@ -48,9 +48,11 @@ export function MobileShoppingSummary({ address }) {
             <KeyboardArrowUpIcon />
           </div>
         </div>
-        <a href="/cart/shipment">
-          <Button className="normal-button">Proceed</Button>
-        </a>
+        <Button disabled={disableButton} className="normal-button">
+          <a href="/cart/shipment" className="text-white text-decoration-none">
+            Proceed
+          </a>
+        </Button>
       </div>
     </div>
   );

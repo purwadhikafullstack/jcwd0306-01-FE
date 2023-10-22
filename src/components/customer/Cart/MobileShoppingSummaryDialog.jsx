@@ -43,7 +43,7 @@ export default function MobileShoppingSummaryDialog({
       >
         <DialogTitle>Shopping Summary</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
+          <div id="alert-dialog-slide-description">
             <div className="d-flex justify-content-between">
               <div>Total Price ({totalItems} items)</div>
               <div>Rp{totalPrice.toLocaleString(`id-ID`)}</div>
@@ -58,7 +58,7 @@ export default function MobileShoppingSummaryDialog({
                 Rp{(totalPrice - totalDiscount).toLocaleString(`id-ID`)}
               </div>
             </div>
-          </DialogContentText>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

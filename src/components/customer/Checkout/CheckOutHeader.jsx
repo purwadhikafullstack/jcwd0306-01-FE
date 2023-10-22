@@ -1,16 +1,23 @@
-import { Button } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import { useState } from 'react';
 import { Address } from './Address';
 import ModalChooseAddress from './ModalChooseAddress';
 import { ModalEditAndAddAddress } from './ModalEditAndAddAddress';
+import ShippingSelect from './ShippingSelect';
 
 export function CheckOutHeader({
   addresses,
   setAddresses,
   address,
   setAddress,
+  shippingOptions,
+  shippingMethod,
+  setShippingMethod,
+  originWarehouse,
+  disableButton,
 }) {
   const [showModal, setShowModal] = useState('');
+  const [addressToEdit, setAddressToEdit] = useState({});
 
   return (
     <>
@@ -18,27 +25,63 @@ export function CheckOutHeader({
       <div className="border-bottom border-secondary-subtle">
         <div>Shipping address</div>
         <hr />
-        <Address address={address} />
+        {address?.id ? (
+          <Address address={address} />
+        ) : (
+          <div className="mb-3">No address found</div>
+        )}
       </div>
-      <div className="d-flex gap-2">
-        <Button
-          variant="light"
-          onClick={() => {
-            setShowModal('CHOOSE_ADDRESS');
+      <div className="d-flex flex-wrap gap-2 justify-content-even">
+        <div className="d-flex gap-2 align-items-center">
+          <Button
+            variant="light"
+            className="h-100"
+            onClick={() => {
+              setShowModal('CHOOSE_ADDRESS');
+            }}
+          >
+            Choose Address
+          </Button>
+          <div className="d-flex align-items-center">
+            <ShippingSelect
+              shippingOptions={shippingOptions}
+              shippingMethod={shippingMethod}
+              setShippingMethod={setShippingMethod}
+              disableButton={disableButton}
+            />
+          </div>
+          <ModalChooseAddress
+            open={showModal}
+            setOpen={setShowModal}
+            addresses={addresses}
+            setAddress={setAddress}
+            setAddresses={setAddresses}
+            setAddressToEdit={setAddressToEdit}
+            setShippingMethod={setShippingMethod}
+          />
+          <ModalEditAndAddAddress
+            open={showModal}
+            setOpen={setShowModal}
+            addresses={addresses}
+            addressToEdit={addressToEdit}
+            setAddress={setAddress}
+            setAddresses={setAddresses}
+            setAddressToEdit={setAddressToEdit}
+          />
+        </div>
+        <div
+          style={{
+            fontSize: '0.9em',
+            display: shippingMethod?.name ? 'block' : 'none',
           }}
         >
-          Choose Address
-        </Button>
-        <Button variant="light">Multiple Addresses</Button>
+          <div>
+            <b>Sent From</b>: {originWarehouse.city_name}
+          </div>
+          <div>Shipping method: {shippingMethod?.name}</div>
+          <div>Delivery time estimation: {shippingMethod?.etd}</div>
+        </div>
       </div>
-      <ModalChooseAddress
-        open={showModal}
-        setOpen={setShowModal}
-        addresses={addresses}
-        setAddress={setAddress}
-        setAddresses={setAddresses}
-      />
-      <ModalEditAndAddAddress open={showModal} setOpen={setShowModal} />
     </>
   );
 }

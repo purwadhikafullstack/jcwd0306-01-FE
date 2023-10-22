@@ -18,6 +18,8 @@ export default function ModalChooseAddress({
   addresses,
   setAddress,
   setAddresses,
+  setAddressToEdit,
+  setShippingMethod,
 }) {
   const handleClose = () => setOpen('');
   const theme = useTheme();
@@ -40,7 +42,7 @@ export default function ModalChooseAddress({
         <Button
           variant="white"
           className="mx-3 border border-secondary-subtle rounded-pill mb-3"
-          onClick={() => setOpen('ADD_ADDRESS')}
+          onClick={() => setOpen('ADD ADDRESS')}
         >
           Add New Address
         </Button>
@@ -49,6 +51,9 @@ export default function ModalChooseAddress({
             addresses={addresses}
             setAddress={setAddress}
             handleClose={handleClose}
+            setAddressToEdit={setAddressToEdit}
+            setOpen={setOpen}
+            setShippingMethod={setShippingMethod}
           />
         </DialogContent>
       </Dialog>
