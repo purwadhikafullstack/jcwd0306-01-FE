@@ -14,6 +14,7 @@ import { constant } from './constants/constant';
 import { Checkout } from './pages/customer/Checkout';
 import { Register } from './pages/register';
 import { Verify } from './pages/verify';
+import ProductDetailPage from './pages/customer/ProductDetailPage';
 
 function App() {
   const authUser = null;
@@ -23,14 +24,12 @@ function App() {
   const pathLocation = location.pathname.split('/')[1];
   const dispatch = useDispatch();
 
-  // calling reducer
-  const userSelector = useSelector((state) => state.authUser);
-
   // TEMPORARY AJA, nunggu login jadi
   const fetchCartItem = async () => {
-    const { data } = await api.get(`/cart/5`);
+    const { data } = await api.get('/cart/5');
     dispatch({ type: constant.updateProductOnCart, payload: data });
   };
+
   useEffect(() => {
     fetchCartItem();
   }, []);
@@ -69,6 +68,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/cart/shipment" element={<Checkout />} />
+        <Route path="/products/:id" element={<ProductDetailPage />} />
       </Routes>
     </>
   );
