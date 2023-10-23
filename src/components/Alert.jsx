@@ -16,7 +16,7 @@ function Alert() {
       open={alert.open}
       autoHideDuration={5000}
       onClose={handleClose}
-      anchorOrigin={{ vertical: `top`, horizontal: `center` }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
     >
       <MuiAlert
         onClose={handleClose}

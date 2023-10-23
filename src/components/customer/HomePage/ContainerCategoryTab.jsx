@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
-import { TabContext } from '@mui/lab';
+import { TabContext, TabPanel } from '@mui/lab';
 import { useSearchParams } from 'react-router-dom';
 import CategoryTabList from './CategoryTabList';
-import CategoryTabPanel from './CategoryTabPanel';
+import ProductCardList from './ProductCardList';
 
 function ContainerCategoryTab() {
   const categories = useSelector((states) => states.categories);
@@ -13,9 +13,20 @@ function ContainerCategoryTab() {
       value={categories.length ? searchParams.get('categoryId') || '0' : '0'}
     >
       <CategoryTabList />
-      <CategoryTabPanel tabId="0" />
+      <TabPanel
+        value="0"
+        sx={{ width: '100%', maxWidth: 'lg', mx: 'auto', px: 0 }}
+      >
+        <ProductCardList />
+      </TabPanel>
       {categories.map((category) => (
-        <CategoryTabPanel key={category.id} tabId={String(category.id)} />
+        <TabPanel
+          key={category.id}
+          value={String(category.id)}
+          sx={{ width: '100%', maxWidth: 'lg', mx: 'auto', px: 0 }}
+        >
+          <ProductCardList />
+        </TabPanel>
       ))}
     </TabContext>
   );

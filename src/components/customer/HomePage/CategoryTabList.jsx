@@ -1,5 +1,4 @@
-import { TabList } from '@mui/lab';
-import { Tab } from '@mui/material';
+import { Tab, Tabs } from '@mui/material';
 import { useSelector } from 'react-redux';
 import useCustomSearchParams from '../../../hooks/useCustomSearchParams';
 
@@ -33,10 +32,11 @@ const tabColors = [
 
 function CategoryTabList() {
   const categories = useSelector((states) => states.categories);
-  const [, updateQueryParams] = useCustomSearchParams();
+  const [searchParams, updateQueryParams] = useCustomSearchParams();
 
   return (
-    <TabList
+    <Tabs
+      value={categories.length ? searchParams.get('categoryId') || '0' : '0'}
       aria-label="Category Tabs"
       variant="scrollable"
       onChange={(e, val) => updateQueryParams({ categoryId: val })}
@@ -51,20 +51,27 @@ function CategoryTabList() {
       }}
       TabScrollButtonProps={{
         sx: {
+          position: 'absolute',
           zIndex: 100,
           bgcolor: 'background.paper',
           boxShadow: 4,
           width: 'fit-content',
           height: 'fit-content',
           alignSelf: 'center',
-          p: '0.3rem',
-          borderRadius: '100%',
-          '&:nth-of-type(1)': { left: '1rem' },
-          '&:nth-of-type(4)': { right: '1rem' },
+          '&:nth-of-type(1)': {
+            left: 0,
+            borderTopRightRadius: 6,
+            borderBottomRightRadius: 6,
+          },
+          '&:nth-of-type(4)': {
+            right: 0,
+            borderTopLeftRadius: 6,
+            borderBottomLeftRadius: 6,
+          },
         },
       }}
       sx={{
-        width: '99vw',
+        position: 'relative',
         maxWidth: 'lg',
         mx: 'auto',
         '& div.MuiTabs-flexContainer': { gap: '0.5rem' },
@@ -96,7 +103,7 @@ function CategoryTabList() {
           sx={{ ...tabColors[idx % tabColors.length] }}
         />
       ))}
-    </TabList>
+    </Tabs>
   );
 }
 
