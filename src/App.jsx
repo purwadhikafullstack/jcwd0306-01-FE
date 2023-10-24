@@ -16,6 +16,7 @@ import { Register } from './pages/register';
 import { Verify } from './pages/verify';
 import ProductDetailPage from './pages/customer/ProductDetailPage';
 import { asyncReceiveUser } from './states/authUser/action';
+import { ProfileDashoard } from './pages/customer/Profile';
 
 function App() {
   const authUser = useSelector((states) => states.authUser);
@@ -72,6 +73,7 @@ function App() {
         <Route path="/verify" element={<Verify />} />
         <Route path="/cart/shipment" element={<Checkout />} />
         <Route path="/products/:id" element={<ProductDetailPage />} />
+        <Route path="/profile" element={<ProfileDashoard />} />
       </Routes>
     </>
   );

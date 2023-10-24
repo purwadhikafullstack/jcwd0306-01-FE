@@ -14,6 +14,7 @@ import checkLocationPathName from '../checkLocationPathName';
 
 function MainToolbar({ setIsCategoryDrawerOpen }) {
   const authUser = useSelector((states) => states.authUser);
+  console.log(authUser);
   const theme = useTheme();
   const isCartPage = checkLocationPathName();
 

@@ -9,6 +9,7 @@ import line from '../assets/line 2.png';
 import { asyncSetAuthUser } from '../states/authUser/action';
 import { constant } from '../constants/constant';
 import api from '../constants/api';
+import { setAlertActionCreator } from '../states/alert/action';
 
 const apiUrl = import.meta.env.VITE_FE_BASE_URL;
 
@@ -43,18 +44,27 @@ function LoginPage() {
           password: formik.values.password,
         };
 
-        localStorage.setItem('auth', data.data.data.token);
+        // localStorage.setItem('auth', data.data.data.token);
 
-        // dispatch(asyncSetAuthUser(authData));
-        dispatch({
-          type: constant.login,
-          payload: { ...payloadValue },
-        });
+        dispatch(asyncSetAuthUser(authData));
+        // dispatch({
+        //   type: constant.login,
+        //   payload: { ...payloadValue },
+        // });
 
-        alert('success login');
+        dispatch(
+          setAlertActionCreator({
+            val: { status: 'success', message: 'login success' },
+          })
+        );
         nav('/');
       } catch (err) {
         console.log(err?.message);
+        dispatch(
+          setAlertActionCreator({
+            val: { status: 'error', message: err?.message },
+          })
+        );
       } finally {
         setButtonDisabled(false);
       }
