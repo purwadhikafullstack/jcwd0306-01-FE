@@ -1,4 +1,5 @@
 import { Divider, Stack, Toolbar, useTheme } from '@mui/material';
+import { useSelector } from 'react-redux';
 import GadgetGalleryLogo from '../../../GadgetGalleryLogo';
 import CategoryButton from './CategoryButton';
 import SearchInput from './SearchInput';
@@ -12,8 +13,7 @@ import GGLogo from '../../../GGLogo';
 import checkLocationPathName from '../checkLocationPathName';
 
 function MainToolbar({ setIsCategoryDrawerOpen }) {
-  // const authUser = useSelector((states) => states.authUser);
-  const authUser = null;
+  const authUser = useSelector((states) => states.authUser);
   const theme = useTheme();
   const isCartPage = checkLocationPathName();
 
