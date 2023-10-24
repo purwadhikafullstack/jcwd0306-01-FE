@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 
@@ -13,14 +12,11 @@ export default function MobileShoppingSummaryDialog({
   open,
   setOpen,
   summaryTransaction,
+  grandTotal,
 }) {
   const handleClose = () => {
     setOpen(false);
   };
-
-  const totalPrice = summaryTransaction.get(`totalPrice`);
-  const totalDiscount = summaryTransaction.get(`totalDiscount`);
-  const totalItems = summaryTransaction.get(`totalItems`);
 
   return (
     <div>
@@ -35,7 +31,7 @@ export default function MobileShoppingSummaryDialog({
           sx: {
             position: 'fixed',
             bottom: 0,
-            maxHeight: '160px',
+            maxHeight: '300px',
             borderTopRightRadius: '20px',
             borderTopLeftRadius: '20px',
           },
@@ -44,19 +40,30 @@ export default function MobileShoppingSummaryDialog({
         <DialogTitle>Shopping Summary</DialogTitle>
         <DialogContent>
           <div id="alert-dialog-slide-description">
+            {[...summaryTransaction.keys()].map((key) =>
+              summaryTransaction.get(key).amount ? (
+                <div
+                  className="d-flex justify-content-between"
+                  key={summaryTransaction.get(key).name}
+                >
+                  <div>{summaryTransaction.get(key).name}</div>
+                  <div>
+                    {key !== 'totalItems'
+                      ? `Rp${summaryTransaction
+                          .get(key)
+                          .amount.toLocaleString(`id-ID`)}`
+                      : `${summaryTransaction
+                          .get(key)
+                          .amount.toLocaleString(`id-ID`)} items`}
+                  </div>
+                </div>
+              ) : null
+            )}
             <div className="d-flex justify-content-between">
-              <div>Total Price ({totalItems} items)</div>
-              <div>Rp{totalPrice.toLocaleString(`id-ID`)}</div>
-            </div>
-            <div className="d-flex justify-content-between">
-              <div>Total Discount</div>
-              <div>Rp{totalDiscount.toLocaleString(`id-ID`)}</div>
-            </div>
-            <div className="d-flex justify-content-between">
-              <div>Grand Total</div>
               <div>
-                Rp{(totalPrice - totalDiscount).toLocaleString(`id-ID`)}
+                <b>Grand total:</b>
               </div>
+              <div>Rp{grandTotal.toLocaleString(`id-ID`)}</div>
             </div>
           </div>
         </DialogContent>

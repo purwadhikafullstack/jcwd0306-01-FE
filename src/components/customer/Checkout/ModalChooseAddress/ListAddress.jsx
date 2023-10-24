@@ -1,5 +1,8 @@
 import ListItemButton from '@mui/material/ListItemButton';
 import { Button } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import api from '../../../../constants/api';
+import { handleDelete, handleSetDefault } from './handleFunction';
 
 export function ListAddress({
   selectedIndex,
@@ -8,7 +11,11 @@ export function ListAddress({
   destination,
   setAddressToEdit,
   setOpen,
+  addresses,
+  setAddresses,
 }) {
+  const dispatch = useDispatch();
+  const userSelector = { id: 5 };
   return (
     <ListItemButton
       selected={selectedIndex === index}
@@ -62,9 +69,35 @@ export function ListAddress({
               fontSize: '0.8em',
               display: destination?.isDefault ? 'none' : 'inline',
             }}
-            onClick={() => console.log(`click`)}
+            onClick={() =>
+              handleSetDefault(
+                dispatch,
+                setAddresses,
+                userSelector.id,
+                addresses,
+                destination,
+                setOpen
+              )
+            }
           >
             Set as Main Address
+          </Button>
+          <Button
+            style={{
+              fontSize: '0.8em',
+              display: destination?.isDefault ? 'none' : 'inline',
+            }}
+            onClick={() =>
+              handleDelete(
+                dispatch,
+                setAddresses,
+                index,
+                addresses,
+                destination
+              )
+            }
+          >
+            Delete
           </Button>
         </div>
       </div>

@@ -45,11 +45,15 @@ export async function addNewAddress(
   config = {}
 ) {
   values.userId = userId;
-  const result = await api.post(`/user_address/new/${userId}`, values, config);
+  const { data } = await api.post(
+    `/user_address/new/${userId}`,
+    values,
+    config
+  );
   const temp = [...addresses];
-  temp.unshift(result.data);
+  temp.unshift({ ...values, ...data });
   setAddresses(temp);
-  setAddress({ ...values, id: result.id });
+  setAddress({ ...values, ...data });
 }
 
 const checkChanges = (initialValues, updateValues) => {

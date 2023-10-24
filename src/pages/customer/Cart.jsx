@@ -8,9 +8,24 @@ import { CartHeader } from '../../components/customer/Cart/CartHeader';
 import { ShoppingSummary } from '../../components/customer/Cart/ShoppingSummary';
 import checkBoxHandler from '../../utils/checkBoxHandler';
 import { MobileShoppingSummary } from '../../components/customer/Cart/MobileShoppingSummary';
+import {
+  cartCalculator,
+  grandTotalCalculator,
+} from '../../components/customer/Cart/cartCalculator';
 
 function Cart() {
   const cart = useSelector((state) => state.cart);
+  const summaryTransaction = new Map([
+    [`totalItems`, { amount: 0, name: `Total Items` }],
+    [`totalPrice`, { amount: 0, name: `Total Price` }],
+    [`totalDiscount`, { amount: 0, name: `Total Discount` }],
+    [`shipmentPrice`, { amount: 0, name: `Shipment Price` }],
+    [`shipmentPriceDiscount`, { amount: 0, name: `Shipment Price Discount` }],
+    ['shippingInsurance', { amount: 0, name: `Shipping Insurance Price` }],
+    [`servicePrice`, { amount: 0, name: `Service Price` }],
+  ]);
+  cartCalculator(cart, summaryTransaction, {}, {});
+  const grandTotal = grandTotalCalculator(summaryTransaction);
 
   useEffect(() => {
     checkBoxHandler(`cart-item-checkboxes`, `check-all-products`);
@@ -36,11 +51,17 @@ function Cart() {
             : 'No Items on Cart'}
         </Col>
         <Col lg={4} md={5} className="position-relative d-none d-md-block">
-          <ShoppingSummary />
+          <ShoppingSummary
+            summaryTransaction={summaryTransaction}
+            grandTotal={grandTotal}
+          />
         </Col>
       </Row>
       <div className="sticky-bottom d-sm-block d-md-none bg-white px-2 pt-1 pb-3 border-top border-secondary-subtle h-100">
-        <MobileShoppingSummary />
+        <MobileShoppingSummary
+          summaryTransaction={summaryTransaction}
+          grandTotal={grandTotal}
+        />
       </div>
     </Container>
   );

@@ -19,6 +19,7 @@ export const updateCart =
       if (index !== -1) {
         temp[index].quantity += updatedItem.quantity;
         temp[index].isChecked = updatedItem.isChecked;
+        temp[index].note = updatedItem.note;
         await api.post(`/cart/${userId}`, { values: temp }, config);
         await dispatch({
           type: constant.updateProductOnCart,

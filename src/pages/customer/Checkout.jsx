@@ -9,13 +9,26 @@ import { ShoppingSummary } from '../../components/customer/Cart/ShoppingSummary'
 import { MobileShoppingSummary } from '../../components/customer/Cart/MobileShoppingSummary';
 import { CheckOutHeader } from '../../components/customer/Checkout/CheckOutHeader';
 import api from '../../constants/api';
-import { fetchPaymentOptions } from '../../components/customer/Checkout/fetchPaymentOptions';
+import { fetchShippingOptions } from '../../components/customer/Checkout/fetchShippingOptions';
 import { setAlertActionCreator } from '../../states/alert/action';
+import {
+  cartCalculator,
+  grandTotalCalculator,
+} from '../../components/customer/Cart/cartCalculator';
 
 export function Checkout() {
   const cart = useSelector((state) => state.cart).filter(
     (item) => item.isChecked
   );
+  const summaryTransaction = new Map([
+    [`totalItems`, { amount: 0, name: `Total Items` }],
+    [`totalPrice`, { amount: 0, name: `Total Price` }],
+    [`totalDiscount`, { amount: 0, name: `Total Discount` }],
+    [`shipmentPrice`, { amount: 0, name: `Shipment Price` }],
+    [`shipmentPriceDiscount`, { amount: 0, name: `Shipment Price Discount` }],
+    ['shippingInsurance', { amount: 0, name: `Shipping Insurance Price` }],
+    [`servicePrice`, { amount: 0, name: `Service Price` }],
+  ]);
   const userSelector = { id: 5 };
   const dispatch = useDispatch();
   const [addresses, setAddresses] = useState([]);
@@ -24,9 +37,13 @@ export function Checkout() {
   const [shippingMethod, setShippingMethod] = useState({});
   const [originWarehouse, setOriginWarehouse] = useState({});
   const [disableButton, setDisableButton] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const directBuyItem = useLocation().state;
+  cartCalculator(cart, summaryTransaction, directBuyItem, shippingMethod);
+  const grandTotal = grandTotalCalculator(summaryTransaction);
   const defaultAddress = addresses.find((destination) => destination.isDefault);
   const addressSelector = useSelector((state) => state.selectedAddress);
-  const directBuyItem = useLocation().state;
+
   async function fetchAddresses() {
     const { data } = await api.get(`/user_address/${userSelector.id}`);
     setAddresses(data);
@@ -42,13 +59,14 @@ export function Checkout() {
 
   useEffect(() => {
     try {
-      fetchPaymentOptions(
+      fetchShippingOptions(
         address,
         cart,
         setShippingOptions,
+        setIsLoading,
         setOriginWarehouse,
         setDisableButton,
-        dispatch
+        setShippingMethod
       );
     } catch (error) {
       setAlertActionCreator({
@@ -79,6 +97,7 @@ export function Checkout() {
             originWarehouse={originWarehouse}
             disableButton={disableButton}
             setDisableButton={setDisableButton}
+            isLoading={isLoading}
           />
           <StackBorder />
           {directBuyItem?.productId ? (
@@ -91,18 +110,30 @@ export function Checkout() {
                 index={index}
                 key={product.productId}
                 address={address}
+                directBuyItem={directBuyItem}
               />
             ))
           )}
         </Col>
         <Col lg={4} md={5} className="position-relative d-none d-md-block">
-          <ShoppingSummary address={address} disableButton={disableButton} />
+          <ShoppingSummary
+            address={address}
+            disableButton={disableButton}
+            shippingMethod={shippingMethod}
+            summaryTransaction={summaryTransaction}
+            grandTotal={grandTotal}
+            cart={cart}
+            directBuyItem={directBuyItem}
+          />
         </Col>
       </Row>
       <div className="sticky-bottom d-sm-block d-md-none bg-white px-2 pt-1 pb-3 border-top border-secondary-subtle">
         <MobileShoppingSummary
           address={address}
           disableButton={disableButton}
+          shippingMethod={shippingMethod}
+          summaryTransaction={summaryTransaction}
+          grandTotal={grandTotal}
         />
       </div>
     </Container>

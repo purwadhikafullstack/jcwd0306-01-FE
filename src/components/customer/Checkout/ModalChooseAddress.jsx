@@ -15,6 +15,7 @@ const Transition = React.forwardRef((props, ref) => (
 export default function ModalChooseAddress({
   open,
   setOpen,
+  address,
   addresses,
   setAddress,
   setAddresses,
@@ -48,8 +49,10 @@ export default function ModalChooseAddress({
         </Button>
         <DialogContent>
           <BoxAddresses
+            address={address}
             addresses={addresses}
             setAddress={setAddress}
+            setAddresses={setAddresses}
             handleClose={handleClose}
             setAddressToEdit={setAddressToEdit}
             setOpen={setOpen}

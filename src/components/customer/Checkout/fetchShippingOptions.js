@@ -1,25 +1,22 @@
 import api from '../../../constants/api';
 import { setAlertActionCreator } from '../../../states/alert/action';
 
-export const fetchPaymentOptions = async (
+export const fetchShippingOptions = async (
   address,
   cart,
   setShippingOptions,
+  setIsLoading,
   setOriginWarehouse,
   setDisableButton,
-  dispatch
+  setShippingMethod
 ) => {
-  dispatch(
-    setAlertActionCreator({
-      val: { status: 'info', message: 'fetching data' },
-    })
-  );
+  setIsLoading(true);
   setDisableButton(true);
   const weight = cart.reduce(
     (acc, val) => acc + val.quantity * val.Product.weight,
     0
   );
-  const { data } = await api.post(`/user_address/payment_option`, {
+  const { data } = await api.post(`/user_address/shipping_option`, {
     longitude: address?.longitude,
     latitude: address?.latitude,
     cityId: address?.cityId,
@@ -27,5 +24,7 @@ export const fetchPaymentOptions = async (
   });
   setShippingOptions(data.method);
   setOriginWarehouse(data.origin_details);
+  setShippingMethod({});
+  setIsLoading(false);
   setDisableButton(false);
 };

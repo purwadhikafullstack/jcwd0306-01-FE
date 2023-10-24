@@ -8,6 +8,7 @@ import checkBoxHandler from '../../../utils/checkBoxHandler';
 export function CartItemList({ cart, product, address }) {
   const [quantity, setQuantity] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
+  const [note, setNote] = useState('');
   const { stock } = product;
   const dispatch = useDispatch();
   const userSelector = { id: 5 };
@@ -32,14 +33,19 @@ export function CartItemList({ cart, product, address }) {
   useEffect(() => {
     setQuantity(product?.quantity);
     setIsChecked(product?.isChecked);
+    if (product?.note) setNote(product?.note);
   }, [product]);
 
   useEffect(() => {
     const temp = { ...product };
     temp.quantity = quantity - product.quantity;
-    if (temp.quantity !== 0 || temp.isChecked !== isChecked) {
-      // if no changes then no updating state and DB
+    if (
+      temp.quantity !== 0 ||
+      temp.isChecked !== isChecked ||
+      temp.note !== note
+    ) {
       temp.isChecked = isChecked;
+      temp.note = note;
       const updateItem = setTimeout(async () => {
         await dispatch(updateCart(cart, temp, userSelector.id));
       }, 500);
@@ -47,7 +53,7 @@ export function CartItemList({ cart, product, address }) {
         clearTimeout(updateItem);
       };
     }
-  }, [quantity, isChecked]);
+  }, [quantity, isChecked, note]);
 
   return (
     <>
@@ -72,8 +78,9 @@ export function CartItemList({ cart, product, address }) {
               <div className="d-flex flex-column gap-2 flex-grow-1">
                 <div>
                   <b>{product?.Product?.name}</b>
+                  <div style={{ fontSize: '0.8em' }}>Stock: {stock} </div>
                 </div>
-                <div>Color / Variant / Stock: {stock} </div>
+
                 <div>
                   {quantity} item{quantity > 1 ? 's' : null} (
                   {product.Product.weight * quantity} gram)
@@ -86,7 +93,7 @@ export function CartItemList({ cart, product, address }) {
           </div>
         </div>
       </div>
-      <div className="my-2">
+      <div className={window.location.pathname === '/cart' ? 'my-2' : 'd-none'}>
         <BottomTools
           quantity={quantity}
           handleChangeQuantity={handleChangeQuantity}
@@ -94,7 +101,19 @@ export function CartItemList({ cart, product, address }) {
           stock={stock}
           product={product}
           cart={cart}
+          note={note}
+          setNote={setNote}
         />
+      </div>
+      <div
+        className={
+          window.location.pathname === '/cart/shipment' && product?.note
+            ? 'my-2'
+            : 'd-none'
+        }
+        style={{ fontSize: '0.8em' }}
+      >
+        Note: {product?.note}
       </div>
       <StackBorder />
     </>

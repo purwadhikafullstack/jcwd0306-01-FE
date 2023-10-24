@@ -17,14 +17,17 @@ function provinceSetter(e, value, addressFormik) {
 
 export default function ProvinceSelect({ addressFormik }) {
   const [provinces, setProvinces] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchProvince, setSearchProvince] = useState('');
   const [val, setVal] = useState({ id: 0, name: '' });
   const fetchProvinces = async (provinceName = '') => {
     const { data } = await api.get(`/province?name=${provinceName}`);
     setProvinces(data);
+    setIsLoading(false);
   };
 
   useEffect(() => {
+    setIsLoading(true);
     const fetch = setTimeout(() => {
       fetchProvinces(searchProvince);
     }, 500);
@@ -43,7 +46,7 @@ export default function ProvinceSelect({ addressFormik }) {
     <Autocomplete
       id="province-select"
       sx={{ width: 300 }}
-      options={provinces}
+      options={isLoading ? [{ name: 'loading...' }] : provinces}
       autoHighlight
       getOptionLabel={(option) => option.name}
       isOptionEqualToValue={(option, value) => option.id === value?.id}

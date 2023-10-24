@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react';
 import { ListAddress } from './ListAddress';
 
 export function BoxAddresses({
+  address = {},
   addresses = [],
   setAddress,
+  setAddresses,
   handleClose,
   setAddressToEdit,
   setOpen,
@@ -21,7 +23,10 @@ export function BoxAddresses({
 
   useEffect(() => {
     setSelectedIndex(addresses.findIndex((dest) => dest.isDefault));
-  }, [addresses]);
+  }, []);
+  useEffect(() => {
+    setSelectedIndex(addresses.findIndex((dest) => dest.id === address.id));
+  }, [address]);
   return (
     <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
       <List component="nav" aria-label="main address list">
@@ -34,6 +39,8 @@ export function BoxAddresses({
             setAddressToEdit={setAddressToEdit}
             setOpen={setOpen}
             key={destination?.id}
+            addresses={addresses}
+            setAddresses={setAddresses}
           />
         ))}
       </List>

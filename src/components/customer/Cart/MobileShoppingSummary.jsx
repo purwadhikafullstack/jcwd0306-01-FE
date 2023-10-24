@@ -1,26 +1,19 @@
 import { Button } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
 import '../../GlobalCSS.css';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useState } from 'react';
 import MobileShoppingSummaryDialog from './MobileShoppingSummaryDialog';
-import { cartCalculator } from './cartCalculator';
 
-export function MobileShoppingSummary({ address, disableButton }) {
+export function MobileShoppingSummary({
+  address,
+  disableButton,
+  shippingMethod,
+  summaryTransaction,
+  grandTotal,
+  cart,
+  directBuyItem,
+}) {
   const [show, setShow] = useState(false);
-  const directBuyItem = useLocation().state;
-  const cart = useSelector((state) => state.cart).filter(
-    (item) => item.isChecked
-  );
-  const summaryTransaction = new Map([
-    [`totalPrice`, 0],
-    [`totalDiscount`, 0],
-    [`totalItems`, 0],
-  ]);
-  cartCalculator(cart, summaryTransaction, directBuyItem);
-  const totalPrice = summaryTransaction.get(`totalPrice`);
-  const totalDiscount = summaryTransaction.get(`totalDiscount`);
 
   return (
     <div>
@@ -28,6 +21,7 @@ export function MobileShoppingSummary({ address, disableButton }) {
         open={show}
         setOpen={setShow}
         summaryTransaction={summaryTransaction}
+        grandTotal={grandTotal}
       />
       <div />
       <div className="d-flex justify-content-between">
@@ -40,7 +34,7 @@ export function MobileShoppingSummary({ address, disableButton }) {
             <div>
               <b>
                 Rp
-                {(totalPrice - totalDiscount).toLocaleString(`id-ID`)}
+                {grandTotal.toLocaleString(`id-ID`)}
               </b>
             </div>
           </div>
