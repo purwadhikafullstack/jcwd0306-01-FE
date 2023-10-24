@@ -19,7 +19,7 @@ export default function ShippingSelect({
   };
 
   return (
-    <Box sx={{ minWidth: 150, fontSize: '0.8em' }}>
+    <Box sx={{ minWidth: 120, fontSize: '0.8em' }}>
       <FormControl fullWidth>
         <InputLabel id="select-shipping-method-label">
           Shipping method

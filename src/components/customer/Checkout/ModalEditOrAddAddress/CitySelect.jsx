@@ -15,16 +15,19 @@ function citySetter(e, value, addressFormik) {
 
 export default function CitySelect({ addressFormik }) {
   const [cities, setCities] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchCity, setSearchCity] = useState('');
   const fetchCities = async (provinceId = 0, cityName = '') => {
     const { data } = await api.get(`/city`, {
       params: { name: cityName, provinceId },
     });
     setCities(data);
+    setIsLoading(false);
   };
   const [val, setVal] = useState({ id: 0, name: '' });
 
   useEffect(() => {
+    setIsLoading(true);
     const fetch = setTimeout(() => {
       fetchCities(addressFormik.values.provinceId, searchCity);
     }, 500);
@@ -40,7 +43,7 @@ export default function CitySelect({ addressFormik }) {
     <Autocomplete
       id="city-select"
       sx={{ width: 300 }}
-      options={cities}
+      options={isLoading ? [{ name: 'loading...' }] : cities}
       value={val.id !== 0 ? val : null}
       autoHighlight
       disabled={!addressFormik.values.provinceId}

@@ -1,5 +1,6 @@
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useState } from 'react';
+import { CircularProgress } from '@mui/material';
 import { Address } from './Address';
 import ModalChooseAddress from './ModalChooseAddress';
 import { ModalEditAndAddAddress } from './ModalEditAndAddAddress';
@@ -15,6 +16,7 @@ export function CheckOutHeader({
   setShippingMethod,
   originWarehouse,
   disableButton,
+  isLoading,
 }) {
   const [showModal, setShowModal] = useState('');
   const [addressToEdit, setAddressToEdit] = useState({});
@@ -43,16 +45,21 @@ export function CheckOutHeader({
             Choose Address
           </Button>
           <div className="d-flex align-items-center">
-            <ShippingSelect
-              shippingOptions={shippingOptions}
-              shippingMethod={shippingMethod}
-              setShippingMethod={setShippingMethod}
-              disableButton={disableButton}
-            />
+            {isLoading ? (
+              <CircularProgress />
+            ) : (
+              <ShippingSelect
+                shippingOptions={shippingOptions}
+                shippingMethod={shippingMethod}
+                setShippingMethod={setShippingMethod}
+                disableButton={disableButton}
+              />
+            )}
           </div>
           <ModalChooseAddress
             open={showModal}
             setOpen={setShowModal}
+            address={address}
             addresses={addresses}
             setAddress={setAddress}
             setAddresses={setAddresses}

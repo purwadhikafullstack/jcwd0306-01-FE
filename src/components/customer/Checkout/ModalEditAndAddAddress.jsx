@@ -3,7 +3,7 @@ import * as React from 'react';
 import Slide from '@mui/material/Slide';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { HeaderChooseAddress } from './ModalChooseAddress/HeaderChooseAddress';
 import ProvinceSelect from './ModalEditOrAddAddress/ProvinceSelect';
 import CitySelect from './ModalEditOrAddAddress/CitySelect';
@@ -70,6 +70,7 @@ export function ModalEditAndAddAddress({
     setOpen('CHOOSE_ADDRESS');
     addressFormik.resetForm();
   }
+
   return (
     <div>
       <Dialog

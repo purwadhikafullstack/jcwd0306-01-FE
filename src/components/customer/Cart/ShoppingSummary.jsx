@@ -1,23 +1,16 @@
 import { Button, Card, ListGroup } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { StackBorder } from './StackBorder';
 import './Cart.css';
 import '../../GlobalCSS.css';
-import { cartCalculator } from './cartCalculator';
 
-export function ShoppingSummary({ address, disableButton }) {
-  const directBuyItem = useLocation().state;
-  const cart = useSelector((state) => state.cart);
-  const summaryTransaction = new Map([
-    [`totalPrice`, 0],
-    [`totalDiscount`, 0],
-    [`totalItems`, 0],
-  ]);
-  cartCalculator(cart, summaryTransaction, directBuyItem);
-  const totalPrice = summaryTransaction.get(`totalPrice`);
-  const totalDiscount = summaryTransaction.get(`totalDiscount`);
-
+export function ShoppingSummary({
+  address,
+  disableButton,
+  shippingMethod,
+  cart,
+  summaryTransaction,
+  grandTotal,
+  directBuyItem,
+}) {
   return (
     <Card className="p-1 card-summary">
       <Card.Header style={{ borderRadius: '45px 45px 0 0' }}>
@@ -25,25 +18,29 @@ export function ShoppingSummary({ address, disableButton }) {
       </Card.Header>
       <Card.Body>
         <ListGroup variant="flush">
+          {[...summaryTransaction.keys()].map((key) =>
+            summaryTransaction.get(key).amount ? (
+              <ListGroup.Item
+                className="px-0"
+                key={summaryTransaction.get(key).name}
+              >
+                <span>{summaryTransaction.get(key).name}</span>
+                <span className="float-end text-right">
+                  {key !== 'totalItems'
+                    ? `Rp${summaryTransaction
+                        .get(key)
+                        .amount.toLocaleString(`id-ID`)}`
+                    : `${summaryTransaction
+                        .get(key)
+                        .amount.toLocaleString(`id-ID`)} items`}
+                </span>
+              </ListGroup.Item>
+            ) : null
+          )}
           <ListGroup.Item className="px-0">
-            <span>Total Price:</span>
+            <span>Grand Total:</span>
             <span className="float-end text-right">
-              Rp{totalPrice.toLocaleString(`id-ID`)}
-            </span>
-          </ListGroup.Item>
-          <ListGroup.Item className="px-0">
-            <span>Discount:</span>
-            <span className="float-end text-right">
-              Rp
-              {totalDiscount.toLocaleString(`id-ID`)}
-            </span>
-          </ListGroup.Item>
-          <StackBorder />
-          <ListGroup.Item className="px-0">
-            <span>Grand total:</span>
-            <span className="float-end text-right">
-              Rp
-              {(totalDiscount + totalPrice).toLocaleString(`id-ID`)}
+              Rp{grandTotal.toLocaleString(`id-ID`)}
             </span>
           </ListGroup.Item>
           <ListGroup.Item className="px-0">Promo Code: takada</ListGroup.Item>
