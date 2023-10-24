@@ -1,8 +1,8 @@
 import { Avatar, Button } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 function AccountButton() {
-  // const authUser = useSelector((states) => states.authUser);
-  const authUser = {};
+  const authUser = useSelector((states) => states.authUser);
 
   return (
     <Button

@@ -15,14 +15,17 @@ import { Checkout } from './pages/customer/Checkout';
 import { Register } from './pages/register';
 import { Verify } from './pages/verify';
 import ProductDetailPage from './pages/customer/ProductDetailPage';
+import { asyncReceiveUser } from './states/authUser/action';
 
 function App() {
-  const authUser = null;
-  // const authUser = { isAdmin: true };
-  // const authUser = useSelector((states) => states.authUser);
+  const authUser = useSelector((states) => states.authUser);
   const location = useLocation();
   const pathLocation = location.pathname.split('/')[1];
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(asyncReceiveUser());
+  }, [dispatch]);
 
   // TEMPORARY AJA, nunggu login jadi
   const fetchCartItem = async () => {
