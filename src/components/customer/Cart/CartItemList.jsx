@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StackBorder } from './StackBorder';
-import { updateCart } from '../../../states/cart/action';
 import BottomTools from './BottomTools';
 import checkBoxHandler from '../../../utils/checkBoxHandler';
+import { checkChanges } from './checkChanges';
+import { updatingCart } from './updatingCart';
 
 export function CartItemList({ cart, product, address }) {
   const [quantity, setQuantity] = useState(0);
@@ -11,7 +12,7 @@ export function CartItemList({ cart, product, address }) {
   const [note, setNote] = useState('');
   const { stock } = product;
   const dispatch = useDispatch();
-  const userSelector = { id: 5 };
+  const userSelector = useSelector((state) => state.authUser);
 
   const editQuantity = async (number) => {
     setQuantity(quantity + number);
@@ -39,16 +40,10 @@ export function CartItemList({ cart, product, address }) {
   useEffect(() => {
     const temp = { ...product };
     temp.quantity = quantity - product.quantity;
-    if (
-      temp.quantity !== 0 ||
-      temp.isChecked !== isChecked ||
-      temp.note !== note
-    ) {
+    if (checkChanges(isChecked, note, temp)) {
       temp.isChecked = isChecked;
       temp.note = note;
-      const updateItem = setTimeout(async () => {
-        await dispatch(updateCart(cart, temp, userSelector.id));
-      }, 500);
+      const updateItem = updatingCart(dispatch, cart, temp, userSelector.id);
       return () => {
         clearTimeout(updateItem);
       };

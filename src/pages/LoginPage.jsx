@@ -25,7 +25,7 @@ function LoginPage() {
     validationSchema: Yup.object().shape({
       email: Yup.string().email('Invalid email address').required('Required'),
       password: Yup.string()
-        .min(8, 'at least 8 characters')
+        .min(5, 'at least 8 characters')
         .required('Required'),
       // .minUppercase(1, 'at least 1 capital letter')
       // .minNumbers(1, 'at least 1 number'),

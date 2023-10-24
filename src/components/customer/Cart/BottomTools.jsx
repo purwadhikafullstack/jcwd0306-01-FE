@@ -1,7 +1,7 @@
 import { Col, Row } from 'react-bootstrap';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { SvgTrash } from '../../SVG/SVG_trash';
 import './Cart.css';
@@ -21,11 +21,11 @@ function BottomTools({
 }) {
   const dispatch = useDispatch();
   const [show, setShow] = useState('');
-  const userSelector = { id: 5 };
+  const userSelector = useSelector((state) => state.authUser);
 
   return (
     <Row className="m-0 gap-2">
-      <Col xs={12} md="auto" className="pr-0">
+      <Col xs={12} md="auto" className="pr-0 flex-grow-1">
         <ProductNote product={product} note={note} setNote={setNote} />
       </Col>
       <Col className="d-flex justify-content-between p-0">

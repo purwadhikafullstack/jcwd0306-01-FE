@@ -7,18 +7,19 @@ function CartHeader() {
   const dispatch = useDispatch();
   const [show, setShow] = useState('');
   const cart = useSelector((state) => state.cart);
-  const userSelector = { id: 5 };
+  const userSelector = useSelector((state) => state.authUser);
 
   const toggleCheck = async (e) => {
     const statusChecked = e.target.checked;
     const checkBoxes = document.getElementsByName('cart-item-checkboxes');
-
     const temp = [];
     cart.forEach((item) => {
       item.isChecked = statusChecked;
       temp.push(item);
     });
-    await dispatch(updateCart(temp, { ...temp[0], quantity: 0 }, 1));
+    await dispatch(
+      updateCart(temp, { ...temp[0], quantity: 0 }, userSelector.id)
+    );
     checkBoxes.forEach((checkBox) => {
       if (checkBox.checked !== statusChecked) checkBox.click();
     });
