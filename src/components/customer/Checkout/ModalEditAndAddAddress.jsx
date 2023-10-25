@@ -2,8 +2,8 @@ import { Button, Dialog, useMediaQuery, useTheme } from '@mui/material';
 import * as React from 'react';
 import Slide from '@mui/material/Slide';
 import { useFormik } from 'formik';
-import { useDispatch } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import { HeaderChooseAddress } from './ModalChooseAddress/HeaderChooseAddress';
 import ProvinceSelect from './ModalEditOrAddAddress/ProvinceSelect';
 import CitySelect from './ModalEditOrAddAddress/CitySelect';
@@ -41,6 +41,7 @@ export function ModalEditAndAddAddress({
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const dispatch = useDispatch();
   const [disableButton, setDisableButton] = useState(false);
+  const userSelector = useSelector((state) => state.authUser);
 
   const addressFormik = useFormik({
     initialValues:
@@ -48,11 +49,10 @@ export function ModalEditAndAddAddress({
     validationSchema: addressValidationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      const { userId } = { userId: 5 };
       try {
         await addressSubmit(
           values,
-          userId,
+          userSelector?.id,
           addresses,
           setAddresses,
           setAddress,
@@ -86,7 +86,7 @@ export function ModalEditAndAddAddress({
         <div className="sticky-top">
           <HeaderChooseAddress handleClose={() => handleClose()} Title={open} />
         </div>
-        <div className="my-3 px-2 d-flex flex-column gap-2">
+        <div className="my-3 px-3 d-flex flex-column gap-2">
           <AddressNameAndReciever addressFormik={addressFormik} />
           <div>
             <div className="d-flex gap-2">

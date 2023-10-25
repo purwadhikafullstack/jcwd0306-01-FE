@@ -3,11 +3,16 @@ import { Col, Row } from 'react-bootstrap';
 export function CartItemLine({ item }) {
   return (
     <Row className="m-0">
-      <a href="/" className="text-decoration-none text-black">
+      <a
+        href={`/products/${item?.productId}`}
+        className="text-decoration-none text-black"
+      >
         <Row className="m-0 px-1 py-2 border-top border-secondary-subtle">
           <Col className="p-0" md="auto" key={1}>
             <img
-              src="https://t3.ftcdn.net/jpg/04/46/38/74/360_F_446387449_OIIQ3VlDKbMQTM63yVJNpks6UecfVAhD.jpg"
+              src={`${import.meta.env.VITE_API_BASE_URL}/products/images/${
+                item?.Product?.ProductImages[0].id
+              }`}
               alt={`img_${item.Product.name}`}
               style={{ width: '40px' }}
             />

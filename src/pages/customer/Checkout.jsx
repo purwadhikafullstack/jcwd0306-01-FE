@@ -1,7 +1,7 @@
 import '../../components/customer/Cart/Cart.css';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { CartItemList } from '../../components/customer/Cart/CartItemList';
 import { StackBorder } from '../../components/customer/Cart/StackBorder';
@@ -15,6 +15,7 @@ import {
   cartCalculator,
   grandTotalCalculator,
 } from '../../components/customer/Cart/cartCalculator';
+import { checkCartLength } from '../../components/customer/Checkout/isCartEmpty';
 
 export function Checkout() {
   const cart = useSelector((state) => state.cart).filter(
@@ -29,7 +30,8 @@ export function Checkout() {
     ['shippingInsurance', { amount: 0, name: `Shipping Insurance Price` }],
     [`servicePrice`, { amount: 0, name: `Service Price` }],
   ]);
-  const userSelector = { id: 5 };
+  const userSelector = useSelector((state) => state.authUser);
+  const nav = useNavigate();
   const dispatch = useDispatch();
   const [addresses, setAddresses] = useState([]);
   const [address, setAddress] = useState({});
@@ -45,12 +47,25 @@ export function Checkout() {
   const addressSelector = useSelector((state) => state.selectedAddress);
 
   async function fetchAddresses() {
-    const { data } = await api.get(`/user_address/${userSelector.id}`);
-    setAddresses(data);
+    try {
+      const { data } = await api.get(`/user_address/${userSelector?.id}`);
+      setAddresses(data);
+    } catch (error) {
+      dispatch(
+        setAlertActionCreator({
+          val: { status: 'error', message: error?.message },
+        })
+      );
+    }
   }
 
   useEffect(() => {
-    if (addressSelector.id) {
+    const isCartEmpty = checkCartLength(cart, directBuyItem, dispatch, nav);
+    return () => clearTimeout(isCartEmpty);
+  }, [cart]);
+
+  useEffect(() => {
+    if (addressSelector?.id) {
       setAddress(addressSelector);
     } else {
       setAddress(defaultAddress);
@@ -58,7 +73,7 @@ export function Checkout() {
   }, [defaultAddress?.id, addressSelector]);
 
   useEffect(() => {
-    try {
+    if (address?.id)
       fetchShippingOptions(
         address,
         cart,
@@ -66,18 +81,14 @@ export function Checkout() {
         setIsLoading,
         setOriginWarehouse,
         setDisableButton,
-        setShippingMethod
+        setShippingMethod,
+        dispatch
       );
-    } catch (error) {
-      setAlertActionCreator({
-        val: { status: 'error', message: error?.message },
-      });
-    }
   }, [address]);
 
   useEffect(() => {
-    fetchAddresses();
-  }, []);
+    if (userSelector?.id) fetchAddresses();
+  }, [userSelector?.id]);
   return (
     <Container className="mx-auto p-0 mt-3" fluid="lg">
       <Row
@@ -134,6 +145,8 @@ export function Checkout() {
           shippingMethod={shippingMethod}
           summaryTransaction={summaryTransaction}
           grandTotal={grandTotal}
+          cart={cart}
+          directBuyItem={directBuyItem}
         />
       </div>
     </Container>
