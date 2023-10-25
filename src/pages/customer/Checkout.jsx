@@ -16,6 +16,7 @@ import {
   grandTotalCalculator,
 } from '../../components/customer/Cart/cartCalculator';
 import { checkCartLength } from '../../components/customer/Checkout/isCartEmpty';
+import { createNewTransaction } from '../../components/customer/Checkout/createNewTransaction';
 
 export function Checkout() {
   const cart = useSelector((state) => state.cart).filter(
@@ -45,6 +46,18 @@ export function Checkout() {
   const grandTotal = grandTotalCalculator(summaryTransaction);
   const defaultAddress = addresses.find((destination) => destination.isDefault);
   const addressSelector = useSelector((state) => state.selectedAddress);
+
+  const createNewOrder = async () =>
+    createNewTransaction(
+      nav,
+      userSelector?.id,
+      cart,
+      directBuyItem,
+      address,
+      shippingMethod,
+      originWarehouse,
+      grandTotal
+    );
 
   async function fetchAddresses() {
     try {
@@ -128,25 +141,19 @@ export function Checkout() {
         </Col>
         <Col lg={4} md={5} className="position-relative d-none d-md-block">
           <ShoppingSummary
-            address={address}
             disableButton={disableButton}
-            shippingMethod={shippingMethod}
             summaryTransaction={summaryTransaction}
             grandTotal={grandTotal}
-            cart={cart}
-            directBuyItem={directBuyItem}
+            createNewOrder={createNewOrder}
           />
         </Col>
       </Row>
       <div className="sticky-bottom d-sm-block d-md-none bg-white px-2 pt-1 pb-3 border-top border-secondary-subtle">
         <MobileShoppingSummary
-          address={address}
           disableButton={disableButton}
-          shippingMethod={shippingMethod}
           summaryTransaction={summaryTransaction}
           grandTotal={grandTotal}
-          cart={cart}
-          directBuyItem={directBuyItem}
+          createNewOrder={createNewOrder}
         />
       </div>
     </Container>

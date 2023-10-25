@@ -5,13 +5,10 @@ import { useState } from 'react';
 import MobileShoppingSummaryDialog from './MobileShoppingSummaryDialog';
 
 export function MobileShoppingSummary({
-  address,
   disableButton,
-  shippingMethod,
   summaryTransaction,
   grandTotal,
-  cart,
-  directBuyItem,
+  createNewOrder,
 }) {
   const [show, setShow] = useState(false);
 

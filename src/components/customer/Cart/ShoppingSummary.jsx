@@ -3,13 +3,10 @@ import './Cart.css';
 import '../../GlobalCSS.css';
 
 export function ShoppingSummary({
-  address,
   disableButton,
-  shippingMethod,
-  cart,
   summaryTransaction,
   grandTotal,
-  directBuyItem,
+  createNewOrder,
 }) {
   return (
     <Card className="p-1 card-summary">
