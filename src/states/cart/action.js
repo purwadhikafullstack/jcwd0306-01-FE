@@ -2,7 +2,7 @@ import api from '../../constants/api';
 import { constant } from '../../constants/constant';
 
 const config = {
-  headers: { Authorization: `Bearer ${localStorage.getItem('auth')}` },
+  headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
 };
 
 const findIndexinCart = (arr = [], item = {}) => {

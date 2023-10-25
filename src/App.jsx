@@ -30,13 +30,15 @@ function App() {
 
   // TEMPORARY AJA, nunggu login jadi
   const fetchCartItem = async () => {
-    const { data } = await api.get('/cart/5');
-    dispatch({ type: constant.updateProductOnCart, payload: data });
+    if (authUser?.id) {
+      const { data } = await api.get(`/cart/${authUser?.id}`);
+      dispatch({ type: constant.updateProductOnCart, payload: data });
+    }
   };
 
   useEffect(() => {
     fetchCartItem();
-  }, []);
+  }, [authUser?.id]);
 
   if (pathLocation === 'admin') {
     if (!authUser?.isAdmin || !authUser?.isWarehouseAdmin) {

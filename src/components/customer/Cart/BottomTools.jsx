@@ -42,7 +42,7 @@ function BottomTools({
           <ConfirmationModal
             action={async () => {
               await dispatch(
-                deleteFromCart(cart, product.productId, userSelector.id)
+                deleteFromCart(cart, product.productId, userSelector?.id)
               );
               setShow(false);
             }}
