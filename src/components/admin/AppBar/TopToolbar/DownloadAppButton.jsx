@@ -5,7 +5,6 @@ function DownloadAppButton() {
   return (
     <Tooltip
       disableFocusListener
-      onClick={undefined}
       slotProps={{
         tooltip: {
           sx: {
@@ -25,6 +24,7 @@ function DownloadAppButton() {
       <Button
         size="small"
         variant="text"
+        onClick={undefined}
         startIcon={<PhoneIphoneOutlined />}
         sx={{
           textTransform: 'none',

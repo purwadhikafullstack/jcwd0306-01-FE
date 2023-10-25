@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { LoginPage } from './pages/LoginPage';
 import Alert from './components/Alert';
 import LoadingBar from './components/LoadingBar';
-import AdminAppBar from './components/admin/AppBar';
+import AdminAppBar from './components/admin/AppBar/AppBar';
 import AdminHomePage from './pages/admin/HomePage';
 import CustomerAppBar from './components/customer/AppBar/AppBar';
 import CustomerHomePage from './pages/customer/HomePage';
@@ -41,24 +41,20 @@ function App() {
   }, [authUser?.id]);
 
   if (pathLocation === 'admin') {
-    if (!authUser?.isAdmin || !authUser?.isWarehouseAdmin) {
+    if (authUser?.isAdmin || authUser?.isWarehouseAdmin) {
       return (
-        <Routes>
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+        <>
+          <Alert />
+          <LoadingBar />
+          <AdminAppBar />
+          <Routes>
+            <Route path="/admin" element={<AdminHomePage />} />
+            <Route path="*" element={<Navigate to="/admin" />} />
+          </Routes>
+        </>
       );
     }
-    return (
-      <>
-        <Alert />
-        <LoadingBar />
-        <AdminAppBar />
-        <Routes>
-          <Route path="/admin" element={<AdminHomePage />} />
-          <Route path="*" element={<Navigate to="/admin" />} />
-        </Routes>
-      </>
-    );
+    return null;
   }
 
   return (
