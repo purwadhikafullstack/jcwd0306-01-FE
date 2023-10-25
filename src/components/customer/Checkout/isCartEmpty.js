@@ -1,8 +1,8 @@
 import { setAlertActionCreator } from '../../../states/alert/action';
 
-export const checkCartLength = (cart, dispatch, nav) =>
+export const checkCartLength = (cart, directBuyItem, dispatch, nav) =>
   setTimeout(() => {
-    if (!cart.length) {
+    if (!cart.length && !directBuyItem?.quantity) {
       dispatch(
         setAlertActionCreator({
           val: {
@@ -11,6 +11,6 @@ export const checkCartLength = (cart, dispatch, nav) =>
           },
         })
       );
-      setTimeout(() => nav(`/cart`), 1000);
+      setTimeout(() => nav(`/cart`), 500);
     }
-  }, 1500);
+  }, 750);

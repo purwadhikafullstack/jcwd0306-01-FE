@@ -60,7 +60,7 @@ export function Checkout() {
   }
 
   useEffect(() => {
-    const isCartEmpty = checkCartLength(cart, dispatch, nav);
+    const isCartEmpty = checkCartLength(cart, directBuyItem, dispatch, nav);
     return () => clearTimeout(isCartEmpty);
   }, [cart]);
 
