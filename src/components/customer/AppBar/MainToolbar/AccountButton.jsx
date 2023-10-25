@@ -1,19 +1,25 @@
 import { Avatar, Box, Button, Link, Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { asyncUnsetAuthUser } from '../../../../states/authUser/action';
 
 const apiUrl = import.meta.env.VITE_FE_BASE_URL;
 
 function AccountButton() {
-  const authUser = useSelector((states) => states.authUser);
+  const globalAuthUser = useSelector((states) => states.authUser);
   const dispatch = useDispatch();
   const nav = useNavigate();
+  const [authUser, setAuthUser] = useState(globalAuthUser);
 
   function logout() {
     dispatch(asyncUnsetAuthUser());
     nav('/login');
   }
+
+  useEffect(() => {
+    setAuthUser(globalAuthUser);
+  }, [globalAuthUser]);
 
   return (
     <Tooltip

@@ -175,6 +175,9 @@ function LoginPage() {
               maxWidth: '100%',
               width: '500px',
             }}
+            value={formik.values.email}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email ? formik.errors.email : ''}
           />
 
           <TextField
@@ -191,6 +194,9 @@ function LoginPage() {
               maxWidth: '100%',
               width: '500px',
             }}
+            value={formik.values.password}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password ? formik.errors.password : ''}
           />
           <Button
             variant="outlined"
