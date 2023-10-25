@@ -1,5 +1,7 @@
+import { hideLoading, showLoading } from 'react-redux-loading-bar';
 import api from '../../constants/api';
 import { constant } from '../../constants/constant';
+import { setAlertActionCreator } from '../alert/action';
 
 const config = {
   headers: { Authorization: `Bearer ${localStorage.getItem('auth')}` },
@@ -9,6 +11,30 @@ const findIndexinCart = (arr = [], item = {}) => {
   const index = arr.findIndex((val) => val.productId === item.productId);
   return index;
 };
+
+export const createCart =
+  ({ productId, quantity, note }) =>
+  async (dispatch) => {
+    try {
+      dispatch(showLoading());
+      const { data } = await api.post('/cart', {
+        productId,
+        quantity,
+        note,
+      });
+      dispatch({
+        type: constant.createCart,
+        payload: data.data,
+      });
+      dispatch(setAlertActionCreator());
+      return true;
+    } catch (err) {
+      dispatch(setAlertActionCreator({ err }));
+      return false;
+    } finally {
+      dispatch(hideLoading());
+    }
+  };
 
 export const updateCart =
   (allValues = [], updatedItem = {}, userId = 0) =>

@@ -9,6 +9,7 @@ import AddToCartButton from './AddToCartButton';
 import DirectBuyButton from './DirectBuyButton';
 import QuantityInput from './QuantityInput';
 import NoteInput from './NoteInput';
+import { createCart } from '../../../../states/cart/action';
 
 function ProductActionStack() {
   const product = useSelector((states) => states.product);
@@ -18,7 +19,7 @@ function ProductActionStack() {
   const stackRef = useCallback((node) => {
     if (node !== null) {
       const getTop = () => {
-        // this function is used to measure the distance from top of stack element to the body
+        // this function is used to measure the distance from top of an element to the top of body
         let tempNode = node;
         let yPosition = 0;
         while (tempNode) {
@@ -36,19 +37,19 @@ function ProductActionStack() {
     quantity: number().integer().min(1).max(product.stock).required(),
     note: string(),
   });
-  const onSubmit = (values, a) => {
-    console.log(values, a);
+  const onSubmit = (values, { resetForm }) => {
     if (values.submitButton === 'add-to-cart') {
-      // dispatch(
-      //   asyncAddProductToCart({
-      //     id: product.id,
-      //     quantity: values.quantity,
-      //     note: values.note,
-      //   })
-      // ).then((isSuccess) => {
-      //   if (isSuccess) resetForm();
-      // });
+      dispatch(
+        createCart({
+          productId: product.id,
+          quantity: values.quantity,
+          note: values.note,
+        })
+      ).then((isSuccess) => {
+        if (isSuccess) resetForm();
+      });
     } else {
+      console.log(values);
       // dispatch(
       //   asyncDirectBuy({
       //     id: product.id,
