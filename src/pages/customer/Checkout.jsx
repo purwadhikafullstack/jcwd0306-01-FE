@@ -50,6 +50,7 @@ export function Checkout() {
   const createNewOrder = async () =>
     createNewTransaction(
       nav,
+      setDisableButton,
       userSelector?.id,
       cart,
       directBuyItem,

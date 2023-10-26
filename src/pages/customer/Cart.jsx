@@ -1,8 +1,9 @@
 import '../../components/customer/Cart/Cart.css';
 import { Col, Container, Row } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { CartItemList } from '../../components/customer/Cart/CartItemList';
 import { StackBorder } from '../../components/customer/Cart/StackBorder';
 import { CartHeader } from '../../components/customer/Cart/CartHeader';
@@ -13,9 +14,12 @@ import {
   cartCalculator,
   grandTotalCalculator,
 } from '../../components/customer/Cart/cartCalculator';
+import { checkStockToQuantity } from '../../components/customer/Cart/checkStockToQuantity';
 
 function Cart() {
   const cart = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+  const nav = useNavigate();
   const summaryTransaction = new Map([
     [`totalItems`, { amount: 0, name: `Total Items` }],
     [`totalPrice`, { amount: 0, name: `Total Price` }],
@@ -27,6 +31,8 @@ function Cart() {
   ]);
   cartCalculator(cart, summaryTransaction, {}, {});
   const grandTotal = grandTotalCalculator(summaryTransaction);
+
+  const checkQuantityToStock = () => checkStockToQuantity(dispatch, nav, cart);
 
   useEffect(() => {
     checkBoxHandler(`cart-item-checkboxes`, `check-all-products`);
@@ -66,6 +72,7 @@ function Cart() {
           <ShoppingSummary
             summaryTransaction={summaryTransaction}
             grandTotal={grandTotal}
+            createNewOrder={checkQuantityToStock}
           />
         </Col>
       </Row>
@@ -73,6 +80,7 @@ function Cart() {
         <MobileShoppingSummary
           summaryTransaction={summaryTransaction}
           grandTotal={grandTotal}
+          createNewOrder={checkQuantityToStock}
         />
       </div>
     </Container>
