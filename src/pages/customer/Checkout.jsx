@@ -3,6 +3,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { all } from 'axios';
 import { CartItemList } from '../../components/customer/Cart/CartItemList';
 import { StackBorder } from '../../components/customer/Cart/StackBorder';
 import { ShoppingSummary } from '../../components/customer/Cart/ShoppingSummary';
@@ -16,11 +17,12 @@ import {
   grandTotalCalculator,
 } from '../../components/customer/Cart/cartCalculator';
 import { checkCartLength } from '../../components/customer/Checkout/isCartEmpty';
+import { createNewTransaction } from '../../components/customer/Checkout/createNewTransaction';
+import { constant } from '../../constants/constant';
 
 export function Checkout() {
-  const cart = useSelector((state) => state.cart).filter(
-    (item) => item.isChecked
-  );
+  const allItemsInCart = useSelector((state) => state.cart);
+  const cart = allItemsInCart.filter((item) => item.isChecked);
   const summaryTransaction = new Map([
     [`totalItems`, { amount: 0, name: `Total Items` }],
     [`totalPrice`, { amount: 0, name: `Total Price` }],
@@ -46,16 +48,27 @@ export function Checkout() {
   const defaultAddress = addresses.find((destination) => destination.isDefault);
   const addressSelector = useSelector((state) => state.selectedAddress);
 
+  const createNewOrder = async () =>
+    createNewTransaction(
+      nav,
+      dispatch,
+      setDisableButton,
+      userSelector?.id,
+      allItemsInCart,
+      cart,
+      directBuyItem,
+      address,
+      shippingMethod,
+      originWarehouse,
+      grandTotal
+    );
+
   async function fetchAddresses() {
     try {
       const { data } = await api.get(`/user_address/${userSelector?.id}`);
       setAddresses(data);
     } catch (error) {
-      dispatch(
-        setAlertActionCreator({
-          val: { status: 'error', message: error?.message },
-        })
-      );
+      dispatch(constant.setError(error));
     }
   }
 
@@ -128,25 +141,19 @@ export function Checkout() {
         </Col>
         <Col lg={4} md={5} className="position-relative d-none d-md-block">
           <ShoppingSummary
-            address={address}
             disableButton={disableButton}
-            shippingMethod={shippingMethod}
             summaryTransaction={summaryTransaction}
             grandTotal={grandTotal}
-            cart={cart}
-            directBuyItem={directBuyItem}
+            createNewOrder={createNewOrder}
           />
         </Col>
       </Row>
       <div className="sticky-bottom d-sm-block d-md-none bg-white px-2 pt-1 pb-3 border-top border-secondary-subtle">
         <MobileShoppingSummary
-          address={address}
           disableButton={disableButton}
-          shippingMethod={shippingMethod}
           summaryTransaction={summaryTransaction}
           grandTotal={grandTotal}
-          cart={cart}
-          directBuyItem={directBuyItem}
+          createNewOrder={createNewOrder}
         />
       </div>
     </Container>

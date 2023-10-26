@@ -1,17 +1,14 @@
-import { Button } from 'react-bootstrap';
 import '../../GlobalCSS.css';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useState } from 'react';
 import MobileShoppingSummaryDialog from './MobileShoppingSummaryDialog';
+import { ButtonShoppingSummary } from './ButtonShoppingSummary';
 
 export function MobileShoppingSummary({
-  address,
   disableButton,
-  shippingMethod,
   summaryTransaction,
   grandTotal,
-  cart,
-  directBuyItem,
+  createNewOrder,
 }) {
   const [show, setShow] = useState(false);
 
@@ -42,11 +39,10 @@ export function MobileShoppingSummary({
             <KeyboardArrowUpIcon />
           </div>
         </div>
-        <Button disabled={disableButton} className="normal-button">
-          <a href="/cart/shipment" className="text-white text-decoration-none">
-            Proceed
-          </a>
-        </Button>
+        <ButtonShoppingSummary
+          disableButton={disableButton}
+          createNewOrder={createNewOrder}
+        />
       </div>
     </div>
   );

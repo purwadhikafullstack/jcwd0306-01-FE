@@ -5,7 +5,6 @@ import BottomTools from './BottomTools';
 import checkBoxHandler from '../../../utils/checkBoxHandler';
 import { checkChanges } from './checkChanges';
 import { updatingCart } from './updatingCart';
-import api from '../../../constants/api';
 import { CartItemImage } from './CartItemImage';
 import { CartItemTitle } from './CartItemTitle';
 
@@ -55,7 +54,11 @@ export function CartItemList({ cart, product, address }) {
 
   return (
     <>
-      <div>
+      <div
+        style={{
+          backgroundColor: product.quantity > product.stock ? '#F8F8FF' : null,
+        }}
+      >
         <div className="d-flex justify-content-between">
           <div className="d-flex align-items-center">
             {window.location.pathname === `/cart` ? (
@@ -67,9 +70,9 @@ export function CartItemList({ cart, product, address }) {
                 onChange={handleCheck}
               />
             ) : null}
-            <div className="d-flex gap-2">
+            <div className="d-flex gap-2 align-items-center">
               <CartItemImage product={product} />
-              <div className="d-flex flex-column gap-2 flex-grow-1">
+              <div className="d-flex flex-column gap-2">
                 <CartItemTitle product={product} stock={stock} />
                 <div>
                   {quantity} item{quantity > 1 ? 's' : null} (
