@@ -1,9 +1,32 @@
 import api from '../../../constants/api';
+import { constant } from '../../../constants/constant';
+import { deleteFromCart } from '../../../states/cart/action';
+
+const removeItemFromCart = (products = []) => {
+  const temp = [];
+  for (let i = 0; i < products.length; i += 1) temp.push(products[i].productId);
+  return temp;
+};
+
+const checkData = (
+  shippingMethod,
+  address = {},
+  products = [],
+  grandTotal = 0
+) => {
+  if (!shippingMethod.price)
+    throw new Error('You have not choose shipping method');
+  if (!address?.id) throw new Error('You have not choose destination');
+  if (!products.length) throw new Error('No products here');
+  if (grandTotal < 1) throw new Error('Application error');
+};
 
 export const createNewTransaction = async (
   nav,
+  dispatch,
   setDisableButton,
   userId = 0,
+  allItemsInCart = [],
   cart = [],
   directBuyItem = {},
   address = {},
@@ -15,19 +38,23 @@ export const createNewTransaction = async (
   try {
     setDisableButton(true);
     const products = directBuyItem?.quantity ? [directBuyItem] : cart;
+    checkData(shippingMethod, address, products, grandTotal);
     const { data } = await api.post(`/order/new/${userId}`, {
       products,
       userAddressId: address.id,
-      shippingMethod: shippingMethod.name || 'jne OKE',
-      shippingPrice: Number(shippingMethod.price) || '15000',
-      warehouseId: originWarehouse.warehouseId || 1,
+      shippingMethod: shippingMethod.name,
+      shippingPrice: Number(shippingMethod.price),
+      warehouseId: originWarehouse.warehouseId,
       total: grandTotal,
       status,
       userId,
     });
-    nav(`/payment/1`);
+    await dispatch(
+      deleteFromCart(allItemsInCart, removeItemFromCart(products), userId)
+    );
+    nav(`/payment`, { state: data });
   } catch (error) {
-    console.log(error);
+    dispatch(constant.setError(error));
   } finally {
     setDisableButton(false);
   }

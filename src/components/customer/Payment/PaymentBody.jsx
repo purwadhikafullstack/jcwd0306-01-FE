@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
+import { useDispatch } from 'react-redux';
 import { renderImage } from '../../../constants/renderImage';
 import api from '../../../constants/api';
+import { constant } from '../../../constants/constant';
+import { ImageDetail } from '../../ImageDetail';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -19,16 +22,29 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-export function PaymentBody() {
+export function PaymentBody({ orderData }) {
   const [imageUrl, setImageUrl] = useState('');
   const [image, setImage] = useState({});
+  const [imgSrc, setImgSrc] = useState('');
+  const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
   const handleSubmit = async () => {
     const form = new FormData();
     form.append('imageUrl', imageUrl);
     form.append(`image`, image);
-    await api.post(`/order/payment_proof`, form);
+    await api
+      .post(`/order/payment_proof/${orderData?.id}`, form)
+      .then(() => dispatch(constant.setSuccess('Success uploading image')));
   };
-  const [imgSrc, setImgSrc] = useState('');
+  useEffect(() => {
+    if (orderData?.paymentProof)
+      setImgSrc(
+        `${import.meta.env.VITE_API_BASE_URL}/order/payment_proof/${
+          orderData?.id
+        }`
+      );
+  }, [orderData?.paymentProof]);
+
   return (
     <Box
       component="form"
@@ -41,21 +57,27 @@ export function PaymentBody() {
         alignItems: 'center',
       }}
     >
+      <ImageDetail open={open} setOpen={setOpen} imgSrc={imgSrc} />
       <Grid container>
-        <Grid item xs={12} display={imgSrc ? 'grid' : 'none'}>
+        <Grid
+          type="button"
+          item
+          xs={12}
+          display={imgSrc ? 'grid' : 'none'}
+          onClick={() => setOpen(true)}
+        >
           <img
             id="paymentProof"
             alt="paymentProof receipt"
-            src=""
+            src={imgSrc}
             style={{
               height: '300px',
-              aspectRatio: `1/1`,
               objectFit: 'cover',
             }}
           />
         </Grid>
       </Grid>
-      <div className="d-flex justify-content-even gap-3">
+      <div className="d-flex justify-content-even gap-3 mt-3">
         <Button
           component="label"
           variant="contained"
@@ -67,9 +89,8 @@ export function PaymentBody() {
             accept="image"
             id="inputPaymentProof"
             onChange={async (e) => {
-              await renderImage(e, 'paymentProof');
-              setImgSrc('uploaded');
-              setImage(e.target.file[0]);
+              await renderImage(e, 'paymentProof', setImgSrc);
+              setImage(e.target.files[0]);
               setImageUrl(e.target.value);
             }}
           />

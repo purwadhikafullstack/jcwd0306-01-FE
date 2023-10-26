@@ -5,7 +5,6 @@ import BottomTools from './BottomTools';
 import checkBoxHandler from '../../../utils/checkBoxHandler';
 import { checkChanges } from './checkChanges';
 import { updatingCart } from './updatingCart';
-import api from '../../../constants/api';
 import { CartItemImage } from './CartItemImage';
 import { CartItemTitle } from './CartItemTitle';
 

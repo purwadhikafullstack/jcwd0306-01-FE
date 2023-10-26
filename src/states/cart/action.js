@@ -68,14 +68,19 @@ export const updateCart =
   };
 
 export const deleteFromCart =
-  (allValues = [], productId = 0 || [], userId = 0) =>
+  (allValues = [], productIds = 0 || [], userId = 0) =>
   async (dispatch) => {
     try {
-      const temp = typeof productId === `object` ? [] : [...allValues];
-      const index = allValues.findIndex((val) => val.productId === productId);
-      temp.splice(index, 1);
+      const temp = [...allValues];
+      const productId =
+        typeof productIds === `number` ? [productIds] : productIds;
+      productId.forEach((id) => {
+        const index = temp.findIndex((val) => val.productId === id);
+        temp.splice(index, 1);
+      });
+
       await api.delete(`/cart/${userId}`, {
-        params: { productId },
+        params: { productId: productIds },
       });
       await dispatch({
         type: constant.deleteProductFromCart,

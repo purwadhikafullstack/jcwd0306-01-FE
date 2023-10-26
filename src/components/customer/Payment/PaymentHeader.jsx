@@ -2,7 +2,7 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 
-export function PaymentHeader() {
+export function PaymentHeader({ orderData }) {
   return (
     <>
       <Avatar sx={{ m: 1, bgcolor: '#009BD2' }}>
@@ -12,7 +12,7 @@ export function PaymentHeader() {
         Selesaikan pembayaran dalam
       </Typography>
       <Typography component="h1" variant="h6">
-        12:00:00
+        {orderData.updatedAt}
       </Typography>
       <Typography variant="h7">Batas akhir pembayaran</Typography>
       <Typography variant="h7">Thursday, 30 October 2023 09:31:35</Typography>

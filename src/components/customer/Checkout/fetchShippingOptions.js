@@ -1,4 +1,5 @@
 import api from '../../../constants/api';
+import { constant } from '../../../constants/constant';
 import { setAlertActionCreator } from '../../../states/alert/action';
 
 const weightCalculator = (cart = []) =>
@@ -37,23 +38,14 @@ export const fetchShippingOptions = async (
       longitude: address?.longitude,
       latitude: address?.latitude,
       cityId: address?.cityId,
+      postalCode: address.postalCode,
       weight,
     });
     setShippingOptions(data.method);
     setOriginWarehouse(data.origin_details);
     setShippingMethod({});
   } catch (error) {
-    dispatch(
-      setAlertActionCreator({
-        val: {
-          status: 'error',
-          message:
-            error?.response?.data?.message ||
-            error?.response?.data ||
-            error?.message,
-        },
-      })
-    );
+    dispatch(constant.setError(error));
   } finally {
     setIsLoading(false);
     setDisableButton(false);
