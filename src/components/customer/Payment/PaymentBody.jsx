@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
+
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
@@ -9,6 +9,7 @@ import { renderImage } from '../../../constants/renderImage';
 import api from '../../../constants/api';
 import { constant } from '../../../constants/constant';
 import { ImageDetail } from '../../ImageDetail';
+import { ImagePayment } from './ImagePayment';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -58,25 +59,7 @@ export function PaymentBody({ orderData }) {
       }}
     >
       <ImageDetail open={open} setOpen={setOpen} imgSrc={imgSrc} />
-      <Grid container>
-        <Grid
-          type="button"
-          item
-          xs={12}
-          display={imgSrc ? 'grid' : 'none'}
-          onClick={() => setOpen(true)}
-        >
-          <img
-            id="paymentProof"
-            alt="paymentProof receipt"
-            src={imgSrc}
-            style={{
-              height: '300px',
-              objectFit: 'cover',
-            }}
-          />
-        </Grid>
-      </Grid>
+      <ImagePayment setOpen={setOpen} imgSrc={imgSrc} />
       <div className="d-flex justify-content-even gap-3 mt-3">
         <Button
           component="label"

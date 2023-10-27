@@ -13,17 +13,17 @@ export function CartItemLine({ item }) {
               src={`${import.meta.env.VITE_API_BASE_URL}/products/images/${
                 item?.Product?.ProductImages[0].id
               }`}
-              alt={`img_${item.Product.name}`}
+              alt={`img_${item?.Product?.name}`}
               style={{ width: '40px' }}
             />
           </Col>
           <Col className="px-1 py-0" key={2}>
             <div className="text-truncate">
-              <b>{item.Product.name}</b>
+              <b>{item?.Product?.name}</b>
             </div>
             <div style={{ fontSize: '10px' }}>
-              {item.quantity} item{item.quantity > 1 ? `s` : null} (
-              {item.Product.weight} gr)
+              {item?.quantity} item{item?.quantity > 1 ? `s` : null} (
+              {item?.Product?.weight} gr)
             </div>
           </Col>
           <Col
@@ -32,7 +32,7 @@ export function CartItemLine({ item }) {
             style={{ height: `inherit` }}
             key={3}
           >
-            Rp{item.Product.price.toLocaleString(`id-ID`)}
+            Rp{item?.Product?.price.toLocaleString(`id-ID`)}
           </Col>
         </Row>
       </a>

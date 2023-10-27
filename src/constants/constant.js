@@ -12,6 +12,7 @@ export const constant = {
   selectAddress: 'SELECT_ADDRESS',
   logout: 'LOGOUT',
   login: 'LOGIN',
+  updateUnpaid: 'UPDATE_UNPAID_ORDER',
   setError: (error) =>
     setAlertActionCreator({
       val: {
