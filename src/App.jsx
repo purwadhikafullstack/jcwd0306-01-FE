@@ -17,8 +17,11 @@ import { Verify } from './pages/verify';
 import ProductDetailPage from './pages/customer/ProductDetailPage';
 import { asyncReceiveUser } from './states/authUser/action';
 import { ProfileDashoard } from './pages/customer/Profile';
-import { Payment } from './pages/customer/Payment';
+import { Payment } from './pages/customer/OrderPayment';
 import { TransitionPage } from './pages/customer/Transition';
+import { PaymentList } from './pages/customer/PaymentList';
+import { OrderList } from './pages/customer/OrderList';
+import { ChatRoom } from './pages/customer/Chatroom';
 
 function App() {
   const authUser = useSelector((states) => states.authUser);
@@ -30,11 +33,11 @@ function App() {
     dispatch(asyncReceiveUser());
   }, [dispatch]);
 
-  // TEMPORARY AJA, nunggu login jadi
   const fetchCartItem = async () => {
     if (authUser?.id) {
-      const { data } = await api.get(`/cart/${authUser?.id}`);
-      dispatch({ type: constant.updateProductOnCart, payload: data });
+      const { data } = await api.get(`/user/details/${authUser?.id}`);
+      dispatch({ type: constant.updateProductOnCart, payload: data.Carts });
+      dispatch({ type: constant.updateUnpaid, payload: data.UserOrder });
     }
   };
 
@@ -78,8 +81,11 @@ function App() {
         <Route path="/cart/shipment" element={<Checkout />} />
         <Route path="/products/:id" element={<ProductDetailPage />} />
         <Route path="/profile" element={<ProfileDashoard />} />
-        <Route path="/payment/:orderId" element={<Payment />} />
         <Route path="/payment" element={<TransitionPage />} />
+        <Route path="/payment/payment-list" element={<PaymentList />} />
+        <Route path="/payment/:orderId" element={<Payment />} />
+        <Route path="/order-list" element={<OrderList />} />
+        <Route path="/chatroom" element={<ChatRoom />} />
       </Routes>
     </>
   );

@@ -10,6 +10,7 @@ import carouselsReducer from './carousels/reducer';
 import { addressReducer, selectedAddressReducer } from './userAddress/reducer';
 import authUserReducer from './authUser/reducer';
 import productReducer from './product/reducer';
+import orderReducer from './order/reducer';
 
 const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
     address: addressReducer,
     selectedAddress: selectedAddressReducer,
     authUser: authUserReducer,
+    order: orderReducer,
   },
   middleware: [thunk],
 });
