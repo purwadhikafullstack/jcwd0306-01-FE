@@ -20,8 +20,8 @@ export function Payment() {
 
   useEffect(() => {
     if (directTransactionData) setOrderData(directTransactionData);
-    else fetchOrder();
-  }, []);
+    else if(userSelector?.id) fetchOrder();
+  }, [userSelector]);
   return (
     <Container component="main" maxWidth="md">
       <CssBaseline />
