@@ -23,6 +23,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import InputAdornment from '@mui/material/InputAdornment';
 import api from '../../constants/api';
 import { setAlertActionCreator } from '../../states/alert/action';
+import { asyncSetAuthUser } from '../../states/authUser/action';
 
 export function ProfileDashoard() {
   const authUser = useSelector((states) => states.authUser);
@@ -30,6 +31,7 @@ export function ProfileDashoard() {
   const [see, setSee] = useState(false);
   const [seeOldPassword, setSeeOldPassword] = useState(false);
   const [seeNewPassword, setSeeNewPassword] = useState(false);
+  const [avatar, setAvatar] = useState(null);
   const dispatch = useDispatch();
 
   const formik = useFormik({
@@ -115,6 +117,17 @@ export function ProfileDashoard() {
     formik.resetForm();
   }
 
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const response = await api.get(`/user/render/${authUser?.id}`);
+        setAvatar(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  }, [authUser?.id]);
+
   return (
     <Container sx={{ mt: 3, p: 2 }}>
       <Card sx={{ p: 2, backgroundColor: '#FBFCFE' }}>
@@ -136,7 +149,7 @@ export function ProfileDashoard() {
           <Stack direction="column" spacing={1} alignItems="center">
             <Avatar
               sx={{ minHeight: 120, minWidth: 120, position: 'relative' }}
-              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286"
+              src={avatar || null}
             />
             <IconButton
               sx={{

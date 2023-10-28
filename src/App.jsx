@@ -22,6 +22,8 @@ import { TransitionPage } from './pages/customer/Transition';
 import { PaymentList } from './pages/customer/PaymentList';
 import { OrderList } from './pages/customer/OrderList';
 import { ChatRoom } from './pages/customer/Chatroom';
+import ForgetPassword from './pages/ForgetPassword';
+import ChangePassword from './pages/ChangePassword';
 
 function App() {
   const authUser = useSelector((states) => states.authUser);
@@ -77,7 +79,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/verify" element={<Verify />} />
+        {authUser !== null && <Route path="/verify" element={<Verify />} />}
         <Route path="/cart/shipment" element={<Checkout />} />
         <Route path="/products/:id" element={<ProductDetailPage />} />
         <Route path="/profile" element={<ProfileDashoard />} />
@@ -86,6 +88,10 @@ function App() {
         <Route path="/payment/:orderId" element={<Payment />} />
         <Route path="/order-list" element={<OrderList />} />
         <Route path="/chatroom" element={<ChatRoom />} />
+        {authUser === null && (
+          <Route path="/forget-password" element={<ForgetPassword />} />
+        )}
+        <Route path="/change-password" element={<ChangePassword />} />
       </Routes>
     </>
   );

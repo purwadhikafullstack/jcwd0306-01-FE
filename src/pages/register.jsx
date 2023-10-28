@@ -1,15 +1,18 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
 import google from '../assets/google.png';
 import line from '../assets/line 2.png';
 import api from '../constants/api';
+import { setAlertActionCreator } from '../states/alert/action';
 // import { setAlertActionCreator } from '../states/alert/action';
 // import GGLogo from '../assets/GadgetGallery Logo 2.png';
 
 const apiUrl = import.meta.env.VITE_FE_BASE_URL;
 
 function Register() {
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -22,22 +25,19 @@ function Register() {
     }),
     onSubmit: async () => {
       try {
-        // console.log('formik', values);
         await api.post('/user/register', formik.values);
 
-        alert('please check email');
-
-        // setAlertActionCreator({
-        //   val: {
-        //     status: 'success',
-        //     message: 'please check your email for verification',
-        //   },
-        // });
+        dispatch(
+          setAlertActionCreator({
+            val: { status: 'success', message: 'Please Check your Email' },
+          })
+        );
       } catch (err) {
-        // setAlertActionCreator({
-        //   val: { status: 'error', message: err?.message },
-        // });
-        alert(err?.message);
+        dispatch(
+          setAlertActionCreator({
+            val: { status: 'error', message: err?.response.data.message },
+          })
+        );
       }
     },
   });
