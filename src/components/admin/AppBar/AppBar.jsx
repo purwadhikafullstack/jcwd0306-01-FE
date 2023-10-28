@@ -1,5 +1,4 @@
 import { AppBar as MuiAppBar } from '@mui/material';
-import TopToolbar from './TopToolbar/TopToolbar';
 import MainToolbar from './MainToolbar/MainToolbar';
 
 function AppBar() {
@@ -13,7 +12,6 @@ function AppBar() {
           boxShadow: 1,
         }}
       >
-        <TopToolbar />
         <MainToolbar />
       </MuiAppBar>
       {/* <MenuDrawer /> */}

@@ -15,7 +15,7 @@ function MainToolbar() {
   const theme = useTheme();
 
   return (
-    <Toolbar sx={{ gap: 2 }}>
+    <Toolbar sx={{ gap: 2, overflow: 'auto' }}>
       <Stack direction="row" alignItems="center" spacing={1}>
         <Box>
           {/* Show GadgetGallery Logo */}
@@ -30,7 +30,6 @@ function MainToolbar() {
           <GGLogo
             sx={{
               fontSize: '2rem',
-              [theme.breakpoints.down('sm')]: { display: 'none' },
               [theme.breakpoints.up('md')]: { display: 'none' },
             }}
           />
@@ -58,13 +57,7 @@ function MainToolbar() {
       />
 
       {/* Show Account Button */}
-      <Stack
-        direction="row"
-        spacing={2}
-        sx={{ [theme.breakpoints.down('sm')]: { display: 'none' } }}
-      >
-        <AccountButton />
-      </Stack>
+      <AccountButton />
     </Toolbar>
   );
 }

@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import { useTheme } from '@mui/material';
 import { LoginPage } from './pages/LoginPage';
 import Alert from './components/Alert';
 import LoadingBar from './components/LoadingBar';
@@ -17,16 +18,24 @@ import { Verify } from './pages/verify';
 import ProductDetailPage from './pages/customer/ProductDetailPage';
 import { asyncReceiveUser } from './states/authUser/action';
 import { ProfileDashoard } from './pages/customer/Profile';
+import WarehousePage from './pages/admin/WarehousePage';
 
 function App() {
   const authUser = useSelector((states) => states.authUser);
   const location = useLocation();
   const pathLocation = location.pathname.split('/')[1];
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   useEffect(() => {
     dispatch(asyncReceiveUser());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (pathLocation === 'admin')
+      document.body.style.backgroundColor = theme.palette.action.selected;
+    else document.body.style.backgroundColor = theme.palette.background.paper;
+  }, [pathLocation]);
 
   // TEMPORARY AJA, nunggu login jadi
   const fetchCartItem = async () => {
@@ -48,6 +57,7 @@ function App() {
           <LoadingBar />
           <AdminAppBar />
           <Routes>
+            <Route path="/admin/warehouses" element={<WarehousePage />} />
             <Route path="/admin" element={<AdminHomePage />} />
             <Route path="*" element={<Navigate to="/admin" />} />
           </Routes>
