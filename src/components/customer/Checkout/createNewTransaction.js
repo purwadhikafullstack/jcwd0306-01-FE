@@ -1,6 +1,7 @@
 import api from '../../../constants/api';
 import { constant } from '../../../constants/constant';
 import { deleteFromCart } from '../../../states/cart/action';
+import { addUnpaid } from '../../../states/order/action';
 
 const removeItemFromCart = (products = []) => {
   const temp = [];
@@ -33,6 +34,7 @@ export const createNewTransaction = async (
   shippingMethod = {},
   originWarehouse = {},
   grandTotal = 0,
+  unpaid = [],
   status = 'unpaid'
 ) => {
   try {
@@ -52,6 +54,8 @@ export const createNewTransaction = async (
     await dispatch(
       deleteFromCart(allItemsInCart, removeItemFromCart(products), userId)
     );
+    data.OrderProducts = products;
+    dispatch(addUnpaid(unpaid, data));
     nav(`/payment`, { state: data });
   } catch (error) {
     dispatch(constant.setError(error));

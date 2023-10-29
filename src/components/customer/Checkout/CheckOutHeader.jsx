@@ -83,7 +83,7 @@ export function CheckOutHeader({
           }}
         >
           <div>
-            <b>Sent From</b>: {originWarehouse.city_name}
+            <b>Sent From</b>: {originWarehouse?.city_name}
           </div>
           <div>Shipping method: {shippingMethod?.name}</div>
           <div>Delivery time estimation: {shippingMethod?.etd}</div>

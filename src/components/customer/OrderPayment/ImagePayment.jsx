@@ -9,6 +9,7 @@ export function ImagePayment({ imgSrc, setOpen }) {
         xs={12}
         display={imgSrc ? 'grid' : 'none'}
         onClick={() => setOpen(true)}
+        justifyContent="center"
       >
         <img
           id="paymentProof"
