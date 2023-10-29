@@ -1,5 +1,5 @@
-export function CartItemImage({ product }) {
-  if (window.location.pathname === `/cart`)
+export function CartItemImage({ product, width = '100px' }) {
+  if (window.location.pathname !== `/cart/shipment`)
     return (
       <a
         href={`/products/${product?.productId}`}
@@ -10,7 +10,7 @@ export function CartItemImage({ product }) {
             product?.Product?.ProductImages[0].id
           }`}
           alt=""
-          width="100px"
+          width={width}
         />
       </a>
     );

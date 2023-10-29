@@ -11,7 +11,10 @@ import { MobileShoppingSummary } from '../../components/customer/Cart/MobileShop
 import { CheckOutHeader } from '../../components/customer/Checkout/CheckOutHeader';
 import api from '../../constants/api';
 import { fetchShippingOptions } from '../../components/customer/Checkout/fetchShippingOptions';
-import { setAlertActionCreator } from '../../states/alert/action';
+import {
+  setAlertActionCreator,
+  unsetAlertActionCreator,
+} from '../../states/alert/action';
 import {
   cartCalculator,
   grandTotalCalculator,
@@ -33,6 +36,7 @@ export function Checkout() {
     [`servicePrice`, { amount: 0, name: `Service Price` }],
   ]);
   const userSelector = useSelector((state) => state.authUser);
+  const unpaid = useSelector((state) => state.order);
   const nav = useNavigate();
   const dispatch = useDispatch();
   const [addresses, setAddresses] = useState([]);
@@ -60,7 +64,8 @@ export function Checkout() {
       address,
       shippingMethod,
       originWarehouse,
-      grandTotal
+      grandTotal,
+      unpaid
     );
 
   async function fetchAddresses() {
@@ -74,7 +79,9 @@ export function Checkout() {
 
   useEffect(() => {
     const isCartEmpty = checkCartLength(cart, directBuyItem, dispatch, nav);
-    return () => clearTimeout(isCartEmpty);
+    return () => {
+      clearTimeout(isCartEmpty);
+    };
   }, [cart]);
 
   useEffect(() => {
@@ -86,7 +93,7 @@ export function Checkout() {
   }, [defaultAddress?.id, addressSelector]);
 
   useEffect(() => {
-    if (address?.id)
+    if (address?.id && (cart.length || directBuyItem?.quantity))
       fetchShippingOptions(
         address,
         cart,
@@ -97,7 +104,7 @@ export function Checkout() {
         setShippingMethod,
         dispatch
       );
-  }, [address]);
+  }, [address, cart.length]);
 
   useEffect(() => {
     if (userSelector?.id) fetchAddresses();

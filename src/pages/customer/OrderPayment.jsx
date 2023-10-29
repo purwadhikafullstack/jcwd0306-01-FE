@@ -4,9 +4,11 @@ import Container from '@mui/material/Container';
 import { useLocation, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { PaymentHeader } from '../../components/customer/Payment/PaymentHeader';
-import { PaymentBody } from '../../components/customer/Payment/PaymentBody';
+
+import { PaymentHeader } from '../../components/customer/OrderPayment/PaymentHeader';
+import { PaymentBody } from '../../components/customer/OrderPayment/PaymentBody';
 import api from '../../constants/api';
+import { SeeOrderProducts } from '../../components/customer/OrderPayment/SeeOrderProducts';
 
 export function Payment() {
   const directTransactionData = useLocation().state;
@@ -20,7 +22,7 @@ export function Payment() {
 
   useEffect(() => {
     if (directTransactionData) setOrderData(directTransactionData);
-    else if(userSelector?.id) fetchOrder();
+    else if (userSelector?.id) fetchOrder();
   }, [userSelector]);
   return (
     <Container component="main" maxWidth="md">
@@ -35,6 +37,7 @@ export function Payment() {
       >
         <PaymentHeader orderData={orderData} />
         <PaymentBody orderData={orderData} />
+        <SeeOrderProducts orderData={orderData} />
       </Box>
     </Container>
   );

@@ -1,6 +1,5 @@
 import api from '../../../constants/api';
 import { constant } from '../../../constants/constant';
-import { setAlertActionCreator } from '../../../states/alert/action';
 
 const weightCalculator = (cart = []) =>
   cart.reduce((acc, val) => acc + val.quantity * val.Product.weight, 0);
@@ -38,7 +37,7 @@ export const fetchShippingOptions = async (
       longitude: address?.longitude,
       latitude: address?.latitude,
       cityId: address?.cityId,
-      postalCode: address.postalCode,
+      postalCode: address?.postalCode,
       weight,
     });
     setShippingOptions(data.method);

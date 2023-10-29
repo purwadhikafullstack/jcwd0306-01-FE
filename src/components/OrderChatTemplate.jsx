@@ -20,7 +20,7 @@ export function OrderChatTemplate({ children }) {
         disableGutters={useMediaQuery(theme.breakpoints.down('md'))}
       >
         <Box sx={{ flexGrow: 1, mt: 2 }}>
-          <Grid container gap={2} wrap="noWrap">
+          <Grid container gap={2} wrap="nowrap">
             <Grid item md={3} display={{ md: 'flex', sm: 'none', xs: 'none' }}>
               <Card sx={{ flexGrow: 1, minHeight: '75vh' }}>
                 <CardContent>
