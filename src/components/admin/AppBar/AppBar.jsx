@@ -1,20 +1,26 @@
 import { AppBar as MuiAppBar } from '@mui/material';
+import { useState } from 'react';
 import MainToolbar from './MainToolbar/MainToolbar';
+import MenuDrawer from './MenuDrawer/MenuDrawer';
 
 function AppBar() {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
   return (
     <>
       <MuiAppBar
         position="sticky"
-        sx={{
-          bgcolor: 'background.paper',
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-          boxShadow: 1,
-        }}
+        sx={{ bgcolor: 'background.paper', boxShadow: 1 }}
       >
-        <MainToolbar />
+        {/* Main Toolbar */}
+        <MainToolbar setIsDrawerOpen={setIsDrawerOpen} />
       </MuiAppBar>
-      {/* <MenuDrawer /> */}
+
+      {/* Menu Drawer */}
+      <MenuDrawer
+        isDrawerOpen={isDrawerOpen}
+        setIsDrawerOpen={setIsDrawerOpen}
+      />
     </>
   );
 }

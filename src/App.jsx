@@ -6,9 +6,8 @@ import { LoginPage } from './pages/LoginPage';
 import Alert from './components/Alert';
 import LoadingBar from './components/LoadingBar';
 import AdminAppBar from './components/admin/AppBar/AppBar';
-import AdminHomePage from './pages/admin/HomePage';
 import CustomerAppBar from './components/customer/AppBar/AppBar';
-import CustomerHomePage from './pages/customer/HomePage';
+import HomePage from './pages/customer/HomePage';
 import { Cart } from './pages/customer/Cart';
 import api from './constants/api';
 import { constant } from './constants/constant';
@@ -19,6 +18,7 @@ import ProductDetailPage from './pages/customer/ProductDetailPage';
 import { asyncReceiveUser } from './states/authUser/action';
 import { ProfileDashoard } from './pages/customer/Profile';
 import WarehousePage from './pages/admin/WarehousePage';
+import DashboardPage from './pages/admin/DashboardPage';
 
 function App() {
   const authUser = useSelector((states) => states.authUser);
@@ -58,7 +58,7 @@ function App() {
           <AdminAppBar />
           <Routes>
             <Route path="/admin/warehouses" element={<WarehousePage />} />
-            <Route path="/admin" element={<AdminHomePage />} />
+            <Route path="/admin" element={<DashboardPage />} />
             <Route path="*" element={<Navigate to="/admin" />} />
           </Routes>
         </>
@@ -74,7 +74,7 @@ function App() {
       <CustomerAppBar />
       <Routes>
         {authUser === null && <Route path="/login" element={<LoginPage />} />}
-        <Route path="/" element={<CustomerHomePage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="*" element={<Navigate to="/" />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/register" element={<Register />} />
