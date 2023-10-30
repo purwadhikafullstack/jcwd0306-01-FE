@@ -47,13 +47,13 @@ function LoginPage() {
           email: formik.values.email,
           password: formik.values.password,
         };
-        dispatch(asyncSetAuthUser(authData, nav));
+        dispatch(asyncSetAuthUser(authData));
         dispatch(
           setAlertActionCreator({
             val: { status: 'success', message: 'login success' },
           })
         );
-        // nav('/');
+        nav('/');
       } catch (err) {
         dispatch(
           setAlertActionCreator({
