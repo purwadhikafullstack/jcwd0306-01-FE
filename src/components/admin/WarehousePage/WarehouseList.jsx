@@ -46,8 +46,8 @@ function WarehouseList() {
       gap={12}
       variant="standard"
       sx={{
-        p: 4,
-        borderRadius: 1,
+        p: 2,
+        borderRadius: 0.5,
         boxShadow: 4,
       }}
     >

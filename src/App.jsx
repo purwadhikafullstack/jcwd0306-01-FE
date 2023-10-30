@@ -19,6 +19,7 @@ import { asyncReceiveUser } from './states/authUser/action';
 import { ProfileDashoard } from './pages/customer/Profile';
 import WarehousePage from './pages/admin/WarehousePage';
 import DashboardPage from './pages/admin/DashboardPage';
+import CategoryPage from './pages/admin/CategoryPage';
 
 function App() {
   const authUser = useSelector((states) => states.authUser);
@@ -49,7 +50,9 @@ function App() {
     fetchCartItem();
   }, [authUser?.id]);
 
+  // ADMIN PAGE
   if (pathLocation === 'admin') {
+    if (authUser == null) return null;
     if (authUser?.isAdmin || authUser?.isWarehouseAdmin) {
       return (
         <>
@@ -57,6 +60,7 @@ function App() {
           <LoadingBar />
           <AdminAppBar />
           <Routes>
+            <Route path="/admin/categories" element={<CategoryPage />} />
             <Route path="/admin/warehouses" element={<WarehousePage />} />
             <Route path="/admin" element={<DashboardPage />} />
             <Route path="*" element={<Navigate to="/admin" />} />
@@ -64,9 +68,11 @@ function App() {
         </>
       );
     }
-    return null;
+
+    return <div>Anda bukan admin</div>;
   }
 
+  // CUSTOMER PAGE
   return (
     <>
       <Alert />

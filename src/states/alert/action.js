@@ -8,10 +8,7 @@ function setAlertActionCreator({
   err = null,
 } = {}) {
   const errVal = err
-    ? err.response?.data?.data || {
-        status: 'error',
-        message: err?.message,
-      }
+    ? { status: 'error', message: err.response?.data?.message || err?.message }
     : {};
 
   return {
