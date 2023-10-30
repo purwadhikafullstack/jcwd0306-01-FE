@@ -5,10 +5,13 @@ function categoriesReducer(categories = [], action = {}) {
     case ActionType.GET_CATEGORIES:
       return action.payload.categories;
 
+    case ActionType.CREATE_CATEGORY:
+      return [...categories, action.payload.category];
+
     case ActionType.EDIT_CATEGORY:
       return categories.map((category) =>
         category.id === action.payload.category.id
-          ? action.payload.category
+          ? { ...category, ...action.payload.category }
           : category
       );
 

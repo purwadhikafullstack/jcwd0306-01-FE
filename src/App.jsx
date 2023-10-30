@@ -1,13 +1,13 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import { useTheme } from '@mui/material';
 import { LoginPage } from './pages/LoginPage';
 import Alert from './components/Alert';
 import LoadingBar from './components/LoadingBar';
-import AdminAppBar from './components/admin/AppBar';
-import AdminHomePage from './pages/admin/HomePage';
+import AdminAppBar from './components/admin/AppBar/AppBar';
 import CustomerAppBar from './components/customer/AppBar/AppBar';
-import CustomerHomePage from './pages/customer/HomePage';
+import HomePage from './pages/customer/HomePage';
 import { Cart } from './pages/customer/Cart';
 import api from './constants/api';
 import { constant } from './constants/constant';
@@ -17,6 +17,9 @@ import { Verify } from './pages/verify';
 import ProductDetailPage from './pages/customer/ProductDetailPage';
 import { asyncReceiveUser } from './states/authUser/action';
 import { ProfileDashoard } from './pages/customer/Profile';
+import WarehousePage from './pages/admin/WarehousePage';
+import DashboardPage from './pages/admin/DashboardPage';
+import CategoryPage from './pages/admin/CategoryPage';
 import { Payment } from './pages/customer/OrderPayment';
 import { TransitionPage } from './pages/customer/Transition';
 import { PaymentList } from './pages/customer/PaymentList';
@@ -30,11 +33,19 @@ function App() {
   const location = useLocation();
   const pathLocation = location.pathname.split('/')[1];
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   useEffect(() => {
     dispatch(asyncReceiveUser());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (pathLocation === 'admin')
+      document.body.style.backgroundColor = theme.palette.action.selected;
+    else document.body.style.backgroundColor = theme.palette.background.paper;
+  }, [pathLocation]);
+
+  // TEMPORARY AJA, nunggu login jadi
   const fetchCartItem = async () => {
     if (authUser?.id) {
       const { data } = await api.get(`/user/details/${authUser?.id}`);
@@ -47,27 +58,29 @@ function App() {
     fetchCartItem();
   }, [authUser?.id]);
 
+  // ADMIN PAGE
   if (pathLocation === 'admin') {
-    if (!authUser?.isAdmin || !authUser?.isWarehouseAdmin) {
+    if (authUser == null) return null;
+    if (authUser?.isAdmin || authUser?.isWarehouseAdmin) {
       return (
-        <Routes>
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+        <>
+          <Alert />
+          <LoadingBar />
+          <AdminAppBar />
+          <Routes>
+            <Route path="/admin/categories" element={<CategoryPage />} />
+            <Route path="/admin/warehouses" element={<WarehousePage />} />
+            <Route path="/admin" element={<DashboardPage />} />
+            <Route path="*" element={<Navigate to="/admin" />} />
+          </Routes>
+        </>
       );
     }
-    return (
-      <>
-        <Alert />
-        <LoadingBar />
-        <AdminAppBar />
-        <Routes>
-          <Route path="/admin" element={<AdminHomePage />} />
-          <Route path="*" element={<Navigate to="/admin" />} />
-        </Routes>
-      </>
-    );
+
+    return <div>Anda bukan admin</div>;
   }
 
+  // CUSTOMER PAGE
   return (
     <>
       <Alert />
@@ -75,7 +88,7 @@ function App() {
       <CustomerAppBar />
       <Routes>
         {authUser === null && <Route path="/login" element={<LoginPage />} />}
-        <Route path="/" element={<CustomerHomePage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="*" element={<Navigate to="/" />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/register" element={<Register />} />
