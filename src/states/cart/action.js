@@ -1,14 +1,40 @@
+import { hideLoading, showLoading } from 'react-redux-loading-bar';
 import api from '../../constants/api';
 import { constant } from '../../constants/constant';
+import { setAlertActionCreator } from '../alert/action';
 
 const config = {
-  headers: { Authorization: `Bearer ${localStorage.getItem('auth')}` },
+  headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
 };
 
 const findIndexinCart = (arr = [], item = {}) => {
   const index = arr.findIndex((val) => val.productId === item.productId);
   return index;
 };
+
+export const createCart =
+  ({ productId, quantity, note }) =>
+  async (dispatch) => {
+    try {
+      dispatch(showLoading());
+      const { data } = await api.post('/cart', {
+        productId,
+        quantity,
+        note,
+      });
+      dispatch({
+        type: constant.createCart,
+        payload: data.data,
+      });
+      dispatch(setAlertActionCreator());
+      return true;
+    } catch (err) {
+      dispatch(setAlertActionCreator({ err }));
+      return false;
+    } finally {
+      dispatch(hideLoading());
+    }
+  };
 
 export const updateCart =
   (allValues = [], updatedItem = {}, userId = 0) =>
@@ -19,6 +45,7 @@ export const updateCart =
       if (index !== -1) {
         temp[index].quantity += updatedItem.quantity;
         temp[index].isChecked = updatedItem.isChecked;
+        temp[index].note = updatedItem.note;
         await api.post(`/cart/${userId}`, { values: temp }, config);
         await dispatch({
           type: constant.updateProductOnCart,
@@ -35,20 +62,25 @@ export const updateCart =
       });
       return constant.success;
     } catch (err) {
-      if (err?.response?.data) return `This item is not available`;
-      return err?.message;
+      if (err?.response?.data) throw new Error(`This item is not available`);
+      throw new Error(err?.message);
     }
   };
 
 export const deleteFromCart =
-  (allValues = [], productId = 0 || [], userId = 0) =>
+  (allValues = [], productIds = 0 || [], userId = 0) =>
   async (dispatch) => {
     try {
-      const temp = typeof productId === `object` ? [] : [...allValues];
-      const index = allValues.findIndex((val) => val.productId === productId);
-      temp.splice(index, 1);
+      const temp = [...allValues];
+      const productId =
+        typeof productIds === `number` ? [productIds] : productIds;
+      productId.forEach((id) => {
+        const index = temp.findIndex((val) => val.productId === id);
+        temp.splice(index, 1);
+      });
+
       await api.delete(`/cart/${userId}`, {
-        params: { productId },
+        params: { productId: productIds },
       });
       await dispatch({
         type: constant.deleteProductFromCart,

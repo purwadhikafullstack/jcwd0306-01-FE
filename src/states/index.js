@@ -9,6 +9,9 @@ import productPaginationReducer from './productPagination/reducer';
 import carouselsReducer from './carousels/reducer';
 import { addressReducer, selectedAddressReducer } from './userAddress/reducer';
 import authUserReducer from './authUser/reducer';
+import productReducer from './product/reducer';
+import warehousesReducer from './warehouses/reducer';
+import orderReducer from './order/reducer';
 
 const store = configureStore({
   reducer: {
@@ -17,11 +20,14 @@ const store = configureStore({
     carousels: carouselsReducer,
     categories: categoriesReducer,
     cart: cartReducer,
+    product: productReducer,
     products: productsReducer,
     productPagination: productPaginationReducer,
     address: addressReducer,
     selectedAddress: selectedAddressReducer,
     authUser: authUserReducer,
+    warehouses: warehousesReducer,
+    order: orderReducer,
   },
   middleware: [thunk],
 });

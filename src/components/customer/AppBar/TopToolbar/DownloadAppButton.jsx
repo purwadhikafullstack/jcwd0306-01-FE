@@ -17,7 +17,7 @@ function DownloadAppButton() {
       }}
       title={
         <Typography color="primary">
-          Comming Soon
+          Coming Soon
           <HourglassTopOutlined />
         </Typography>
       }
@@ -25,7 +25,6 @@ function DownloadAppButton() {
       <Button
         size="small"
         variant="text"
-        onClick={undefined}
         startIcon={<PhoneIphoneOutlined />}
         sx={{
           textTransform: 'none',

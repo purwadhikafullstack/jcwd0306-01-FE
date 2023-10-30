@@ -15,9 +15,12 @@ const Transition = React.forwardRef((props, ref) => (
 export default function ModalChooseAddress({
   open,
   setOpen,
+  address,
   addresses,
   setAddress,
   setAddresses,
+  setAddressToEdit,
+  setShippingMethod,
 }) {
   const handleClose = () => setOpen('');
   const theme = useTheme();
@@ -40,15 +43,20 @@ export default function ModalChooseAddress({
         <Button
           variant="white"
           className="mx-3 border border-secondary-subtle rounded-pill mb-3"
-          onClick={() => setOpen('ADD_ADDRESS')}
+          onClick={() => setOpen('ADD ADDRESS')}
         >
           Add New Address
         </Button>
         <DialogContent>
           <BoxAddresses
+            address={address}
             addresses={addresses}
             setAddress={setAddress}
+            setAddresses={setAddresses}
             handleClose={handleClose}
+            setAddressToEdit={setAddressToEdit}
+            setOpen={setOpen}
+            setShippingMethod={setShippingMethod}
           />
         </DialogContent>
       </Dialog>

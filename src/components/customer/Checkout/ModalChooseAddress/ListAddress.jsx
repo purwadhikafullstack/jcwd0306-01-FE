@@ -1,12 +1,21 @@
 import ListItemButton from '@mui/material/ListItemButton';
 import { Button } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import api from '../../../../constants/api';
+import { handleDelete, handleSetDefault } from './handleFunction';
 
 export function ListAddress({
   selectedIndex,
   handleListItemClick,
   index,
   destination,
+  setAddressToEdit,
+  setOpen,
+  addresses,
+  setAddresses,
 }) {
+  const dispatch = useDispatch();
+  const userSelector = { id: 5 };
   return (
     <ListItemButton
       selected={selectedIndex === index}
@@ -17,7 +26,7 @@ export function ListAddress({
       }}
       disableTouchRipple
     >
-      <div className="d-flex flex-column position-relative">
+      <div className="d-flex flex-column position-relative w-100">
         <Button
           className="position-absolute"
           style={{
@@ -46,7 +55,12 @@ export function ListAddress({
         <div className="mt-1">
           <Button
             style={{ fontSize: '0.8em' }}
-            onClick={(e) => console.log(`click`)}
+            onClick={() => {
+              const tempAddress = { ...destination };
+              tempAddress.index = index;
+              setAddressToEdit(tempAddress);
+              setOpen('EDIT ADDRESS');
+            }}
           >
             Edit
           </Button>
@@ -55,9 +69,35 @@ export function ListAddress({
               fontSize: '0.8em',
               display: destination?.isDefault ? 'none' : 'inline',
             }}
-            onClick={(e) => console.log(`click`)}
+            onClick={() =>
+              handleSetDefault(
+                dispatch,
+                setAddresses,
+                userSelector.id,
+                addresses,
+                destination,
+                setOpen
+              )
+            }
           >
             Set as Main Address
+          </Button>
+          <Button
+            style={{
+              fontSize: '0.8em',
+              display: destination?.isDefault ? 'none' : 'inline',
+            }}
+            onClick={() =>
+              handleDelete(
+                dispatch,
+                setAddresses,
+                index,
+                addresses,
+                destination
+              )
+            }
+          >
+            Delete
           </Button>
         </div>
       </div>

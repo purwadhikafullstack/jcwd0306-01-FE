@@ -13,14 +13,14 @@ function TopFooter() {
 
   const iconStyle = {
     color: 'white',
-    [theme.breakpoints.down('sm')]: { fontSize: '10vw' },
+    [theme.breakpoints.down('sm')]: { fontSize: '4rem' },
     [theme.breakpoints.between('sm', 'md')]: { fontSize: '4rem' },
     [theme.breakpoints.up('md')]: { fontSize: '3rem' },
   };
 
   const textStyle = {
     color: 'white',
-    [theme.breakpoints.down('sm')]: { fontSize: '6vw' },
+    [theme.breakpoints.down('sm')]: { fontSize: '1.5rem' },
     [theme.breakpoints.between('sm', 'md')]: { fontSize: '1.8rem' },
     [theme.breakpoints.up('md')]: { fontSize: '1.5rem' },
   };
@@ -41,16 +41,15 @@ function TopFooter() {
         justifyContent="center"
         spacing={1}
       >
-        <Typography color="white" variant="h6" sx={{ ...textStyle }}>
+        <Typography color="white" variant="h6">
           Keuntungan Belanja di
         </Typography>
         <GadgetGalleryLogo
           sx={{
-            [theme.breakpoints.down(300)]: { fontSize: '10vw', px: '5vw' },
-            [theme.breakpoints.up(300)]: { fontSize: '2rem', px: '2rem' },
+            fontSize: '2rem',
             bgcolor: 'white',
             borderRadius: 4,
-            maxWidth: '90vw',
+            px: '1rem',
           }}
         />
       </Stack>

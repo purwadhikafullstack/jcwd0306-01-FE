@@ -4,6 +4,7 @@ import api from '../../constants/api';
 
 const ActionType = {
   GET_CATEGORIES: 'GET_CATEGORIES',
+  CREATE_CATEGORY: 'CREATE_CATEGORY',
   EDIT_CATEGORY: 'EDIT_CATEGORY',
   DELETE_CATEGORY: 'DELETE_CATEGORY',
 };
@@ -12,6 +13,13 @@ function getCategoriesActionCreator(categories) {
   return {
     type: ActionType.GET_CATEGORIES,
     payload: { categories },
+  };
+}
+
+function createCategoryActionCreator(category) {
+  return {
+    type: ActionType.CREATE_CATEGORY,
+    payload: { category },
   };
 }
 
@@ -29,11 +37,17 @@ function deleteCategoryActionCreator(categoryId) {
   };
 }
 
-function asyncGetCategories() {
+function asyncGetCategories({ name, sortBy, orderBy } = {}) {
   return async (dispatch) => {
     try {
       dispatch(showLoading());
-      const { data } = await api.get('/categories');
+
+      const nameQ = name ? `name=${encodeURIComponent(name)}&` : '';
+      const sortByQ = sortBy ? `sortBy=${encodeURIComponent(sortBy)}&` : '';
+      const orderByQ = orderBy ? `orderBy=${encodeURIComponent(orderBy)}&` : '';
+      const allQuery = `?${nameQ}${sortByQ}${orderByQ}`;
+
+      const { data } = await api.get(`/categories${allQuery}`);
       dispatch(getCategoriesActionCreator(data.data));
     } catch (err) {
       dispatch(setAlertActionCreator({ err }));
@@ -47,9 +61,9 @@ function asyncCreateCategory(formData) {
   return async (dispatch) => {
     try {
       dispatch(showLoading());
-      await api.post('/categories', formData);
+      const { data } = await api.post('/categories', formData);
+      dispatch(createCategoryActionCreator(data.data));
       dispatch(setAlertActionCreator());
-      dispatch(asyncGetCategories());
       return true;
     } catch (err) {
       dispatch(setAlertActionCreator({ err }));
@@ -95,6 +109,7 @@ function asyncDeleteCategory(categoryId) {
 export {
   ActionType,
   getCategoriesActionCreator,
+  createCategoryActionCreator,
   editCategoryActionCreator,
   deleteCategoryActionCreator,
   asyncGetCategories,

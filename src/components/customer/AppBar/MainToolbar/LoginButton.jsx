@@ -12,7 +12,7 @@ function LoginButton() {
         href={`${apiUrl}/login`}
         sx={{ textTransform: 'none', textDecoration: 'none' }}
       >
-        masuk
+        Masuk
       </Link>
     </Button>
   );

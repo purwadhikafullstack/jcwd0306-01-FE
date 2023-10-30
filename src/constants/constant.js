@@ -1,5 +1,7 @@
+import { setAlertActionCreator } from '../states/alert/action';
+
 export const constant = {
-  addProductToCart: 'ADD_TO_CART',
+  createCart: 'CREATE_CART',
   updateProductOnCart: 'UPDATE_CART',
   deleteProductFromCart: 'DELETE_FROM_CART',
   resetCart: 'RESET_CART',
@@ -10,4 +12,14 @@ export const constant = {
   selectAddress: 'SELECT_ADDRESS',
   logout: 'LOGOUT',
   login: 'LOGIN',
+  updateUnpaid: 'UPDATE_UNPAID_ORDER',
+  setError: (error) =>
+    setAlertActionCreator({
+      val: {
+        status: 'error',
+        message: error?.response?.data?.message || error?.message,
+      },
+    }),
+  setSuccess: (message = '') =>
+    setAlertActionCreator({ val: { status: 'success', message } }),
 };

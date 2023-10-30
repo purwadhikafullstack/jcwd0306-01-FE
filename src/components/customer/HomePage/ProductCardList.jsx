@@ -27,10 +27,7 @@ function ProductCardList() {
         })()}
         gap={12}
         variant="standard"
-        sx={{
-          maxWidth: 'lg',
-          p: 1,
-        }}
+        sx={{ p: 1 }}
       >
         {products.map((product) => (
           <ProductCardItem
@@ -38,6 +35,7 @@ function ProductCardList() {
             image={`${import.meta.env.VITE_API_BASE_URL}/products/images/${
               product.imageIds[0]
             }`}
+            id={product.id}
             name={product.name}
             price={product.price}
             sold={product.sold}

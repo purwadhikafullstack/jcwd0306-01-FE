@@ -1,12 +1,13 @@
 import { Col, Row } from 'react-bootstrap';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { SvgTrash } from '../../SVG/SVG_trash';
 import './Cart.css';
 import { deleteFromCart } from '../../../states/cart/action';
 import { ConfirmationModal } from '../../ConfirmationModal';
+import { ProductNote } from './ProductNote';
 
 function BottomTools({
   quantity,
@@ -15,22 +16,19 @@ function BottomTools({
   stock,
   product,
   cart,
+  note,
+  setNote,
 }) {
   const dispatch = useDispatch();
   const [show, setShow] = useState('');
-  const userSelector = { id: 5 };
+  const userSelector = useSelector((state) => state.authUser);
 
   return (
-    <Row
-      className="m-0"
-      style={{
-        display: window.location.pathname === '/cart' ? 'flex' : 'none',
-      }}
-    >
-      <Col xs={12} md={5}>
-        Write a note
+    <Row className="m-0 gap-2">
+      <Col xs={12} md="auto" className="pr-0 flex-grow-1">
+        <ProductNote product={product} note={note} setNote={setNote} />
       </Col>
-      <Col className="d-flex justify-content-between">
+      <Col className="d-flex justify-content-between p-0">
         <div />
         <div className="d-flex gap-5 align-items-center">
           <button
@@ -44,7 +42,7 @@ function BottomTools({
           <ConfirmationModal
             action={async () => {
               await dispatch(
-                deleteFromCart(cart, product.productId, userSelector.id)
+                deleteFromCart(cart, product.productId, userSelector?.id)
               );
               setShow(false);
             }}

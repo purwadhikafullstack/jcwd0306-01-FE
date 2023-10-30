@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import YupPassword from 'yup-password';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import api from '../constants/api';
 import { setAlertActionCreator } from '../states/alert/action';
 
@@ -13,6 +14,7 @@ export function Verify() {
   const queryParams = new URLSearchParams(window.location.search);
   const email = queryParams.get('email');
   const nav = useNavigate();
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -39,19 +41,19 @@ export function Verify() {
     onSubmit: async () => {
       try {
         const res = await api.patch('/user/verify', formik.values);
-
-        setAlertActionCreator({
-          val: { status: 'success', message: 'verify user succesfully' },
-        });
-
-        alert('verify success');
+        dispatch(
+          setAlertActionCreator({
+            val: { status: 'success', message: 'verification success' },
+          })
+        );
 
         nav('/login');
       } catch (err) {
-        setAlertActionCreator({
-          val: { status: 'error', message: err?.message },
-        });
-        alert(err?.mesage);
+        dispatch(
+          setAlertActionCreator({
+            val: { status: 'error', message: err?.message },
+          })
+        );
       }
     },
   });
@@ -82,6 +84,8 @@ export function Verify() {
           size="small"
           // value={formik.values.firstName}
           onChange={(e) => inputHandler(e, 'firstName')}
+          error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+          helperText={formik.touched.firstName && formik.errors.firstName}
         />
         <TextField
           id="outlined-basic"
@@ -91,6 +95,8 @@ export function Verify() {
           sx={{ marginTop: '10px' }}
           // value={formik.values.lastName}
           onChange={(e) => inputHandler(e, 'lastName')}
+          error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+          helperText={formik.touched.lastName && formik.errors.lastName}
         />
         <TextField
           id="outlined-basic"
@@ -100,6 +106,8 @@ export function Verify() {
           sx={{ marginTop: '10px' }}
           // value={formik.values.password}
           onChange={(e) => inputHandler(e, 'password')}
+          error={formik.touched.password && Boolean(formik.errors.password)}
+          helperText={formik.touched.password && formik.errors.password}
         />
         <TextField
           id="outlined-basic"
@@ -109,6 +117,13 @@ export function Verify() {
           sx={{ marginTop: '10px' }}
           // value={formik.values.confirmPassword}
           onChange={(e) => inputHandler(e, 'confirmPassword')}
+          error={
+            formik.touched.confirmPassword &&
+            Boolean(formik.errors.confirmPassword)
+          }
+          helperText={
+            formik.touched.confirmPassword && formik.errors.confirmPassword
+          }
         />
       </Stack>
       <Button

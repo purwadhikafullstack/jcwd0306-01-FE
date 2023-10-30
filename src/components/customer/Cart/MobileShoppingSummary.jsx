@@ -1,26 +1,16 @@
-import { Button } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
 import '../../GlobalCSS.css';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useState } from 'react';
 import MobileShoppingSummaryDialog from './MobileShoppingSummaryDialog';
-import { cartCalculator } from './cartCalculator';
+import { ButtonShoppingSummary } from './ButtonShoppingSummary';
 
-export function MobileShoppingSummary({ address }) {
+export function MobileShoppingSummary({
+  disableButton,
+  summaryTransaction,
+  grandTotal,
+  createNewOrder,
+}) {
   const [show, setShow] = useState(false);
-  const directBuyItem = useLocation().state;
-  const cart = useSelector((state) => state.cart).filter(
-    (item) => item.isChecked
-  );
-  const summaryTransaction = new Map([
-    [`totalPrice`, 0],
-    [`totalDiscount`, 0],
-    [`totalItems`, 0],
-  ]);
-  cartCalculator(cart, summaryTransaction, directBuyItem);
-  const totalPrice = summaryTransaction.get(`totalPrice`);
-  const totalDiscount = summaryTransaction.get(`totalDiscount`);
 
   return (
     <div>
@@ -28,6 +18,7 @@ export function MobileShoppingSummary({ address }) {
         open={show}
         setOpen={setShow}
         summaryTransaction={summaryTransaction}
+        grandTotal={grandTotal}
       />
       <div />
       <div className="d-flex justify-content-between">
@@ -40,7 +31,7 @@ export function MobileShoppingSummary({ address }) {
             <div>
               <b>
                 Rp
-                {(totalPrice - totalDiscount).toLocaleString(`id-ID`)}
+                {grandTotal.toLocaleString(`id-ID`)}
               </b>
             </div>
           </div>
@@ -48,9 +39,10 @@ export function MobileShoppingSummary({ address }) {
             <KeyboardArrowUpIcon />
           </div>
         </div>
-        <a href="/cart/shipment">
-          <Button className="normal-button">Proceed</Button>
-        </a>
+        <ButtonShoppingSummary
+          disableButton={disableButton}
+          createNewOrder={createNewOrder}
+        />
       </div>
     </div>
   );
