@@ -20,6 +20,13 @@ import { ProfileDashoard } from './pages/customer/Profile';
 import WarehousePage from './pages/admin/WarehousePage';
 import DashboardPage from './pages/admin/DashboardPage';
 import CategoryPage from './pages/admin/CategoryPage';
+import { Payment } from './pages/customer/OrderPayment';
+import { TransitionPage } from './pages/customer/Transition';
+import { PaymentList } from './pages/customer/PaymentList';
+import { OrderList } from './pages/customer/OrderList';
+import { ChatRoom } from './pages/customer/Chatroom';
+import ForgetPassword from './pages/ForgetPassword';
+import ChangePassword from './pages/ChangePassword';
 
 function App() {
   const authUser = useSelector((states) => states.authUser);
@@ -41,8 +48,9 @@ function App() {
   // TEMPORARY AJA, nunggu login jadi
   const fetchCartItem = async () => {
     if (authUser?.id) {
-      const { data } = await api.get(`/cart/${authUser?.id}`);
-      dispatch({ type: constant.updateProductOnCart, payload: data });
+      const { data } = await api.get(`/user/details/${authUser?.id}`);
+      dispatch({ type: constant.updateProductOnCart, payload: data.Carts });
+      dispatch({ type: constant.updateUnpaid, payload: data.UserOrder });
     }
   };
 
@@ -84,10 +92,19 @@ function App() {
         <Route path="*" element={<Navigate to="/" />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/verify" element={<Verify />} />
+        {authUser !== null && <Route path="/verify" element={<Verify />} />}
         <Route path="/cart/shipment" element={<Checkout />} />
         <Route path="/products/:id" element={<ProductDetailPage />} />
         <Route path="/profile" element={<ProfileDashoard />} />
+        <Route path="/payment" element={<TransitionPage />} />
+        <Route path="/payment/payment-list" element={<PaymentList />} />
+        <Route path="/payment/:orderId" element={<Payment />} />
+        <Route path="/order-list" element={<OrderList />} />
+        <Route path="/chatroom" element={<ChatRoom />} />
+        {authUser === null && (
+          <Route path="/forget-password" element={<ForgetPassword />} />
+        )}
+        <Route path="/change-password" element={<ChangePassword />} />
       </Routes>
     </>
   );

@@ -2,24 +2,26 @@ import { Avatar, Box, Button, Link, Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import LogoutIcon from '@mui/icons-material/Logout';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { asyncUnsetAuthUser } from '../../../../states/authUser/action';
 
 const apiUrl = import.meta.env.VITE_FE_BASE_URL;
 
 function AccountButton() {
-  const globalAuthUser = useSelector((states) => states.authUser);
+  const authUser = useSelector((states) => states.authUser);
   const dispatch = useDispatch();
   const nav = useNavigate();
-  const [authUser, setAuthUser] = useState(globalAuthUser);
+  // const [authUser, setAuthUser] = useState(globalAuthUser);
 
   function logout() {
     dispatch(asyncUnsetAuthUser());
-    nav('/login');
+    nav('/');
   }
 
-  useEffect(() => {
-    setAuthUser(globalAuthUser);
-  }, [globalAuthUser]);
+  // useEffect(() => {
+  //   setAuthUser(globalAuthUser);
+  // }, [globalAuthUser]);
 
   return (
     <Tooltip
@@ -40,13 +42,15 @@ function AccountButton() {
               href={`${apiUrl}/profile`}
               sx={{ textTransform: 'none', textDecoration: 'none' }}
             >
-              Profile
+              <AccountCircleIcon fontSize="small" />
+              &nbsp; Profile
             </Link>
           </Button>
           <Button>My Order</Button>
           <Button>My Wishlist</Button>
           <Button>My Address</Button>
           <Button color="error" onClick={logout}>
+            <LogoutIcon fontSize="small" />
             Logout
           </Button>
         </Box>

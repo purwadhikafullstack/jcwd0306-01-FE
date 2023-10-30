@@ -1,15 +1,13 @@
-import { Button, Card, ListGroup } from 'react-bootstrap';
+import { Card, ListGroup } from 'react-bootstrap';
 import './Cart.css';
 import '../../GlobalCSS.css';
+import { ButtonShoppingSummary } from './ButtonShoppingSummary';
 
 export function ShoppingSummary({
-  address,
   disableButton,
-  shippingMethod,
-  cart,
   summaryTransaction,
   grandTotal,
-  directBuyItem,
+  createNewOrder,
 }) {
   return (
     <Card className="p-1 card-summary">
@@ -45,14 +43,10 @@ export function ShoppingSummary({
           </ListGroup.Item>
           <ListGroup.Item className="px-0">Promo Code: takada</ListGroup.Item>
         </ListGroup>
-
-        <Button disabled={disableButton} className="normal-button">
-          <a href="/cart/shipment" className="text-white text-decoration-none">
-            {window.location.pathname === '/cart'
-              ? 'Proceed'
-              : 'Payment Option'}
-          </a>
-        </Button>
+        <ButtonShoppingSummary
+          disableButton={disableButton}
+          createNewOrder={createNewOrder}
+        />
       </Card.Body>
     </Card>
   );

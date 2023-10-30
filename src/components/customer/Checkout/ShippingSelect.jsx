@@ -7,8 +7,8 @@ import { Col } from 'react-bootstrap';
 import { useState } from 'react';
 
 export default function ShippingSelect({
-  shippingOptions,
-  shippingMethod,
+  shippingOptions = [],
+  shippingMethod = {},
   setShippingMethod,
   disableButton,
 }) {
