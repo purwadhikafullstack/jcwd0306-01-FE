@@ -8,7 +8,7 @@ import { setAlertActionCreator } from '../states/alert/action';
 
 export default function ForgetPassword() {
   const [isLoading, setIsLoading] = useState(false);
-  const [isTokenExist, setIsTokenExist] = useState(null);
+  // const [isTokenExist, setIsTokenExist] = useState(null);
   const [isEmailSent, setIsEmailSent] = useState(null);
   const dispatch = useDispatch();
 
@@ -29,10 +29,10 @@ export default function ForgetPassword() {
         const { email } = formik.values;
         const res = await api.post(`/user/request-fp?email=${email}`);
         // console.log(res);
-        const checkToken = await api.get(
-          `/user/forgetPasswordToken?email=${email}`
-        );
-        setIsTokenExist(checkToken.data.data);
+        // const checkToken = await api.get(
+        //   `/user/forgetPasswordToken?email=${email}`
+        // );
+        // setIsTokenExist(checkToken.data.data);
         dispatch(
           setAlertActionCreator({
             val: { status: 'success', message: 'check your email' },
@@ -96,7 +96,7 @@ export default function ForgetPassword() {
             sx={{ mt: 3 }}
             variant="contained"
             onClick={formik.handleSubmit}
-            disabled={isTokenExist !== null || isEmailSent !== null}
+            // disabled={isTokenExist !== null || isEmailSent !== null}
           >
             Reset
           </Button>
