@@ -80,7 +80,7 @@ function CategoryTableItem() {
             <TableCell>
               <Stack direction="row">
                 {/* Edit button */}
-                <Tooltip title="Edit category" arrow>
+                <Tooltip title="Edit kategori" arrow>
                   <IconButton
                     onClick={() => handleEditButton(val)}
                     sx={{ '&:hover': { color: 'info.main' } }}
@@ -90,7 +90,7 @@ function CategoryTableItem() {
                 </Tooltip>
 
                 {/* Delete button */}
-                <Tooltip title="Delete category" arrow>
+                <Tooltip title="Hapus kategori" arrow>
                   <IconButton
                     value="categoryId"
                     onClick={() => handleDeleteButton(val.id)}
