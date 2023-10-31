@@ -17,7 +17,7 @@ function Container() {
           borderRadius: 1,
         }}
       >
-        <Stack spacing={2}>
+        <Stack spacing={5}>
           <Stack direction="row" spacing={1} justifyContent="space-between">
             {/* Title */}
             <Typography fontWeight={800} fontSize="1.2rem">

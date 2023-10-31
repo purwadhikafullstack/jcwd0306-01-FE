@@ -45,11 +45,6 @@ function WarehouseList() {
       })()}
       gap={12}
       variant="standard"
-      sx={{
-        p: 2,
-        borderRadius: 0.5,
-        boxShadow: 4,
-      }}
     >
       {warehouses.map((warehouse, idx) => (
         <WarehouseItem
