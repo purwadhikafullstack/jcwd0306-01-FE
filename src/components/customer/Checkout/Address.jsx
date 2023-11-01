@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { fullAddressFormatter } from './ModalChooseAddress/fullAddressFormatter';
 
 export function Address({ location = 'checkout', address }) {
   const [destination, setDestination] = useState({});
@@ -21,15 +22,7 @@ export function Address({ location = 'checkout', address }) {
         ) : null}
       </div>
       <div style={{ fontSize: '0.9em' }}>{destination?.receiverPhone}</div>
-      <p style={{ fontSize: '0.9em' }}>
-        {[
-          destination?.detail,
-          destination?.village,
-          destination?.district,
-          `${destination?.City?.name} ${destination?.postalCode}`,
-          destination?.Province?.name,
-        ].join(`, `)}
-      </p>
+      <p style={{ fontSize: '0.9em' }}>{fullAddressFormatter(destination)}</p>
     </div>
   );
 }

@@ -28,7 +28,7 @@ function NotificationButton() {
             minWidth: '11px',
             height: '15px',
             fontSize: '11px',
-            padding: '0 4px',
+            padding: '0 3px',
           }}
         >
           {unpaidOrder.length}

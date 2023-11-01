@@ -4,7 +4,7 @@ import Slide from '@mui/material/Slide';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { HeaderChooseAddress } from './ModalChooseAddress/HeaderChooseAddress';
+import { HeaderModal } from '../../HeaderModal';
 import ProvinceSelect from './ModalEditOrAddAddress/ProvinceSelect';
 import CitySelect from './ModalEditOrAddAddress/CitySelect';
 import {
@@ -35,7 +35,6 @@ export function ModalEditAndAddAddress({
   addresses,
   setAddress,
   setAddresses,
-  setAddressToEdit,
 }) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -84,7 +83,7 @@ export function ModalEditAndAddAddress({
         scroll="paper"
       >
         <div className="sticky-top">
-          <HeaderChooseAddress handleClose={() => handleClose()} Title={open} />
+          <HeaderModal handleClose={() => handleClose()} Title={open} />
         </div>
         <div className="my-3 px-3 d-flex flex-column gap-2">
           <AddressNameAndReciever addressFormik={addressFormik} />

@@ -10,14 +10,28 @@ export const constant = {
   updateAddress: 'UPADATE_ADDRESS',
   deleteAddress: 'DELETE_ADDRESS',
   selectAddress: 'SELECT_ADDRESS',
-  logout: 'LOGOUT',
+  logout: 'UNSET_AUTH_USER',
   login: 'LOGIN',
   updateUnpaid: 'UPDATE_UNPAID_ORDER',
+  unpaidColor: 'darkorange',
+  cancelledColor: 'red',
+  verifyingColor: 'dodgerblue',
+  processed: 'blue',
+  shippedColor: 'blue',
+  receivedColor: 'green',
+  rejectedColor: 'green',
+  status: {
+    ongoing: ['verifying', 'processed', 'shipped'],
+    failed: ['cancelled', 'rejected'],
+  },
   setError: (error) =>
     setAlertActionCreator({
       val: {
         status: 'error',
-        message: error?.response?.data?.message || error?.message,
+        message:
+          error?.response?.data?.message ||
+          error?.message?.code ||
+          error?.mesage,
       },
     }),
   setSuccess: (message = '') =>

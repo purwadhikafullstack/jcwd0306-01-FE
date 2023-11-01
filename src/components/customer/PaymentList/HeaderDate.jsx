@@ -1,5 +1,6 @@
 import { Avatar, Grid, Stack } from '@mui/material';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import { constant } from '../../../constants/constant';
 
 export function HeaderDate({ order = {} }) {
   return (
@@ -18,8 +19,14 @@ export function HeaderDate({ order = {} }) {
             <ShoppingBagIcon sx={{ width: '16px', height: '16px' }} />
           </Avatar>
           <Stack direction="row" flexWrap="wrap" alignItems="center" gap={1}>
-            <b>Order</b>
-            <small>{new Date(order.createdAt).toDateString()}</small>
+            <b>Order-{order?.id}</b>
+            <small>{new Date(order?.createdAt).toDateString()}</small>
+            <small>
+              status:{' '}
+              <span style={{ color: constant[`${order?.status}Color`] }}>
+                {order?.status}
+              </span>
+            </small>
           </Stack>
         </Stack>
       </Grid>
@@ -35,8 +42,8 @@ export function HeaderDate({ order = {} }) {
           <span>Pay before</span>
           <small className="text-primary">
             {new Date(
-              new Date(order.createdAt).setDate(
-                new Date(order.createdAt).getDate() + 1
+              new Date(order?.createdAt).setDate(
+                new Date(order?.createdAt).getDate() + 1
               )
             ).toDateString()}
           </small>

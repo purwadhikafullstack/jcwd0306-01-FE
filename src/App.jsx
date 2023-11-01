@@ -37,7 +37,9 @@ function App() {
 
   const fetchCartItem = async () => {
     if (authUser?.id) {
-      const { data } = await api.get(`/user/details/${authUser?.id}`);
+      const { data } = await api.get(`/user/details/${authUser?.id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
       dispatch({ type: constant.updateProductOnCart, payload: data.Carts });
       dispatch({ type: constant.updateUnpaid, payload: data.UserOrder });
     }
@@ -45,7 +47,7 @@ function App() {
 
   useEffect(() => {
     fetchCartItem();
-  }, [authUser?.id]);
+  }, [localStorage.getItem('token')]);
 
   if (pathLocation === 'admin') {
     if (!authUser?.isAdmin || !authUser?.isWarehouseAdmin) {

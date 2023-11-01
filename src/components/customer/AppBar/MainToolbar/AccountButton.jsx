@@ -1,7 +1,6 @@
 import { Avatar, Box, Button, Link, Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { asyncUnsetAuthUser } from '../../../../states/authUser/action';

@@ -76,17 +76,16 @@ export function CheckOutHeader({
             setAddressToEdit={setAddressToEdit}
           />
         </div>
-        <div
-          style={{
-            fontSize: '0.9em',
-            display: shippingMethod?.name ? 'block' : 'none',
-          }}
-        >
-          <div>
+        <div style={{ fontSize: '0.9em' }}>
+          <div className={isLoading ? 'd-none' : ''}>
             <b>Sent From</b>: {originWarehouse?.city_name}
           </div>
-          <div>Shipping method: {shippingMethod?.name}</div>
-          <div>Delivery time estimation: {shippingMethod?.etd}</div>
+          {shippingMethod?.name ? (
+            <>
+              <div>Shipping method: {shippingMethod?.name}</div>
+              <div>Delivery time estimation: {shippingMethod?.etd}</div>
+            </>
+          ) : null}
         </div>
       </div>
     </>

@@ -2,7 +2,10 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import { useEffect, useState } from 'react';
+import { Card, CardContent } from '@mui/material';
 import { countDownTimer } from './countDownTimer';
+import { PaymentMethod } from '../PaymentList/PaymentMethod';
+import { TotalPayment } from '../PaymentList/TotalPayment';
 
 export function PaymentHeader({ orderData }) {
   const [timer, setTimer] = useState(0);
@@ -27,13 +30,13 @@ export function PaymentHeader({ orderData }) {
         <ReceiptLongIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
-        Selesaikan pembayaran dalam
+        Complete your payment
       </Typography>
       <Typography variant="h6">
         {timer > 0 ? countDownTimer(timer) : '00:00:00'}
       </Typography>
-      <Typography variant="h7">Batas akhir pembayaran</Typography>
       <Typography variant="h7">
+        Deadline:{' '}
         {`${new Date(deadline).toDateString()} ${new Date(deadline)
           .toLocaleTimeString(`id-ID`)
           .replace(/\./g, `:`)}`}
@@ -43,6 +46,14 @@ export function PaymentHeader({ orderData }) {
           Your item(s) may be taken by others before you settle this payment
         </b>
       </Typography>
+      <Card>
+        <CardContent>
+          <PaymentMethod order={orderData} />
+          <div className="mt-2 d-block d-md-none">
+            <TotalPayment order={orderData} />
+          </div>
+        </CardContent>
+      </Card>
     </>
   );
 }
