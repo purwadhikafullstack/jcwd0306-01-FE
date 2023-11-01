@@ -2,7 +2,7 @@ import { ShoppingCartOutlined } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { CartShowUp } from './CartShowUp';
+import { CartShowUp } from './CartButton/CartShowUp';
 
 function CartButton() {
   const [showCart, setShowCart] = useState(false);

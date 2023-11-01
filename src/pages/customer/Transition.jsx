@@ -34,11 +34,6 @@ export function TransitionPage() {
         <Skeleton animation="wave" />
         <Skeleton animation="wave" />
         <Skeleton animation="wave" />
-        <div className="d-flex justify-content-center align-items-center">
-          <EmojiEmotionsIcon />
-          <Typography textAlign="center">Advertisement Here</Typography>
-          <EmojiEmotionsIcon />
-        </div>
         <Skeleton animation="wave" />
         <Skeleton animation="wave" />
         <Skeleton animation="wave" />

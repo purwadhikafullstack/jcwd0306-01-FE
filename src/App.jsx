@@ -45,12 +45,12 @@ function App() {
     else document.body.style.backgroundColor = theme.palette.background.paper;
   }, [pathLocation]);
 
-  // TEMPORARY AJA, nunggu login jadi
   const fetchCartItem = async () => {
     if (authUser?.id) {
       const { data } = await api.get(`/user/details/${authUser?.id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
+      dispatch({ type: constant.updateOrderStatus, payload: data });
       dispatch({ type: constant.updateProductOnCart, payload: data.Carts });
       dispatch({ type: constant.updateUnpaid, payload: data.UserOrder });
     }
