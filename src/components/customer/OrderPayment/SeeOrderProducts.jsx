@@ -3,10 +3,12 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Stack,
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
 import { OrderProductCard } from './OrderProductsCard';
+import { PaymentPriceCard } from './PaymentPriceCard';
 
 export function SeeOrderProducts({ orderData }) {
   const [show, setShow] = useState(false);
@@ -16,16 +18,17 @@ export function SeeOrderProducts({ orderData }) {
         See Items
       </Button>
       <Card className="w-100" style={{ display: show ? 'block' : 'none' }}>
-        <CardHeader>
-          <Typography>Item-list in this order</Typography>
-        </CardHeader>
         <CardContent>
-          {orderData?.OrderProducts?.map((product) => (
-            <OrderProductCard
-              product={product}
-              key={product?.name || product?.Product?.name}
-            />
-          ))}
+          <Stack gap={1}>
+            <Typography variant="h6">Item-list in this order</Typography>
+            {orderData?.OrderProducts?.map((product) => (
+              <OrderProductCard
+                product={product}
+                key={product?.name || product?.Product?.name}
+              />
+            ))}
+            <PaymentPriceCard orderData={orderData} />
+          </Stack>
         </CardContent>
       </Card>
     </div>

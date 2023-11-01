@@ -1,7 +1,7 @@
 import { Stack } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { OrderChatTemplate } from '../../components/OrderChatTemplate';
-import { OrderListItem } from '../../components/customer/PaymentList/OrderListItem';
+import { PaymentListItem } from '../../components/customer/PaymentList/PaymentListItem';
 
 export function PaymentList() {
   const unpaidOrder = useSelector((state) => state.order);
@@ -12,7 +12,7 @@ export function PaymentList() {
       <Stack direction="column" gap={1} sx={{ fontSize: '0.9em' }}>
         {unpaidOrder.length ? (
           unpaidOrder.map((order) => (
-            <OrderListItem order={order} key={order.id} />
+            <PaymentListItem order={order} key={order.id} />
           ))
         ) : (
           <div

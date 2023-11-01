@@ -40,11 +40,12 @@ export const fetchShippingOptions = async (
       postalCode: address?.postalCode,
       weight,
     });
+    if (!data.method || !data.origin_details) throw new Error('API ERROR');
     setShippingOptions(data.method);
     setOriginWarehouse(data.origin_details);
     setShippingMethod({});
   } catch (error) {
-    dispatch(constant.setError(error));
+    // if (typeof error?.message !== 'object') dispatch(constant.setError(error));
   } finally {
     setIsLoading(false);
     setDisableButton(false);

@@ -6,7 +6,7 @@ export function TotalPayment({ order = {} }) {
       <Stack className="d-flex d-sm-none">
         <div>Total Payment</div>
         <div>
-          <b>Rp{order.total.toLocaleString(`id-ID`)}</b>
+          <b>Rp{Number(order?.total).toLocaleString(`id-ID`)}</b>
         </div>
       </Stack>
     </div>

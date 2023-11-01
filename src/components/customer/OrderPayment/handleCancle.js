@@ -18,13 +18,15 @@ export const handleCancel = async (
     fn: async () => {
       try {
         setDisableButton(false);
-        await api.patch(`/order/cancel/${userSelector?.id}/${orderData?.id}`, {
+        await api.patch(`/order/${userSelector?.id}/${orderData?.id}`, {
           status: 'cancelled',
         });
         setShowConfirmModal(false);
         if (setHiddenCancle) setHiddenCancle(true);
-        dispatch(deleteUnpaid(unpaid, orderData?.id));
-        dispatch(constant.setSuccess('Success cancelling this transaction'));
+        await dispatch(deleteUnpaid(unpaid, orderData?.id));
+        await dispatch(
+          constant.setSuccess('Success cancelling this transaction')
+        );
         if (nav) setTimeout(() => nav(`/`), 2000);
       } catch (error) {
         dispatch(constant.setError(error));

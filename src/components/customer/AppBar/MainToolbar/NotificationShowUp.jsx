@@ -37,7 +37,7 @@ export function NotificationShowUp({ show, setShow, unpaidOrder = [] }) {
               display: unpaidOrder.length ? 'flex' : 'none',
               minWidth: '16px',
               maxHeight: '16px',
-              padding: unpaidOrder.length > 9 ? '0 4px' : '0',
+              padding: unpaidOrder.length > 9 ? '0 2px' : '0',
             }}
           >
             {unpaidOrder.length}
