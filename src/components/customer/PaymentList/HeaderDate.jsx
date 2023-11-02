@@ -19,8 +19,11 @@ export function HeaderDate({ order = {} }) {
             <ShoppingBagIcon sx={{ width: '16px', height: '16px' }} />
           </Avatar>
           <Stack direction="row" flexWrap="wrap" alignItems="center" gap={1}>
-            <b>Order-{order?.id}</b>
-            <small>{new Date(order?.createdAt).toDateString()}</small>
+            <b>Order-{order?.plain_id}</b>
+            <small>
+              {new Date(order?.createdAt).toDateString(`id-ID`)}{' '}
+              {new Date(order?.createdAt).toTimeString(`id-ID`).slice(0, 8)}
+            </small>
             <small>
               status:{' '}
               <span style={{ color: constant[`${order?.status}Color`] }}>

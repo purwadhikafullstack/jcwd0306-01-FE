@@ -1,5 +1,6 @@
 import api from '../../../constants/api';
 import { constant } from '../../../constants/constant';
+import { deleteUnpaid } from '../../../states/order/action';
 
 const formSetter = (imageUrl = '', image = {}) => {
   const form = new FormData();
@@ -9,17 +10,23 @@ const formSetter = (imageUrl = '', image = {}) => {
   return form;
 };
 
+const successUploadingMsg =
+  'Success uploading image. You may now wait for payment verification';
+
 export const handleSubmit = async (
   setDisableButton,
   setDisableSubmit,
   setShowConfirmModal,
   setHiddenCancel,
+  setOrderData,
   nav,
   setAction,
   dispatch,
   image,
   imageUrl,
-  orderData
+  orderData,
+  unpaid,
+  orderStatus
 ) => {
   setShowConfirmModal(true);
   setAction({
@@ -30,16 +37,16 @@ export const handleSubmit = async (
         setDisableButton(true);
         await api
           .post(`/order/payment_proof/${orderData?.id}`, form)
-          .then(() =>
-            dispatch(
-              constant.setSuccess(
-                'Success uploading image. You may now wait for payment verification'
-              )
-            )
-          );
-        setTimeout(() => nav(`/order-list`), 2000);
+          .then(() => dispatch(constant.setSuccess(successUploadingMsg)));
+        setTimeout(() => nav(`/order-list`), 4000);
         setShowConfirmModal(false);
         setHiddenCancel(true);
+        dispatch(deleteUnpaid(unpaid, orderData?.id));
+        dispatch({
+          type: constant.updateOrderStatus,
+          payload: { verifying: orderStatus.verifying + 1 },
+        });
+        setOrderData({ ...orderData, status: 'verifying' });
       } catch (error) {
         dispatch(constant.setError(error));
         setTimeout(() => setDisableSubmit(false), 2000);

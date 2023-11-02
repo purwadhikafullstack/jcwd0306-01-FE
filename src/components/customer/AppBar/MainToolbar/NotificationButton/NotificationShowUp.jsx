@@ -32,7 +32,7 @@ export function NotificationShowUp({ show, setShow, unpaidOrder = [] }) {
           <PaymentsIcon color="primary" />
           Waiting for Payment
           <span
-            className="bg-danger rounded-circle text-white d-flex align-items-center justify-content-center text-center"
+            className="bg-danger rounded-circle text-white align-items-center justify-content-center text-center"
             style={{
               display: unpaidOrder.length ? 'flex' : 'none',
               minWidth: '11px',
