@@ -13,6 +13,7 @@ export const constant = {
   logout: 'UNSET_AUTH_USER',
   login: 'LOGIN',
   updateUnpaid: 'UPDATE_UNPAID_ORDER',
+  updateOrderStatus: 'UPDATE_ORDER_STATUS',
   unpaidColor: 'darkorange',
   cancelledColor: 'red',
   verifyingColor: 'dodgerblue',

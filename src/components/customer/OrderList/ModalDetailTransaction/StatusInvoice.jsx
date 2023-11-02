@@ -19,7 +19,8 @@ export function StatusInvoice({ order = {} }) {
         <Typography>Invoice number</Typography>
         <Typography>
           INV/
-          {String(order?.createdAt).slice(0, 10).replace(/-/g, '')}/{order?.id}
+          {String(order?.createdAt).slice(0, 10).replace(/-/g, '')}/
+          {order?.plain_id}
         </Typography>
       </Stack>
       <Stack direction="row" justifyContent="space-between">

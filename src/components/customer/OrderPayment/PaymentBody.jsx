@@ -24,8 +24,9 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-export function PaymentBody({ orderData }) {
+export function PaymentBody({ orderData, setOrderData }) {
   const userSelector = useSelector((state) => state.authUser);
+  const orderStatus = useSelector((state) => state.orderStatus);
   const unpaid = useSelector((state) => state.order);
   const [imageUrl, setImageUrl] = useState('');
   const [image, setImage] = useState({});
@@ -113,12 +114,15 @@ export function PaymentBody({ orderData }) {
               setDisableSubmit,
               setShowConfirmModal,
               setHiddenCancel,
+              setOrderData,
               nav,
               setAction,
               dispatch,
               image,
               imageUrl,
-              orderData
+              orderData,
+              unpaid,
+              orderStatus
             )
           }
           disabled={disableButton || disableSubmit}
