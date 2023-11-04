@@ -13,10 +13,10 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import google from '../assets/google.png';
 import line from '../assets/line 2.png';
 import { asyncSetAuthUser } from '../states/authUser/action';
-import { constant } from '../constants/constant';
 import api from '../constants/api';
 import { setAlertActionCreator } from '../states/alert/action';
 
@@ -53,7 +53,8 @@ function LoginPage() {
             val: { status: 'success', message: 'login success' },
           })
         );
-        nav('/');
+        if (data?.data?.data?.user?.isAdmin) return nav('/admin');
+        return nav('/');
       } catch (err) {
         dispatch(
           setAlertActionCreator({
@@ -194,7 +195,14 @@ function LoginPage() {
                     edge="end"
                     tabIndex="-1"
                   >
-                    <VisibilityOffIcon fontSize="small" />
+                    <VisibilityOffIcon
+                      fontSize="small"
+                      sx={{ display: !see ? 'block' : 'none' }}
+                    />
+                    <VisibilityIcon
+                      fontSize="small"
+                      sx={{ display: see ? 'block' : 'none' }}
+                    />
                   </IconButton>
                 </InputAdornment>
               ),

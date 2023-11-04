@@ -4,12 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import HomeIcon from '@mui/icons-material/Home';
 import { asyncUnsetAuthUser } from '../../../../states/authUser/action';
 
 const apiUrl = import.meta.env.VITE_FE_BASE_URL;
 
 function AccountButton() {
   const authUser = useSelector((states) => states.authUser);
+  const [isAdmin, setIsAdmin] = useState(authUser?.isAdmin || false);
+  // if (authUser?.isAdmin) setIsAdmin(authUser.isAdmin);
   const dispatch = useDispatch();
   const nav = useNavigate();
   // const [authUser, setAuthUser] = useState(globalAuthUser);
@@ -37,18 +41,28 @@ function AccountButton() {
       }}
       title={
         <Box display="flex" flexDirection="column">
-          <Button>
-            <Link
-              href={`${apiUrl}/profile`}
-              sx={{ textTransform: 'none', textDecoration: 'none' }}
-            >
-              <AccountCircleIcon fontSize="small" />
-              &nbsp; Profile
-            </Link>
+          <Button
+            onClick={() => nav('/user/settings')}
+            // sx={{ textTransform: 'none', textDecoration: 'none' }}
+          >
+            <AccountCircleIcon fontSize="small" />
+            &nbsp; Profile
+          </Button>
+          <Button
+            sx={{ display: isAdmin ? 'block' : 'none' }}
+            onClick={() => {
+              nav('/admin/dashboard');
+            }}
+          >
+            <AdminPanelSettingsIcon />
+            Admin Page
           </Button>
           <Button>My Order</Button>
           <Button>My Wishlist</Button>
-          <Button>My Address</Button>
+          <Button onClick={() => nav('/user/address')}>
+            <HomeIcon />
+            My Address
+          </Button>
           <Button color="error" onClick={logout}>
             <LogoutIcon fontSize="small" />
             Logout
