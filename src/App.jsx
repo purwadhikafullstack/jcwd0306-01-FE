@@ -27,6 +27,8 @@ import { OrderList } from './pages/customer/OrderList';
 import { ChatRoom } from './pages/customer/Chatroom';
 import ForgetPassword from './pages/ForgetPassword';
 import ChangePassword from './pages/ChangePassword';
+import { CustomerAddressPage } from './pages/customer/Address';
+import { AuthorizeUser } from './middlewares/auth';
 
 function App() {
   const authUser = useSelector((states) => states.authUser);
@@ -79,7 +81,7 @@ function App() {
       );
     }
 
-    return <div>Anda bukan admin</div>;
+    return <Navigate to="/" replace />;
   }
 
   // CUSTOMER PAGE
@@ -97,7 +99,14 @@ function App() {
         {authUser !== null && <Route path="/verify" element={<Verify />} />}
         <Route path="/cart/shipment" element={<Checkout />} />
         <Route path="/products/:id" element={<ProductDetailPage />} />
-        <Route path="/profile" element={<ProfileDashoard />} />
+        <Route
+          path="/user/settings"
+          element={
+            <AuthorizeUser>
+              <ProfileDashoard />
+            </AuthorizeUser>
+          }
+        />
         <Route path="/payment" element={<TransitionPage />} />
         <Route path="/payment/payment-list" element={<PaymentList />} />
         <Route path="/payment/:orderId" element={<Payment />} />
@@ -107,6 +116,7 @@ function App() {
           <Route path="/forget-password" element={<ForgetPassword />} />
         )}
         <Route path="/change-password" element={<ChangePassword />} />
+        <Route path="/user/address" element={<CustomerAddressPage />} />
       </Routes>
     </>
   );
