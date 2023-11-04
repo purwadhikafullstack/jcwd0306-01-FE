@@ -5,6 +5,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import HomeIcon from '@mui/icons-material/Home';
+import { useState } from 'react';
 import { asyncUnsetAuthUser } from '../../../../states/authUser/action';
 
 const apiUrl = import.meta.env.VITE_FE_BASE_URL;
