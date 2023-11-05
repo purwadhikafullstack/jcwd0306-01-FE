@@ -125,6 +125,10 @@ function AddressItem({ address, fetchAddress, setOpen, setAddressToEdit }) {
               <DrawerActionDialog
                 isOpen={isDrawerOpen}
                 onClose={handleDrawerClose}
+                setOpen={setOpen}
+                address={address}
+                setAddressToEdit={setAddressToEdit}
+                deleteAddress={deleteAddress}
               />
             </Box>
           </CardContent>
