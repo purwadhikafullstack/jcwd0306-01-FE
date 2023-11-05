@@ -1,31 +1,29 @@
-import { Avatar, Box, Button, Link, Tooltip } from '@mui/material';
+import { Avatar, Box, Button, Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import HomeIcon from '@mui/icons-material/Home';
-import { useState } from 'react';
 import { asyncUnsetAuthUser } from '../../../../states/authUser/action';
+// import api from '../../../../constants/api';
 
-const apiUrl = import.meta.env.VITE_FE_BASE_URL;
+// const apiUrl = import.meta.env.VITE_FE_BASE_URL;
 
 function AccountButton() {
   const authUser = useSelector((states) => states.authUser);
-  const [isAdmin, setIsAdmin] = useState(authUser?.isAdmin || false);
-  // if (authUser?.isAdmin) setIsAdmin(authUser.isAdmin);
+  const isAdmin = authUser?.isAdmin || false;
   const dispatch = useDispatch();
   const nav = useNavigate();
-  // const [authUser, setAuthUser] = useState(globalAuthUser);
 
-  function logout() {
+  const logout = () => {
     dispatch(asyncUnsetAuthUser());
     nav('/');
-  }
+  };
 
-  // useEffect(() => {
-  //   setAuthUser(globalAuthUser);
-  // }, [globalAuthUser]);
+  const toProfile = () => {
+    nav('user/address');
+  };
 
   return (
     <Tooltip
@@ -41,10 +39,7 @@ function AccountButton() {
       }}
       title={
         <Box display="flex" flexDirection="column">
-          <Button
-            onClick={() => nav('/user/settings')}
-            // sx={{ textTransform: 'none', textDecoration: 'none' }}
-          >
+          <Button onClick={() => nav('/user/settings')}>
             <AccountCircleIcon fontSize="small" />
             &nbsp; Profile
           </Button>
@@ -59,9 +54,9 @@ function AccountButton() {
           </Button>
           <Button>My Order</Button>
           <Button>My Wishlist</Button>
-          <Button onClick={() => nav('/user/address')}>
-            <HomeIcon />
-            My Address
+          <Button onClick={toProfile}>
+            <HomeIcon fontSize="small" />
+            &nbsp; My Address
           </Button>
           <Button color="error" onClick={logout}>
             <LogoutIcon fontSize="small" />

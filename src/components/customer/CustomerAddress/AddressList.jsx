@@ -13,16 +13,20 @@ function AddressList({ addresses, fetchAddress, setOpen, setAddressToEdit }) {
         boxShadow: 4,
       }}
     >
-      {addresses?.map((address, idx) => (
-        <AddressItem
-          key={address?.id}
-          address={address}
-          idx={idx}
-          fetchAddress={fetchAddress}
-          setOpen={setOpen}
-          setAddressToEdit={setAddressToEdit}
-        />
-      ))}
+      {addresses && addresses.length > 0 ? (
+        addresses.map((address, idx) => (
+          <AddressItem
+            key={address?.id}
+            address={address}
+            idx={idx}
+            fetchAddress={fetchAddress}
+            setOpen={setOpen}
+            setAddressToEdit={setAddressToEdit}
+          />
+        ))
+      ) : (
+        <div>No Address Data</div>
+      )}
     </ImageList>
   );
 }

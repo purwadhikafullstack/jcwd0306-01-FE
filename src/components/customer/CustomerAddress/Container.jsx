@@ -16,15 +16,19 @@ function Container() {
   // const [addressesProfile, setAddressesProfile] = useState([]);
   const dispatch = useDispatch();
   const addressSelector = useSelector((state) => state.selectedAddress);
-  const defaultAddress = addresses.find((destination) => destination.isDefault);
+  const defaultAddress = Array.isArray(addresses)
+    ? addresses.find((destination) => destination.isDefault)
+    : null;
   const [address, setAddress] = useState({});
   const [addressToEdit, setAddressToEdit] = useState({});
 
   const fetchAddress = async () => {
     try {
       const res = await api.get(`/user_address/${authUser?.id}`);
-      setAddresses(res?.data);
+      setAddresses(res?.data?.rows);
+      console.log(res.data.rows);
     } catch (error) {
+      console.log(error);
       dispatch(
         setAlertActionCreator({
           val: { status: 'error', message: error?.response.data.message },

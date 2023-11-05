@@ -4,6 +4,7 @@ import api from '../../constants/api';
 const ActionType = {
   SET_AUTH_USER: 'SET_AUTH_USER',
   UNSET_AUTH_USER: 'UNSET_AUTH_USER',
+  UPDATE_AUTH_USER: 'UPDATE_AUTH_USER',
 };
 
 function setAuthUserActionCreator(authUser) {
@@ -16,6 +17,13 @@ function setAuthUserActionCreator(authUser) {
 function unsetAuthUserActionCreator() {
   return {
     type: ActionType.UNSET_AUTH_USER,
+  };
+}
+
+function updateAuthUserActionCreator(updatedUser) {
+  return {
+    type: ActionType.UPDATE_AUTH_USER,
+    payload: updatedUser,
   };
 }
 
@@ -73,4 +81,5 @@ export {
   asyncUnsetAuthUser,
   asyncRegisterUser,
   asyncReceiveUser,
+  updateAuthUserActionCreator,
 };

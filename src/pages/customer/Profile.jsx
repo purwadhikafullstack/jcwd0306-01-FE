@@ -1,4 +1,3 @@
-import { AspectRatio } from '@mui/joy';
 import {
   Avatar,
   Box,
@@ -9,7 +8,6 @@ import {
   FormControl,
   FormLabel,
   IconButton,
-  Input,
   Stack,
   TextField,
   Typography,
@@ -24,7 +22,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import api from '../../constants/api';
 import { setAlertActionCreator } from '../../states/alert/action';
-import { asyncSetAuthUser } from '../../states/authUser/action';
+import { updateAuthUserActionCreator } from '../../states/authUser/action';
 
 export function ProfileDashoard() {
   const authUser = useSelector((states) => states.authUser);
@@ -48,10 +46,12 @@ export function ProfileDashoard() {
     onSubmit: async () => {
       try {
         setButtonDisabled(true);
-        const data = await api.patch(
-          `/user/edit/${authUser?.id}`,
-          formik.values
-        );
+        await api.patch(`/user/edit/${authUser?.id}`, formik.values);
+
+        const fetchUser = await api.get(`/user/${authUser?.id}`);
+        // console.log(fetchUser?.data?.data?.user);
+
+        dispatch(updateAuthUserActionCreator(fetchUser?.data?.data?.user));
 
         dispatch(
           setAlertActionCreator({
@@ -114,9 +114,9 @@ export function ProfileDashoard() {
     formik2.setFieldValue(fieldName, value);
   }
 
-  function handleCancel() {
+  const handleCancel = () => {
     formik.resetForm();
-  }
+  };
 
   useEffect(() => {
     const fetchImage = async () => {
