@@ -29,7 +29,9 @@ export function OrderProductCard({ product }) {
                   <Typography>
                     <small>
                       {product?.quantity} item
-                      {product?.quantity > 1 ? 's' : null}
+                      {product?.quantity > 1 ? 's' : null} (
+                      {product.Product.weight * product.quantity} gr) x Rp
+                      {Number(product?.price).toLocaleString(`id-ID`)}
                     </small>
                   </Typography>
                 </div>
@@ -39,9 +41,9 @@ export function OrderProductCard({ product }) {
               <Typography className="text-end" flexShrink={1}>
                 <b>
                   Rp
-                  {(product?.price || product?.Product?.price).toLocaleString(
-                    `id-ID`
-                  )}
+                  {Number(
+                    product?.price || product?.Product?.price
+                  ).toLocaleString(`id-ID`)}
                 </b>
               </Typography>
             </Grid>

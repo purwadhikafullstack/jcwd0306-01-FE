@@ -1,7 +1,9 @@
+import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 
 export function TransitionPage() {
   const nav = useNavigate();
@@ -18,9 +20,12 @@ export function TransitionPage() {
 
   return (
     <div
-      className="d-flex vw-100 align-items-center justify-content-center"
+      className="d-flex flex-column vw-100 align-items-center justify-content-center gap-3"
       style={{ height: '75vh' }}
     >
+      <Typography variant="h5">
+        Please wait while we processing your order
+      </Typography>
       <Box sx={{ width: 600 }}>
         <Skeleton animation="wave" />
         <Skeleton animation="wave" />

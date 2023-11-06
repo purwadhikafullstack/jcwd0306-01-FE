@@ -8,12 +8,21 @@ import {
 } from '@mui/material';
 import { Form, Formik } from 'formik';
 import { number, object, string } from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { asyncCreateWarehouse } from '../../../states/warehouses/action';
 import FormikOutlinedInput from '../../FormikOutlinedInput';
+import { asyncGetProvinces } from '../../../states/provinces/action';
+import FormikSelect from '../../FormikSelect';
+import FormikSelectCity from './FormikSelectCity';
 
 function CreateDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
+  const provinces = useSelector((states) => states.provinces);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(asyncGetProvinces());
+  }, []);
 
   const initialValues = {
     name: '',
@@ -23,8 +32,6 @@ function CreateDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
     district: '',
     village: '',
     detail: '',
-    longitude: '',
-    latitude: '',
   };
 
   const validationSchema = object({
@@ -35,8 +42,6 @@ function CreateDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
     district: string().required(),
     village: string().required(),
     detail: string().required(),
-    longitude: number().required(),
-    latitude: number().required(),
   });
 
   const onSubmit = (values, { resetForm }) => {
@@ -73,32 +78,20 @@ function CreateDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
                   label="Negara"
                   inputProps={{ disabled: true }}
                 />
-                <FormikOutlinedInput
+                <FormikSelect
                   name="provinceId"
                   label="Provinsi"
-                  inputProps={{ type: 'number', disabled: true }}
+                  values={provinces}
+                  itemValueName="id"
+                  itemValueLabel="name"
                 />
-                <FormikOutlinedInput
-                  name="cityId"
-                  label="Kota / Kabupaten"
-                  inputProps={{ type: 'number', disabled: true }}
-                />
+                <FormikSelectCity />
                 <FormikOutlinedInput name="district" label="Kecamatan" />
                 <FormikOutlinedInput name="village" label="Kelurahan / Desa" />
                 <FormikOutlinedInput
                   name="detail"
                   label="Alamat detail"
                   inputProps={{ multiline: true, rows: 4 }}
-                />
-                <FormikOutlinedInput
-                  name="longitude"
-                  label="Longitude"
-                  inputProps={{ type: 'number' }}
-                />
-                <FormikOutlinedInput
-                  name="latitude"
-                  label="Latitude"
-                  inputProps={{ type: 'number' }}
                 />
               </Stack>
             </DialogContent>

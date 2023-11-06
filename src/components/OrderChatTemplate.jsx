@@ -1,7 +1,7 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import { Avatar, Button, Grid, Stack } from '@mui/material';
+import { Avatar, Button, Grid, Link, Stack } from '@mui/material';
 import Card from '@mui/material/Card';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -22,7 +22,7 @@ export function OrderChatTemplate({ children }) {
         <Box sx={{ flexGrow: 1, mt: 2 }}>
           <Grid container gap={2} wrap="nowrap">
             <Grid item md={3} display={{ md: 'flex', sm: 'none', xs: 'none' }}>
-              <Card sx={{ flexGrow: 1, minHeight: '75vh' }}>
+              <Card sx={{ flexGrow: 1, height: '80vh' }}>
                 <CardContent>
                   <Stack gap={2}>
                     <Card sx={{ flexGrow: 1 }}>
@@ -41,25 +41,25 @@ export function OrderChatTemplate({ children }) {
                       </CardContent>
                     </Card>
                     <Stack gap={1}>
-                      <Button>
-                        <a
+                      <Button sx={{ justifyContent: 'start' }}>
+                        <Link
                           href="/chatroom"
                           className="text-decoration-none"
                           style={{ color: 'inherit' }}
                         >
                           Chat
-                        </a>
+                        </Link>
                       </Button>
-                      <Button>
-                        <a
+                      <Button sx={{ justifyContent: 'start' }}>
+                        <Link
                           href="/payment/payment-list"
                           className="text-decoration-none"
                           style={{ color: 'inherit' }}
                         >
                           Waiting for Payment
-                        </a>
+                        </Link>
                       </Button>
-                      <Button>
+                      <Button sx={{ justifyContent: 'start' }}>
                         <a
                           href="/order-list"
                           className="text-decoration-none"

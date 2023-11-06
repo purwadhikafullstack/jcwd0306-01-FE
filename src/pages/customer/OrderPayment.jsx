@@ -36,7 +36,7 @@ export function Payment() {
         }}
       >
         <PaymentHeader orderData={orderData} />
-        <PaymentBody orderData={orderData} />
+        <PaymentBody orderData={orderData} setOrderData={setOrderData} />
         <SeeOrderProducts orderData={orderData} />
       </Box>
     </Container>

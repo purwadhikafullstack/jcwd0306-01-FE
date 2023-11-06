@@ -8,6 +8,9 @@ function authUserReducer(authUser = null, action = {}) {
     case ActionType.UNSET_AUTH_USER:
       return null;
 
+    case ActionType.UPDATE_AUTH_USER:
+      return { ...authUser, ...action.payload };
+
     default:
       return authUser;
   }

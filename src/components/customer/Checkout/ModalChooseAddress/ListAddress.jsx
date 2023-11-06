@@ -3,6 +3,7 @@ import { Button } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import api from '../../../../constants/api';
 import { handleDelete, handleSetDefault } from './handleFunction';
+import { fullAddressFormatter } from './fullAddressFormatter';
 
 export function ListAddress({
   selectedIndex,
@@ -43,15 +44,7 @@ export function ListAddress({
           <b>{destination?.receiverName}</b>
         </div>
         <div>{destination?.receiverPhone}</div>
-        <div>
-          {[
-            destination?.detail,
-            destination?.village,
-            destination?.district,
-            `${destination?.City?.name} ${destination?.postalCode}`,
-            destination?.Province?.name,
-          ].join(`, `)}
-        </div>
+        <div>{fullAddressFormatter(destination)}</div>
         <div className="mt-1">
           <Button
             style={{ fontSize: '0.8em' }}

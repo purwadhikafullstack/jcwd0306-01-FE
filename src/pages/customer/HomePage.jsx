@@ -22,7 +22,6 @@ function HomePage() {
         categoryId: searchParams.get('categoryId'),
         sortBy: searchParams.get('sortBy'),
         orderBy: searchParams.get('orderBy'),
-        isPaginated: searchParams.get('isPaginated'),
         page: searchParams.get('page'),
         perPage: searchParams.get('perPage'),
       })
@@ -32,7 +31,6 @@ function HomePage() {
     searchParams.get('categoryId'),
     searchParams.get('sortBy'),
     searchParams.get('orderBy'),
-    searchParams.get('isPaginated'),
     searchParams.get('page'),
     searchParams.get('perPage'),
   ]);

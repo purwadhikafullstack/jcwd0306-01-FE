@@ -1,48 +1,27 @@
-import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
-import { useEffect, useState } from 'react';
-import { countDownTimer } from './countDownTimer';
+import { PaymentHeaderUnpaid } from './PaymentHeaderUnpaid';
+import { PaymentHeaderPaid } from './PaymentHeaderPaid';
 
-export function PaymentHeader({ orderData }) {
-  const [timer, setTimer] = useState(0);
-
-  const deadline = new Date(orderData?.createdAt).setDate(
-    new Date(orderData?.createdAt).getDate() + 1
-  );
-
-  useEffect(() => {
-    setTimer(
-      new Date(orderData?.createdAt).setDate(
-        new Date(orderData?.createdAt).getDate() + 1
-      ) - new Date()
+export function PaymentHeader({ orderData = {} }) {
+  if (orderData?.status === 'unpaid')
+    return <PaymentHeaderUnpaid orderData={orderData} />;
+  if (orderData?.status === 'verifying')
+    return <PaymentHeaderPaid orderData={orderData} />;
+  if (orderData?.status === 'cancelled' || orderData?.status === 'rejected')
+    return (
+      <PaymentHeaderPaid
+        orderData={orderData}
+        expression="Sorry"
+        message={`This transaction has been ${orderData?.status}`}
+        message2="You can make another transaction"
+      />
     );
-  }, [orderData]);
-  useEffect(() => {
-    if (timer > 0) setTimeout(() => setTimer(timer - 1000), 1000);
-  }, [timer]);
-  return (
-    <>
-      <Avatar sx={{ m: 1, bgcolor: '#009BD2' }}>
-        <ReceiptLongIcon />
-      </Avatar>
-      <Typography component="h1" variant="h5">
-        Selesaikan pembayaran dalam
-      </Typography>
-      <Typography variant="h6">
-        {timer > 0 ? countDownTimer(timer) : '00:00:00'}
-      </Typography>
-      <Typography variant="h7">Batas akhir pembayaran</Typography>
-      <Typography variant="h7">
-        {`${new Date(deadline).toDateString()} ${new Date(deadline)
-          .toLocaleTimeString(`id-ID`)
-          .replace(/\./g, `:`)}`}
-      </Typography>
-      <Typography variant="h7" sx={{ textAlign: 'center', color: 'orange' }}>
-        <b>
-          Your item(s) may be taken by others before you settle this payment
-        </b>
-      </Typography>
-    </>
-  );
+  if (orderData?.status === 'processed' || orderData?.status === 'shipped')
+    return (
+      <PaymentHeaderPaid
+        orderData={orderData}
+        expression="Thank You"
+        message={`Your order has been ${orderData?.status}`}
+        message2="Happy waiting and shopping"
+      />
+    );
 }

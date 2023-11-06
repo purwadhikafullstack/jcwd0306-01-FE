@@ -1,13 +1,16 @@
-import { InputAdornment, TextField } from '@mui/material';
+import { Box, InputAdornment, TextField } from '@mui/material';
 import { useEffect } from 'react';
 import { SearchOutlined } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import useCustomSearchParams from '../../../../hooks/useCustomSearchParams';
 import { asyncGetProducts } from '../../../../states/products/action';
 
 function SearchInput() {
   const dispatch = useDispatch();
   const [searchParams, updateQueryParams] = useCustomSearchParams();
+  const location = useLocation();
+  const pathLocation = location.pathname.split('/')[1];
 
   const handleSearch = () => {
     dispatch(
@@ -17,7 +20,6 @@ function SearchInput() {
         categoryId: searchParams.get('categoryId'),
         sortBy: searchParams.get('sortBy'),
         orderBy: searchParams.get('orderBy'),
-        isPaginated: searchParams.get('isPaginated'),
         page: searchParams.get('page'),
         perPage: searchParams.get('perPage'),
       })
@@ -28,6 +30,8 @@ function SearchInput() {
     const timerId = setTimeout(handleSearch, 300); // Create a debounce timer
     return () => clearTimeout(timerId); // Clear the previous timer on each input change
   }, [searchParams.get('name')]);
+
+  if (pathLocation !== '') return <Box flexGrow={1} />;
 
   return (
     <TextField

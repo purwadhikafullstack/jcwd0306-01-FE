@@ -21,9 +21,9 @@ export function CartShowUp({ showCart, setShowCart }) {
       }}
     >
       <Row className="m-0 p-2">
-        <a href="/cart" className="text-decoration-none text-secondary">
+        <a href="/cart" className="text-decoration-none text-secondary w-100">
           {cart.length === 0 ? (
-            <span className="text-center">Empty</span>
+            <span className="text-center">Phew, Your cart is empty</span>
           ) : (
             `Your Cart (${cart.length})`
           )}

@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Typography } from '@mui/material';
 
-export function HeaderChooseAddress({ handleClose, Title = '' }) {
+export function HeaderModal({ handleClose, Title = '' }) {
   return (
     <AppBar
       sx={{

@@ -1,4 +1,4 @@
-export function CartItemImage({ product, width = '100px' }) {
+export function CartItemImage({ product, width = '100px', index = 0 }) {
   if (window.location.pathname !== `/cart/shipment`)
     return (
       <a
@@ -7,7 +7,7 @@ export function CartItemImage({ product, width = '100px' }) {
       >
         <img
           src={`${import.meta.env.VITE_API_BASE_URL}/products/images/${
-            product?.Product?.ProductImages[0].id
+            product?.Product?.ProductImages[index].id
           }`}
           alt=""
           width={width}
@@ -17,7 +17,7 @@ export function CartItemImage({ product, width = '100px' }) {
   return (
     <img
       src={`${import.meta.env.VITE_API_BASE_URL}/products/images/${
-        product?.Product?.ProductImages[0].id
+        product?.Product?.ProductImages[index].id
       }`}
       alt=""
       width="100px"
