@@ -11,27 +11,59 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import CheckIcon from '@mui/icons-material/Check';
 import AddressAction from './actions/AddressCardAction';
 import DrawerActionDialog from './dialogs/DrawerAddressAction';
 import api from '../../../constants/api';
 import { setAlertActionCreator } from '../../../states/alert/action';
 
-function AddressItem({ address, fetchAddress, setOpen, setAddressToEdit }) {
+function AddressItem({
+  address,
+  fetchAddress,
+  setOpen,
+  setAddressToEdit,
+  // setIsDefaultUpdated,
+  isDefaultUpdated,
+  setChoosenAddress,
+  chosenAddress,
+}) {
   const isDesktop = useMediaQuery('(min-width:600px)');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const authUser = useSelector((states) => states.authUser);
   const dispatch = useDispatch();
 
+  /* Set Default Address */
+  const setDefaultAddress = async () => {
+    try {
+      const result = await api.patch(
+        `user_address/new_default/${authUser?.id}/${address?.id}`,
+        {
+          isDefault: 1,
+        }
+      );
+      fetchAddress();
+      dispatch(
+        setAlertActionCreator({
+          val: { status: 'success', message: result?.data },
+        })
+      );
+    } catch (error) {
+      dispatch(
+        setAlertActionCreator({
+          val: { status: 'error', message: error?.response?.data },
+        })
+      );
+    }
+  };
+
   const handleDrawerOpen = () => {
     setIsDrawerOpen(true);
   };
-
   const handleDrawerClose = () => {
     setIsDrawerOpen(false);
   };
-
   const deleteAddress = async () => {
     try {
       await api.delete(`/user_address/${authUser?.id}/${address?.id}`);
@@ -55,7 +87,12 @@ function AddressItem({ address, fetchAddress, setOpen, setAddressToEdit }) {
       sx={{
         width: isDesktop ? '45rem' : '19rem',
         color: 'black',
-        ':hover': { backgroundColor: '#f4fcfd' },
+        backgroundColor:
+          chosenAddress && chosenAddress.id === address.id ? 'bisque' : 'white',
+        // ':hover':
+        //   address.isDefault === true
+        //     ? { backgroundColor: 'bisque' }
+        //     : { backgroundColor: '#f4fcfd' },
       }}
     >
       <Grid container spacing={2} alignItems="center">
@@ -71,7 +108,23 @@ function AddressItem({ address, fetchAddress, setOpen, setAddressToEdit }) {
             {/* Address Name */}
             <Box>
               <Stack direction="column" spacing={1} maxWidth={800}>
-                <Typography fontWeight={550}>{address?.addressName}</Typography>
+                <Box display="flex" alignItems="center">
+                  <Typography fontWeight={550} mr="1rem">
+                    {address?.addressName}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontWeight: 450,
+                      backgroundColor: 'grey',
+                      color: 'white',
+                      p: '2px',
+                      borderRadius: '4px',
+                      display: address.isDefault ? 'inline-block' : 'none',
+                    }}
+                  >
+                    Utama
+                  </Typography>
+                </Box>
                 <Typography fontWeight={650}>
                   {address?.receiverName}
                 </Typography>
@@ -105,23 +158,57 @@ function AddressItem({ address, fetchAddress, setOpen, setAddressToEdit }) {
                 height: isDesktop ? 'auto' : '2rem',
                 display: 'flex',
                 alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
-              <Button variant="contained" fullWidth={!isDesktop}>
-                Pilih
-              </Button>
-              <IconButton
-                sx={{
-                  display: isDesktop ? 'none' : 'block',
-                }}
-                onClick={handleDrawerOpen}
-              >
-                <MoreVertOutlinedIcon
+              {chosenAddress && chosenAddress.id === address.id && (
+                <CheckIcon
                   sx={{
-                    transform: 'rotate(90deg)',
+                    marginRight: '8px',
+                    color: 'green',
+                    display: isDesktop ? 'inline-block' : 'none',
                   }}
                 />
-              </IconButton>
+              )}
+              <Button
+                variant="contained"
+                fullWidth={!isDesktop}
+                sx={{
+                  display:
+                    chosenAddress && chosenAddress.id === address.id
+                      ? 'none'
+                      : 'inline-block',
+                }}
+                onClick={() => {
+                  setChoosenAddress(address);
+                }}
+              >
+                Pilih
+              </Button>
+              {address.isDefault ? (
+                <Button
+                  onClick={() => {
+                    setAddressToEdit(address);
+                    setOpen('EDIT ADDRESS');
+                  }}
+                  sx={{ display: isDesktop ? 'none' : 'inline-block' }}
+                >
+                  ubah alamat
+                </Button>
+              ) : (
+                <IconButton
+                  sx={{
+                    display: isDesktop ? 'none' : 'block',
+                  }}
+                  onClick={handleDrawerOpen}
+                >
+                  <MoreVertOutlinedIcon
+                    sx={{
+                      transform: 'rotate(90deg)',
+                    }}
+                  />
+                </IconButton>
+              )}
               <DrawerActionDialog
                 isOpen={isDrawerOpen}
                 onClose={handleDrawerClose}
@@ -129,6 +216,7 @@ function AddressItem({ address, fetchAddress, setOpen, setAddressToEdit }) {
                 address={address}
                 setAddressToEdit={setAddressToEdit}
                 deleteAddress={deleteAddress}
+                setDefaultAddress={setDefaultAddress}
               />
             </Box>
           </CardContent>
@@ -140,6 +228,7 @@ function AddressItem({ address, fetchAddress, setOpen, setAddressToEdit }) {
             setOpen={setOpen}
             setAddressToEdit={setAddressToEdit}
             address={address}
+            setDefaultAddress={setDefaultAddress}
           />
         </Grid>
       </Grid>

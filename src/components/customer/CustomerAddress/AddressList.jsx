@@ -1,7 +1,16 @@
 import { ImageList } from '@mui/material';
 import AddressItem from './AddressItem';
 
-function AddressList({ addresses, fetchAddress, setOpen, setAddressToEdit }) {
+function AddressList({
+  addresses,
+  fetchAddress,
+  setOpen,
+  setAddressToEdit,
+  setIsDefaultUpdated,
+  isDefaultUpdated,
+  setChoosenAddress,
+  chosenAddress,
+}) {
   return (
     <ImageList
       cols={1}
@@ -22,6 +31,10 @@ function AddressList({ addresses, fetchAddress, setOpen, setAddressToEdit }) {
             fetchAddress={fetchAddress}
             setOpen={setOpen}
             setAddressToEdit={setAddressToEdit}
+            setIsDefaultUpdated={setIsDefaultUpdated}
+            isDefaultUpdated={isDefaultUpdated}
+            setChoosenAddress={setChoosenAddress}
+            chosenAddress={chosenAddress}
           />
         ))
       ) : (

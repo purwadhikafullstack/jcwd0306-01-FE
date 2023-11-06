@@ -13,7 +13,6 @@ function Container() {
   const [showModal, setShowModal] = useState('');
   const authUser = useSelector((states) => states.authUser);
   const [addresses, setAddresses] = useState([]);
-  // const [addressesProfile, setAddressesProfile] = useState([]);
   const dispatch = useDispatch();
   const addressSelector = useSelector((state) => state.selectedAddress);
   const defaultAddress = Array.isArray(addresses)
@@ -21,12 +20,24 @@ function Container() {
     : null;
   const [address, setAddress] = useState({});
   const [addressToEdit, setAddressToEdit] = useState({});
+  const [isDefaultUpdated, setIsDefaultUpdated] = useState(false);
+  const [defAddress, setDefAddress] = useState(null);
+
+  const [chosenAddress, setChoosenAddress] = useState(defaultAddress || null);
 
   const fetchAddress = async () => {
     try {
       const res = await api.get(`/user_address/${authUser?.id}`);
-      setAddresses(res?.data?.rows);
-      console.log(res.data.rows);
+      const temp = res?.data?.rows;
+      setAddresses(temp);
+      setIsDefaultUpdated(!isDefaultUpdated);
+
+      temp.map((val) => {
+        const newDefault = val.isDefault;
+        if (newDefault === true) {
+          setDefAddress(newDefault);
+        }
+      });
     } catch (error) {
       console.log(error);
       dispatch(
@@ -48,6 +59,7 @@ function Container() {
       setAddress(addressSelector);
     } else {
       setAddress(defaultAddress);
+      setChoosenAddress(defaultAddress || null);
     }
   }, [defaultAddress?.id, addressSelector]);
 
@@ -92,6 +104,10 @@ function Container() {
           fetchAddress={fetchAddress}
           setOpen={setShowModal}
           setAddressToEdit={setAddressToEdit} // new
+          // setIsDefaultUpdated={setIsDefaultUpdated}
+          isDefaultUpdated={isDefaultUpdated}
+          setChoosenAddress={setChoosenAddress}
+          chosenAddress={chosenAddress}
         />
       </Stack>
       {/* modal edit and add */}
