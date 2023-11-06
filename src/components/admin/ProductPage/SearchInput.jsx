@@ -1,16 +1,14 @@
-import { Box, InputAdornment, TextField } from '@mui/material';
-import { useEffect } from 'react';
-import { SearchOutlined } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
-import { useLocation } from 'react-router-dom';
-import useCustomSearchParams from '../../../../hooks/useCustomSearchParams';
-import { asyncGetProducts } from '../../../../states/products/action';
+import { useEffect, useRef } from 'react';
+import { InputAdornment, TextField } from '@mui/material';
+import { SearchOutlined } from '@mui/icons-material';
+import useCustomSearchParams from '../../../hooks/useCustomSearchParams';
+import { asyncGetProducts } from '../../../states/products/action';
 
 function SearchInput() {
   const dispatch = useDispatch();
   const [searchParams, updateQueryParams] = useCustomSearchParams();
-  const location = useLocation();
-  const pathLocation = location.pathname.split('/')[1];
+  const isFirstRender = useRef(true);
 
   const handleSearch = () => {
     dispatch(
@@ -19,6 +17,7 @@ function SearchInput() {
         name: searchParams.get('name'),
         categoryId: searchParams.get('categoryId'),
         sortBy: searchParams.get('sortBy'),
+        paranoid: false,
         orderBy: searchParams.get('orderBy'),
         page: searchParams.get('page'),
         perPage: searchParams.get('perPage'),
@@ -27,25 +26,23 @@ function SearchInput() {
   };
 
   useEffect(() => {
-    const timerId = setTimeout(handleSearch, 300); // Create a debounce timer
-    return () => clearTimeout(timerId); // Clear the previous timer on each input change
-  }, [searchParams.get('name')]);
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return () => {};
+    }
 
-  if (pathLocation !== '') return <Box flexGrow={1} />;
+    const timerId = setTimeout(handleSearch, 300);
+    return () => clearTimeout(timerId);
+  }, [searchParams.get('name')]);
 
   return (
     <TextField
       onChange={({ target }) => updateQueryParams({ name: target.value })}
       size="small"
       variant="outlined"
-      placeholder="Cari di GadgetGallery"
+      placeholder="Cari Produk"
       value={searchParams.get('name') || ''}
-      sx={{
-        flexGrow: 1,
-        '&:focus': {
-          border: 'none',
-        },
-      }}
+      sx={{ flexGrow: 1 }}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
