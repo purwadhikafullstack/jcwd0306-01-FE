@@ -8,10 +8,13 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-export function ImageDetail({ imgSrc = '', open, setOpen }) {
+export function ImageDetail({ imgSrc = '', open, setOpen, showPreviousModal }) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const handleClose = () => setOpen('');
+  const handleClose = () => {
+    setOpen(false);
+    if (showPreviousModal) showPreviousModal(true);
+  };
   return (
     <Dialog
       fullWidth

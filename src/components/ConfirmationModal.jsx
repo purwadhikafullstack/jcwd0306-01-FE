@@ -6,8 +6,9 @@ export function ConfirmationModal({
   setShow,
   actionName,
   actionDescription,
+  onCloseString,
 }) {
-  const handleClose = () => setShow('');
+  const handleClose = () => setShow(onCloseString || '');
   return (
     <Modal show={show} onHide={handleClose} style={{ marginTop: '20vh' }}>
       <Modal.Header closeButton>

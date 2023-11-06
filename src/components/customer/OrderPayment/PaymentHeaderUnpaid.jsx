@@ -10,14 +10,14 @@ import { TotalPayment } from '../PaymentList/TotalPayment';
 export function PaymentHeaderUnpaid({ orderData }) {
   const [timer, setTimer] = useState(0);
 
-  const deadline = new Date(orderData?.createdAt).setDate(
-    new Date(orderData?.createdAt).getDate() + 1
+  const deadline = new Date(orderData?.updatedAt).setDate(
+    new Date(orderData?.updatedAt).getDate() + 1
   );
 
   useEffect(() => {
     setTimer(
-      new Date(orderData?.createdAt).setDate(
-        new Date(orderData?.createdAt).getDate() + 1
+      new Date(orderData?.updatedAt).setDate(
+        new Date(orderData?.updatedAt).getDate() + 1
       ) - new Date()
     );
   }, [orderData]);

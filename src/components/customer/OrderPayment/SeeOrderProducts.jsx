@@ -1,14 +1,7 @@
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Button, Card, CardContent, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import { OrderProductCard } from './OrderProductsCard';
-import { PaymentPriceCard } from './PaymentPriceCard';
+import { ShippingPriceCard } from './ShippingPriceCard';
 
 export function SeeOrderProducts({ orderData }) {
   const [show, setShow] = useState(false);
@@ -27,7 +20,7 @@ export function SeeOrderProducts({ orderData }) {
                 key={product?.name || product?.Product?.name}
               />
             ))}
-            <PaymentPriceCard orderData={orderData} />
+            <ShippingPriceCard orderData={orderData} />
           </Stack>
         </CardContent>
       </Card>

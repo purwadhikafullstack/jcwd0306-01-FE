@@ -51,6 +51,7 @@ export function Checkout() {
   const grandTotal = grandTotalCalculator(summaryTransaction);
   const defaultAddress = addresses.find((destination) => destination.isDefault);
   const addressSelector = useSelector((state) => state.selectedAddress);
+  console.log(cart);
 
   const createNewOrder = async () =>
     createNewTransaction(

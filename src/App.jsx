@@ -1,7 +1,8 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material';
+import { io } from 'socket.io-client';
 import { LoginPage } from './pages/LoginPage';
 import Alert from './components/Alert';
 import LoadingBar from './components/LoadingBar';
@@ -27,6 +28,10 @@ import { OrderList } from './pages/customer/OrderList';
 import { ChatRoom } from './pages/customer/Chatroom';
 import ForgetPassword from './pages/ForgetPassword';
 import ChangePassword from './pages/ChangePassword';
+import { TransactionPage } from './pages/admin/TransactionPage';
+import { socketListener } from './constants/socketListener';
+
+const socketConn = io(import.meta.env.VITE_API_BASE_URL);
 
 function App() {
   const authUser = useSelector((states) => states.authUser);
@@ -34,6 +39,7 @@ function App() {
   const pathLocation = location.pathname.split('/')[1];
   const dispatch = useDispatch();
   const theme = useTheme();
+  const [warehouseId, setWarehouseId] = useState([]);
 
   useEffect(() => {
     dispatch(asyncReceiveUser());
@@ -50,6 +56,7 @@ function App() {
       const { data } = await api.get(`/user/details/${authUser?.id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
+      setWarehouseId(data.WarehouseUsers);
       dispatch({ type: constant.updateOrderStatus, payload: data });
       dispatch({ type: constant.updateProductOnCart, payload: data.Carts });
       dispatch({ type: constant.updateUnpaid, payload: data.UserOrder });
@@ -58,6 +65,10 @@ function App() {
 
   useEffect(() => {
     fetchCartItem();
+    socketConn.connect();
+    socketListener(socketConn, dispatch, warehouseId, authUser?.id);
+
+    // return () => socketConn.disconnect();
   }, [localStorage.getItem('token')]);
 
   // ADMIN PAGE
@@ -72,6 +83,7 @@ function App() {
           <Routes>
             <Route path="/admin/categories" element={<CategoryPage />} />
             <Route path="/admin/warehouses" element={<WarehousePage />} />
+            <Route path="/admin/transactions" element={<TransactionPage />} />
             <Route path="/admin" element={<DashboardPage />} />
             <Route path="*" element={<Navigate to="/admin" />} />
           </Routes>
