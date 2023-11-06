@@ -18,7 +18,6 @@ function MoreProductsButton() {
         categoryId: searchParams.get('categoryId'),
         sortBy: searchParams.get('sortBy'),
         orderBy: searchParams.get('orderBy'),
-        isPaginated: searchParams.get('isPaginated'),
         page: nextPage,
       })
     ).finally(() => setNextPage((prevState) => prevState + 1));

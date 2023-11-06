@@ -1,20 +1,23 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
-import { asyncGetCategories } from '../../states/categories/action';
-import ContainerCategoryTab from '../../components/customer/HomePage/ContainerCategoryTab';
 import { asyncGetProducts } from '../../states/products/action';
-import Footer from '../../components/customer/Footer/Footer';
-import { asyncGetCarousels } from '../../states/carousels/action';
-import Carousel from '../../components/customer/HomePage/Carousel';
+import Container from '../../components/admin/ProductPage/Container';
+import useCustomSearchParams from '../../hooks/useCustomSearchParams';
 
-function HomePage() {
+function ProductPage() {
   const dispatch = useDispatch();
-  const [searchParams] = useSearchParams();
+  const [searchParams, updateQueryParams] = useCustomSearchParams();
 
   useEffect(() => {
-    dispatch(asyncGetCarousels());
-    dispatch(asyncGetCategories());
+    updateQueryParams({
+      sortBy: searchParams.get('sortBy') || 'updatedAt',
+      orderBy: searchParams.get('orderBy') || 'desc',
+      page: searchParams.get('page') || 1,
+      perPage: searchParams.get('perPage') || 10,
+    });
+  }, []);
+
+  useEffect(() => {
     dispatch(
       asyncGetProducts({
         getType: 'REPLACE',
@@ -22,6 +25,7 @@ function HomePage() {
         categoryId: searchParams.get('categoryId'),
         sortBy: searchParams.get('sortBy'),
         orderBy: searchParams.get('orderBy'),
+        paranoid: false,
         page: searchParams.get('page'),
         perPage: searchParams.get('perPage'),
       })
@@ -36,14 +40,17 @@ function HomePage() {
   ]);
 
   return (
-    <>
-      <main>
-        <Carousel />
-        <ContainerCategoryTab />
-      </main>
-      <Footer />
-    </>
+    <main
+      style={{
+        maxWidth: 'fit-content',
+        padding: '1rem',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+      }}
+    >
+      <Container />
+    </main>
   );
 }
 
-export default HomePage;
+export default ProductPage;

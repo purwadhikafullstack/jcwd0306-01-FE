@@ -27,6 +27,7 @@ import { OrderList } from './pages/customer/OrderList';
 import { ChatRoom } from './pages/customer/Chatroom';
 import ForgetPassword from './pages/ForgetPassword';
 import ChangePassword from './pages/ChangePassword';
+import ProductPage from './pages/admin/ProductPage';
 import { CustomerAddressPage } from './pages/customer/Address';
 import { AuthorizeUser } from './middlewares/auth';
 
@@ -72,6 +73,7 @@ function App() {
           <LoadingBar />
           <AdminAppBar />
           <Routes>
+            <Route path="/admin/products" element={<ProductPage />} />
             <Route path="/admin/categories" element={<CategoryPage />} />
             <Route path="/admin/warehouses" element={<WarehousePage />} />
             <Route path="/admin" element={<DashboardPage />} />
