@@ -4,7 +4,7 @@ import Slide from '@mui/material/Slide';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { HeaderChooseAddress } from './ModalChooseAddress/HeaderChooseAddress';
+import { HeaderModal } from '../../HeaderModal';
 import ProvinceSelect from './ModalEditOrAddAddress/ProvinceSelect';
 import CitySelect from './ModalEditOrAddAddress/CitySelect';
 import {
@@ -17,6 +17,7 @@ import { PostalCodeDistrictVillageDetailsForm } from './ModalEditOrAddAddress/Po
 import { setAlertActionCreator } from '../../../states/alert/action';
 
 const handleError = (error, dispatch) => {
+  console.log(error);
   dispatch(
     setAlertActionCreator({
       val: { status: 'error', message: error?.response?.data?.message },
@@ -35,7 +36,8 @@ export function ModalEditAndAddAddress({
   addresses,
   setAddress,
   setAddresses,
-  setAddressToEdit,
+  fetchAddress, // page /user/address
+  // setAddressesProfile,
 }) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -57,6 +59,13 @@ export function ModalEditAndAddAddress({
           setAddresses,
           setAddress,
           addressToEdit
+          // setAddressesProfile
+        );
+        if (window.location.pathname === '/user/address') fetchAddress(); // page /user/address
+        dispatch(
+          setAlertActionCreator({
+            val: { status: 'success', message: 'success' }, // tambahan(nazhif)
+          })
         );
         setOpen('CHOOSE_ADDRESS');
         addressFormik.resetForm();
@@ -84,7 +93,7 @@ export function ModalEditAndAddAddress({
         scroll="paper"
       >
         <div className="sticky-top">
-          <HeaderChooseAddress handleClose={() => handleClose()} Title={open} />
+          <HeaderModal handleClose={() => handleClose()} Title={open} />
         </div>
         <div className="my-3 px-3 d-flex flex-column gap-2">
           <AddressNameAndReciever addressFormik={addressFormik} />

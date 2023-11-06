@@ -47,24 +47,26 @@ function CartHeader() {
   return (
     <>
       <div className="fw-bold">YOUR CART</div>
-      <div className="d-flex justify-content-between w-100">
-        <label htmlFor="check-all-products">
-          <input
-            type="checkbox"
-            id="check-all-products"
-            onChange={toggleCheck}
-            style={{ marginRight: '8px' }}
-          />
-          Select All
-        </label>
-        <span
-          type="button"
-          style={{ color: '#009BD2' }}
-          onClick={() => setShow('RESET_CART')}
-        >
-          Delete All
-        </span>
-      </div>
+      {cart.length ? (
+        <div className="d-flex justify-content-between w-100">
+          <label htmlFor="check-all-products">
+            <input
+              type="checkbox"
+              id="check-all-products"
+              onChange={toggleCheck}
+              style={{ marginRight: '8px' }}
+            />
+            Select All
+          </label>
+          <span
+            type="button"
+            style={{ color: '#009BD2' }}
+            onClick={() => setShow('RESET_CART')}
+          >
+            Delete All
+          </span>
+        </div>
+      ) : null}
       <ConfirmationModal
         action={resetCart}
         actionName="DELETE ALL ITEMS FROM CART"

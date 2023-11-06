@@ -71,7 +71,7 @@ export function Checkout() {
   async function fetchAddresses() {
     try {
       const { data } = await api.get(`/user_address/${userSelector?.id}`);
-      setAddresses(data);
+      setAddresses(data.rows);
     } catch (error) {
       dispatch(constant.setError(error));
     }
@@ -113,7 +113,7 @@ export function Checkout() {
     <Container className="mx-auto p-0 mt-3" fluid="lg">
       <Row
         className="m-0 d-flex justify-content-center"
-        style={{ minHeight: '82vh' }}
+        style={{ minHeight: '81vh' }}
       >
         <Col lg={7} md={7} className="d-flex flex-column gap-3">
           <CheckOutHeader

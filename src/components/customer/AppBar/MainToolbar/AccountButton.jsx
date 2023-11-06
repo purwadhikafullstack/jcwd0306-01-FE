@@ -1,27 +1,29 @@
-import { Avatar, Box, Button, Link, Tooltip } from '@mui/material';
+import { Avatar, Box, Button, Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import HomeIcon from '@mui/icons-material/Home';
 import { asyncUnsetAuthUser } from '../../../../states/authUser/action';
+// import api from '../../../../constants/api';
 
-const apiUrl = import.meta.env.VITE_FE_BASE_URL;
+// const apiUrl = import.meta.env.VITE_FE_BASE_URL;
 
 function AccountButton() {
   const authUser = useSelector((states) => states.authUser);
+  const isAdmin = authUser?.isAdmin || false;
   const dispatch = useDispatch();
   const nav = useNavigate();
-  // const [authUser, setAuthUser] = useState(globalAuthUser);
 
-  function logout() {
+  const logout = () => {
     dispatch(asyncUnsetAuthUser());
     nav('/');
-  }
+  };
 
-  // useEffect(() => {
-  //   setAuthUser(globalAuthUser);
-  // }, [globalAuthUser]);
+  const toProfile = () => {
+    nav('user/address');
+  };
 
   return (
     <Tooltip
@@ -37,18 +39,25 @@ function AccountButton() {
       }}
       title={
         <Box display="flex" flexDirection="column">
-          <Button>
-            <Link
-              href={`${apiUrl}/profile`}
-              sx={{ textTransform: 'none', textDecoration: 'none' }}
-            >
-              <AccountCircleIcon fontSize="small" />
-              &nbsp; Profile
-            </Link>
+          <Button onClick={() => nav('/user/settings')}>
+            <AccountCircleIcon fontSize="small" />
+            &nbsp; Profile
+          </Button>
+          <Button
+            sx={{ display: isAdmin ? 'block' : 'none' }}
+            onClick={() => {
+              nav('/admin/dashboard');
+            }}
+          >
+            <AdminPanelSettingsIcon />
+            Admin Page
           </Button>
           <Button>My Order</Button>
           <Button>My Wishlist</Button>
-          <Button>My Address</Button>
+          <Button onClick={toProfile}>
+            <HomeIcon fontSize="small" />
+            &nbsp; My Address
+          </Button>
           <Button color="error" onClick={logout}>
             <LogoutIcon fontSize="small" />
             Logout

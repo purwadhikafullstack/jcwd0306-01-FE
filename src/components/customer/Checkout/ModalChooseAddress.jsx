@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import Slide from '@mui/material/Slide';
 import { useMediaQuery, useTheme } from '@mui/material';
-import { HeaderChooseAddress } from './ModalChooseAddress/HeaderChooseAddress';
+import { HeaderModal } from '../../HeaderModal';
 import { SearchBox } from './ModalChooseAddress/Searchbox';
 import { BoxAddresses } from './ModalChooseAddress/BoxAddresses';
 
@@ -36,7 +36,7 @@ export default function ModalChooseAddress({
         fullScreen={fullScreen}
         aria-describedby="alert-dialog-slide-description"
       >
-        <HeaderChooseAddress handleClose={handleClose} Title="Choose Address" />
+        <HeaderModal handleClose={handleClose} Title="Choose Address" />
         <div className="my-3">
           <SearchBox />
         </div>

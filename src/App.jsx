@@ -28,6 +28,8 @@ import { ChatRoom } from './pages/customer/Chatroom';
 import ForgetPassword from './pages/ForgetPassword';
 import ChangePassword from './pages/ChangePassword';
 import ProductPage from './pages/admin/ProductPage';
+import { CustomerAddressPage } from './pages/customer/Address';
+import { AuthorizeUser } from './middlewares/auth';
 
 function App() {
   const authUser = useSelector((states) => states.authUser);
@@ -46,10 +48,12 @@ function App() {
     else document.body.style.backgroundColor = theme.palette.background.paper;
   }, [pathLocation]);
 
-  // TEMPORARY AJA, nunggu login jadi
   const fetchCartItem = async () => {
     if (authUser?.id) {
-      const { data } = await api.get(`/user/details/${authUser?.id}`);
+      const { data } = await api.get(`/user/details/${authUser?.id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+      dispatch({ type: constant.updateOrderStatus, payload: data });
       dispatch({ type: constant.updateProductOnCart, payload: data.Carts });
       dispatch({ type: constant.updateUnpaid, payload: data.UserOrder });
     }
@@ -57,7 +61,7 @@ function App() {
 
   useEffect(() => {
     fetchCartItem();
-  }, [authUser?.id]);
+  }, [localStorage.getItem('token')]);
 
   // ADMIN PAGE
   if (pathLocation === 'admin') {
@@ -79,7 +83,7 @@ function App() {
       );
     }
 
-    return <div>Anda bukan admin</div>;
+    return <Navigate to="/" replace />;
   }
 
   // CUSTOMER PAGE
@@ -97,7 +101,14 @@ function App() {
         {authUser !== null && <Route path="/verify" element={<Verify />} />}
         <Route path="/cart/shipment" element={<Checkout />} />
         <Route path="/products/:id" element={<ProductDetailPage />} />
-        <Route path="/profile" element={<ProfileDashoard />} />
+        <Route
+          path="/user/settings"
+          element={
+            <AuthorizeUser>
+              <ProfileDashoard />
+            </AuthorizeUser>
+          }
+        />
         <Route path="/payment" element={<TransitionPage />} />
         <Route path="/payment/payment-list" element={<PaymentList />} />
         <Route path="/payment/:orderId" element={<Payment />} />
@@ -107,6 +118,7 @@ function App() {
           <Route path="/forget-password" element={<ForgetPassword />} />
         )}
         <Route path="/change-password" element={<ChangePassword />} />
+        <Route path="/user/address" element={<CustomerAddressPage />} />
       </Routes>
     </>
   );

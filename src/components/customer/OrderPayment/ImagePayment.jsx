@@ -2,7 +2,7 @@ import Grid from '@mui/material/Grid';
 
 export function ImagePayment({ imgSrc, setOpen }) {
   return (
-    <Grid container>
+    <Grid container mb={2}>
       <Grid
         type="button"
         item

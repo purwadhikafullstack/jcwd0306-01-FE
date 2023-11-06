@@ -4,11 +4,11 @@ import { PaymentMethod } from './PaymentMethod';
 import { TotalPayment } from './TotalPayment';
 import { ActionButton } from './ActionButton';
 
-export function OrderListItem({ order = {} }) {
+export function PaymentListItem({ order = {} }) {
   return (
     <Card>
       <CardContent>
-        <Stack gap={1}>
+        <Stack gap={2}>
           <Grid
             container
             wrap="nowrap"
