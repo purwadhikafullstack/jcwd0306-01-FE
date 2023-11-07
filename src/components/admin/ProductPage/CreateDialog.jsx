@@ -59,6 +59,7 @@ function CreateDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
             (value) => value.size <= 1024 * 1024 // 1MB = 1024 * 1024 bytes
           )
       )
+      .min(1)
       .required(),
   });
 
