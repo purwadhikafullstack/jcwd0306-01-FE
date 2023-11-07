@@ -88,11 +88,13 @@ function AddressItem({
         width: isDesktop ? '45rem' : '19rem',
         color: 'black',
         backgroundColor:
-          chosenAddress && chosenAddress.id === address.id ? 'bisque' : 'white',
-        // ':hover':
-        //   address.isDefault === true
-        //     ? { backgroundColor: 'bisque' }
-        //     : { backgroundColor: '#f4fcfd' },
+          chosenAddress && chosenAddress.id === address.id
+            ? '#d1f4f9'
+            : 'white',
+        ':hover':
+          address.isDefault === true
+            ? { backgroundColor: '#d1f4f9' }
+            : { backgroundColor: '#f4fcfd' },
       }}
     >
       <Grid container spacing={2} alignItems="center">
