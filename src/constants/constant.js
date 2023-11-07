@@ -18,10 +18,10 @@ export const constant = {
   unpaidColor: 'darkorange',
   cancelledColor: 'red',
   verifyingColor: 'dodgerblue',
-  processed: 'blue',
+  processedColor: 'blue',
   shippedColor: 'blue',
   receivedColor: 'green',
-  rejectedColor: 'green',
+  rejectedColor: 'red',
   status: {
     ongoing: ['verifying', 'processed', 'shipped'],
     failed: ['cancelled', 'rejected'],

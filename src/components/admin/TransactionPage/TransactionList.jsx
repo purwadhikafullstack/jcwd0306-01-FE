@@ -38,7 +38,7 @@ export function TransactionList({
               fetchDetailTransaction(order?.id);
             }}
           >
-            Verify
+            {order.status === 'verifying' ? 'Verify' : 'Update'}
           </Button>
           <Button sx={{ p: 0 }}>Message</Button>
         </div>

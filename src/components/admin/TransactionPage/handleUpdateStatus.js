@@ -11,6 +11,7 @@ const updateArray = (setArr, arr = [{}], transaction = {}) => {
 const handleUpdateStatus = async (
   dispatch,
   setOpen,
+  setShow,
   setIsLoading,
   setTransactions,
   transactions = [],
@@ -29,7 +30,9 @@ const handleUpdateStatus = async (
     });
     updateArray(setTransactions, transactions, transaction);
     setOpen(false);
+    setShow('');
   } catch (error) {
+    setOpen(true);
     dispatch(constant.setError(error));
   } finally {
     setIsLoading(false);
