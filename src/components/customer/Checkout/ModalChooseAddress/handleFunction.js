@@ -17,13 +17,16 @@ export const handleDelete = async (
   setAddresses,
   index,
   addresses = [],
-  destination = {}
+  destination = {},
+  userId = 0,
+  setOpen
 ) => {
   try {
-    await api.delete(`/user_address/${destination?.id}`);
+    await api.delete(`/user_address/${userId}/${destination?.id}`);
     const temp = [...addresses];
     temp.splice(index, 1);
     setAddresses(temp);
+    setOpen()
   } catch (error) {
     dispatch(setAlertActionCreator(error?.response?.data || error?.message));
   }
@@ -34,8 +37,7 @@ export const handleSetDefault = async (
   setAddresses,
   userId = 0,
   addresses = [],
-  destination = {},
-  setOpen
+  destination = {}
 ) => {
   try {
     const temp = [...addresses];
@@ -47,7 +49,6 @@ export const handleSetDefault = async (
       payload: { ...destination, isDefault: 1 },
     });
     changeDefault(setAddresses, temp, destination);
-    setOpen('');
   } catch (error) {
     dispatch(setAlertActionCreator(error?.response?.data || error?.message));
   }

@@ -33,10 +33,11 @@ export function OrderChatTemplate({ children }) {
                           alignItems="center"
                           gap={1}
                         >
-                          <Avatar>
+                          <Avatar style={{ backgroundColor: '#009BD2' }}>
                             <AccountCircleIcon />
                           </Avatar>
-                          {userSelector?.name || 'anonymous'}
+                          {`${userSelector?.firstName} ${userSelector?.lastName}` ||
+                            'anonymous'}
                         </Stack>
                       </CardContent>
                     </Card>

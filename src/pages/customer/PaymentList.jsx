@@ -9,7 +9,7 @@ export function PaymentList() {
   return (
     <OrderChatTemplate>
       <h5>Waiting for Payment</h5>
-      <Stack direction="column" gap={1} sx={{ fontSize: '0.9em' }}>
+      <Stack direction="column-reverse" gap={1} sx={{ fontSize: '0.9em' }}>
         {unpaidOrder.length ? (
           unpaidOrder.map((order) => (
             <PaymentListItem order={order} key={order.id} />

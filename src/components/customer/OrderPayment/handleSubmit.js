@@ -2,11 +2,12 @@ import api from '../../../constants/api';
 import { constant } from '../../../constants/constant';
 import { deleteUnpaid } from '../../../states/order/action';
 
-const formSetter = (imageUrl = '', image = {}) => {
+const formSetter = (imageUrl = '', image = {}, warehouseId = 0) => {
   const form = new FormData();
   form.append('imageUrl', imageUrl);
   form.append(`image`, image);
   form.append(`status`, 'verifying');
+  form.append(`warehouseId`, warehouseId);
   return form;
 };
 
@@ -32,7 +33,7 @@ export const handleSubmit = async (
   setAction({
     fn: async () => {
       setDisableSubmit(true);
-      const form = formSetter(imageUrl, image);
+      const form = formSetter(imageUrl, image, orderData?.warehouseId);
       try {
         setDisableButton(true);
         await api

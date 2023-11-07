@@ -12,10 +12,6 @@ import { CheckOutHeader } from '../../components/customer/Checkout/CheckOutHeade
 import api from '../../constants/api';
 import { fetchShippingOptions } from '../../components/customer/Checkout/fetchShippingOptions';
 import {
-  setAlertActionCreator,
-  unsetAlertActionCreator,
-} from '../../states/alert/action';
-import {
   cartCalculator,
   grandTotalCalculator,
 } from '../../components/customer/Cart/cartCalculator';
@@ -93,10 +89,11 @@ export function Checkout() {
   }, [defaultAddress?.id, addressSelector]);
 
   useEffect(() => {
+    const tempCart = directBuyItem?.quantity ? [directBuyItem] : cart;
     if (address?.id && (cart.length || directBuyItem?.quantity))
       fetchShippingOptions(
         address,
-        cart,
+        tempCart,
         setShippingOptions,
         setIsLoading,
         setOriginWarehouse,
@@ -104,7 +101,7 @@ export function Checkout() {
         setShippingMethod,
         dispatch
       );
-  }, [address, cart.length]);
+  }, [address, cart.length, directBuyItem?.quantity]);
 
   useEffect(() => {
     if (userSelector?.id) fetchAddresses();

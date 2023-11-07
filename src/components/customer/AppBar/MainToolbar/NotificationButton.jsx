@@ -38,9 +38,11 @@ function NotificationButton() {
           {totalNotification}
         </span>
       ) : null}
-      <IconButton color="text">
-        <NotificationsNoneOutlined />
-      </IconButton>
+      <a href={unpaidOrder.length ? '/payment/payment-list' : '/order-list'}>
+        <IconButton color="text">
+          <NotificationsNoneOutlined />
+        </IconButton>
+      </a>
       <NotificationShowUp
         show={show}
         setShow={setShow}

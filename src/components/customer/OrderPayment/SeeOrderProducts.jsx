@@ -1,14 +1,7 @@
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Button, Card, CardContent, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import { OrderProductCard } from './OrderProductsCard';
-import { PaymentPriceCard } from './PaymentPriceCard';
+import { ShippingPriceCard } from './ShippingPriceCard';
 
 export function SeeOrderProducts({ orderData }) {
   const [show, setShow] = useState(false);
@@ -20,14 +13,14 @@ export function SeeOrderProducts({ orderData }) {
       <Card className="w-100" style={{ display: show ? 'block' : 'none' }}>
         <CardContent>
           <Stack gap={1}>
-            <Typography variant="h6">Item-list in this order</Typography>
+            <Typography variant="h6">Order - {orderData?.plain_id}</Typography>
             {orderData?.OrderProducts?.map((product) => (
               <OrderProductCard
                 product={product}
                 key={product?.name || product?.Product?.name}
               />
             ))}
-            <PaymentPriceCard orderData={orderData} />
+            <ShippingPriceCard orderData={orderData} />
           </Stack>
         </CardContent>
       </Card>

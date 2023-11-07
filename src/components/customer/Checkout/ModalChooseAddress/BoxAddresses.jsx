@@ -12,6 +12,7 @@ export function BoxAddresses({
   setAddressToEdit,
   setOpen,
   setShippingMethod,
+  open,
 }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const handleListItemClick = (event, index, destination) => {
@@ -41,6 +42,7 @@ export function BoxAddresses({
             key={destination?.id}
             addresses={addresses}
             setAddresses={setAddresses}
+            open={open}
           />
         ))}
       </List>

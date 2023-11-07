@@ -9,6 +9,7 @@ import {
 import { CartItemImage } from '../Cart/CartItemImage';
 
 export function OrderProductCard({ product }) {
+  const price = product?.price || product?.Product?.price;
   return (
     <Card>
       <CardContent>
@@ -31,7 +32,7 @@ export function OrderProductCard({ product }) {
                       {product?.quantity} item
                       {product?.quantity > 1 ? 's' : null} (
                       {product.Product.weight * product.quantity} gr) x Rp
-                      {Number(product?.price).toLocaleString(`id-ID`)}
+                      {Number(price).toLocaleString(`id-ID`)}
                     </small>
                   </Typography>
                 </div>
@@ -41,9 +42,26 @@ export function OrderProductCard({ product }) {
               <Typography className="text-end" flexShrink={1}>
                 <b>
                   Rp
-                  {Number(
-                    product?.price || product?.Product?.price
-                  ).toLocaleString(`id-ID`)}
+                  {Number(price).toLocaleString(`id-ID`)}
+                </b>
+              </Typography>
+              <Typography
+                className="text-end"
+                flexShrink={1}
+                display={
+                  window.location.pathname === '/admin/transactions'
+                    ? 'block'
+                    : 'none'
+                }
+              >
+                <b
+                  className={
+                    product?.stock > product?.quantity
+                      ? 'text-success'
+                      : 'text-danger'
+                  }
+                >
+                  Stock: {product?.stock}
                 </b>
               </Typography>
             </Grid>

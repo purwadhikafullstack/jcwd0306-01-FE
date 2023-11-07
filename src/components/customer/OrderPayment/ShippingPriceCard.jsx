@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@mui/material';
 
-export function PaymentPriceCard({ orderData }) {
+export function ShippingPriceCard({ orderData }) {
   return (
     <Card>
       <CardContent>
@@ -15,9 +15,7 @@ export function PaymentPriceCard({ orderData }) {
           <Grid container className="w-100 flex-row justify-content-between">
             <Grid item flexGrow={1}>
               <Stack direction="row" gap={1} alignItems="center">
-                <Typography>
-                  Shipping method: {orderData?.shippingMethod}
-                </Typography>
+                <Typography>Shipping: {orderData?.shippingMethod}</Typography>
               </Stack>
             </Grid>
             <Grid item sm="auto" xs={12} alignItems="center">

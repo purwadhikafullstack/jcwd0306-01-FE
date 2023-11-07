@@ -26,7 +26,7 @@ export function ShippingInfo({ order = {} }) {
           :
         </Grid>
         <Grid item display="flex" xs={8.5} alignItems="center" ml={1}>
-          TLJR3DHMN5MF740L
+          {order?.shippingReceipt || '-'}
         </Grid>
       </Grid>
       <Grid container>
