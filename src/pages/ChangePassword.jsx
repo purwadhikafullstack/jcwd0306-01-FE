@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { setAlertActionCreator } from '../states/alert/action';
 import api from '../constants/api';
 
@@ -151,7 +152,14 @@ export default function ChangePassword() {
                     edge="end"
                     tabIndex="-1"
                   >
-                    <VisibilityOffIcon fontSize="small" />
+                    <VisibilityOffIcon
+                      fontSize="small"
+                      sx={{ display: !see ? 'block' : 'none' }}
+                    />
+                    <VisibilityIcon
+                      fontSize="small"
+                      sx={{ display: see ? 'block' : 'none' }}
+                    />
                   </IconButton>
                 ),
               }}
@@ -179,7 +187,14 @@ export default function ChangePassword() {
                     edge="end"
                     tabIndex="-1"
                   >
-                    <VisibilityOffIcon fontSize="small" />
+                    <VisibilityOffIcon
+                      fontSize="small"
+                      sx={{ display: !seeConfirm ? 'block' : 'none' }}
+                    />
+                    <VisibilityIcon
+                      fontSize="small"
+                      sx={{ display: seeConfirm ? 'block' : 'none' }}
+                    />
                   </IconButton>
                 ),
               }}

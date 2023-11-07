@@ -76,9 +76,23 @@ export async function updateAddress(
       values,
       config
     );
-    const temp = [...addresses];
-    temp.splice(values.index, 1, data);
-    setAddresses(temp);
+    /* Nazhif (to fix bug card increase after edit) */
+    // Find the index of the address to be updated in the addresses array
+    const indexToUpdate = addresses.findIndex(
+      (address) => address.id === values.id
+    );
+
+    if (indexToUpdate !== -1) {
+      // Update the address in the array without modifying the original array
+      const updatedAddresses = [...addresses];
+      updatedAddresses[indexToUpdate] = data;
+
+      // Set the updated addresses in the state
+      setAddresses(updatedAddresses);
+    }
+    // const temp = [...addresses];
+    // temp.splice(values.index, 1, data);
+    // setAddresses(temp);
   }
 }
 

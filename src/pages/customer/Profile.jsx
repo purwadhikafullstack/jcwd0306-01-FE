@@ -1,4 +1,3 @@
-import { AspectRatio } from '@mui/joy';
 import {
   Avatar,
   Box,
@@ -9,7 +8,6 @@ import {
   FormControl,
   FormLabel,
   IconButton,
-  Input,
   Stack,
   TextField,
   Typography,
@@ -21,9 +19,10 @@ import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import InputAdornment from '@mui/material/InputAdornment';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import api from '../../constants/api';
 import { setAlertActionCreator } from '../../states/alert/action';
-import { asyncSetAuthUser } from '../../states/authUser/action';
+import { updateAuthUserActionCreator } from '../../states/authUser/action';
 
 export function ProfileDashoard() {
   const authUser = useSelector((states) => states.authUser);
@@ -47,10 +46,12 @@ export function ProfileDashoard() {
     onSubmit: async () => {
       try {
         setButtonDisabled(true);
-        const data = await api.patch(
-          `/user/edit/${authUser?.id}`,
-          formik.values
-        );
+        await api.patch(`/user/edit/${authUser?.id}`, formik.values);
+
+        const fetchUser = await api.get(`/user/${authUser?.id}`);
+        // console.log(fetchUser?.data?.data?.user);
+
+        dispatch(updateAuthUserActionCreator(fetchUser?.data?.data?.user));
 
         dispatch(
           setAlertActionCreator({
@@ -113,9 +114,9 @@ export function ProfileDashoard() {
     formik2.setFieldValue(fieldName, value);
   }
 
-  function handleCancel() {
+  const handleCancel = () => {
     formik.resetForm();
-  }
+  };
 
   useEffect(() => {
     const fetchImage = async () => {
@@ -230,7 +231,11 @@ export function ProfileDashoard() {
               Change Password
             </Button>
 
-            <Stack direction="row" spacing={1} display={see ? 'block' : 'none'}>
+            <Stack
+              direction={{ xs: 'column', md: 'row' }}
+              spacing={1}
+              display={see ? 'block' : 'none'}
+            >
               <FormControl sx={{ gap: 1, maxWidth: 225 }}>
                 <TextField
                   size="small"
@@ -246,7 +251,14 @@ export function ProfileDashoard() {
                           edge="end"
                           tabIndex="-1"
                         >
-                          <VisibilityOffIcon fontSize="small" />
+                          <VisibilityOffIcon
+                            fontSize="small"
+                            sx={{ display: !seeOldPassword ? 'block' : 'none' }}
+                          />
+                          <VisibilityIcon
+                            fontSize="small"
+                            sx={{ display: seeOldPassword ? 'block' : 'none' }}
+                          />
                         </IconButton>
                       </InputAdornment>
                     ),
@@ -261,6 +273,10 @@ export function ProfileDashoard() {
                   }
                   onChange={(e) => inputHandler2(e, 'oldPassword')}
                   onBlur={formik2.handleBlur}
+                  sx={{
+                    width: '100%', // Set width to 100% on small screens
+                    marginBottom: 1, // Add bottom margin for spacing
+                  }}
                 />
               </FormControl>
               <FormControl sx={{ gap: 1, maxWidth: 225 }}>
@@ -278,7 +294,14 @@ export function ProfileDashoard() {
                           edge="end"
                           tabIndex="-1"
                         >
-                          <VisibilityOffIcon fontSize="small" />
+                          <VisibilityOffIcon
+                            fontSize="small"
+                            sx={{ display: !seeNewPassword ? 'block' : 'none' }}
+                          />
+                          <VisibilityIcon
+                            fontSize="small"
+                            sx={{ display: seeNewPassword ? 'block' : 'none' }}
+                          />
                         </IconButton>
                       </InputAdornment>
                     ),
@@ -293,6 +316,10 @@ export function ProfileDashoard() {
                   }
                   onChange={(e) => inputHandler2(e, 'newPassword')}
                   onBlur={formik2.handleBlur}
+                  sx={{
+                    width: '100%', // Set width to 100% on small screens
+                    marginBottom: 1, // Add bottom margin for spacing
+                  }}
                 />
               </FormControl>
               <Button

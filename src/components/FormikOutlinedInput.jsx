@@ -24,8 +24,8 @@ function FormikOutlinedInput({ name, label, inputProps }) {
             label={label}
             inputProps={{ 'aria-label': label }}
             aria-describedby={`${name}_helper-text`}
-            {...inputProps}
             {...field}
+            {...inputProps}
           />
           <FormHelperText id={`${name}_helper-text`}>
             {meta.touched && meta.error}
