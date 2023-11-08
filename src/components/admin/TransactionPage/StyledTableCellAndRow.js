@@ -6,11 +6,17 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: '#009BD2',
     color: theme.palette.common.white,
-    // padding: '16px 6px',
+    padding: '16px',
+    [theme.breakpoints.down('md')]: {
+      padding: '16px 6px',
+    },
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    // padding: '16px 6px',
+    padding: '16px',
+    [theme.breakpoints.down('md')]: {
+      padding: '16px 6px',
+    },
   },
 }));
 

@@ -29,8 +29,8 @@ export function StatusFilterButton({ setSearchParams, searchParams }) {
   }, [searchParams]);
 
   return (
-    <Stack gap={1}>
-      <Stack direction="row" gap={1}>
+    <Stack gap={1} justifyContent="center">
+      <Stack direction="row" gap={1} flexWrap>
         <Button
           variant={!status ? 'contained' : 'outlined'}
           onClick={() => {

@@ -31,7 +31,8 @@ function SearchInput() {
     return () => clearTimeout(timerId); // Clear the previous timer on each input change
   }, [searchParams.get('name')]);
 
-  if (pathLocation !== '') return <Box flexGrow={1} />;
+  if (pathLocation !== '' && location.pathname !== '/cart')
+    return <Box flexGrow={1} />;
 
   return (
     <TextField

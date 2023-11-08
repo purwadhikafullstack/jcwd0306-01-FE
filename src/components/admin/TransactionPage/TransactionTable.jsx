@@ -43,14 +43,25 @@ export function TransactionTable({ transactions = [], setTransactions }) {
   }, [transaction]);
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table" stickyHeader>
+      <Table aria-label="customized table" stickyHeader>
         <TableHead>
           <TableRow>
-            <StyledTableCell align="center">No</StyledTableCell>
+            <StyledTableCell
+              align="center"
+              sx={{ display: { xs: 'none', md: 'table-cell' } }}
+            >
+              No
+            </StyledTableCell>
             <StyledTableCell align="center">ID</StyledTableCell>
             <StyledTableCell align="center">Status</StyledTableCell>
-            <StyledTableCell align="center">Total Price</StyledTableCell>
-            <StyledTableCell align="center">Transaction Time</StyledTableCell>
+            <StyledTableCell align="center">
+              <span className="d-none d-md-inline">Total Price</span>
+              <span className="d-md-none d-inline">Price</span>
+            </StyledTableCell>
+            <StyledTableCell align="center" className="d-none d-sm-table-cell">
+              <span className="d-none d-md-inline">Transaction Time</span>
+              <span className="d-md-none d-inline">Date</span>
+            </StyledTableCell>
             <StyledTableCell align="center">Action</StyledTableCell>
           </TableRow>
         </TableHead>
