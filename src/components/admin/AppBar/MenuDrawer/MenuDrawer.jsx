@@ -10,6 +10,7 @@ import {
   SupervisorAccountRounded,
   WarehouseRounded,
 } from '@mui/icons-material';
+import ReceiptLongRoundedIcon from '@mui/icons-material/ReceiptLongRounded';
 import { Button, Drawer, List, ListSubheader, Stack } from '@mui/material';
 import ListItem from './ListItem';
 
@@ -44,6 +45,9 @@ function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
           </ListItem>
           <ListItem text="Kategori" to="/admin/categories">
             <CategoryRounded />
+          </ListItem>
+          <ListItem text="Transaksi" to="/admin/transactions">
+            <ReceiptLongRoundedIcon />
           </ListItem>
           <ListItem text="Laporan" to="/admin/report">
             <AssessmentRounded />

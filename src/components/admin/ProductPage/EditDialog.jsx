@@ -39,25 +39,23 @@ function EditDialog({ product, isEditDialogOpen, setIsEditDialogOpen }) {
     discount: num().min(0).max(1).required(),
     description: str().required(),
     categoryIds: array().of(num().integer().min(1)),
-    images: array()
-      .of(
-        mixed()
-          .required()
-          .test(
-            'is-file',
-            'Image must be a file',
-            (value) => value instanceof File
-          )
-          .test('is-image', 'File must be an image', (value) =>
-            value.type.startsWith('image/')
-          )
-          .test(
-            'file-size',
-            'File size must be ≤ 1MB',
-            (value) => value.size <= 1024 * 1024 // 1MB = 1024 * 1024 bytes
-          )
-      )
-      .required(),
+    images: array().of(
+      mixed()
+        .required()
+        .test(
+          'is-file',
+          'Image must be a file',
+          (value) => value instanceof File
+        )
+        .test('is-image', 'File must be an image', (value) =>
+          value.type.startsWith('image/')
+        )
+        .test(
+          'file-size',
+          'File size must be ≤ 1MB',
+          (value) => value.size <= 1024 * 1024 // 1MB = 1024 * 1024 bytes
+        )
+    ),
     imageIdsToDelete: array().of(num().integer().min(1)),
   });
 

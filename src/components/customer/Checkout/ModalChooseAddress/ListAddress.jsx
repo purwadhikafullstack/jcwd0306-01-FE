@@ -1,9 +1,10 @@
 import ListItemButton from '@mui/material/ListItemButton';
 import { Button } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import api from '../../../../constants/api';
+import { useState } from 'react';
 import { handleDelete, handleSetDefault } from './handleFunction';
 import { fullAddressFormatter } from './fullAddressFormatter';
+import { ConfirmationModal } from '../../../ConfirmationModal';
 
 export function ListAddress({
   selectedIndex,
@@ -12,11 +13,22 @@ export function ListAddress({
   destination,
   setAddressToEdit,
   setOpen,
+  open,
   addresses,
   setAddresses,
 }) {
   const dispatch = useDispatch();
   const userSelector = { id: 5 };
+  const deleteAddress = () =>
+    handleDelete(
+      dispatch,
+      setAddresses,
+      index,
+      addresses,
+      destination,
+      userSelector?.id,
+      setOpen(`CHOOSE_ADDRESS`)
+    );
   return (
     <ListItemButton
       selected={selectedIndex === index}
@@ -68,8 +80,7 @@ export function ListAddress({
                 setAddresses,
                 userSelector.id,
                 addresses,
-                destination,
-                setOpen
+                destination
               )
             }
           >
@@ -80,18 +91,20 @@ export function ListAddress({
               fontSize: '0.8em',
               display: destination?.isDefault ? 'none' : 'inline',
             }}
-            onClick={() =>
-              handleDelete(
-                dispatch,
-                setAddresses,
-                index,
-                addresses,
-                destination
-              )
-            }
+            onClick={() => setOpen(`deleteAddress${destination?.id}`)}
           >
             Delete
           </Button>
+          <ConfirmationModal
+            action={deleteAddress}
+            actionName="delete this address"
+            show={open === `deleteAddress${destination?.id}` ? open : ''}
+            setShow={setOpen}
+            onCloseString="CHOOSE_ADDRESS"
+            actionDescription={`The address: ${fullAddressFormatter(
+              destination
+            )}`}
+          />
         </div>
       </div>
     </ListItemButton>

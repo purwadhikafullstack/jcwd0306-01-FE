@@ -1,5 +1,4 @@
 import api from '../../../constants/api';
-import { constant } from '../../../constants/constant';
 
 const weightCalculator = (cart = []) =>
   cart.reduce((acc, val) => acc + val.quantity * val.Product.weight, 0);
