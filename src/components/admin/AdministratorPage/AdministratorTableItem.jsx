@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import { DeleteRounded, EditNoteRounded } from '@mui/icons-material';
 import {
   Avatar,
@@ -9,33 +10,18 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { asyncDeleteCategory } from '../../../states/categories/action';
+import { useSelector } from 'react-redux';
 // import EditDialog from './EditDialog';
 
 function AdministratorTableItem() {
-  const dispatch = useDispatch();
-  // const categories = useSelector((states) => states.categories);
-  const [category, setCategory] = useState({});
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  // const warehouseAdmin = useSelector((states) => states.administrator);
-  // console.log(warehouseAdmin);
+  const warehouseAdmin = useSelector((states) => states.administrator);
 
-  /*  const handleEditButton = (val) => {
-    setCategory(val);
-    setIsEditDialogOpen(true);
-  }; */
-
-  /*  const handleDeleteButton = (categoryId) => {
-    dispatch(asyncDeleteCategory(categoryId));
-  }; */
-
+  let idCounter = 1;
   return (
     <>
       <TableBody>
-        {/* When category not found */}
-        {/* {!categories.length && (
+        {/* When WH-admin not found */}
+        {!warehouseAdmin.length && (
           <TableRow>
             <TableCell colSpan={5}>
               <Typography variant="body2" align="center">
@@ -43,72 +29,66 @@ function AdministratorTableItem() {
               </Typography>
             </TableCell>
           </TableRow>
-        )} */}
+        )}
 
         {/* When category exist */}
-        {/* {categories.map((val) => ( */}
-        <TableRow /* key={val.id} */>
-          {/* ID column */}
-          <TableCell>{/* {val.id} */}val.id</TableCell>
+        {warehouseAdmin.map((val) => (
+          <TableRow key={val.id}>
+            {/* ID column */}
+            <TableCell>{idCounter++}</TableCell>
 
-          {/* Image column */}
-          <TableCell>
-            <Avatar
-              variant="square"
-              alt={/* val.name */ 'val.name'}
-              // src={`${import.meta.env.VITE_API_BASE_URL}/categories/${
-              //   val.id
-              // }/image`}
-            />
-          </TableCell>
+            {/* Image column */}
+            <TableCell>
+              <Avatar
+                variant="square"
+                alt={val.name}
+                // src={`${import.meta.env.VITE_API_BASE_URL}/categories/${
+                //   val.id
+                // }/image`}
+              />
+            </TableCell>
 
-          {/* Name column */}
-          <TableCell>{/* val.name */ 'val.name'}</TableCell>
+            {/* Name column */}
+            <TableCell>{val.User.firstName}</TableCell>
 
-          {/* Total products column */}
-          <TableCell>{/* val.totalProducts */ 'val.Warehouse'}</TableCell>
+            {/* Email column */}
+            <TableCell>{val.User.email}</TableCell>
 
-          {/* createdAt column */}
-          <TableCell>
-            {new Date(/* val.createdAt */ 'val.createdAt').toLocaleDateString(
-              'id-ID'
-            )}
-          </TableCell>
+            {/* Warehouse column */}
+            <TableCell>{val.Warehouse.name}</TableCell>
 
-          {/* updatedAt column */}
-          <TableCell>
-            {new Date(/* val.updatedAt */ 'val.updatedAt').toLocaleDateString(
-              'id-ID'
-            )}
-          </TableCell>
+            {/* Warehouse Address */}
+            <TableCell>
+              {val.Warehouse.WarehouseAddress.Province.name}
+            </TableCell>
 
-          {/* Action column */}
-          <TableCell>
-            <Stack direction="row">
-              {/* Edit button */}
-              <Tooltip title="Edit kategori" arrow>
-                <IconButton
-                  // onClick={() => handleEditButton(val)}
-                  sx={{ '&:hover': { color: 'info.main' } }}
-                >
-                  <EditNoteRounded />
-                </IconButton>
-              </Tooltip>
+            {/* Action column */}
+            <TableCell>
+              <Stack direction="row">
+                {/* Edit button */}
+                <Tooltip title="Edit WH-admin" arrow>
+                  <IconButton
+                    // onClick={() => handleEditButton(val)}
+                    sx={{ '&:hover': { color: 'info.main' } }}
+                  >
+                    <EditNoteRounded />
+                  </IconButton>
+                </Tooltip>
 
-              {/* Delete button */}
-              <Tooltip title="Hapus kategori" arrow>
-                <IconButton
-                  value="categoryId"
-                  onClick={/* () => handleDeleteButton(val.id) */ null}
-                  sx={{ '&:hover': { color: 'error.main' } }}
-                >
-                  <DeleteRounded />
-                </IconButton>
-              </Tooltip>
-            </Stack>
-          </TableCell>
-        </TableRow>
-        {/* ))} */}
+                {/* Delete button */}
+                <Tooltip title="Hapus WH-admin" arrow>
+                  <IconButton
+                    value="categoryId"
+                    onClick={/* () => handleDeleteButton(val.id) */ null}
+                    sx={{ '&:hover': { color: 'error.main' } }}
+                  >
+                    <DeleteRounded />
+                  </IconButton>
+                </Tooltip>
+              </Stack>
+            </TableCell>
+          </TableRow>
+        ))}
       </TableBody>
 
       {/* Edit Dialog */}

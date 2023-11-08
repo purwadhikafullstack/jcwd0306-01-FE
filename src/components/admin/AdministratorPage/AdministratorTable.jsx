@@ -14,13 +14,13 @@ function AdministratorTable() {
     <TableContainer component={Paper} sx={{ borderRadius: 0.5 }}>
       <Table aria-label="Category Table">
         <TableHead>
-          <TableRow sx={{ bgcolor: 'primary.main' }}>
+          <TableRow sx={{ bgcolor: '#33c7cc' }}>
             <TableCell sx={{ color: 'white' }}>No</TableCell>
             <TableCell sx={{ color: 'white' }}>Gambar</TableCell>
             <TableCell sx={{ color: 'white' }}>Nama</TableCell>
+            <TableCell sx={{ color: 'white' }}>Email</TableCell>
             <TableCell sx={{ color: 'white' }}>Warehouse</TableCell>
-            <TableCell sx={{ color: 'white' }}>Tanggal Dibuat</TableCell>
-            <TableCell sx={{ color: 'white' }}>Tanggal Diperbarui</TableCell>
+            <TableCell sx={{ color: 'white' }}>Warehouse Address</TableCell>
             <TableCell />
           </TableRow>
         </TableHead>

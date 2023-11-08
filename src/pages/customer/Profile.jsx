@@ -22,7 +22,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import api from '../../constants/api';
 import { setAlertActionCreator } from '../../states/alert/action';
-import { updateAuthUserActionCreator } from '../../states/authUser/action';
+import {
+  asyncUpdateAuthUser,
+  updateAuthUserActionCreator,
+} from '../../states/authUser/action';
+import ImageInput from '../../components/customer/ProfilePage/ImageInput';
 
 export function ProfileDashoard() {
   const authUser = useSelector((states) => states.authUser);
@@ -46,12 +50,14 @@ export function ProfileDashoard() {
     onSubmit: async () => {
       try {
         setButtonDisabled(true);
-        await api.patch(`/user/edit/${authUser?.id}`, formik.values);
+        // await api.patch(`/user/edit/${authUser?.id}`, formik.values);
+        const userId = authUser?.id;
+        const formData = formik.values;
 
         const fetchUser = await api.get(`/user/${authUser?.id}`);
         // console.log(fetchUser?.data?.data?.user);
 
-        dispatch(updateAuthUserActionCreator(fetchUser?.data?.data?.user));
+        dispatch(asyncUpdateAuthUser({ userId, formData }));
 
         dispatch(
           setAlertActionCreator({
@@ -129,6 +135,10 @@ export function ProfileDashoard() {
     };
   }, [authUser?.id]);
 
+  const image = `${import.meta.env.VITE_API_BASE_URL}/user/${
+    authUser?.id
+  }/image`;
+
   return (
     <Container sx={{ mt: 3, p: 2 }}>
       <Card sx={{ p: 2, backgroundColor: '#FBFCFE' }}>
@@ -150,7 +160,7 @@ export function ProfileDashoard() {
           <Stack direction="column" spacing={1} alignItems="center">
             <Avatar
               sx={{ minHeight: 120, minWidth: 120, position: 'relative' }}
-              src={avatar || null}
+              src={image}
             />
             <IconButton
               sx={{
@@ -163,7 +173,20 @@ export function ProfileDashoard() {
               }}
             >
               <EditIcon />
+              <input
+                type="file"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  opacity: 0,
+                  cursor: 'pointer',
+                }}
+              />
             </IconButton>
+            {/* <ImageInput /> */}
           </Stack>
           {/* biodata */}
           <Stack spacing={1} sx={{ flexGrow: 1 }}>

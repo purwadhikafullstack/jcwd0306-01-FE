@@ -1,14 +1,12 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import { AddRounded } from '@mui/icons-material';
-import { useSelector } from 'react-redux';
 import SearchInput from './SearchInput';
 import AdministratorTable from './AdministratorTable';
+import { CreatedDialog } from './CreateDialog/CreateDialog';
 
-function ContainerAdministrator({ test }) {
+function ContainerAdministrator() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const warehouseAdmin = useSelector((state) => state.administrator);
-  // console.log(warehouseAdmin);
 
   return (
     <>
@@ -24,7 +22,6 @@ function ContainerAdministrator({ test }) {
         <Typography fontWeight={800} fontSize="1.2rem">
           Manage Warehouse Admin
         </Typography>
-        <Button onClick={() => test()}>test</Button>
         <Stack spacing={2} direction={{ xs: 'column', md: 'row' }}>
           {/* Search Categories Input */}
           <SearchInput />
@@ -36,7 +33,7 @@ function ContainerAdministrator({ test }) {
             startIcon={<AddRounded />}
             sx={{ textTransform: 'none' }}
           >
-            Admin
+            WH - Admin
           </Button>
         </Stack>
         {/* Category Table */}
@@ -44,10 +41,10 @@ function ContainerAdministrator({ test }) {
       </Stack>
 
       {/* Create Category Dialog */}
-      {/* <CreateDialog
+      <CreatedDialog
         isCreateDialogOpen={isCreateDialogOpen}
         setIsCreateDialogOpen={setIsCreateDialogOpen}
-      /> */}
+      />
     </>
   );
 }

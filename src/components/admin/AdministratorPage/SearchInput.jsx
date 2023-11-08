@@ -29,7 +29,7 @@ function SearchInput() {
       onChange={({ target }) => updateQueryParams({ name: target.value })}
       size="small"
       variant="outlined"
-      placeholder="Cari Kategori"
+      placeholder="Cari WH-admin"
       value={searchParams.get('name') || ''}
       sx={{ flexGrow: 1 }}
       InputProps={{

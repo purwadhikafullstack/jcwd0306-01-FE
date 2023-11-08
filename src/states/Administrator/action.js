@@ -11,13 +11,13 @@ function getWarehouseAdminActionCreator(warehouseAdmin) {
   };
 }
 
-function asyncGetWarehouseAdmin(warehouseId) {
+function asyncGetWarehouseAdmin() {
   return async (dispatch) => {
     try {
-      const data = await api.get(`/warehouseusers/${warehouseId}/users`);
-      console.log(data.data);
+      const data = await api.get(`/warehouseusers`);
+      // console.log(data.data.data);
 
-      dispatch(getWarehouseAdminActionCreator(data.data));
+      dispatch(getWarehouseAdminActionCreator(data.data.data));
     } catch (err) {
       console.log(err);
     }
