@@ -43,6 +43,7 @@ export function Checkout() {
   const [disableButton, setDisableButton] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const directBuyItem = useLocation().state;
+  console.log(directBuyItem);
   cartCalculator(cart, summaryTransaction, directBuyItem, shippingMethod);
   const grandTotal = grandTotalCalculator(summaryTransaction);
   const defaultAddress = addresses.find((destination) => destination.isDefault);
