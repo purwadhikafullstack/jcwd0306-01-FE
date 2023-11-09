@@ -10,11 +10,58 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import DeleteDialog from './DeleteDialog';
+import api from '../../../constants/api';
+import { setAlertActionCreator } from '../../../states/alert/action';
 // import EditDialog from './EditDialog';
 
 function AdministratorTableItem() {
   const warehouseAdmin = useSelector((states) => states.administrator);
+  const dispatch = useDispatch();
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [deleteDialogData, setDeleteDialogData] = useState({
+    warehouseId: null,
+    userIds: [],
+  });
+  // console.log(deleteDialogData);
+
+  // warehouseAdmin.map((val) => console.log(val));
+
+  const handleDeleteDialogOpen = (warehouseId, userId) => {
+    setIsDeleteDialogOpen(true);
+    setDeleteDialogData((prevData) => ({
+      ...prevData,
+      warehouseId,
+      userIds: [...prevData.userIds, userId],
+    }));
+  };
+  const handleDeleteDialogClose = () => {
+    setIsDeleteDialogOpen(false);
+    setDeleteDialogData({ warehouseId: null, userIds: [] });
+  };
+
+  const deleteAdmin = async (warehouseId, userIds) => {
+    try {
+      console.log({ warehouseId, userIds });
+      await api.delete(`/warehouseusers/${warehouseId}/users`, {
+        data: { userIds },
+      });
+      dispatch(
+        setAlertActionCreator({
+          val: { status: 'success', message: 'Success delete admin' },
+        })
+      );
+    } catch (error) {
+      console.log(error);
+      dispatch(
+        setAlertActionCreator({
+          val: { status: 'error', message: 'Error' },
+        })
+      );
+    }
+  };
 
   let idCounter = 1;
   return (
@@ -25,7 +72,7 @@ function AdministratorTableItem() {
           <TableRow>
             <TableCell colSpan={5}>
               <Typography variant="body2" align="center">
-                Kategori tidak ditemukan
+                Warehouse Admin tidak ditemukan
               </Typography>
             </TableCell>
           </TableRow>
@@ -79,7 +126,9 @@ function AdministratorTableItem() {
                 <Tooltip title="Hapus WH-admin" arrow>
                   <IconButton
                     value="categoryId"
-                    onClick={/* () => handleDeleteButton(val.id) */ null}
+                    onClick={() =>
+                      handleDeleteDialogOpen(val.warehouseId, val.User.id)
+                    }
                     sx={{ '&:hover': { color: 'error.main' } }}
                   >
                     <DeleteRounded />
@@ -90,6 +139,15 @@ function AdministratorTableItem() {
           </TableRow>
         ))}
       </TableBody>
+
+      {/* delete dialog */}
+      <DeleteDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={handleDeleteDialogClose}
+        deleteAdmin={deleteAdmin}
+        warehouseId={deleteDialogData.warehouseId}
+        userIds={deleteDialogData.userIds}
+      />
 
       {/* Edit Dialog */}
       {/* <EditDialog

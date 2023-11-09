@@ -8,11 +8,14 @@ import {
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
 import { HeaderModal } from './HeaderModal';
 import WarehouseSelect from './WarehouseSelect';
 import api from '../../../../constants/api';
+import { setAlertActionCreator } from '../../../../states/alert/action';
 
 export function CreatedDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -20,20 +23,48 @@ export function CreatedDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
     },
     validationSchema: Yup.object().shape({
       email: Yup.string().email('Invalid email address').required('Required'),
-      warehouseDestination: Yup.string().required('required!'),
+      // warehouseDestination: Yup.string().required('required!'),
     }),
     enableReinitialize: true,
     onSubmit: async () => {
       try {
-        const { data } = await api.post(`/warehouseusers/4/users`);
-        console.log(data);
+        const whDestinationId = formik.values.warehouseDestination.id;
+        const { email } = formik.values;
+        const data = await api.post(
+          `/warehouseusers/${whDestinationId}/users`,
+          { email }
+        );
+        setIsCreateDialogOpen(false);
+        dispatch(
+          setAlertActionCreator({
+            val: {
+              status: 'success',
+              message: 'success create new warehouse admin',
+            },
+          })
+        );
+        dispatch(
+          setAlertActionCreator({
+            val: { status: 'success', message: data.data.status },
+          })
+        );
       } catch (err) {
-        console.log(err);
+        dispatch(
+          setAlertActionCreator({
+            val: { status: 'error', message: err.response.data.message },
+          })
+        );
       }
     },
   });
 
-  console.log(formik.values);
+  // console.log({
+  //   email: formik.values.email,
+  //   whdestinationId: formik.values.warehouseDestination.id,
+  // });
+
+  // console.log('Formik state:', formik.values, formik.touched, formik.errors);
+  // console.log(formik.values.warehouseDestination);
 
   function inputHandler(e, fieldName) {
     const { value } = e.target;
@@ -76,6 +107,7 @@ export function CreatedDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
         <Typography mt={3} mb={2}>
           Warehouse Tujuan
         </Typography>
+        {/* Input Wh Destination */}
         <WarehouseSelect formik={formik} />
       </DialogContent>
 
@@ -87,7 +119,7 @@ export function CreatedDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
       />
 
       <DialogActions sx={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Button>Submit</Button>
+        <Button onClick={formik.handleSubmit}>Submit</Button>
       </DialogActions>
     </Dialog>
   );

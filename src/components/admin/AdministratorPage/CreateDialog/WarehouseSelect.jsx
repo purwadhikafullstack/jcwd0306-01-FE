@@ -1,24 +1,12 @@
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import api from '../../../../constants/api';
 
 export default function WarehouseSelect({ formik }) {
   const [warehouses, setWarehouses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [searchWarehouse, setSearchWarehouse] = useState('');
-
-  // const fetchWarehouses = async (warehouseName = '') => {
-  //   setIsLoading(true);
-  //   const { data } = await api.get(`/warehouse?name=${warehouseName}`);
-  //   setWarehouses(data);
-  //   setIsLoading(false);
-  // };
-
-  // useEffect(() => {
-  //   fetchWarehouses(searchWarehouse);
-  // }, [searchWarehouse]);
+  // const [searchWarehouse, setSearchWarehouse] = useState('');
 
   const fetchWarehouses = async () => {
     try {
@@ -56,8 +44,8 @@ export default function WarehouseSelect({ formik }) {
             ...params.inputProps,
             autoComplete: 'new-password', // disable autocomplete and autofill
           }}
-          onChange={(e) => setSearchWarehouse(e.target.value)}
-          onClick={() => setSearchWarehouse('')}
+          // onChange={(e) => setSearchWarehouse(e.target.value)}
+          // onClick={() => setSearchWarehouse('')}
         />
       )}
     />
