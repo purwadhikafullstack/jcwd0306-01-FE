@@ -30,6 +30,7 @@ import ChangePassword from './pages/ChangePassword';
 import ProductPage from './pages/admin/ProductPage';
 import { CustomerAddressPage } from './pages/customer/Address';
 import { AuthorizeUser } from './middlewares/auth';
+import WarehouseDetailPage from './pages/admin/WarehouseDetailPage';
 
 function App() {
   const authUser = useSelector((states) => states.authUser);
@@ -76,6 +77,10 @@ function App() {
             <Route path="/admin/products" element={<ProductPage />} />
             <Route path="/admin/categories" element={<CategoryPage />} />
             <Route path="/admin/warehouses" element={<WarehousePage />} />
+            <Route
+              path="/admin/warehouses/:warehouseId"
+              element={<WarehouseDetailPage />}
+            />
             <Route path="/admin" element={<DashboardPage />} />
             <Route path="*" element={<Navigate to="/admin" />} />
           </Routes>
@@ -100,7 +105,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         {authUser !== null && <Route path="/verify" element={<Verify />} />}
         <Route path="/cart/shipment" element={<Checkout />} />
-        <Route path="/products/:id" element={<ProductDetailPage />} />
+        <Route path="/products/:productId" element={<ProductDetailPage />} />
         <Route
           path="/user/settings"
           element={

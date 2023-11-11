@@ -3,22 +3,22 @@ import { setAlertActionCreator } from '../alert/action';
 import api from '../../constants/api';
 
 const ActionType = {
-  GET_PRODUCT: 'GET_PRODUCT',
+  GET_WAREHOUSE: 'GET_WAREHOUSE',
 };
 
-function getProductActionCreator(product) {
+function getWarehouseActionCreator(warehouse) {
   return {
-    type: ActionType.GET_PRODUCT,
-    payload: { product },
+    type: ActionType.GET_WAREHOUSE,
+    payload: { warehouse },
   };
 }
 
-function asyncGetProduct(productId) {
+function asyncGetWarehouse(warehouseId) {
   return async (dispatch) => {
     try {
       dispatch(showLoading());
-      const { data } = await api.get(`/products/${productId}`);
-      dispatch(getProductActionCreator(data.data));
+      const { data } = await api.get(`/warehouses/${warehouseId}`);
+      dispatch(getWarehouseActionCreator(data.data));
     } catch (err) {
       dispatch(setAlertActionCreator({ err }));
     } finally {
@@ -27,4 +27,4 @@ function asyncGetProduct(productId) {
   };
 }
 
-export { ActionType, getProductActionCreator, asyncGetProduct };
+export { ActionType, getWarehouseActionCreator, asyncGetWarehouse };

@@ -50,6 +50,7 @@ function asyncGetProducts({
   getType = 'REPLACE',
   name,
   categoryId,
+  warehouseId,
   sortBy,
   orderBy,
   paranoid = true,
@@ -66,6 +67,9 @@ function asyncGetProducts({
         categoryId && categoryId !== '0'
           ? `categoryId=${encodeURIComponent(categoryId)}&`
           : '';
+      const warehouseIdQ = warehouseId
+        ? `warehouseId=${encodeURIComponent(warehouseId)}&`
+        : '';
       const sortByQ = sortBy ? `sortBy=${encodeURIComponent(sortBy)}&` : '';
       const orderByQ = orderBy ? `orderBy=${encodeURIComponent(orderBy)}&` : '';
       const paranoidQ = paranoid
@@ -76,7 +80,7 @@ function asyncGetProducts({
         : `isPaginated=${encodeURIComponent(false)}&`;
       const pageQ = page ? `page=${encodeURIComponent(page)}&` : '';
       const perPageQ = perPage ? `perPage=${encodeURIComponent(perPage)}&` : '';
-      const allQuery = `?${nameQ}${categoryIdQ}${sortByQ}${orderByQ}${paranoidQ}${isPaginatedQ}${pageQ}${perPageQ}`;
+      const allQuery = `?${nameQ}${categoryIdQ}${warehouseIdQ}${sortByQ}${orderByQ}${paranoidQ}${isPaginatedQ}${pageQ}${perPageQ}`;
 
       const { data } = await api.get(`/products${allQuery}`);
       if (getType === 'PUSH')
