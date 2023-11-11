@@ -31,6 +31,7 @@ import ProductPage from './pages/admin/ProductPage';
 import { CustomerAddressPage } from './pages/customer/Address';
 import { AuthorizeUser } from './middlewares/auth';
 import { AdministratorPage } from './pages/admin/AdministratorPage';
+import { AllUsersPage } from './pages/admin/AllUsersPage';
 
 function App() {
   const authUser = useSelector((states) => states.authUser);
@@ -81,6 +82,7 @@ function App() {
               path="/admin/administrator"
               element={<AdministratorPage />}
             />
+            <Route path="/admin/users" element={<AllUsersPage />} />
             <Route path="/admin" element={<DashboardPage />} />
             <Route path="*" element={<Navigate to="/admin" />} />
           </Routes>

@@ -13,6 +13,7 @@ import { HeaderModal } from './HeaderModal';
 import WarehouseSelect from './WarehouseSelect';
 import api from '../../../../constants/api';
 import { setAlertActionCreator } from '../../../../states/alert/action';
+import { asyncGetWarehouseAdmin } from '../../../../states/Administrator/action';
 
 export function CreatedDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
   const dispatch = useDispatch();
@@ -43,12 +44,14 @@ export function CreatedDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
             },
           })
         );
+        dispatch(asyncGetWarehouseAdmin());
         dispatch(
           setAlertActionCreator({
             val: { status: 'success', message: data.data.status },
           })
         );
       } catch (err) {
+        console.log(err);
         dispatch(
           setAlertActionCreator({
             val: { status: 'error', message: err.response.data.message },

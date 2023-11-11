@@ -35,7 +35,37 @@ export function ProfileDashoard() {
   const [seeOldPassword, setSeeOldPassword] = useState(false);
   const [seeNewPassword, setSeeNewPassword] = useState(false);
   const [avatar, setAvatar] = useState(null);
+  // console.log(avatar);
+  const [image, setImage] = useState(null);
   const dispatch = useDispatch();
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setImage(URL.createObjectURL(file));
+
+    // Create a FormData object to send the file
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // Send the file to the backend
+    api
+      .patch(`/user/edit/${authUser?.id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(async (response) => {
+        console.log('File uploaded successfully:', response.data);
+        dispatch(
+          setAlertActionCreator({
+            val: { status: 'success', message: 'Edit Success' },
+          })
+        );
+      })
+      .catch((error) => {
+        console.error('Error uploading file:', error);
+      });
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -124,18 +154,7 @@ export function ProfileDashoard() {
     formik.resetForm();
   };
 
-  useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const response = await api.get(`/user/render/${authUser?.id}`);
-        setAvatar(response);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-  }, [authUser?.id]);
-
-  const image = `${import.meta.env.VITE_API_BASE_URL}/user/${
+  const gambarProfil = `${import.meta.env.VITE_API_BASE_URL}/user/${
     authUser?.id
   }/image`;
 
@@ -160,7 +179,7 @@ export function ProfileDashoard() {
           <Stack direction="column" spacing={1} alignItems="center">
             <Avatar
               sx={{ minHeight: 120, minWidth: 120, position: 'relative' }}
-              src={image}
+              src={image || gambarProfil}
             />
             <IconButton
               sx={{
@@ -175,6 +194,7 @@ export function ProfileDashoard() {
               <EditIcon />
               <input
                 type="file"
+                onChange={handleFileChange}
                 style={{
                   position: 'absolute',
                   top: 0,

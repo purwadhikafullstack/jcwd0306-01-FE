@@ -11,6 +11,8 @@ function getWarehouseAdminActionCreator(warehouseAdmin) {
   };
 }
 
+// function deleteWarehouseAdminActionCreator()
+
 function asyncGetWarehouseAdmin() {
   return async (dispatch) => {
     try {

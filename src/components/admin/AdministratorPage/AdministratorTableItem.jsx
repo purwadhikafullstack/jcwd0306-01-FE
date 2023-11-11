@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import DeleteDialog from './DeleteDialog';
 import api from '../../../constants/api';
 import { setAlertActionCreator } from '../../../states/alert/action';
+import { asyncGetWarehouseAdmin } from '../../../states/Administrator/action';
 // import EditDialog from './EditDialog';
 
 function AdministratorTableItem() {
@@ -25,7 +26,6 @@ function AdministratorTableItem() {
     warehouseId: null,
     userIds: [],
   });
-  // console.log(deleteDialogData);
 
   // warehouseAdmin.map((val) => console.log(val));
 
@@ -44,17 +44,16 @@ function AdministratorTableItem() {
 
   const deleteAdmin = async (warehouseId, userIds) => {
     try {
-      console.log({ warehouseId, userIds });
       await api.delete(`/warehouseusers/${warehouseId}/users`, {
         data: { userIds },
       });
+      dispatch(asyncGetWarehouseAdmin());
       dispatch(
         setAlertActionCreator({
           val: { status: 'success', message: 'Success delete admin' },
         })
       );
     } catch (error) {
-      console.log(error);
       dispatch(
         setAlertActionCreator({
           val: { status: 'error', message: 'Error' },
@@ -83,17 +82,6 @@ function AdministratorTableItem() {
           <TableRow key={val.id}>
             {/* ID column */}
             <TableCell>{idCounter++}</TableCell>
-
-            {/* Image column */}
-            <TableCell>
-              <Avatar
-                variant="square"
-                alt={val.name}
-                // src={`${import.meta.env.VITE_API_BASE_URL}/categories/${
-                //   val.id
-                // }/image`}
-              />
-            </TableCell>
 
             {/* Name column */}
             <TableCell>{val.User.firstName}</TableCell>
