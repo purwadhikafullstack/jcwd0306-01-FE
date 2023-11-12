@@ -18,13 +18,13 @@ import AddressAction from './actions/AddressCardAction';
 import DrawerActionDialog from './dialogs/DrawerAddressAction';
 import api from '../../../constants/api';
 import { setAlertActionCreator } from '../../../states/alert/action';
+import { asyncReceiveUser } from '../../../states/authUser/action';
+import { asyncGetAddress } from '../../../states/Address/action';
 
 function AddressItem({
   address,
-  fetchAddress,
   setOpen,
   setAddressToEdit,
-  // setIsDefaultUpdated,
   isDefaultUpdated,
   setChoosenAddress,
   chosenAddress,
@@ -43,7 +43,7 @@ function AddressItem({
           isDefault: 1,
         }
       );
-      fetchAddress();
+      dispatch(asyncGetAddress(authUser?.id));
       dispatch(
         setAlertActionCreator({
           val: { status: 'success', message: result?.data },
@@ -67,7 +67,7 @@ function AddressItem({
   const deleteAddress = async () => {
     try {
       await api.delete(`/user_address/${authUser?.id}/${address?.id}`);
-      fetchAddress();
+      dispatch(asyncGetAddress(authUser?.id));
       dispatch(
         setAlertActionCreator({
           val: {

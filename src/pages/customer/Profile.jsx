@@ -16,17 +16,16 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import Collapse from '@mui/material/Collapse';
 import api from '../../constants/api';
 import { setAlertActionCreator } from '../../states/alert/action';
-import {
-  asyncUpdateAuthUser,
-  updateAuthUserActionCreator,
-} from '../../states/authUser/action';
-import ImageInput from '../../components/customer/ProfilePage/ImageInput';
+import { asyncUpdateAuthUser } from '../../states/authUser/action';
 
 export function ProfileDashoard() {
   const authUser = useSelector((states) => states.authUser);
@@ -34,10 +33,9 @@ export function ProfileDashoard() {
   const [see, setSee] = useState(false);
   const [seeOldPassword, setSeeOldPassword] = useState(false);
   const [seeNewPassword, setSeeNewPassword] = useState(false);
-  const [avatar, setAvatar] = useState(null);
-  // console.log(avatar);
   const [image, setImage] = useState(null);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -123,19 +121,24 @@ export function ProfileDashoard() {
     enableReinitialize: true,
     onSubmit: async () => {
       try {
+        setLoading(true);
         await api.patch('/user/edit-password', formik2.values);
-
         dispatch(
           setAlertActionCreator({
             val: { status: 'success', message: 'Edit Password Success' },
           })
         );
       } catch (err) {
+        formik2.resetForm();
         dispatch(
           setAlertActionCreator({
             val: { status: 'error', message: err?.response.data.data },
           })
         );
+        setLoading(false);
+      } finally {
+        formik2.resetForm();
+        setLoading(false);
       }
     },
   });
@@ -265,6 +268,7 @@ export function ProfileDashoard() {
               />
             </FormControl>
 
+            {/* CHANGE PASSWORD */}
             <Button
               variant="text"
               color="primary"
@@ -272,107 +276,125 @@ export function ProfileDashoard() {
               onClick={() => (see ? setSee(false) : setSee(true))}
             >
               Change Password
+              <ArrowDropDownIcon sx={{ display: see ? 'none' : 'block' }} />
+              <ArrowDropUpIcon sx={{ display: see ? 'block' : 'none' }} />
             </Button>
 
-            <Stack
-              direction={{ xs: 'column', md: 'row' }}
-              spacing={1}
-              display={see ? 'block' : 'none'}
+            <Collapse
+              in={see}
+              timeout={300}
+              style={{ transformOrigin: '0 0 0' }}
+              {...(see ? { timeout: 600 } : {})}
             >
-              <FormControl sx={{ gap: 1, maxWidth: 225 }}>
-                <TextField
-                  size="small"
-                  id="outlined-basic-old-password"
-                  label="old password"
-                  variant="outlined"
-                  type={seeOldPassword ? 'text' : 'password'}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setSeeOldPassword(!seeOldPassword)}
-                          edge="end"
-                          tabIndex="-1"
-                        >
-                          <VisibilityOffIcon
-                            fontSize="small"
-                            sx={{ display: !seeOldPassword ? 'block' : 'none' }}
-                          />
-                          <VisibilityIcon
-                            fontSize="small"
-                            sx={{ display: seeOldPassword ? 'block' : 'none' }}
-                          />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  value={formik2.values.oldPassword}
-                  error={
-                    formik2.touched.oldPassword &&
-                    Boolean(formik2.errors.oldPassword)
-                  }
-                  helperText={
-                    formik2.touched.oldPassword && formik2.errors.oldPassword
-                  }
-                  onChange={(e) => inputHandler2(e, 'oldPassword')}
-                  onBlur={formik2.handleBlur}
-                  sx={{
-                    width: '100%', // Set width to 100% on small screens
-                    marginBottom: 1, // Add bottom margin for spacing
-                  }}
-                />
-              </FormControl>
-              <FormControl sx={{ gap: 1, maxWidth: 225 }}>
-                <TextField
-                  size="small"
-                  id="outlined-basic-new-password"
-                  label="new password"
-                  variant="outlined"
-                  type={seeNewPassword ? 'text' : 'password'}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setSeeNewPassword(!seeNewPassword)}
-                          edge="end"
-                          tabIndex="-1"
-                        >
-                          <VisibilityOffIcon
-                            fontSize="small"
-                            sx={{ display: !seeNewPassword ? 'block' : 'none' }}
-                          />
-                          <VisibilityIcon
-                            fontSize="small"
-                            sx={{ display: seeNewPassword ? 'block' : 'none' }}
-                          />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  value={formik2.values.newPassword}
-                  error={
-                    formik2.touched.newPassword &&
-                    Boolean(formik2.errors.newPassword)
-                  }
-                  helperText={
-                    formik2.touched.newPassword && formik2.errors.newPassword
-                  }
-                  onChange={(e) => inputHandler2(e, 'newPassword')}
-                  onBlur={formik2.handleBlur}
-                  sx={{
-                    width: '100%', // Set width to 100% on small screens
-                    marginBottom: 1, // Add bottom margin for spacing
-                  }}
-                />
-              </FormControl>
-              <Button
-                variant="contained"
-                color="info"
-                onClick={formik2.handleSubmit}
+              <Stack
+                direction={{ xs: 'column', md: 'row' }}
+                spacing={1}
+                display={see ? 'block' : 'none'}
               >
-                Update Password
-              </Button>
-            </Stack>
+                <FormControl sx={{ gap: 1, maxWidth: 225 }}>
+                  <TextField
+                    size="small"
+                    id="outlined-basic-old-password"
+                    label="old password"
+                    variant="outlined"
+                    type={seeOldPassword ? 'text' : 'password'}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setSeeOldPassword(!seeOldPassword)}
+                            edge="end"
+                            tabIndex="-1"
+                          >
+                            <VisibilityOffIcon
+                              fontSize="small"
+                              sx={{
+                                display: !seeOldPassword ? 'block' : 'none',
+                              }}
+                            />
+                            <VisibilityIcon
+                              fontSize="small"
+                              sx={{
+                                display: seeOldPassword ? 'block' : 'none',
+                              }}
+                            />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    value={formik2.values.oldPassword}
+                    error={
+                      formik2.touched.oldPassword &&
+                      Boolean(formik2.errors.oldPassword)
+                    }
+                    helperText={
+                      formik2.touched.oldPassword && formik2.errors.oldPassword
+                    }
+                    onChange={(e) => inputHandler2(e, 'oldPassword')}
+                    // onBlur={formik2.handleBlur}
+                    sx={{
+                      width: '100%', // Set width to 100% on small screens
+                      marginBottom: 1, // Add bottom margin for spacing
+                    }}
+                  />
+                </FormControl>
+                <FormControl sx={{ gap: 1, maxWidth: 225 }}>
+                  <TextField
+                    size="small"
+                    id="outlined-basic-new-password"
+                    label="new password"
+                    variant="outlined"
+                    type={seeNewPassword ? 'text' : 'password'}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setSeeNewPassword(!seeNewPassword)}
+                            edge="end"
+                            tabIndex="-1"
+                          >
+                            <VisibilityOffIcon
+                              fontSize="small"
+                              sx={{
+                                display: !seeNewPassword ? 'block' : 'none',
+                              }}
+                            />
+                            <VisibilityIcon
+                              fontSize="small"
+                              sx={{
+                                display: seeNewPassword ? 'block' : 'none',
+                              }}
+                            />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    value={formik2.values.newPassword}
+                    error={
+                      formik2.touched.newPassword &&
+                      Boolean(formik2.errors.newPassword)
+                    }
+                    helperText={
+                      formik2.touched.newPassword && formik2.errors.newPassword
+                    }
+                    onChange={(e) => inputHandler2(e, 'newPassword')}
+                    onBlur={formik2.handleBlur}
+                    sx={{
+                      width: '100%', // Set width to 100% on small screens
+                      marginBottom: 1, // Add bottom margin for spacing
+                    }}
+                  />
+                </FormControl>
+                <Button
+                  variant="contained"
+                  color="info"
+                  onClick={formik2.handleSubmit}
+                  disabled={loading}
+                >
+                  Update Password
+                </Button>
+              </Stack>
+            </Collapse>
           </Stack>
         </Stack>
         {/* footer */}

@@ -16,7 +16,7 @@ function AdministratorTable() {
         <TableHead>
           <TableRow sx={{ bgcolor: '#33c7cc' }}>
             <TableCell sx={{ color: 'white' }}>No</TableCell>
-            <TableCell sx={{ color: 'white' }}>Nama</TableCell>
+            <TableCell sx={{ color: 'white' }}>Name</TableCell>
             <TableCell sx={{ color: 'white' }}>Email</TableCell>
             <TableCell sx={{ color: 'white' }}>Warehouse</TableCell>
             <TableCell sx={{ color: 'white' }}>Warehouse Location</TableCell>

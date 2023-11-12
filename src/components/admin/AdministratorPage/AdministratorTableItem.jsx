@@ -1,7 +1,6 @@
 /* eslint-disable no-plusplus */
 import { DeleteRounded, EditNoteRounded } from '@mui/icons-material';
 import {
-  Avatar,
   IconButton,
   Stack,
   TableBody,
@@ -16,16 +15,22 @@ import DeleteDialog from './DeleteDialog';
 import api from '../../../constants/api';
 import { setAlertActionCreator } from '../../../states/alert/action';
 import { asyncGetWarehouseAdmin } from '../../../states/Administrator/action';
+import { EditDialog } from './EditDialog';
 // import EditDialog from './EditDialog';
 
 function AdministratorTableItem() {
   const warehouseAdmin = useSelector((states) => states.administrator);
   const dispatch = useDispatch();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isEditDialogOpen, setEditDialogOpen] = useState(false);
+
   const [deleteDialogData, setDeleteDialogData] = useState({
     warehouseId: null,
     userIds: [],
   });
+  const [editData, setEditData] = useState(null);
+  const [email, setEmail] = useState(null);
+  // console.log(email);
 
   // warehouseAdmin.map((val) => console.log(val));
 
@@ -40,6 +45,16 @@ function AdministratorTableItem() {
   const handleDeleteDialogClose = () => {
     setIsDeleteDialogOpen(false);
     setDeleteDialogData({ warehouseId: null, userIds: [] });
+  };
+
+  const handleEditDialogOpen = (val, emailTo) => {
+    setEditDialogOpen(true);
+    setEditData(val);
+    setEmail(emailTo);
+  };
+  const handleEditDialogClose = () => {
+    setEditDialogOpen(false);
+    setEditData(null);
   };
 
   const deleteAdmin = async (warehouseId, userIds) => {
@@ -103,7 +118,7 @@ function AdministratorTableItem() {
                 {/* Edit button */}
                 <Tooltip title="Edit WH-admin" arrow>
                   <IconButton
-                    // onClick={() => handleEditButton(val)}
+                    onClick={() => handleEditDialogOpen(val, val.User.email)}
                     sx={{ '&:hover': { color: 'info.main' } }}
                   >
                     <EditNoteRounded />
@@ -138,11 +153,12 @@ function AdministratorTableItem() {
       />
 
       {/* Edit Dialog */}
-      {/* <EditDialog
-        category={category}
-        isEditDialogOpen={isEditDialogOpen}
-        setIsEditDialogOpen={setIsEditDialogOpen}
-      /> */}
+      <EditDialog
+        isOpen={isEditDialogOpen}
+        onClose={handleEditDialogClose}
+        editData={editData}
+        email={email}
+      />
     </>
   );
 }

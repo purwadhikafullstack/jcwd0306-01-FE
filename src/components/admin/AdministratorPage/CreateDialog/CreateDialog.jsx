@@ -9,6 +9,7 @@ import {
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { HeaderModal } from './HeaderModal';
 import WarehouseSelect from './WarehouseSelect';
 import api from '../../../../constants/api';
@@ -17,6 +18,7 @@ import { asyncGetWarehouseAdmin } from '../../../../states/Administrator/action'
 
 export function CreatedDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -29,6 +31,7 @@ export function CreatedDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
     enableReinitialize: true,
     onSubmit: async () => {
       try {
+        setLoading(true);
         const whDestinationId = formik.values.warehouseDestination.id;
         const { email } = formik.values;
         const data = await api.post(
@@ -50,8 +53,10 @@ export function CreatedDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
             val: { status: 'success', message: data.data.status },
           })
         );
+        setLoading(false);
       } catch (err) {
         console.log(err);
+        setLoading(false);
         dispatch(
           setAlertActionCreator({
             val: { status: 'error', message: err.response.data.message },
@@ -122,7 +127,9 @@ export function CreatedDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
       />
 
       <DialogActions sx={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Button onClick={formik.handleSubmit}>Submit</Button>
+        <Button onClick={formik.handleSubmit} disabled={loading}>
+          Submit
+        </Button>
       </DialogActions>
     </Dialog>
   );
