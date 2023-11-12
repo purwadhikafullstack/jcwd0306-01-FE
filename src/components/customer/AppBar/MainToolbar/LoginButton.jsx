@@ -1,19 +1,15 @@
-import { Button, Link } from '@mui/material';
-
-const apiUrl = import.meta.env.VITE_FE_BASE_URL;
+import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 function LoginButton() {
+  const nav = useNavigate();
   return (
     <Button
       variant="outlined"
       sx={{ textTransform: 'none', textDecoration: 'none' }}
+      onClick={() => nav('/login')}
     >
-      <Link
-        href={`${apiUrl}/login`}
-        sx={{ textTransform: 'none', textDecoration: 'none' }}
-      >
-        Masuk
-      </Link>
+      Masuk
     </Button>
   );
 }
