@@ -5,6 +5,9 @@ function productReducer(product = null, action = {}) {
     case ActionType.GET_PRODUCT:
       return action.payload.product;
 
+    case ActionType.UPDATE_WAREHOUSEPRODUCT_STOCK:
+      return action.payload.product;
+
     default:
       return product;
   }

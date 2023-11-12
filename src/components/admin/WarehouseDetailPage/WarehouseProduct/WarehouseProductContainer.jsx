@@ -1,9 +1,17 @@
 import { ExpandMore } from '@mui/icons-material';
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Stack,
+} from '@mui/material';
+import SearchInput from './SearchInput';
+import ProductTable from './ProductTable';
+import ProductTableFooter from './ProductTableFooter';
 
 function WarehouseProductContainer() {
   return (
-    <Accordion>
+    <Accordion defaultExpanded>
       <AccordionSummary
         expandIcon={<ExpandMore />}
         aria-controls="WarehouseAddress-content"
@@ -11,7 +19,25 @@ function WarehouseProductContainer() {
       >
         Produk
       </AccordionSummary>
-      <AccordionDetails />
+      <AccordionDetails>
+        <Stack
+          spacing={3}
+          sx={{
+            p: 2,
+            bgcolor: 'background.paper',
+            borderRadius: 1,
+          }}
+        >
+          {/* Search Products Input */}
+          <SearchInput />
+
+          {/* Product Table */}
+          <ProductTable />
+
+          {/* Product Table Footer */}
+          <ProductTableFooter />
+        </Stack>
+      </AccordionDetails>
     </Accordion>
   );
 }

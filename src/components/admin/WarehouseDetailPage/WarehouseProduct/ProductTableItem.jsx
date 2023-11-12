@@ -1,4 +1,8 @@
-import { EditNoteRounded } from '@mui/icons-material';
+import {
+  CancelRounded,
+  CheckCircleRounded,
+  EditRounded,
+} from '@mui/icons-material';
 import {
   Avatar,
   Box,
@@ -13,18 +17,17 @@ import {
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import DescriptionTableCell from './DescriptionTableCell';
-import EditDialog from './EditDialog';
-import StatusTableCell from './StatusTableCell';
+import UpdateStockDialog from './UpdateStockDialog';
 
 function ProductTableItem() {
   const products = useSelector((states) => states.products);
   const productPagination = useSelector((states) => states.productPagination);
-  const [product, setProduct] = useState({});
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [productId, setProductId] = useState(null);
+  const [isUpdateStockDialogOpen, setIsUpdateStockDialogOpen] = useState(false);
 
-  const handleClickEditButton = (val) => {
-    setProduct(val);
-    setIsEditDialogOpen(true);
+  const handleClickUpdateStockButton = (val) => {
+    setProductId(val.id);
+    setIsUpdateStockDialogOpen(true);
   };
 
   return (
@@ -33,7 +36,7 @@ function ProductTableItem() {
         {/* When product not found */}
         {!products.length && (
           <TableRow>
-            <TableCell colSpan={14}>
+            <TableCell colSpan={13}>
               <Typography variant="body2" align="center">
                 Produk tidak ditemukan
               </Typography>
@@ -48,7 +51,17 @@ function ProductTableItem() {
             <TableCell>{productPagination.offset + idx + 1}</TableCell>
 
             {/* Status column */}
-            <StatusTableCell product={val} />
+            <TableCell>
+              {val.deletedAt === null ? (
+                <Tooltip title="Status: Aktif">
+                  <CheckCircleRounded color="success" />
+                </Tooltip>
+              ) : (
+                <Tooltip title="Status: Nonaktif">
+                  <CancelRounded color="error" />
+                </Tooltip>
+              )}
+            </TableCell>
 
             {/* Image column */}
             <TableCell>
@@ -66,17 +79,37 @@ function ProductTableItem() {
               <Box sx={{ width: '15rem' }}>{val.name}</Box>
             </TableCell>
 
+            {/* Stock column */}
+            <TableCell>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Typography fontWeight={900}>
+                  {val.WarehouseProducts[0].stock}
+                </Typography>
+
+                {/* Update product stock */}
+                <Tooltip title="Update stok" arrow>
+                  <IconButton
+                    onClick={() => handleClickUpdateStockButton(val)}
+                    sx={{ '&:hover': { color: 'info.main' } }}
+                  >
+                    <EditRounded sx={{ fontSize: '1rem' }} />
+                  </IconButton>
+                </Tooltip>
+              </Stack>
+            </TableCell>
+
+            {/* Stock mutation column */}
+            <TableCell />
+
             {/* Price column */}
             <TableCell>{val.price.toLocaleString('id-ID')}</TableCell>
 
             {/* Weight column */}
             <TableCell>{val.weight}</TableCell>
-
-            {/* Stock column */}
-            <TableCell>{val.stock}</TableCell>
-
-            {/* Sold column */}
-            <TableCell>{val.sold}</TableCell>
 
             {/* Discount column */}
             <TableCell>{val.discount * 100}</TableCell>
@@ -93,38 +126,29 @@ function ProductTableItem() {
 
             {/* createdAt column */}
             <TableCell>
-              {new Date(val.createdAt).toLocaleDateString('id-ID')}
+              {new Date(val.WarehouseProducts[0].createdAt).toLocaleDateString(
+                'id-ID'
+              )}
             </TableCell>
 
             {/* updatedAt column */}
             <TableCell>
-              {new Date(val.updatedAt).toLocaleDateString('id-ID')}
-            </TableCell>
-
-            {/* Action column */}
-            <TableCell>
-              <Stack direction="row">
-                {/* Edit button */}
-                <Tooltip title="Edit produk" arrow>
-                  <IconButton
-                    onClick={() => handleClickEditButton(val)}
-                    sx={{ '&:hover': { color: 'info.main' } }}
-                  >
-                    <EditNoteRounded />
-                  </IconButton>
-                </Tooltip>
-              </Stack>
+              {new Date(val.WarehouseProducts[0].updatedAt).toLocaleDateString(
+                'id-ID'
+              )}
             </TableCell>
           </TableRow>
         ))}
       </TableBody>
 
-      {/* Edit Dialog */}
-      <EditDialog
-        product={product}
-        isEditDialogOpen={isEditDialogOpen}
-        setIsEditDialogOpen={setIsEditDialogOpen}
-      />
+      {/* Update Stock Dialog */}
+      {productId !== null && (
+        <UpdateStockDialog
+          productId={productId}
+          isUpdateStockDialogOpen={isUpdateStockDialogOpen}
+          setIsUpdateStockDialogOpen={setIsUpdateStockDialogOpen}
+        />
+      )}
     </>
   );
 }

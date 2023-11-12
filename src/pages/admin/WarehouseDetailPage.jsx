@@ -1,12 +1,15 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { Box, Typography } from '@mui/material';
 import useCustomSearchParams from '../../hooks/useCustomSearchParams';
 import { asyncGetProducts } from '../../states/products/action';
 import Container from '../../components/admin/WarehouseDetailPage/Container';
 import { asyncGetWarehouse } from '../../states/warehouse/action';
+import BgImage from '../../../assets/footer/bg-top-footer.svg';
 
 function WarehouseDetailPage() {
+  const warehouse = useSelector((states) => states.warehouse);
   const dispatch = useDispatch();
   const { warehouseId } = useParams();
   const [searchParams, updateQueryParams] = useCustomSearchParams();
@@ -45,16 +48,35 @@ function WarehouseDetailPage() {
     searchParams.get('perPage'),
   ]);
 
+  if (warehouse === null) return null;
+
   return (
-    <main
-      style={{
-        maxWidth: 'fit-content',
-        padding: '1rem',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-      }}
-    >
-      <Container />
+    <main>
+      <Typography
+        variant="h1"
+        color="primary"
+        sx={{
+          backgroundImage: `url(${BgImage})`,
+          color: 'white',
+          textAlign: 'center',
+          fontWeight: 900,
+          fontSize: '2rem',
+          fontFamily: '"Righteous", sans-serif',
+          p: '1rem',
+        }}
+      >
+        {warehouse.name}
+      </Typography>
+      <Box
+        sx={{
+          maxWidth: 'fit-content',
+          padding: '1rem',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+        }}
+      >
+        <Container />
+      </Box>
     </main>
   );
 }
