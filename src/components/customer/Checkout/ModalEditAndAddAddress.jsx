@@ -15,6 +15,7 @@ import {
 import { AddressNameAndReciever } from './ModalEditOrAddAddress/AddressNameAndReceiverForm';
 import { PostalCodeDistrictVillageDetailsForm } from './ModalEditOrAddAddress/PostalCodeDistrictVillageDetailsForm';
 import { setAlertActionCreator } from '../../../states/alert/action';
+import { asyncGetAddress } from '../../../states/Address/action';
 
 const handleError = (error, dispatch) => {
   console.log(error);
@@ -36,9 +37,8 @@ export function ModalEditAndAddAddress({
   addresses,
   setAddress,
   setAddresses,
-  fetchAddress, // page /user/address
-  // setAddressesProfile,
 }) {
+  const authUser = useSelector((state) => state.authUser);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const dispatch = useDispatch();
@@ -59,9 +59,10 @@ export function ModalEditAndAddAddress({
           setAddresses,
           setAddress,
           addressToEdit
-          // setAddressesProfile
         );
-        if (window.location.pathname === '/user/address') fetchAddress(); // page /user/address
+        if (window.location.pathname === '/user/address')
+          dispatch(asyncGetAddress(authUser?.id));
+        // page /user/address
         dispatch(
           setAlertActionCreator({
             val: { status: 'success', message: 'success' }, // tambahan(nazhif)

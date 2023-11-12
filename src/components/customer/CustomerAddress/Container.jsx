@@ -7,37 +7,33 @@ import { SearchAddress } from './SearchInput';
 import { ModalEditAndAddAddress } from '../Checkout/ModalEditAndAddAddress';
 import api from '../../../constants/api';
 import { setAlertActionCreator } from '../../../states/alert/action';
+import { asyncGetAddress } from '../../../states/Address/action';
 
 function Container() {
+  const authUser = useSelector((states) => states.authUser);
+  const globalAddress = useSelector((state) => state.userAddress);
   const isDesktop = useMediaQuery('(min-width:600px)');
   const [showModal, setShowModal] = useState('');
-  const authUser = useSelector((states) => states.authUser);
   const [addresses, setAddresses] = useState([]);
+  // console.log({ globalAddress, addresses });
+
   const dispatch = useDispatch();
   const addressSelector = useSelector((state) => state.selectedAddress);
-  const defaultAddress = Array.isArray(addresses)
-    ? addresses.find((destination) => destination.isDefault)
-    : null;
+  const defaultAddress = globalAddress.find((address) => address.isDefault);
+  // console.log(defaultAddress);
   const [address, setAddress] = useState({});
   const [addressToEdit, setAddressToEdit] = useState({});
   const [isDefaultUpdated, setIsDefaultUpdated] = useState(false);
-  const [defAddress, setDefAddress] = useState(null);
 
   const [chosenAddress, setChoosenAddress] = useState(defaultAddress || null);
 
   const fetchAddress = async () => {
     try {
       const res = await api.get(`/user_address/${authUser?.id}`);
+
       const temp = res?.data?.rows;
       setAddresses(temp);
       setIsDefaultUpdated(!isDefaultUpdated);
-
-      temp.map((val) => {
-        const newDefault = val.isDefault;
-        if (newDefault === true) {
-          setDefAddress(newDefault);
-        }
-      });
     } catch (error) {
       console.log(error);
       dispatch(
@@ -51,6 +47,7 @@ function Container() {
   useEffect(() => {
     if (authUser && authUser.id) {
       fetchAddress();
+      dispatch(asyncGetAddress(authUser?.id));
     }
   }, [authUser]);
 
@@ -100,11 +97,9 @@ function Container() {
 
         {/* Address List */}
         <AddressList
-          addresses={addresses}
-          fetchAddress={fetchAddress}
+          addresses={globalAddress}
           setOpen={setShowModal}
           setAddressToEdit={setAddressToEdit} // new
-          // setIsDefaultUpdated={setIsDefaultUpdated}
           isDefaultUpdated={isDefaultUpdated}
           setChoosenAddress={setChoosenAddress}
           chosenAddress={chosenAddress}
@@ -114,14 +109,11 @@ function Container() {
       <ModalEditAndAddAddress
         open={showModal}
         setOpen={setShowModal}
-        addresses={addresses}
+        addresses={globalAddress}
         addressToEdit={addressToEdit}
         setAddress={setAddress}
         setAddresses={setAddresses}
         setAddressToEdit={setAddressToEdit}
-        // additional untuk page /user/address
-        fetchAddress={fetchAddress}
-        // setAddressesProfile={setAddressesProfile}
       />
     </Stack>
   );

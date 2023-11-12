@@ -7,6 +7,7 @@ const ActionType = {
   UPDATE_AUTH_USER: 'UPDATE_AUTH_USER',
 };
 
+// arguments
 function setAuthUserActionCreator(authUser) {
   return {
     type: ActionType.SET_AUTH_USER,
@@ -24,6 +25,15 @@ function updateAuthUserActionCreator(updatedUser) {
   return {
     type: ActionType.UPDATE_AUTH_USER,
     payload: updatedUser,
+  };
+}
+
+// functions
+function asyncUpdateAuthUser({ userId, formData }) {
+  return async (dispatch) => {
+    const { data } = await api.patch(`/user/edit/${userId}`, formData);
+
+    dispatch(updateAuthUserActionCreator(data.data));
   };
 }
 
@@ -82,4 +92,5 @@ export {
   asyncRegisterUser,
   asyncReceiveUser,
   updateAuthUserActionCreator,
+  asyncUpdateAuthUser,
 };

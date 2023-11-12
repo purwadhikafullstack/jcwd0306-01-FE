@@ -12,6 +12,7 @@ import {
 } from '@mui/icons-material';
 import ReceiptLongRoundedIcon from '@mui/icons-material/ReceiptLongRounded';
 import { Button, Drawer, List, ListSubheader, Stack } from '@mui/material';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import ListItem from './ListItem';
 
 function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
@@ -58,6 +59,9 @@ function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
         <List subheader={<ListSubheader>Preferensi</ListSubheader>}>
           <ListItem text="Admin" to="/admin/administrator">
             <SupervisorAccountRounded />
+          </ListItem>
+          <ListItem text="Users" to="/admin/users">
+            <PeopleOutlineIcon />
           </ListItem>
           <ListItem text="Pengaturan" to="/admin/general">
             <SettingsRounded />

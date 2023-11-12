@@ -3,7 +3,6 @@ import AddressItem from './AddressItem';
 
 function AddressList({
   addresses,
-  fetchAddress,
   setOpen,
   setAddressToEdit,
   setIsDefaultUpdated,
@@ -28,7 +27,6 @@ function AddressList({
             key={address?.id}
             address={address}
             idx={idx}
-            fetchAddress={fetchAddress}
             setOpen={setOpen}
             setAddressToEdit={setAddressToEdit}
             setIsDefaultUpdated={setIsDefaultUpdated}
