@@ -67,15 +67,19 @@ function App() {
   // ADMIN PAGE
   if (pathLocation === 'admin') {
     if (authUser == null) return null;
-    if (authUser?.isAdmin || authUser?.isWarehouseAdmin) {
+    if (authUser.isAdmin || authUser.WarehouseUsers[0]?.deletedAt) {
       return (
         <>
           <Alert />
           <LoadingBar />
           <AdminAppBar />
           <Routes>
-            <Route path="/admin/products" element={<ProductPage />} />
-            <Route path="/admin/categories" element={<CategoryPage />} />
+            {authUser.isAdmin && (
+              <Route path="/admin/products" element={<ProductPage />} />
+            )}
+            {authUser.isAdmin && (
+              <Route path="/admin/categories" element={<CategoryPage />} />
+            )}
             <Route path="/admin/warehouses" element={<WarehousePage />} />
             <Route
               path="/admin/warehouses/:warehouseId"

@@ -14,8 +14,6 @@ import WarehouseAddressItem from './WarehouseAddressItem';
 function WarehouseAddressContainer() {
   const warehouse = useSelector((states) => states.warehouse);
 
-  if (warehouse === null) return null;
-
   return (
     <Accordion>
       <AccordionSummary

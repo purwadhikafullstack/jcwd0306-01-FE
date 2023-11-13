@@ -11,9 +11,12 @@ import {
   WarehouseRounded,
 } from '@mui/icons-material';
 import { Button, Drawer, List, ListSubheader, Stack } from '@mui/material';
+import { useSelector } from 'react-redux';
 import ListItem from './ListItem';
 
 function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
+  const authUser = useSelector((states) => states.authUser);
+
   return (
     <Drawer
       anchor="left"
@@ -39,12 +42,16 @@ function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
           <ListItem text="Gudang" to="/admin/warehouses">
             <WarehouseRounded />
           </ListItem>
-          <ListItem text="Produk" to="/admin/products">
-            <Inventory2Rounded />
-          </ListItem>
-          <ListItem text="Kategori" to="/admin/categories">
-            <CategoryRounded />
-          </ListItem>
+          {authUser.isAdmin && (
+            <ListItem text="Produk" to="/admin/products">
+              <Inventory2Rounded />
+            </ListItem>
+          )}
+          {authUser.isAdmin && (
+            <ListItem text="Kategori" to="/admin/categories">
+              <CategoryRounded />
+            </ListItem>
+          )}
           <ListItem text="Laporan" to="/admin/report">
             <AssessmentRounded />
           </ListItem>
@@ -52,9 +59,11 @@ function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
 
         {/* Preferences Menu */}
         <List subheader={<ListSubheader>Preferensi</ListSubheader>}>
-          <ListItem text="Admin" to="/admin/administrator">
-            <SupervisorAccountRounded />
-          </ListItem>
+          {authUser.isAdmin && (
+            <ListItem text="Admin" to="/admin/administrator">
+              <SupervisorAccountRounded />
+            </ListItem>
+          )}
           <ListItem text="Pengaturan" to="/admin/general">
             <SettingsRounded />
           </ListItem>
