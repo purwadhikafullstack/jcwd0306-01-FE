@@ -42,8 +42,13 @@ function ProductTable() {
             {/* Weight */}
             <SortLabelTableCell label="weight">Berat (gr)</SortLabelTableCell>
 
-            {/* Stock */}
-            <SortLabelTableCell label="stock">Stok</SortLabelTableCell>
+            {/* Active Stock */}
+            <SortLabelTableCell label="stock">Stok Aktif</SortLabelTableCell>
+
+            {/* Inactive Stock */}
+            <SortLabelTableCell label="inactive-stock">
+              Stok Nonaktif
+            </SortLabelTableCell>
 
             {/* Sold */}
             <SortLabelTableCell label="sold">Terjual</SortLabelTableCell>

@@ -15,6 +15,9 @@ import orderReducer from './order/reducer';
 import provincesReducer from './provinces/reducer';
 import citiesReducer from './cities/reducer';
 import orderStatusReducer from './order/orderStatusReducer';
+import warehouseReducer from './warehouse/reducer';
+import administratorReducer from './Administrator/reducer';
+import userAddressReducer from './Address/reducer';
 
 const store = configureStore({
   reducer: {
@@ -29,11 +32,14 @@ const store = configureStore({
     address: addressReducer,
     selectedAddress: selectedAddressReducer,
     authUser: authUserReducer,
+    warehouse: warehouseReducer,
     warehouses: warehousesReducer,
     order: orderReducer,
     provinces: provincesReducer,
     cities: citiesReducer,
     orderStatus: orderStatusReducer,
+    administrator: administratorReducer,
+    userAddress: userAddressReducer,
   },
   middleware: [thunk],
 });

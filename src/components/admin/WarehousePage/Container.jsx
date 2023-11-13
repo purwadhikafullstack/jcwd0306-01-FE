@@ -1,11 +1,13 @@
 import { AddRounded } from '@mui/icons-material';
 import { Button, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import CreateDialog from './CreateDialog';
 
 import WarehouseList from './WarehouseList';
 
 function Container() {
+  const authUser = useSelector((states) => states.authUser);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   return (
@@ -25,14 +27,16 @@ function Container() {
             </Typography>
 
             {/* Create Warehouse Button */}
-            <Button
-              onClick={() => setIsCreateDialogOpen(true)}
-              variant="contained"
-              startIcon={<AddRounded />}
-              sx={{ textTransform: 'none' }}
-            >
-              Gudang
-            </Button>
+            {authUser.isAdmin && (
+              <Button
+                onClick={() => setIsCreateDialogOpen(true)}
+                variant="contained"
+                startIcon={<AddRounded />}
+                sx={{ textTransform: 'none' }}
+              >
+                Gudang
+              </Button>
+            )}
           </Stack>
 
           {/* Warehouse List */}

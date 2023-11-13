@@ -7,10 +7,7 @@ import {
 } from '@mui/material';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import DeleteDialog from '../dialogs/DeleteDialog';
-import api from '../../../../constants/api';
-import { setAlertActionCreator } from '../../../../states/alert/action';
 
 export default function AddressAction({
   isDesktop,
@@ -24,36 +21,6 @@ export default function AddressAction({
   const [defaultAddressDialogOpen, setDefaultAddressDialogOpen] =
     useState(false);
   const [disableDefaultBtn, setDisableDefaultBtn] = useState(false);
-  const authUser = useSelector((states) => states.authUser);
-  const dispatch = useDispatch();
-
-  // const setDefaultAddress = async () => {
-  //   try {
-  //     const result = await api.patch(
-  //       `user_address/new_default/${authUser?.id}/${address?.id}`,
-  //       {
-  //         isDefault: 1,
-  //       }
-  //     );
-  //     setIsDefaultUpdated(true);
-  //     setDisableDefaultBtn(true);
-  //     dispatch(
-  //       setAlertActionCreator({
-  //         val: { status: 'success', message: result?.data },
-  //       })
-  //     );
-  //   } catch (error) {
-  //     setDisableDefaultBtn(false);
-
-  //     dispatch(
-  //       setAlertActionCreator({
-  //         val: { status: 'error', message: error?.response?.data },
-  //       })
-  //     );
-  //   } finally {
-  //     setDisableDefaultBtn(false);
-  //   }
-  // };
 
   const handleDefaultDialogOpen = () => {
     setDefaultAddressDialogOpen(true);
@@ -134,7 +101,6 @@ export function DefaultAddressDialog({
   onClose,
   setDefaultAddress,
   address,
-  tutup,
 }) {
   return (
     <Dialog open={isOpen} onClose={onClose}>
@@ -151,7 +117,6 @@ export function DefaultAddressDialog({
           onClick={() => {
             setDefaultAddress();
             onClose();
-            tutup();
           }}
         >
           Ya
