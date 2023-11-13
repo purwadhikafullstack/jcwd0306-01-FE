@@ -57,6 +57,7 @@ export default function ModalChooseAddress({
             setAddressToEdit={setAddressToEdit}
             setOpen={setOpen}
             setShippingMethod={setShippingMethod}
+            open={open}
           />
         </DialogContent>
       </Dialog>

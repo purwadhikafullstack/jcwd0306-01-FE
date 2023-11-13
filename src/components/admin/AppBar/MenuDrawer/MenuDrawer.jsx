@@ -10,8 +10,10 @@ import {
   SupervisorAccountRounded,
   WarehouseRounded,
 } from '@mui/icons-material';
+import ReceiptLongRoundedIcon from '@mui/icons-material/ReceiptLongRounded';
 import { Button, Drawer, List, ListSubheader, Stack } from '@mui/material';
 import { useSelector } from 'react-redux';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import ListItem from './ListItem';
 
 function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
@@ -52,6 +54,9 @@ function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
               <CategoryRounded />
             </ListItem>
           )}
+          <ListItem text="Transaksi" to="/admin/transactions">
+            <ReceiptLongRoundedIcon />
+          </ListItem>
           <ListItem text="Laporan" to="/admin/report">
             <AssessmentRounded />
           </ListItem>
@@ -64,6 +69,9 @@ function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
               <SupervisorAccountRounded />
             </ListItem>
           )}
+          <ListItem text="Users" to="/admin/users">
+            <PeopleOutlineIcon />
+          </ListItem>
           <ListItem text="Pengaturan" to="/admin/general">
             <SettingsRounded />
           </ListItem>

@@ -63,73 +63,77 @@ export function PaymentBody({ orderData, setOrderData }) {
     >
       <ImageDetail open={open} setOpen={setOpen} imgSrc={imgSrc} />
       <ImagePayment setOpen={setOpen} imgSrc={imgSrc} />
-      <Button
-        component="label"
-        variant="contained"
-        startIcon={<CloudUploadIcon />}
-      >
-        Upload payment proof
-        <VisuallyHiddenInput
-          type="file"
-          accept="image"
-          id="inputPaymentProof"
-          onChange={async (e) => {
-            await renderImage(e, 'paymentProof', setImgSrc);
-            setImage(e.target.files[0]);
-            setImageUrl(e.target.value);
-            setDisableSubmit(false);
-          }}
-        />
-      </Button>
-      <div className="d-flex justify-content-even gap-3 mt-3">
-        <Button
-          variant="contained"
-          className={
-            orderData?.status !== `unpaid` || hiddenCancel
-              ? 'd-none'
-              : 'd-inline'
-          }
-          onClick={() =>
-            handleCancel(
-              setShowConfirmModal,
-              setAction,
-              nav,
-              dispatch,
-              setDisableButton,
-              userSelector,
-              orderData,
-              null,
-              unpaid
-            )
-          }
-          disabled={disableButton}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="contained"
-          onClick={() =>
-            handleSubmit(
-              setDisableButton,
-              setDisableSubmit,
-              setShowConfirmModal,
-              setHiddenCancel,
-              setOrderData,
-              nav,
-              setAction,
-              dispatch,
-              image,
-              imageUrl,
-              orderData,
-              unpaid,
-              orderStatus
-            )
-          }
-          disabled={disableButton || disableSubmit}
-        >
-          Submit
-        </Button>
-      </div>
+      {orderData?.status === 'unpaid' || orderData?.status === 'verifying' ? (
+        <>
+          <Button
+            component="label"
+            variant="contained"
+            startIcon={<CloudUploadIcon />}
+          >
+            Upload payment proof
+            <VisuallyHiddenInput
+              type="file"
+              accept="image"
+              id="inputPaymentProof"
+              onChange={async (e) => {
+                await renderImage(e, 'paymentProof', setImgSrc);
+                setImage(e.target.files[0]);
+                setImageUrl(e.target.value);
+                setDisableSubmit(false);
+              }}
+            />
+          </Button>
+          <div className="d-flex justify-content-even gap-3 mt-3">
+            <Button
+              variant="contained"
+              className={
+                orderData?.status !== `unpaid` || hiddenCancel
+                  ? 'd-none'
+                  : 'd-inline'
+              }
+              onClick={() =>
+                handleCancel(
+                  setShowConfirmModal,
+                  setAction,
+                  nav,
+                  dispatch,
+                  setDisableButton,
+                  userSelector,
+                  orderData,
+                  null,
+                  unpaid
+                )
+              }
+              disabled={disableButton}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() =>
+                handleSubmit(
+                  setDisableButton,
+                  setDisableSubmit,
+                  setShowConfirmModal,
+                  setHiddenCancel,
+                  setOrderData,
+                  nav,
+                  setAction,
+                  dispatch,
+                  image,
+                  imageUrl,
+                  orderData,
+                  unpaid,
+                  orderStatus
+                )
+              }
+              disabled={disableButton || disableSubmit}
+            >
+              Submit
+            </Button>
+          </div>
+        </>
+      ) : null}
       <ConfirmationModal
         action={action.fn}
         actionName={action.name}
