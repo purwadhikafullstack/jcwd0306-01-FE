@@ -10,7 +10,7 @@ import ProductActionStack from './ProductActionStack/ProductActionStack';
 function ContainerGrid() {
   const product = useSelector((states) => states.product);
 
-  if (Object.keys(product).length === 0) return null;
+  if (product === null) return null;
 
   return (
     <Grid container spacing={3} sx={{ my: 0 }} rowGap={3}>

@@ -36,22 +36,19 @@ function ProductTable() {
             {/* Name */}
             <SortLabelTableCell label="name">Nama</SortLabelTableCell>
 
+            {/* Stock */}
+            <SortLabelTableCell label="stock">Stok</SortLabelTableCell>
+
+            {/* Stock Mutation */}
+            <SortLabelTableCell label="stock-mutation">
+              Mutasi Stok
+            </SortLabelTableCell>
+
             {/* Price */}
             <SortLabelTableCell label="price">Harga (Rp)</SortLabelTableCell>
 
             {/* Weight */}
             <SortLabelTableCell label="weight">Berat (gr)</SortLabelTableCell>
-
-            {/* Active Stock */}
-            <SortLabelTableCell label="stock">Stok Aktif</SortLabelTableCell>
-
-            {/* Inactive Stock */}
-            <SortLabelTableCell label="inactive-stock">
-              Stok Nonaktif
-            </SortLabelTableCell>
-
-            {/* Sold */}
-            <SortLabelTableCell label="sold">Terjual</SortLabelTableCell>
 
             {/* Discount */}
             <SortLabelTableCell label="discount">Diskon (%)</SortLabelTableCell>
@@ -73,9 +70,6 @@ function ProductTable() {
             <SortLabelTableCell label="updatedAt">
               Tanggal Diperbarui
             </SortLabelTableCell>
-
-            {/* Actions */}
-            <TableCell />
           </TableRow>
         </TableHead>
         <ProductTableItem />
