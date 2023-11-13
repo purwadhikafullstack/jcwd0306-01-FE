@@ -33,7 +33,7 @@ function ProductTableItem() {
         {/* When product not found */}
         {!products.length && (
           <TableRow>
-            <TableCell colSpan={14}>
+            <TableCell colSpan={15}>
               <Typography variant="body2" align="center">
                 Produk tidak ditemukan
               </Typography>
@@ -72,8 +72,11 @@ function ProductTableItem() {
             {/* Weight column */}
             <TableCell>{val.weight}</TableCell>
 
-            {/* Stock column */}
+            {/* Active Stock column */}
             <TableCell>{val.stock}</TableCell>
+
+            {/* Inactive Stock column */}
+            <TableCell>{val.inactiveStock}</TableCell>
 
             {/* Sold column */}
             <TableCell>{val.sold}</TableCell>
