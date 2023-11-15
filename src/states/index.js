@@ -18,6 +18,9 @@ import orderStatusReducer from './order/orderStatusReducer';
 import administratorReducer from './Administrator/reducer';
 import userAddressReducer from './Address/reducer';
 import warehouseAdminPaginationReducer from './AdministratorPagination/reducer';
+import allUsersReducer from './users/reducer';
+import allUsersPaginationReducer from './allUsersPagination/reducer';
+import addressPaginationReducer from './AddressPagination/reducer';
 
 const store = configureStore({
   reducer: {
@@ -40,6 +43,9 @@ const store = configureStore({
     administrator: administratorReducer,
     userAddress: userAddressReducer,
     warehouseAdminPagination: warehouseAdminPaginationReducer,
+    allUser: allUsersReducer,
+    allUserPagination: allUsersPaginationReducer,
+    addressPagination: addressPaginationReducer,
   },
   middleware: [thunk],
 });

@@ -27,7 +27,7 @@ function CustomerAddressButton() {
   }
 
   useEffect(() => {
-    dispatch(asyncGetAddress(authUser?.id));
+    if (authUser?.id) dispatch(asyncGetAddress(authUser?.id));
   }, [authUser?.id]);
 
   return (

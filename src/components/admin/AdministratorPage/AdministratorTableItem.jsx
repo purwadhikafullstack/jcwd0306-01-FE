@@ -85,7 +85,7 @@ function AdministratorTableItem() {
         {!warehouseAdmin.length && (
           <TableRow>
             <TableCell colSpan={5}>
-              <Typography variant="body2" align="center">
+              <Typography variant="body2" align="center" ml={10}>
                 Warehouse Admin tidak ditemukan
               </Typography>
             </TableCell>

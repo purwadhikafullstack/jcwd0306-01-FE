@@ -31,7 +31,7 @@ import ChangePassword from './pages/ChangePassword';
 import { TransactionPage } from './pages/admin/TransactionPage';
 import { socketListener } from './constants/socketListener';
 import ProductPage from './pages/admin/ProductPage';
-import { CustomerAddressPage } from './pages/customer/Address';
+import { CustomerAddressPage } from './pages/Address';
 import { AuthorizeUser } from './middlewares/auth';
 import { AdministratorPage } from './pages/admin/AdministratorPage';
 import { AllUsersPage } from './pages/admin/AllUsersPage';

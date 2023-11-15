@@ -26,7 +26,6 @@ function AdministratorTable() {
               Warehouse Location
             </SortLabelTableCell>
             <TableCell sx={{ color: 'white' }}>Actions</TableCell>
-            <TableCell />
           </TableRow>
         </TableHead>
 
