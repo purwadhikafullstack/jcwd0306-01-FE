@@ -17,6 +17,7 @@ import citiesReducer from './cities/reducer';
 import orderStatusReducer from './order/orderStatusReducer';
 import administratorReducer from './Administrator/reducer';
 import userAddressReducer from './Address/reducer';
+import warehouseAdminPaginationReducer from './AdministratorPagination/reducer';
 
 const store = configureStore({
   reducer: {
@@ -38,6 +39,7 @@ const store = configureStore({
     orderStatus: orderStatusReducer,
     administrator: administratorReducer,
     userAddress: userAddressReducer,
+    warehouseAdminPagination: warehouseAdminPaginationReducer,
   },
   middleware: [thunk],
 });
