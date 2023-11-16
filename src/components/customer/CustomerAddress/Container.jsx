@@ -16,10 +16,12 @@ function Container() {
   const globalAddress = useSelector((state) => state.userAddress);
 
   const [showModal, setShowModal] = useState('');
+  const [addresses, setAddresses] = useState([]);
+  const [address, setAddress] = useState({});
   const [addressToEdit, setAddressToEdit] = useState({});
 
   useEffect(() => {
-    if (authUser?.id) dispatch(asyncGetAddress(authUser?.id));
+    if (authUser?.id) dispatch(asyncGetAddress({ userId: authUser?.id }));
   }, [authUser?.id]);
 
   return (
@@ -72,6 +74,8 @@ function Container() {
         addresses={globalAddress}
         addressToEdit={addressToEdit}
         setAddressToEdit={setAddressToEdit}
+        setAddresses={setAddresses}
+        setAddress={setAddress}
       />
     </Stack>
   );

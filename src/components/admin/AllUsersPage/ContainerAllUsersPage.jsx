@@ -44,7 +44,7 @@ function ContainerAllUsersPage() {
     >
       {/* Title */}
       <Typography fontWeight={800} fontSize="1.2rem">
-        All Users
+        List Of All Users
       </Typography>
       <Stack spacing={2} direction={{ xs: 'column', md: 'row' }}>
         {/* Search Users Input */}

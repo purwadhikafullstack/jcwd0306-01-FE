@@ -36,6 +36,7 @@ import { AuthorizeUser } from './middlewares/auth';
 import { AdministratorPage } from './pages/admin/AdministratorPage';
 import { AllUsersPage } from './pages/admin/AllUsersPage';
 import { ReportPage } from './pages/admin/ReportPage';
+import { MonthlyReport } from './pages/admin/MonthlyReport';
 
 const socketConn = io(import.meta.env.VITE_API_BASE_URL);
 
@@ -97,6 +98,7 @@ function App() {
             />
             <Route path="/admin/users" element={<AllUsersPage />} />
             <Route path="/admin/report" element={<ReportPage />} />
+            <Route path="/admin/report/monthly" element={<MonthlyReport />} />
             <Route path="/admin" element={<DashboardPage />} />
             <Route path="*" element={<Navigate to="/admin" />} />
           </Routes>

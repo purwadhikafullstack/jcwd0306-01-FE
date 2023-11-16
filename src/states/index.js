@@ -21,6 +21,7 @@ import warehouseAdminPaginationReducer from './AdministratorPagination/reducer';
 import allUsersReducer from './users/reducer';
 import allUsersPaginationReducer from './allUsersPagination/reducer';
 import addressPaginationReducer from './AddressPagination/reducer';
+import salesReportReducer from './salesReport/reducer';
 
 const store = configureStore({
   reducer: {
@@ -46,6 +47,7 @@ const store = configureStore({
     allUser: allUsersReducer,
     allUserPagination: allUsersPaginationReducer,
     addressPagination: addressPaginationReducer,
+    salesReport: salesReportReducer,
   },
   middleware: [thunk],
 });

@@ -15,6 +15,7 @@ function CustomerAddressButton() {
   const mainAddress = globalAddress.find(defaultAddressParameter);
   // kalo gaada main addressnya, kirim ke alamat paling pertama dari table, kalo gaada kasih tulisan (tambah alamat)
   const firstAddress = globalAddress[0]?.City?.name;
+  const isUserLogin = localStorage.getItem('token');
 
   let display;
 
@@ -27,7 +28,7 @@ function CustomerAddressButton() {
   }
 
   useEffect(() => {
-    if (authUser?.id) dispatch(asyncGetAddress(authUser?.id));
+    if (authUser?.id) dispatch(asyncGetAddress({ userId: authUser?.id }));
   }, [authUser?.id]);
 
   return (
@@ -40,6 +41,7 @@ function CustomerAddressButton() {
         textTransform: 'none',
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
+        display: isUserLogin ? 'flex' : 'none',
         [theme.breakpoints.down('sm')]: {
           display: isCartPage ? `none` : `flex`,
         },

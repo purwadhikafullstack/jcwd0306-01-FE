@@ -58,7 +58,7 @@ function AddressItem({ address, setOpen, setAddressToEdit }) {
   const deleteAddress = async () => {
     try {
       await api.delete(`/user_address/${authUser?.id}/${address?.id}`);
-      dispatch(asyncGetAddress(authUser?.id));
+      dispatch(asyncGetAddress({ userId: authUser?.id }));
       dispatch(
         setAlertActionCreator({
           val: {

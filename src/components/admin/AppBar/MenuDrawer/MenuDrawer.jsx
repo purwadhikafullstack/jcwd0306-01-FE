@@ -11,6 +11,9 @@ import {
   WarehouseRounded,
 } from '@mui/icons-material';
 import ReceiptLongRoundedIcon from '@mui/icons-material/ReceiptLongRounded';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import TodayIcon from '@mui/icons-material/Today';
+import DonutLargeIcon from '@mui/icons-material/DonutLarge';
 import { Button, Drawer, List, ListSubheader, Stack } from '@mui/material';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import ListItem from './ListItem';
@@ -68,6 +71,19 @@ function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
           </ListItem>
           <ListItem text="Halaman Utama" to="/">
             <ShoppingCartRounded />
+          </ListItem>
+        </List>
+
+        {/* Sales Menu */}
+        <List subheader={<ListSubheader>Sales</ListSubheader>}>
+          <ListItem text="Daily" to="#">
+            <TodayIcon />
+          </ListItem>
+          <ListItem text="Monthly" to="/admin/report/monthly">
+            <CalendarMonthIcon />
+          </ListItem>
+          <ListItem text="Breakdown" to="#">
+            <DonutLargeIcon />
           </ListItem>
         </List>
 

@@ -1,7 +1,7 @@
 import { useTheme } from '@mui/material';
-import ContainerReportPage from '../../components/admin/ReportPage/ContainerReportPage';
+import ContainerMonthlyReport from '../../components/admin/MonthlyReport/ContainerMonthlyReport';
 
-export function ReportPage() {
+export function MonthlyReport() {
   const theme = useTheme();
 
   return (
@@ -13,7 +13,7 @@ export function ReportPage() {
         marginRight: 'auto',
       }}
     >
-      <ContainerReportPage />{' '}
+      <ContainerMonthlyReport />
     </main>
   );
 }
