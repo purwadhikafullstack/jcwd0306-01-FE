@@ -16,13 +16,16 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import Collapse from '@mui/material/Collapse';
 import api from '../../constants/api';
 import { setAlertActionCreator } from '../../states/alert/action';
-import { updateAuthUserActionCreator } from '../../states/authUser/action';
+import { asyncUpdateAuthUser } from '../../states/authUser/action';
 
 export function ProfileDashoard() {
   const authUser = useSelector((states) => states.authUser);
@@ -30,8 +33,37 @@ export function ProfileDashoard() {
   const [see, setSee] = useState(false);
   const [seeOldPassword, setSeeOldPassword] = useState(false);
   const [seeNewPassword, setSeeNewPassword] = useState(false);
-  const [avatar, setAvatar] = useState(null);
+  const [image, setImage] = useState(null);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setImage(URL.createObjectURL(file));
+
+    // Create a FormData object to send the file
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // Send the file to the backend
+    api
+      .patch(`/user/edit/${authUser?.id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(async (response) => {
+        console.log('File uploaded successfully:', response.data);
+        dispatch(
+          setAlertActionCreator({
+            val: { status: 'success', message: 'Edit Success' },
+          })
+        );
+      })
+      .catch((error) => {
+        console.error('Error uploading file:', error);
+      });
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -46,12 +78,14 @@ export function ProfileDashoard() {
     onSubmit: async () => {
       try {
         setButtonDisabled(true);
-        await api.patch(`/user/edit/${authUser?.id}`, formik.values);
+        // await api.patch(`/user/edit/${authUser?.id}`, formik.values);
+        const userId = authUser?.id;
+        const formData = formik.values;
 
         const fetchUser = await api.get(`/user/${authUser?.id}`);
         // console.log(fetchUser?.data?.data?.user);
 
-        dispatch(updateAuthUserActionCreator(fetchUser?.data?.data?.user));
+        dispatch(asyncUpdateAuthUser({ userId, formData }));
 
         dispatch(
           setAlertActionCreator({
@@ -87,19 +121,24 @@ export function ProfileDashoard() {
     enableReinitialize: true,
     onSubmit: async () => {
       try {
+        setLoading(true);
         await api.patch('/user/edit-password', formik2.values);
-
         dispatch(
           setAlertActionCreator({
             val: { status: 'success', message: 'Edit Password Success' },
           })
         );
       } catch (err) {
+        formik2.resetForm();
         dispatch(
           setAlertActionCreator({
             val: { status: 'error', message: err?.response.data.data },
           })
         );
+        setLoading(false);
+      } finally {
+        formik2.resetForm();
+        setLoading(false);
       }
     },
   });
@@ -118,16 +157,9 @@ export function ProfileDashoard() {
     formik.resetForm();
   };
 
-  useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const response = await api.get(`/user/render/${authUser?.id}`);
-        setAvatar(response);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-  }, [authUser?.id]);
+  const gambarProfil = `${import.meta.env.VITE_API_BASE_URL}/user/${
+    authUser?.id
+  }/image`;
 
   return (
     <Container sx={{ mt: 3, p: 2 }}>
@@ -150,7 +182,7 @@ export function ProfileDashoard() {
           <Stack direction="column" spacing={1} alignItems="center">
             <Avatar
               sx={{ minHeight: 120, minWidth: 120, position: 'relative' }}
-              src={avatar || null}
+              src={image || gambarProfil}
             />
             <IconButton
               sx={{
@@ -163,7 +195,21 @@ export function ProfileDashoard() {
               }}
             >
               <EditIcon />
+              <input
+                type="file"
+                onChange={handleFileChange}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  opacity: 0,
+                  cursor: 'pointer',
+                }}
+              />
             </IconButton>
+            {/* <ImageInput /> */}
           </Stack>
           {/* biodata */}
           <Stack spacing={1} sx={{ flexGrow: 1 }}>
@@ -222,6 +268,7 @@ export function ProfileDashoard() {
               />
             </FormControl>
 
+            {/* CHANGE PASSWORD */}
             <Button
               variant="text"
               color="primary"
@@ -229,107 +276,125 @@ export function ProfileDashoard() {
               onClick={() => (see ? setSee(false) : setSee(true))}
             >
               Change Password
+              <ArrowDropDownIcon sx={{ display: see ? 'none' : 'block' }} />
+              <ArrowDropUpIcon sx={{ display: see ? 'block' : 'none' }} />
             </Button>
 
-            <Stack
-              direction={{ xs: 'column', md: 'row' }}
-              spacing={1}
-              display={see ? 'block' : 'none'}
+            <Collapse
+              in={see}
+              timeout={300}
+              style={{ transformOrigin: '0 0 0' }}
+              {...(see ? { timeout: 600 } : {})}
             >
-              <FormControl sx={{ gap: 1, maxWidth: 225 }}>
-                <TextField
-                  size="small"
-                  id="outlined-basic-old-password"
-                  label="old password"
-                  variant="outlined"
-                  type={seeOldPassword ? 'text' : 'password'}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setSeeOldPassword(!seeOldPassword)}
-                          edge="end"
-                          tabIndex="-1"
-                        >
-                          <VisibilityOffIcon
-                            fontSize="small"
-                            sx={{ display: !seeOldPassword ? 'block' : 'none' }}
-                          />
-                          <VisibilityIcon
-                            fontSize="small"
-                            sx={{ display: seeOldPassword ? 'block' : 'none' }}
-                          />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  value={formik2.values.oldPassword}
-                  error={
-                    formik2.touched.oldPassword &&
-                    Boolean(formik2.errors.oldPassword)
-                  }
-                  helperText={
-                    formik2.touched.oldPassword && formik2.errors.oldPassword
-                  }
-                  onChange={(e) => inputHandler2(e, 'oldPassword')}
-                  onBlur={formik2.handleBlur}
-                  sx={{
-                    width: '100%', // Set width to 100% on small screens
-                    marginBottom: 1, // Add bottom margin for spacing
-                  }}
-                />
-              </FormControl>
-              <FormControl sx={{ gap: 1, maxWidth: 225 }}>
-                <TextField
-                  size="small"
-                  id="outlined-basic-new-password"
-                  label="new password"
-                  variant="outlined"
-                  type={seeNewPassword ? 'text' : 'password'}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setSeeNewPassword(!seeNewPassword)}
-                          edge="end"
-                          tabIndex="-1"
-                        >
-                          <VisibilityOffIcon
-                            fontSize="small"
-                            sx={{ display: !seeNewPassword ? 'block' : 'none' }}
-                          />
-                          <VisibilityIcon
-                            fontSize="small"
-                            sx={{ display: seeNewPassword ? 'block' : 'none' }}
-                          />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  value={formik2.values.newPassword}
-                  error={
-                    formik2.touched.newPassword &&
-                    Boolean(formik2.errors.newPassword)
-                  }
-                  helperText={
-                    formik2.touched.newPassword && formik2.errors.newPassword
-                  }
-                  onChange={(e) => inputHandler2(e, 'newPassword')}
-                  onBlur={formik2.handleBlur}
-                  sx={{
-                    width: '100%', // Set width to 100% on small screens
-                    marginBottom: 1, // Add bottom margin for spacing
-                  }}
-                />
-              </FormControl>
-              <Button
-                variant="contained"
-                color="info"
-                onClick={formik2.handleSubmit}
+              <Stack
+                direction={{ xs: 'column', md: 'row' }}
+                spacing={1}
+                display={see ? 'block' : 'none'}
               >
-                Update Password
-              </Button>
-            </Stack>
+                <FormControl sx={{ gap: 1, maxWidth: 225 }}>
+                  <TextField
+                    size="small"
+                    id="outlined-basic-old-password"
+                    label="old password"
+                    variant="outlined"
+                    type={seeOldPassword ? 'text' : 'password'}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setSeeOldPassword(!seeOldPassword)}
+                            edge="end"
+                            tabIndex="-1"
+                          >
+                            <VisibilityOffIcon
+                              fontSize="small"
+                              sx={{
+                                display: !seeOldPassword ? 'block' : 'none',
+                              }}
+                            />
+                            <VisibilityIcon
+                              fontSize="small"
+                              sx={{
+                                display: seeOldPassword ? 'block' : 'none',
+                              }}
+                            />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    value={formik2.values.oldPassword}
+                    error={
+                      formik2.touched.oldPassword &&
+                      Boolean(formik2.errors.oldPassword)
+                    }
+                    helperText={
+                      formik2.touched.oldPassword && formik2.errors.oldPassword
+                    }
+                    onChange={(e) => inputHandler2(e, 'oldPassword')}
+                    // onBlur={formik2.handleBlur}
+                    sx={{
+                      width: '100%', // Set width to 100% on small screens
+                      marginBottom: 1, // Add bottom margin for spacing
+                    }}
+                  />
+                </FormControl>
+                <FormControl sx={{ gap: 1, maxWidth: 225 }}>
+                  <TextField
+                    size="small"
+                    id="outlined-basic-new-password"
+                    label="new password"
+                    variant="outlined"
+                    type={seeNewPassword ? 'text' : 'password'}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setSeeNewPassword(!seeNewPassword)}
+                            edge="end"
+                            tabIndex="-1"
+                          >
+                            <VisibilityOffIcon
+                              fontSize="small"
+                              sx={{
+                                display: !seeNewPassword ? 'block' : 'none',
+                              }}
+                            />
+                            <VisibilityIcon
+                              fontSize="small"
+                              sx={{
+                                display: seeNewPassword ? 'block' : 'none',
+                              }}
+                            />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    value={formik2.values.newPassword}
+                    error={
+                      formik2.touched.newPassword &&
+                      Boolean(formik2.errors.newPassword)
+                    }
+                    helperText={
+                      formik2.touched.newPassword && formik2.errors.newPassword
+                    }
+                    onChange={(e) => inputHandler2(e, 'newPassword')}
+                    onBlur={formik2.handleBlur}
+                    sx={{
+                      width: '100%', // Set width to 100% on small screens
+                      marginBottom: 1, // Add bottom margin for spacing
+                    }}
+                  />
+                </FormControl>
+                <Button
+                  variant="contained"
+                  color="info"
+                  onClick={formik2.handleSubmit}
+                  disabled={loading}
+                >
+                  Update Password
+                </Button>
+              </Stack>
+            </Collapse>
           </Stack>
         </Stack>
         {/* footer */}

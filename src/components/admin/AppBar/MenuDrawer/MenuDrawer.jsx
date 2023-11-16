@@ -12,9 +12,13 @@ import {
 } from '@mui/icons-material';
 import ReceiptLongRoundedIcon from '@mui/icons-material/ReceiptLongRounded';
 import { Button, Drawer, List, ListSubheader, Stack } from '@mui/material';
+import { useSelector } from 'react-redux';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import ListItem from './ListItem';
 
 function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
+  const authUser = useSelector((states) => states.authUser);
+
   return (
     <Drawer
       anchor="left"
@@ -40,12 +44,16 @@ function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
           <ListItem text="Gudang" to="/admin/warehouses">
             <WarehouseRounded />
           </ListItem>
-          <ListItem text="Produk" to="/admin/products">
-            <Inventory2Rounded />
-          </ListItem>
-          <ListItem text="Kategori" to="/admin/categories">
-            <CategoryRounded />
-          </ListItem>
+          {authUser.isAdmin && (
+            <ListItem text="Produk" to="/admin/products">
+              <Inventory2Rounded />
+            </ListItem>
+          )}
+          {authUser.isAdmin && (
+            <ListItem text="Kategori" to="/admin/categories">
+              <CategoryRounded />
+            </ListItem>
+          )}
           <ListItem text="Transaksi" to="/admin/transactions">
             <ReceiptLongRoundedIcon />
           </ListItem>
@@ -56,8 +64,13 @@ function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
 
         {/* Preferences Menu */}
         <List subheader={<ListSubheader>Preferensi</ListSubheader>}>
-          <ListItem text="Admin" to="/admin/administrator">
-            <SupervisorAccountRounded />
+          {authUser.isAdmin && (
+            <ListItem text="Admin" to="/admin/administrator">
+              <SupervisorAccountRounded />
+            </ListItem>
+          )}
+          <ListItem text="Users" to="/admin/users">
+            <PeopleOutlineIcon />
           </ListItem>
           <ListItem text="Pengaturan" to="/admin/general">
             <SettingsRounded />

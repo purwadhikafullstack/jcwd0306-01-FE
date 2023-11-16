@@ -8,12 +8,12 @@ import { asyncGetProduct } from '../../states/product/action';
 
 function ProductDetailPage() {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { productId } = useParams();
   const theme = useTheme();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    dispatch(asyncGetProduct(id));
+    dispatch(asyncGetProduct(productId));
   }, []);
 
   return (

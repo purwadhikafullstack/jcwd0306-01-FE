@@ -35,6 +35,10 @@ import { CustomerAddressPage } from './pages/customer/Address';
 import { AuthorizeUser } from './middlewares/auth';
 import { AdminChatRoom } from './components/Chat/AdminChatRoom';
 import { fetchCartItemAndNotif } from './utils/fetchCartItemAndNotif';
+import WarehouseDetailPage from './pages/admin/WarehouseDetailPage';
+import { AdministratorPage } from './pages/admin/AdministratorPage';
+import { AllUsersPage } from './pages/admin/AllUsersPage';
+import { ReportPage } from './pages/admin/ReportPage';
 
 const socketConn = io(import.meta.env.VITE_API_BASE_URL);
 
@@ -80,7 +84,7 @@ function App() {
   // ADMIN PAGE
   if (pathLocation === 'admin') {
     if (authUser == null) return null;
-    if (authUser?.isAdmin || authUser?.isWarehouseAdmin) {
+    if (authUser.isAdmin || authUser.WarehouseUsers[0]?.deletedAt) {
       return (
         <>
           <Alert />
@@ -91,13 +95,24 @@ function App() {
             setChatAttrAdmin={setChatAttrAdmin}
           />
           <Routes>
-            <Route path="/admin/products" element={<ProductPage />} />
-            <Route path="/admin/categories" element={<CategoryPage />} />
+            {authUser.isAdmin && (
+              <Route path="/admin/products" element={<ProductPage />} />
+            )}
+            {authUser.isAdmin && (
+              <Route path="/admin/categories" element={<CategoryPage />} />
+            )}
             <Route path="/admin/warehouses" element={<WarehousePage />} />
             <Route
-              path="/admin/transactions"
-              element={<TransactionPage warehouseId={warehouseId} />}
+              path="/admin/warehouses/:warehouseId"
+              element={<WarehouseDetailPage />}
             />
+            <Route path="/admin/transactions" element={<TransactionPage warehouseId={warehouseId} />} />
+            <Route
+              path="/admin/administrator"
+              element={<AdministratorPage />}
+            />
+            <Route path="/admin/users" element={<AllUsersPage />} />
+            <Route path="/admin/report" element={<ReportPage />} />
             <Route path="/admin" element={<DashboardPage />} />
             <Route path="*" element={<Navigate to="/admin" />} />
           </Routes>
@@ -109,6 +124,7 @@ function App() {
   }
 
   // CUSTOMER PAGE
+
   if (localStorage.getItem('token'))
     return (
       <>
@@ -118,11 +134,9 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="*" element={<Navigate to="/" />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/register" element={<Register />} />
           <Route path="/verify" element={<Verify />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/cart/shipment" element={<Checkout />} />
-          <Route path="/products/:id" element={<ProductDetailPage />} />
           <Route
             path="/user/settings"
             element={
@@ -149,15 +163,18 @@ function App() {
         <LoadingBar />
         <CustomerAppBar />
         <Routes>
-          {authUser === null && <Route path="/login" element={<LoginPage />} />}
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<HomePage />} />
+          <Route path="/products/:productId" element={<ProductDetailPage />} />
+          <Route path="/register" element={<Register />} />
           <Route path="*" element={<Navigate to="/" />} />
-          {authUser === null && (
-            <Route path="/forget-password" element={<ForgetPassword />} />
-          )}
+          <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/user/address" element={<CustomerAddressPage />} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
         </Routes>
       </>
     );
+
 }
 
 export default App;
