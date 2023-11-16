@@ -20,7 +20,7 @@ function ProductTable() {
               '& *': { color: 'white !important' },
               '& .MuiTableSortLabel-root': {
                 width: '100%',
-                justifyContent: 'space-between',
+                justifyContent: 'center',
               },
             }}
           >
@@ -40,9 +40,7 @@ function ProductTable() {
             <SortLabelTableCell label="stock">Stok</SortLabelTableCell>
 
             {/* Stock Mutation */}
-            <SortLabelTableCell label="stock-mutation">
-              Mutasi Stok
-            </SortLabelTableCell>
+            <TableCell>Mutasi Stok</TableCell>
 
             {/* Price */}
             <SortLabelTableCell label="price">Harga (Rp)</SortLabelTableCell>

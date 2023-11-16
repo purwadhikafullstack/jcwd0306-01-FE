@@ -48,7 +48,7 @@ function QuantityInput({ warehouseProduct }) {
                 type="number"
                 disableUnderline
                 inputProps={{
-                  min: field.value <= warehouseProduct.stock * -1,
+                  min: -warehouseProduct.stock,
                   step: 1,
                   style: { textAlign: 'center' },
                 }}

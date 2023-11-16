@@ -18,6 +18,8 @@ import orderStatusReducer from './order/orderStatusReducer';
 import warehouseReducer from './warehouse/reducer';
 import administratorReducer from './Administrator/reducer';
 import userAddressReducer from './Address/reducer';
+import stockMutationsReducer from './stockMutations/reducer';
+import stockMutationPaginationReducer from './stockMutationPagination/reducer';
 
 const store = configureStore({
   reducer: {
@@ -40,6 +42,8 @@ const store = configureStore({
     orderStatus: orderStatusReducer,
     administrator: administratorReducer,
     userAddress: userAddressReducer,
+    stockMutations: stockMutationsReducer,
+    stockMutationPagination: stockMutationPaginationReducer,
   },
   middleware: [thunk],
 });

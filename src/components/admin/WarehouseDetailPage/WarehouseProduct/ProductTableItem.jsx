@@ -2,6 +2,7 @@ import {
   CancelRounded,
   CheckCircleRounded,
   EditRounded,
+  LocalShippingRounded,
 } from '@mui/icons-material';
 import {
   Avatar,
@@ -18,12 +19,20 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import DescriptionTableCell from './DescriptionTableCell';
 import UpdateStockDialog from './UpdateStockDialog';
+import CreateStockMutationDialog from './CreateStockMutationDialog';
 
 function ProductTableItem() {
   const products = useSelector((states) => states.products);
   const productPagination = useSelector((states) => states.productPagination);
   const [productId, setProductId] = useState(null);
   const [isUpdateStockDialogOpen, setIsUpdateStockDialogOpen] = useState(false);
+  const [isCreateStockMutationDialogOpen, setIsCreateStockMutationDialogOpen] =
+    useState(false);
+
+  const handleClickCreateStockMutation = (val) => {
+    setProductId(val.id);
+    setIsCreateStockMutationDialogOpen(true);
+  };
 
   const handleClickUpdateStockButton = (val) => {
     setProductId(val.id);
@@ -102,8 +111,17 @@ function ProductTableItem() {
               </Stack>
             </TableCell>
 
-            {/* Stock mutation column */}
-            <TableCell />
+            {/* Stock Mutation column */}
+            <TableCell>
+              <Tooltip title="Ajukan mutasi stok" arrow>
+                <IconButton
+                  onClick={() => handleClickCreateStockMutation(val)}
+                  sx={{ '&:hover': { color: 'info.main' } }}
+                >
+                  <LocalShippingRounded />
+                </IconButton>
+              </Tooltip>
+            </TableCell>
 
             {/* Price column */}
             <TableCell>{val.price.toLocaleString('id-ID')}</TableCell>
@@ -140,6 +158,17 @@ function ProductTableItem() {
           </TableRow>
         ))}
       </TableBody>
+
+      {/* Create Stock Mutation */}
+      {productId !== null && (
+        <CreateStockMutationDialog
+          productId={productId}
+          isCreateStockMutationDialogOpen={isCreateStockMutationDialogOpen}
+          setIsCreateStockMutationDialogOpen={
+            setIsCreateStockMutationDialogOpen
+          }
+        />
+      )}
 
       {/* Update Stock Dialog */}
       {productId !== null && (
