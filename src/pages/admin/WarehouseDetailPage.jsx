@@ -16,6 +16,7 @@ function WarehouseDetailPage() {
 
   useEffect(() => {
     updateQueryParams({
+      tab: searchParams.get('tab') || 'information',
       sortBy: searchParams.get('sortBy') || 'updatedAt',
       orderBy: searchParams.get('orderBy') || 'desc',
       page: searchParams.get('page') || 1,

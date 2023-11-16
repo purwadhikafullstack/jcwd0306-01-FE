@@ -6,7 +6,6 @@ import {
   Grid,
   Paper,
   Stack,
-  Typography,
 } from '@mui/material';
 import { useSelector } from 'react-redux';
 import WarehouseAddressItem from './WarehouseAddressItem';
@@ -15,21 +14,16 @@ function WarehouseAddressContainer() {
   const warehouse = useSelector((states) => states.warehouse);
 
   return (
-    <Accordion>
+    <Accordion defaultExpanded>
       <AccordionSummary
         expandIcon={<ExpandMore />}
         aria-controls="WarehouseAddress-content"
         id="WarehouseAddress-header"
       >
-        Detail Gudang
+        Alamat Gudang
       </AccordionSummary>
       <AccordionDetails>
         <Stack component={Paper} spacing={3} sx={{ p: 3, overflow: 'auto' }}>
-          {/* Title */}
-          <Typography fontSize="1.2em" fontWeight={600}>
-            Alamat Gudang
-          </Typography>
-
           {/* Warehouse Address Detail */}
           <Grid
             container
