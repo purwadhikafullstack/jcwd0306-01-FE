@@ -1,7 +1,7 @@
 import {
+  Button,
   Container,
   Stack,
-  TablePagination,
   Typography,
   useMediaQuery,
 } from '@mui/material';
@@ -9,26 +9,46 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
 import { useSearchParams } from 'react-router-dom';
+import WidgetsRoundedIcon from '@mui/icons-material/WidgetsRounded';
 import { TransactionTable } from '../../components/admin/TransactionPage/TransactionTable';
-import api from '../../constants/api';
-import { constant } from '../../constants/constant';
 import { StatusFilterButton } from '../../components/customer/OrderList/StatusFilterButton';
 import { SearchBox } from '../../components/customer/OrderList/Searchbox';
 import { fetchTransaction } from '../../components/admin/TransactionPage/fetchTransaction';
+import { PaginationTable } from '../../components/admin/TransactionPage/PaginationTable';
+import { WarehouseSelect } from '../../components/admin/TransactionPage/WarehouseSelect';
 
-export function TransactionPage() {
+function idSetter(setWarehouseIds, warehouseId = []) {
+  const temp = [];
+  warehouseId.forEach((val) => temp.push(val.warehouseId));
+  return setWarehouseIds(temp);
+}
+
+export function TransactionPage({ warehouseId }) {
   const userSelector = useSelector((state) => state.authUser);
   const [searchParams, setSearchParams] = useSearchParams();
   const [transactions, setTransactions] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
+  const [warehouseIds, setWarehouseIds] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [count, setCount] = useState(0);
+  const [showMenu, setShowMenu] = useState(false);
   const dispatch = useDispatch();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const xsOnly = useMediaQuery(theme.breakpoints.up('sm'));
 
   useEffect(() => {
-    if (userSelector?.id)
+    idSetter(setWarehouseIds, warehouseId);
+  }, [warehouseId]);
+
+  useEffect(() => {
+    setSearchParams((params) =>
+      params.set('warehouseId', JSON.stringify(warehouseIds))
+    );
+  }, [warehouseIds]);
+
+  useEffect(() => {
+    if (userSelector?.id) {
       fetchTransaction(
         setIsLoading,
         setTransactions,
@@ -37,66 +57,66 @@ export function TransactionPage() {
         dispatch,
         searchParams
       );
+    }
   }, [userSelector, searchParams]);
   return (
     <Container className="p-0">
       <Stack
         sx={{
-          p: fullScreen ? 0 : 2,
+          p: fullScreen ? '16px 0' : 2,
           bgcolor: 'background.paper',
           borderRadius: 1,
           gap: 2,
+          minHeight: '91vh',
         }}
       >
-        <Typography variant="h5" sx={{ p: fullScreen ? '0 16px' : 0 }}>
-          Transaction List
-        </Typography>
-        <SearchBox setSearchParams={setSearchParams} />
-        <Stack className="flex-row justify-content-between flex-wrap">
-          <StatusFilterButton
+        <Stack direction="row" justifyContent="space-between">
+          <Typography variant="h6" sx={{ p: fullScreen ? '0 16px' : 0 }}>
+            Transaction List
+          </Typography>
+          <Button
+            sx={{ display: xsOnly ? 'none' : 'inline' }}
+            onClick={() => setShowMenu(!showMenu)}
+          >
+            <WidgetsRoundedIcon />
+          </Button>
+        </Stack>
+        <Stack direction="row" className="w-100 flex-wrap gap-3">
+          <SearchBox setSearchParams={setSearchParams} />
+          {showMenu || xsOnly ? (
+            <WarehouseSelect
+              warehouseIds={warehouseIds}
+              setWarehouseIds={setWarehouseIds}
+            />
+          ) : null}
+        </Stack>
+        {showMenu || xsOnly ? (
+          <Stack className="flex-row justify-content-between flex-wrap">
+            <StatusFilterButton
+              searchParams={searchParams}
+              setSearchParams={setSearchParams}
+            />
+            <Stack flexGrow={1} className="align-items-end justify-content-end">
+              <PaginationTable
+                count={count}
+                searchParams={searchParams}
+                setSearchParams={setSearchParams}
+              />
+            </Stack>
+          </Stack>
+        ) : null}
+        <Stack>
+          <TransactionTable
+            transactions={transactions}
+            isLoading={isLoading}
+            setTransactions={setTransactions}
+          />
+          <PaginationTable
+            count={count}
             searchParams={searchParams}
             setSearchParams={setSearchParams}
           />
-          <Stack flexGrow={1}>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={count}
-              rowsPerPage={Number(searchParams.get('limit') || 5)}
-              page={
-                searchParams.get('page')
-                  ? Number(searchParams.get('page')) - 1
-                  : 0
-              }
-              onPageChange={(e, value) => {
-                setSearchParams((params) => {
-                  params.set(`page`, value + 1);
-                  return params;
-                });
-              }}
-              onRowsPerPageChange={(e) => {
-                setSearchParams((params) => {
-                  params.set('limit', parseInt(e.target.value, 10));
-                  params.set('page', 1);
-                  return params;
-                });
-              }}
-              sx={{
-                '.MuiTablePagination-selectLabel': { margin: '0' },
-                '.MuiTablePagination-displayedRows': { margin: '0' },
-                '.MuiSelect-select': { padding: '0' },
-                '.MuiInputBase-root.MuiInputBase-colorPrimary.MuiTablePagination-input.css-1sm7cl9-MuiInputBase-root-MuiTablePagination-select':
-                  { margin: '0 12px 0 0' },
-                '.MuiTablePagination-actions': { margin: 0 },
-              }}
-            />
-          </Stack>
         </Stack>
-        <TransactionTable
-          transactions={transactions}
-          isLoading={isLoading}
-          setTransactions={setTransactions}
-        />
       </Stack>
     </Container>
   );

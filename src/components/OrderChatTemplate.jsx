@@ -45,7 +45,7 @@ export function OrderChatTemplate({ children }) {
                       <Button sx={{ justifyContent: 'start' }}>
                         <Link
                           href="/chatroom"
-                          className="text-decoration-none"
+                          className="text-decoration-none text-start"
                           style={{ color: 'inherit' }}
                         >
                           Chat
@@ -54,7 +54,7 @@ export function OrderChatTemplate({ children }) {
                       <Button sx={{ justifyContent: 'start' }}>
                         <Link
                           href="/payment/payment-list"
-                          className="text-decoration-none"
+                          className="text-decoration-none text-start"
                           style={{ color: 'inherit' }}
                         >
                           Waiting for Payment
@@ -63,7 +63,7 @@ export function OrderChatTemplate({ children }) {
                       <Button sx={{ justifyContent: 'start' }}>
                         <a
                           href="/order-list"
-                          className="text-decoration-none"
+                          className="text-decoration-none text-start"
                           style={{ color: 'inherit' }}
                         >
                           Transaction List
@@ -75,7 +75,7 @@ export function OrderChatTemplate({ children }) {
               </Card>
             </Grid>
             <Grid item md={9} xs={12}>
-              <Card sx={{ flexGrow: 1, minHeight: '75vh' }}>
+              <Card sx={{ flexGrow: 1, minHeight: '80vh' }}>
                 <CardContent>{children}</CardContent>
               </Card>
             </Grid>

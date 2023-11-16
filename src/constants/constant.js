@@ -10,11 +10,14 @@ export const constant = {
   updateAddress: 'UPADATE_ADDRESS',
   deleteAddress: 'DELETE_ADDRESS',
   selectAddress: 'SELECT_ADDRESS',
+  setWarehouseUser: 'SET_WAREHOUSE_USER',
   logout: 'UNSET_AUTH_USER',
   login: 'LOGIN',
   updateUnpaid: 'UPDATE_UNPAID_ORDER',
   addUnpaid: 'ADD_UNPAID_ORDER',
   updateOrderStatus: 'UPDATE_ORDER_STATUS',
+  setChatRoom: 'SET_CHAT_ROOM',
+  resetChatRoom: 'RESET_CHAT_ROOM',
   unpaidColor: 'darkorange',
   cancelledColor: 'red',
   verifyingColor: 'dodgerblue',
@@ -33,7 +36,7 @@ export const constant = {
         message:
           error?.response?.data?.message ||
           error?.message?.code ||
-          error?.mesage,
+          error?.message,
       },
     }),
   setSuccess: (message = '') =>

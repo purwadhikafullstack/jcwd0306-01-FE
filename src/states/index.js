@@ -15,11 +15,14 @@ import orderReducer from './order/reducer';
 import provincesReducer from './provinces/reducer';
 import citiesReducer from './cities/reducer';
 import orderStatusReducer from './order/orderStatusReducer';
+import { chatReducer } from './chat/reducer';
+import { warehouseUserReducer } from './warehouses/warehouseUserReducer';
 import warehouseReducer from './warehouse/reducer';
 import administratorReducer from './Administrator/reducer';
 import userAddressReducer from './Address/reducer';
 import stockMutationsReducer from './stockMutations/reducer';
 import stockMutationPaginationReducer from './stockMutationPagination/reducer';
+
 
 const store = configureStore({
   reducer: {
@@ -40,6 +43,8 @@ const store = configureStore({
     provinces: provincesReducer,
     cities: citiesReducer,
     orderStatus: orderStatusReducer,
+    chatRoom: chatReducer,
+    warehouseUser: warehouseUserReducer,
     administrator: administratorReducer,
     userAddress: userAddressReducer,
     stockMutations: stockMutationsReducer,
