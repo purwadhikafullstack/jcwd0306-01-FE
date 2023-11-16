@@ -1,9 +1,10 @@
+import { ChatRoom } from '../../components/Chat/ChatRoom';
 import { OrderChatTemplate } from '../../components/OrderChatTemplate';
 
-export function ChatRoom() {
+export function Chat() {
   return (
     <OrderChatTemplate>
-      <h1>Order List Page</h1>
+      <ChatRoom />
     </OrderChatTemplate>
   );
 }
