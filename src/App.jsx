@@ -106,7 +106,10 @@ function App() {
               path="/admin/warehouses/:warehouseId"
               element={<WarehouseDetailPage />}
             />
-            <Route path="/admin/transactions" element={<TransactionPage warehouseId={warehouseId} />} />
+            <Route
+              path="/admin/transactions"
+              element={<TransactionPage warehouseId={warehouseId} />}
+            />
             <Route
               path="/admin/administrator"
               element={<AdministratorPage />}
@@ -148,6 +151,7 @@ function App() {
           <Route path="/payment" element={<TransitionPage />} />
           <Route path="/payment/payment-list" element={<PaymentList />} />
           <Route path="/payment/:orderId" element={<Payment />} />
+          <Route path="/products/:productId" element={<ProductDetailPage />} />
           <Route path="/order-list" element={<OrderList />} />
           <Route path="/chatroom" element={<Chat />} />
           <Route path="/change-password" element={<ChangePassword />} />
@@ -174,7 +178,6 @@ function App() {
         </Routes>
       </>
     );
-
 }
 
 export default App;
