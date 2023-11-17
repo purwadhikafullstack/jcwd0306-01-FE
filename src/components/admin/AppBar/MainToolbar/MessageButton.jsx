@@ -5,7 +5,6 @@ import api from '../../../../constants/api';
 
 function MessageButton() {
   const warehouseIds = useSelector((state) => state.warehouseUser);
-  console.log(warehouseIds);
   const fetchUnreadMsg = async () => {
     const { data } = await api.get(`/chat/inbox`, { params: { warehouseId } });
   };

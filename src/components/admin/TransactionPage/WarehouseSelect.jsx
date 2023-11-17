@@ -13,7 +13,7 @@ export function WarehouseSelect({ warehouseIds = [], setWarehouseIds }) {
   const userSelector = useSelector((state) => state.authUser);
 
   const fetchWarehouseCityName = async () => {
-    const { data } = await api.get(`/warehouses/${userSelector?.id}`, {
+    const { data } = await api.get(`/warehouses/admin/${userSelector?.id}`, {
       params: { warehouseId: warehouseIds },
     });
     setWarehouses(data);
