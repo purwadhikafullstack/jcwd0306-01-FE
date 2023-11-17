@@ -10,8 +10,6 @@ import AdminAppBar from './components/admin/AppBar/AppBar';
 import CustomerAppBar from './components/customer/AppBar/AppBar';
 import HomePage from './pages/customer/HomePage';
 import { Cart } from './pages/customer/Cart';
-import api from './constants/api';
-import { constant } from './constants/constant';
 import { Checkout } from './pages/customer/Checkout';
 import { Register } from './pages/register';
 import { Verify } from './pages/verify';
