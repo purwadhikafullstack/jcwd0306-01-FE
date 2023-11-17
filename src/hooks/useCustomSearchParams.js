@@ -10,7 +10,7 @@ function useCustomSearchParams() {
     setSearchParams(updatedParams); // Set the updated query parameters
   };
 
-  return [searchParams, updateQueryParams];
+  return [searchParams, updateQueryParams, setSearchParams];
 }
 
 export default useCustomSearchParams;

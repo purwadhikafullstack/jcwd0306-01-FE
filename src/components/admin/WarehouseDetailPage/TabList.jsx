@@ -36,9 +36,9 @@ function TabList() {
   const warehouse = useSelector((states) => states.warehouse);
   const [searchParams, updateQueryParams] = useCustomSearchParams();
   const [tabNames, setTabNames] = useState([
-    { label: 'Produk', value: 'products' },
     { label: 'Informasi', value: 'information' },
-    { label: 'Mutasi Stok', value: 'stock-mutation' },
+    { label: 'Produk', value: 'products' },
+    { label: 'Mutasi Stok', value: 'stock-mutations' },
   ]);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ function TabList() {
       setTabNames((prevState) =>
         prevState.filter(
           // Only super admin or warehouse admin can see this tab
-          (val) => !['products', 'stock-mutation'].includes(val.value)
+          (val) => !['products', 'stock-mutations'].includes(val.value)
         )
       );
     }
@@ -59,7 +59,7 @@ function TabList() {
 
   return (
     <Tabs
-      value={searchParams.get('tab')}
+      value={searchParams.get('tab') || 'information'}
       aria-label="Warehouse Detail Tabs"
       variant="scrollable"
       onChange={(e, val) => updateQueryParams({ tab: val })}
