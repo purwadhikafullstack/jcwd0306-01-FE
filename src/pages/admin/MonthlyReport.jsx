@@ -1,4 +1,4 @@
-import { useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import ContainerMonthlyReport from '../../components/admin/MonthlyReport/ContainerMonthlyReport';
 
 export function MonthlyReport() {
@@ -11,6 +11,7 @@ export function MonthlyReport() {
         padding: '1rem',
         marginLeft: 'auto',
         marginRight: 'auto',
+        border: '2px solid red',
       }}
     >
       <ContainerMonthlyReport />

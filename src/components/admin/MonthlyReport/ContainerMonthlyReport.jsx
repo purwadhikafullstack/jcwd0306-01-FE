@@ -1,4 +1,4 @@
-import { Button, Stack, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
@@ -54,7 +54,9 @@ function ContainerMonthlyReport() {
       </Stack>
 
       {/* Content */}
-      <MonthlyBar />
+      <Box sx={{ maxWidth: '500px', height: '260px' }}>
+        <MonthlyBar />
+      </Box>
     </Stack>
   );
 }

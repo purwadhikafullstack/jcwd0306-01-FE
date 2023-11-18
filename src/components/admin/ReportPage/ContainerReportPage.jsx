@@ -3,6 +3,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchInput from './SearchInput';
 import SalesReportTable from './SalesReportTable';
+import ReportFooter from './ReportFooter';
 
 function ContainerReportPage() {
   return (
@@ -19,7 +20,7 @@ function ContainerReportPage() {
         Sales Report
       </Typography>
       <Stack spacing={2} direction={{ xs: 'column', md: 'row' }}>
-        {/* Search Categories Input */}
+        {/* Search Input */}
         <SearchInput />
 
         {/* Create Category Button */}
@@ -51,7 +52,7 @@ function ContainerReportPage() {
       <SalesReportTable />
 
       {/* Footer */}
-      {/* <AdministratorFooter /> */}
+      <ReportFooter />
     </Stack>
   );
 }

@@ -1,16 +1,29 @@
 /* eslint-disable no-plusplus */
-import { TableBody, TableCell, TableRow, Typography } from '@mui/material';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { asyncGetReports } from '../../../states/salesReport/action';
+import {
+  Button,
+  TableBody,
+  TableCell,
+  TableRow,
+  Typography,
+} from '@mui/material';
+import { useSelector } from 'react-redux';
+import moment from 'moment';
+import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
+import formatDate from '../../../utils/salesReport/formatDate';
+import formatCurrency from '../../../utils/salesReport/formatCurrency';
+import api from '../../../constants/api';
 
 function SalesReportTableItem() {
-  const dispatch = useDispatch();
   const reportData = useSelector((states) => states.salesReport);
 
-  useEffect(() => {
-    dispatch(asyncGetReports());
-  }, []);
+  const fetchDetailOrder = async (orderId) => {
+    try {
+      const { data } = await api.get(`/order/${orderId}`);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   let idCounter = 1;
   return (
@@ -31,21 +44,27 @@ function SalesReportTableItem() {
         <TableRow
           key={val.id}
           sx={{
-            bgcolor: index % 2 === 0 ? 'white' : '#9ae8f2',
+            bgcolor: index % 2 === 0 ? 'white' : '#d2f5f9',
             ':hover': { bgcolor: '#f5f5f5' },
           }}
         >
           <TableCell>{idCounter++}</TableCell>
 
-          <TableCell>{val.invoiceId}</TableCell>
+          <TableCell>{val.id}</TableCell>
 
           <TableCell>{val.UserAddress?.City?.name}</TableCell>
 
           <TableCell>{val.Warehouse?.WarehouseAddress?.City?.name}</TableCell>
 
-          <TableCell>{val.createdAt}</TableCell>
+          <TableCell>{formatDate(moment, val.createdAt)}</TableCell>
 
-          <TableCell>{val.total}</TableCell>
+          <TableCell>{formatCurrency(val.total)}</TableCell>
+
+          <TableCell>
+            <Button size="small" onClick={() => fetchDetailOrder(val?.id)}>
+              Detail <ArrowOutwardIcon sx={{ maxWidth: 15 }} />
+            </Button>
+          </TableCell>
         </TableRow>
       ))}
     </TableBody>

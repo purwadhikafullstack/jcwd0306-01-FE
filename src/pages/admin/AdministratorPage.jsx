@@ -10,10 +10,6 @@ export function AdministratorPage() {
   const dispatch = useDispatch();
   const [searchParams, updateQueryParams] = useCustomSearchParams();
 
-  // useEffect(() => {
-  //   dispatch(asyncGetWarehouseAdmin());
-  // }, [dispatch]);
-
   useEffect(() => {
     updateQueryParams({
       sortBy: searchParams.get('sortBy') || 'name',

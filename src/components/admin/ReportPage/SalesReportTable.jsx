@@ -13,13 +13,14 @@ function SalesReportTable() {
     <TableContainer component={Paper} sx={{ borderRadius: 0.5 }}>
       <Table aria-label="Category Table">
         <TableHead>
-          <TableRow sx={{ bgcolor: '#4ca3ed' }}>
+          <TableRow sx={{ bgcolor: 'primary.main' }}>
             <TableCell sx={{ color: 'white' }}>No</TableCell>
-            <TableCell sx={{ color: 'white' }}>Invoice</TableCell>
+            <TableCell sx={{ color: 'white' }}>ID</TableCell>
             <TableCell sx={{ color: 'white' }}>Sent to</TableCell>
             <TableCell sx={{ color: 'white' }}>warehouse origin</TableCell>
             <TableCell sx={{ color: 'white' }}>Transaction Date </TableCell>
             <TableCell sx={{ color: 'white' }}>Total </TableCell>
+            <TableCell sx={{ color: 'white' }}>Action</TableCell>
           </TableRow>
         </TableHead>
         <SalesReportTableItem />
