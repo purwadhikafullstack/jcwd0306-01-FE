@@ -4,10 +4,10 @@ import {
   TablePagination,
   Typography,
   useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTheme } from '@emotion/react';
 import { useSearchParams } from 'react-router-dom';
 import { TransactionTable } from '../../components/admin/TransactionPage/TransactionTable';
 import api from '../../constants/api';

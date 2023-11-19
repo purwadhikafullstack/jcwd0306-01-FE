@@ -2,6 +2,7 @@ import { ExpandMoreOutlined, PlaceOutlined } from '@mui/icons-material';
 import { Box, Button, useTheme } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import checkLocationPathName from '../checkLocationPathName';
 import defaultAddressParameter from '../../../../utils/defaultAddressParameter';
 import { asyncGetAddress } from '../../../../states/Address/action';
@@ -9,6 +10,7 @@ import { asyncGetAddress } from '../../../../states/Address/action';
 function CustomerAddressButton() {
   const authUser = useSelector((state) => state.authUser);
   const globalAddress = useSelector((states) => states.userAddress);
+  const navigate = useNavigate();
   const isCartPage = checkLocationPathName();
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -32,6 +34,7 @@ function CustomerAddressButton() {
 
   return (
     <Button
+      onClick={() => navigate('/user/address')}
       color="text"
       size="small"
       startIcon={<PlaceOutlined />}

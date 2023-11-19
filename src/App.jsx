@@ -37,6 +37,7 @@ import WarehouseDetailPage from './pages/admin/WarehouseDetailPage';
 import { AdministratorPage } from './pages/admin/AdministratorPage';
 import { AllUsersPage } from './pages/admin/AllUsersPage';
 import { ReportPage } from './pages/admin/ReportPage';
+import CustomerNavBar from './components/customer/NavBar/NavBar';
 
 const socketConn = io(import.meta.env.VITE_API_BASE_URL);
 
@@ -81,7 +82,7 @@ function App() {
   // ADMIN PAGE
   if (pathLocation === 'admin') {
     if (authUser == null) return null;
-    if (authUser.isAdmin || authUser.WarehouseUsers[0]?.deletedAt) {
+    if (authUser.isAdmin || authUser.WarehouseUsers[0]?.deletedAt === null) {
       return (
         <>
           <Alert />
@@ -122,12 +123,13 @@ function App() {
       <Alert />
       <LoadingBar />
       <CustomerAppBar />
+
       <Routes>
         {authUser === null && <Route path="/login" element={<LoginPage />} />}
         <Route path="/" element={<HomePage />} />
         <Route path="*" element={<Navigate to="/" />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/register" element={<Register />} />
+        {authUser === null && <Route path="/register" element={<Register />} />}
         {authUser !== null && <Route path="/verify" element={<Verify />} />}
         <Route path="/cart/shipment" element={<Checkout />} />
         <Route path="/products/:productId" element={<ProductDetailPage />} />
@@ -150,6 +152,7 @@ function App() {
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/user/address" element={<CustomerAddressPage />} />
       </Routes>
+      <CustomerNavBar />
     </>
   );
 }

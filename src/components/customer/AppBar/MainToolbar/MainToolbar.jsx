@@ -22,7 +22,7 @@ function MainToolbar({ setIsCategoryDrawerOpen }) {
       sx={{
         gap: 2,
         [theme.breakpoints.down('sm')]: {
-          display: isCartPage ? `none` : `flex`,
+          display: isCartPage ? 'none' : 'flex',
         },
       }}
     >

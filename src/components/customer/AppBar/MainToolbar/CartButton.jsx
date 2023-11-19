@@ -2,11 +2,14 @@ import { ShoppingCartOutlined } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { CartShowUp } from './CartButton/CartShowUp';
 
 function CartButton() {
   const [showCart, setShowCart] = useState(false);
   const cart = useSelector((state) => state.cart);
+  const navigate = useNavigate();
+
   return (
     <div
       className="position-relative"
@@ -28,11 +31,9 @@ function CartButton() {
           {cart.reduce((acc, val) => acc + val.quantity, 0)}
         </span>
       ) : null}
-      <a href="/cart">
-        <IconButton color="text">
-          <ShoppingCartOutlined />
-        </IconButton>
-      </a>
+      <IconButton color="text" onClick={() => navigate('/cart')}>
+        <ShoppingCartOutlined />
+      </IconButton>
       <CartShowUp showCart={showCart} setShowCart={setShowCart} />
     </div>
   );
