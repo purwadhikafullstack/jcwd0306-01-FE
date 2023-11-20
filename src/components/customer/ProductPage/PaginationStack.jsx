@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useMemo } from 'react';
 import useCustomSearchParams from '../../../hooks/useCustomSearchParams';
 
-function ProductTableFooter() {
+function PaginationStack() {
   const productPagination = useSelector((states) => states.productPagination);
   const [searchParams, updateQueryParams] = useCustomSearchParams();
   const perPageValues = useMemo(() => [10, 25, 50, 75, 100], []);
@@ -40,4 +40,4 @@ function ProductTableFooter() {
   );
 }
 
-export default ProductTableFooter;
+export default PaginationStack;

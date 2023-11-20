@@ -2,14 +2,14 @@ import { Box, Button, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import google from '../assets/google.png';
 import line from '../assets/line 2.png';
 import api from '../constants/api';
 import { setAlertActionCreator } from '../states/alert/action';
+import GadgetGalleryLogo from '../components/GadgetGalleryLogo';
 // import { setAlertActionCreator } from '../states/alert/action';
 // import GGLogo from '../assets/GadgetGallery Logo 2.png';
-
-const apiUrl = import.meta.env.VITE_FE_BASE_URL;
 
 function Register() {
   const dispatch = useDispatch();
@@ -49,19 +49,11 @@ function Register() {
 
   return (
     <>
-      <Box
-        width="100%"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        m="20px"
-      >
-        <Typography fontFamily="sans-serif" fontSize="30px" color="green">
-          GadgetGallery
-        </Typography>
-      </Box>
+      <GadgetGalleryLogo
+        sx={{ m: '3rem', fontSize: '3rem', textAlign: 'center' }}
+      />
 
-      <Box display="flex" mt="4rem" justifyContent="space-evenly">
+      <Box display="flex" justifyContent="space-evenly">
         {/* <Box>
           <img
             src={GGLogo}
@@ -84,9 +76,9 @@ function Register() {
             variant="h5"
             display="flex"
             justifyContent="center"
-            fontWeight="500"
+            fontWeight="700"
           >
-            Register
+            Daftar
           </Typography>
           <Typography
             display="flex"
@@ -94,14 +86,10 @@ function Register() {
             fontWeight="400"
             fontSize={12}
             mt={2}
+            sx={{ '& a': { color: 'primary.main', textDecoration: 'none' } }}
           >
-            Already have an acount?&nbsp;&nbsp;
-            <a
-              href={`${apiUrl}/login`}
-              style={{ color: 'green', textDecoration: 'none' }}
-            >
-              Sign In
-            </a>
+            sudah punya akun?&nbsp;&nbsp;
+            <Link to="/login">Masuk</Link>
           </Typography>
           <Box
             display="flex"
@@ -151,7 +139,7 @@ function Register() {
             label="email"
             variant="outlined"
             size="small"
-            style={{
+            sx={{
               marginTop: '10px',
               height: '40px',
               maxWidth: '100%',
@@ -165,7 +153,7 @@ function Register() {
             variant="outlined"
             size="small"
             defaultValue=""
-            style={{
+            sx={{
               marginTop: '10px',
               height: '40px',
               maxWidth: '100%',
@@ -181,7 +169,7 @@ function Register() {
             variant="outlined"
             size="small"
             defaultValue=""
-            style={{
+            sx={{
               marginTop: '10px',
               height: '40px',
               maxWidth: '100%',
@@ -198,7 +186,7 @@ function Register() {
             size="small"
             type="password"
             defaultValue=""
-            style={{
+            sx={{
               marginTop: '10px',
               height: '40px',
               maxWidth: '100%',
@@ -207,12 +195,13 @@ function Register() {
             }}
           />
           <Button
-            variant="outlined"
-            style={{ marginTop: '10px', width: '100%', height: '50px' }}
+            fullWidth
+            variant="contained"
             size="large"
             onClick={formik.handleSubmit}
+            sx={{ mt: '10px' }}
           >
-            Register
+            Daftar
           </Button>
         </Box>
       </Box>

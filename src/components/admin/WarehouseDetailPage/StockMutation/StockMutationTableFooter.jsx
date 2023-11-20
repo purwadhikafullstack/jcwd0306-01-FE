@@ -1,10 +1,12 @@
 import { MenuItem, Pagination, Stack, TextField } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { useMemo } from 'react';
-import useCustomSearchParams from '../../../hooks/useCustomSearchParams';
+import useCustomSearchParams from '../../../../hooks/useCustomSearchParams';
 
-function ProductTableFooter() {
-  const productPagination = useSelector((states) => states.productPagination);
+function StockMutationTableFooter() {
+  const stockMutationPagination = useSelector(
+    (states) => states.stockMutationPagination
+  );
   const [searchParams, updateQueryParams] = useCustomSearchParams();
   const perPageValues = useMemo(() => [10, 25, 50, 75, 100], []);
 
@@ -13,7 +15,7 @@ function ProductTableFooter() {
       {/* Pagination */}
       <Pagination
         onChange={(e, page) => updateQueryParams({ page })}
-        count={productPagination.totalPage || 1}
+        count={stockMutationPagination.totalPage || 1}
         shape="rounded"
         color="primary"
         page={+searchParams.get('page') || 1}
@@ -40,4 +42,4 @@ function ProductTableFooter() {
   );
 }
 
-export default ProductTableFooter;
+export default StockMutationTableFooter;
