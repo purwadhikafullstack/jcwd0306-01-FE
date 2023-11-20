@@ -1,32 +1,25 @@
 import { ExpandMoreOutlined, PlaceOutlined } from '@mui/icons-material';
-import { Box, Button, useTheme } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import checkLocationPathName from '../checkLocationPathName';
-import defaultAddressParameter from '../../../../utils/defaultAddressParameter';
 import { asyncGetAddress } from '../../../../states/Address/action';
 
 function CustomerAddressButton() {
   const authUser = useSelector((state) => state.authUser);
-  const globalAddress = useSelector((states) => states.userAddress);
+  const userAddress = useSelector((states) => states.userAddress);
   const navigate = useNavigate();
-  const isCartPage = checkLocationPathName();
-  const theme = useTheme();
   const dispatch = useDispatch();
-  const mainAddress = globalAddress.find(defaultAddressParameter);
-  // kalo gaada main addressnya, kirim ke alamat paling pertama dari table, kalo gaada kasih tulisan (tambah alamat)
-  const firstAddress = globalAddress[0]?.City?.name;
 
-  let display;
+  const display = useMemo(() => {
+    const mainAddress = userAddress.find((val) => val.isDefault);
+    // kalo gaada main addressnya, kirim ke alamat paling pertama dari table
+    const firstAddress = userAddress[0]?.City?.name;
 
-  if (mainAddress) {
-    display = mainAddress?.City.name || '';
-  } else if (firstAddress) {
-    display = firstAddress || '';
-  } else {
-    display = '-';
-  }
+    if (mainAddress) return mainAddress?.City.name || '';
+    if (firstAddress) return firstAddress || '';
+    return '-';
+  }, [userAddress]);
 
   useEffect(() => {
     dispatch(asyncGetAddress(authUser?.id));
@@ -43,9 +36,6 @@ function CustomerAddressButton() {
         textTransform: 'none',
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
-        [theme.breakpoints.down('sm')]: {
-          display: isCartPage ? `none` : `flex`,
-        },
       }}
     >
       <Box component="span" sx={{ color: 'text.secondary', mr: 1 }}>

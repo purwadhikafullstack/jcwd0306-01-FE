@@ -1,29 +1,31 @@
-import { Drawer, Toolbar, useTheme } from '@mui/material';
+import { Drawer, Toolbar, useMediaQuery, useTheme } from '@mui/material';
+import { bool, func } from 'prop-types';
 import CategoryImageList from './CategoryImageList';
 
 function CategoryDrawer({ isCategoryDrawerOpen, setIsCategoryDrawerOpen }) {
   const theme = useTheme();
+  const isSmDown = useMediaQuery(theme.breakpoints.down('sm'));
+
+  if (isSmDown) return null;
 
   return (
     <Drawer
       anchor="top"
       open={isCategoryDrawerOpen}
       onClose={() => setIsCategoryDrawerOpen(false)}
-      PaperProps={{
-        sx: { maxHeight: '80vh' },
-      }}
+      PaperProps={{ sx: { maxHeight: '80vh' } }}
     >
-      <Toolbar
-        variant="dense"
-        sx={{
-          [theme.breakpoints.down('md')]: { display: 'none' },
-        }}
-      />
+      <Toolbar variant="dense" />
       <Toolbar />
       <Toolbar variant="dense" />
-      <CategoryImageList />
+      <CategoryImageList setIsCategoryDrawerOpen={setIsCategoryDrawerOpen} />
     </Drawer>
   );
 }
+
+CategoryDrawer.propTypes = {
+  isCategoryDrawerOpen: bool.isRequired,
+  setIsCategoryDrawerOpen: func.isRequired,
+};
 
 export default CategoryDrawer;

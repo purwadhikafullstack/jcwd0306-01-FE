@@ -24,7 +24,7 @@ function WarehouseDetailPage() {
       dispatch(
         asyncGetProducts({
           getType: 'REPLACE',
-          name: searchParams.get('name'),
+          search: searchParams.get('search'),
           categoryId: searchParams.get('categoryId'),
           sortBy: searchParams.get('sortBy') || 'updatedAt',
           orderBy: searchParams.get('orderBy') || 'desc',

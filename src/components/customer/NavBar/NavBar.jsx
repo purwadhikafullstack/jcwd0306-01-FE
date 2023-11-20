@@ -25,14 +25,21 @@ function NavBar() {
   const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
   const [value, setValue] = useState('');
   const [isMenuDialogOpen, setIsMenuDialogOpen] = useState(false);
-  const location = useLocation();
-  const pathLocation = location.pathname.split('/')[1];
+  const pathName = useLocation().pathname.split('/')[1];
 
   useEffect(() => {
     if (isMenuDialogOpen === false && value === 'menu') setValue('');
   }, [isMenuDialogOpen]);
 
-  if (isSmUp || !['', 'order-list', 'user'].includes(pathLocation)) return null;
+  useEffect(() => {
+    if (pathName === '') setValue('home');
+    else if (pathName === 'products') setValue('products');
+    else if (pathName === 'order-list') setValue('orders');
+    else if (pathName === 'login') setValue('login');
+    else setValue('');
+  }, [pathName]);
+
+  if (isSmUp || pathName === 'cart') return null;
 
   return (
     <>
@@ -64,6 +71,7 @@ function NavBar() {
 
           {/* Product button */}
           <BottomNavigationAction
+            onClick={() => navigate('/products')}
             value="products"
             label="Produk"
             icon={<CategoryRounded />}

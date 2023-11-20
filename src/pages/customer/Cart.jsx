@@ -3,7 +3,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { CartItemList } from '../../components/customer/Cart/CartItemList';
 import { StackBorder } from '../../components/customer/Cart/StackBorder';
 import { CartHeader } from '../../components/customer/Cart/CartHeader';
@@ -60,9 +60,9 @@ function Cart() {
               <div>No Items on Cart</div>
               <div>
                 <Button variant="contained">
-                  <a href="/" className="text-decoration-none text-white">
+                  <Link to="/" className="text-decoration-none text-white">
                     Start shopping
-                  </a>
+                  </Link>
                 </Button>
               </div>
             </div>

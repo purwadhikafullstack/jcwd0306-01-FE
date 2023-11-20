@@ -1,18 +1,18 @@
-import { Box, Toolbar } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { Box, Toolbar, useMediaQuery, useTheme } from '@mui/material';
 import CustomerAddressButton from './CustomerAddressButton';
 import { BackToHome } from './BackToHome';
+import useIsPathName from '../../../../hooks/useIsPathName';
 
 function BottomToolbar() {
-  const authUser = useSelector((states) => states.authUser);
-
-  if (authUser === null) return null;
+  const theme = useTheme();
+  const isSmDown = useMediaQuery(theme.breakpoints.down('sm'));
+  const isCartPage = useIsPathName('cart');
 
   return (
     <Toolbar variant="dense" sx={{ minHeight: 'fit-content' }}>
-      <BackToHome />
+      {isSmDown && isCartPage && <BackToHome />}
       <Box sx={{ flexGrow: 1 }} />
-      <CustomerAddressButton />
+      {!(isCartPage && isSmDown) && <CustomerAddressButton />}
     </Toolbar>
   );
 }

@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material';
@@ -30,7 +30,7 @@ import ForgetPassword from './pages/ForgetPassword';
 import ChangePassword from './pages/ChangePassword';
 import { TransactionPage } from './pages/admin/TransactionPage';
 import { socketListener } from './constants/socketListener';
-import ProductPage from './pages/admin/ProductPage';
+import AdminProductPage from './pages/admin/ProductPage';
 import { CustomerAddressPage } from './pages/customer/Address';
 import { AuthorizeUser } from './middlewares/auth';
 import WarehouseDetailPage from './pages/admin/WarehouseDetailPage';
@@ -38,13 +38,14 @@ import { AdministratorPage } from './pages/admin/AdministratorPage';
 import { AllUsersPage } from './pages/admin/AllUsersPage';
 import { ReportPage } from './pages/admin/ReportPage';
 import CustomerNavBar from './components/customer/NavBar/NavBar';
+import CustomerProductPage from './pages/customer/ProductPage';
+import useIsPathName from './hooks/useIsPathName';
 
 const socketConn = io(import.meta.env.VITE_API_BASE_URL);
 
 function App() {
   const authUser = useSelector((states) => states.authUser);
-  const location = useLocation();
-  const pathLocation = location.pathname.split('/')[1];
+  const isAdminPage = useIsPathName('admin');
   const dispatch = useDispatch();
   const theme = useTheme();
   const [warehouseId, setWarehouseId] = useState([]);
@@ -54,10 +55,10 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (pathLocation === 'admin')
+    if (isAdminPage)
       document.body.style.backgroundColor = theme.palette.action.selected;
     else document.body.style.backgroundColor = theme.palette.background.paper;
-  }, [pathLocation]);
+  }, [isAdminPage]);
 
   const fetchCartItem = async () => {
     if (authUser?.id) {
@@ -80,7 +81,7 @@ function App() {
   }, [localStorage.getItem('token')]);
 
   // ADMIN PAGE
-  if (pathLocation === 'admin') {
+  if (isAdminPage) {
     if (authUser == null) return null;
     if (authUser.isAdmin || authUser.WarehouseUsers[0]?.deletedAt === null) {
       return (
@@ -90,7 +91,7 @@ function App() {
           <AdminAppBar />
           <Routes>
             {authUser.isAdmin && (
-              <Route path="/admin/products" element={<ProductPage />} />
+              <Route path="/admin/products" element={<AdminProductPage />} />
             )}
             {authUser.isAdmin && (
               <Route path="/admin/categories" element={<CategoryPage />} />
@@ -123,7 +124,6 @@ function App() {
       <Alert />
       <LoadingBar />
       <CustomerAppBar />
-
       <Routes>
         {authUser === null && <Route path="/login" element={<LoginPage />} />}
         <Route path="/" element={<HomePage />} />
@@ -132,6 +132,7 @@ function App() {
         {authUser === null && <Route path="/register" element={<Register />} />}
         {authUser !== null && <Route path="/verify" element={<Verify />} />}
         <Route path="/cart/shipment" element={<Checkout />} />
+        <Route path="/products" element={<CustomerProductPage />} />
         <Route path="/products/:productId" element={<ProductDetailPage />} />
         <Route
           path="/user/settings"

@@ -6,10 +6,13 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
+import { func } from 'prop-types';
 import { useSelector } from 'react-redux';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 
-function CategoryImageList() {
+function CategoryImageList({ setIsCategoryDrawerOpen }) {
   const categories = useSelector((states) => states.categories);
+  const navigate = useNavigate();
   const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
 
@@ -28,6 +31,15 @@ function CategoryImageList() {
         <ImageListItem
           key={category.id}
           component={Button}
+          onClick={() => {
+            navigate({
+              pathname: '/products',
+              search: createSearchParams({
+                categoryId: category.id,
+              }).toString(),
+            });
+            setIsCategoryDrawerOpen(false);
+          }}
           sx={{ p: 0, borderRadius: 1, overflow: 'clip', boxShadow: 3 }}
         >
           <img
@@ -43,5 +55,9 @@ function CategoryImageList() {
     </ImageList>
   );
 }
+
+CategoryImageList.propTypes = {
+  setIsCategoryDrawerOpen: func.isRequired,
+};
 
 export default CategoryImageList;
