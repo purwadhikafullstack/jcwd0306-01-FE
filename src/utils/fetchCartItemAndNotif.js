@@ -14,8 +14,6 @@ export const fetchCartItemAndNotif = async (
       const tempWarehouse = [];
       data.WarehouseUsers.forEach((val) => tempWarehouse.push(val.warehouseId));
       setWarehouseId(data.WarehouseUsers);
-      console.log(tempWarehouse);
-      console.log(data);
       dispatch({
         type: constant.setWarehouseUser,
         payload: tempWarehouse,

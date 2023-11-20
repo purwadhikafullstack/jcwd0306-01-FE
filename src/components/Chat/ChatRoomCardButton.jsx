@@ -1,11 +1,23 @@
 import { Button, Card, CardContent } from '@mui/material';
 
-export function ChatRoomCardButton({ setSearchParams, room = {} }) {
+export function ChatRoomCardButton({
+  setSearchParams,
+  room = {},
+  searchParams,
+  page,
+}) {
   return (
-    <Card>
+    <Card
+      className={
+        Number(searchParams.get('orderId')) === room.orderId
+          ? 'bg-info-subtle'
+          : 'transparent'
+      }
+    >
       <Button
-        className="d-flex w-100"
+        className="d-flex w-100 flex-column-reverse"
         onClick={() => {
+          page.current = 1;
           setSearchParams((params) => {
             params.set(`orderId`, room.orderId);
             params.set('warehouseId', room.warehouseId);

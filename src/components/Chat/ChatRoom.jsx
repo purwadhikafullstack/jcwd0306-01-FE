@@ -6,11 +6,14 @@ import {
   Paper,
   Stack,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './ChatRoom.css';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
+import { ArrowBack } from '@mui/icons-material';
 import { ChatBody } from './ChatBody';
 import { ChatRoomCardButton } from './ChatRoomCardButton';
 import { fetchMessages } from './fetchMessages';
@@ -22,12 +25,22 @@ export function ChatRoom() {
   const [chatRooms, setChatRooms] = useState([]);
   const [messages, setMessages] = useState([]);
   const [showInput, setShowInput] = useState(false);
+  const totalData = useRef(0);
+  const page = useRef(1);
+  const theme = useTheme();
+  const smallerScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
-    if (userSelector?.id)
-      fetchMessages(userSelector.id, searchParams, setMessages);
+    if (userSelector?.id && searchParams.get(`orderId`))
+      fetchMessages(
+        userSelector.id,
+        searchParams,
+        setMessages,
+        page?.current,
+        totalData
+      );
     if (searchParams.get(`orderId`)) setShowInput(true);
-  }, [searchParams]);
+  }, [searchParams, userSelector, page?.current]);
 
   useEffect(() => {
     if (userSelector?.id) fetchChatRooms(userSelector?.id, setChatRooms);
@@ -36,19 +49,39 @@ export function ChatRoom() {
     <div className="container" style={{ padding: '0' }}>
       <Typography variant="h5">Write message to our staff</Typography>
       <Grid container spacing={1} mt={1}>
-        <Grid item md={3}>
+        <Grid
+          item
+          md={3}
+          xs={12}
+          sx={{
+            display:
+              smallerScreen && searchParams.get(`orderId`) ? 'none' : 'block',
+          }}
+        >
           <Stack gap={1}>
-            <Card>
+            <Card
+              className={
+                searchParams.get('orderId') === 'null'
+                  ? 'bg-info-subtle'
+                  : 'transparent'
+              }
+            >
               <Button
                 className="d-flex w-100"
                 onClick={() => {
                   setShowInput(true);
+                  page.current = 1;
                   setSearchParams((params) => {
-                    params.delete('orderId');
+                    params.set('orderId', null);
                     params.delete(`warehouseId`);
                     return params;
                   });
-                  fetchMessages(userSelector.id, searchParams, setMessages);
+                  fetchMessages(
+                    userSelector.id,
+                    searchParams,
+                    setMessages,
+                    page.current
+                  );
                 }}
               >
                 <CardContent className="p-2">Customer support</CardContent>
@@ -58,19 +91,45 @@ export function ChatRoom() {
               ? chatRooms.map((room) => (
                   <ChatRoomCardButton
                     key={room.id}
+                    searchParams={searchParams}
                     setSearchParams={setSearchParams}
                     room={room}
+                    page={page}
                   />
                 ))
               : null}
           </Stack>
         </Grid>
-        <Grid item md={9} xs={12}>
+        <Grid
+          item
+          md={9}
+          xs={12}
+          sx={{
+            display:
+              smallerScreen && !searchParams.get(`orderId`) ? 'none' : 'block',
+            position: 'relative',
+          }}
+        >
+          <Button
+            onClick={() => {
+              setShowInput(false);
+              setSearchParams((params) => {
+                params.delete('orderId');
+                params.delete(`warehouseId`);
+                return params;
+              });
+            }}
+          >
+            <ArrowBack />
+            Back
+          </Button>
           {messages.length || showInput ? (
             <ChatBody
               messages={messages}
               setMessages={setMessages}
               searchParams={searchParams}
+              page={page}
+              totalData={totalData}
             />
           ) : (
             <Paper className="paper" sx={{ minHeight: '55vh' }}>
