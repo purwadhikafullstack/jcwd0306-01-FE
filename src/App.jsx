@@ -43,18 +43,13 @@ const socketConn = io(import.meta.env.VITE_API_BASE_URL);
 function App() {
   const authUser = useSelector((states) => states.authUser);
   const orderStatus = useSelector((states) => states.orderStatus);
+  const chatAttr = useSelector((states) => states.chatRoom);
   const location = useLocation();
   const pathLocation = location.pathname.split('/')[1];
   const dispatch = useDispatch();
   const theme = useTheme();
   const [warehouseId, setWarehouseId] = useState([]);
-  const [chatAttrAdmin, setChatAttrAdmin] = useState(
-    new Map([
-      [`receiverId`, 5],
-      [`orderId`, 80],
-      [`warehouseId`, 37],
-    ])
-  );
+  const [chatAttrAdmin, setChatAttrAdmin] = useState(new Map());
   useEffect(() => {
     dispatch(asyncReceiveUser());
   }, [dispatch]);
@@ -65,6 +60,9 @@ function App() {
     else document.body.style.backgroundColor = theme.palette.background.paper;
   }, [pathLocation]);
 
+  useEffect(() => {
+    setChatAttrAdmin(chatAttr);
+  }, [chatAttr]);
   useEffect(() => {
     fetchCartItemAndNotif(authUser, setWarehouseId, dispatch);
     socketConn.connect();

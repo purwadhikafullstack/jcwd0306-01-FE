@@ -20,7 +20,7 @@ function MainToolbar({ setIsDrawerOpen }) {
   const isMdDown = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
-    <Toolbar sx={{ gap: 2, overflow: 'auto' }}>
+    <Toolbar sx={{ gap: 2 }}>
       <Stack direction="row" alignItems="center" spacing={1}>
         <IconButton onClick={() => setIsDrawerOpen((prevState) => !prevState)}>
           <MenuRounded />

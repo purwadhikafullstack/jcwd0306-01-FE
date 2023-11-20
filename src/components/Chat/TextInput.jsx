@@ -12,7 +12,6 @@ export function TextInput({ searchParams, messages, setMessages }) {
   const handlePostMessage = async () => {
     try {
       const message = document.getElementById('standard-text').value;
-      // eslint-disable-next-line no-useless-return
       if (!message) return;
       if (message.length > 255)
         throw new Error(`Text exceeds 255 characters (${message.length})`);
@@ -26,7 +25,9 @@ export function TextInput({ searchParams, messages, setMessages }) {
         }),
         message,
       });
-      setMessages([...messages, data]);
+      const rec = messages.find((val) => val.id === data.id);
+      if (rec) return;
+      setMessages([data, ...messages]);
       document.getElementById('standard-text').value = '';
     } catch (error) {
       dispatch(constant.setError(error));
@@ -47,8 +48,14 @@ export function TextInput({ searchParams, messages, setMessages }) {
     >
       <TextField
         id="standard-text"
-        label="メッセージを入力"
+        label="Write your message"
         className="w-100"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handlePostMessage();
+            e.preventDefault();
+          }
+        }}
       />
       <Button
         variant="contained"
