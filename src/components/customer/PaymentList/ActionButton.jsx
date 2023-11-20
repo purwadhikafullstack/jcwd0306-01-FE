@@ -1,6 +1,8 @@
 import { Button, Link } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import EmailIcon from '@mui/icons-material/Email';
+import { useNavigate } from 'react-router-dom';
 import { ConfirmationModal } from '../../ConfirmationModal';
 import { handleCancel } from '../OrderPayment/handleCancle';
 
@@ -12,6 +14,7 @@ export function ActionButton({ order = {}, setOrderDetail, setOpen }) {
   const dispatch = useDispatch();
   const userSelector = useSelector((state) => state.authUser);
   const unpaid = useSelector((state) => state.order);
+  const nav = useNavigate();
 
   return (
     <>
@@ -23,6 +26,18 @@ export function ActionButton({ order = {}, setOrderDetail, setOpen }) {
         actionDescription={action.desc}
       />
       <div className="d-flex gap-2">
+        <Button
+          onClick={() =>
+            nav(
+              `/chatroom?orderId=${order?.plain_id}&warehouseId=${order?.warehouseId}`
+            )
+          }
+        >
+          <div className="d-none d-md-block">Contact admin</div>
+          <div className="d-md-none d-block">
+            <EmailIcon />
+          </div>
+        </Button>
         <Button
           variant="contained"
           className={

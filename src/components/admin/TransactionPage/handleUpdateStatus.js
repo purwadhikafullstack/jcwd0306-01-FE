@@ -30,11 +30,11 @@ const handleUpdateStatus = async (
     });
     updateArray(setTransactions, transactions, transaction);
     setOpen(false);
-    setShow('');
   } catch (error) {
     setOpen(true);
     dispatch(constant.setError(error));
   } finally {
+    setShow('');
     setIsLoading(false);
   }
 };

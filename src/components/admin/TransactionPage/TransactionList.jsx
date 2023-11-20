@@ -19,7 +19,7 @@ export function TransactionList({
         width="3%"
         sx={{ display: { xs: 'none', md: 'table-cell' } }}
       >
-        {idx + 1}
+        {order?.warehouseId}
       </StyledTableCell>
       <StyledTableCell align="right">{order?.id}</StyledTableCell>
       <StyledTableCell

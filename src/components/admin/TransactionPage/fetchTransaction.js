@@ -24,6 +24,7 @@ export const fetchTransaction = async (
         limit: searchParams.get(`limit`) || 5,
         status: setStatus(searchParams),
         text: searchParams.get(`name`),
+        warehouseId: JSON.parse(searchParams.get('warehouseId')),
       },
     });
     setTransactions(data.rows);

@@ -50,7 +50,7 @@ export function TransactionTable({ transactions = [], setTransactions }) {
               align="center"
               sx={{ display: { xs: 'none', md: 'table-cell' } }}
             >
-              No
+              WHID
             </StyledTableCell>
             <StyledTableCell align="center">ID</StyledTableCell>
             <StyledTableCell align="center">Status</StyledTableCell>
@@ -66,15 +66,26 @@ export function TransactionTable({ transactions = [], setTransactions }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {transactions.map((order, idx) => (
-            <TransactionList
-              key={order?.id}
-              idx={idx}
-              order={order}
-              setOpen={setOpen}
-              fetchDetailTransaction={fetchDetailTransaction}
-            />
-          ))}
+          {transactions.length ? (
+            transactions.map((order, idx) => (
+              <TransactionList
+                key={order?.id}
+                idx={idx}
+                order={order}
+                setOpen={setOpen}
+                fetchDetailTransaction={fetchDetailTransaction}
+              />
+            ))
+          ) : (
+            <TableRow>
+              <StyledTableCell />
+              <StyledTableCell />
+              <StyledTableCell />
+              <StyledTableCell sx={{ textAlign: 'center' }}>
+                No item match
+              </StyledTableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
       {isFetching ? (

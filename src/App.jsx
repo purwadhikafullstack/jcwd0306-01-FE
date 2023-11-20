@@ -10,8 +10,6 @@ import AdminAppBar from './components/admin/AppBar/AppBar';
 import CustomerAppBar from './components/customer/AppBar/AppBar';
 import HomePage from './pages/customer/HomePage';
 import { Cart } from './pages/customer/Cart';
-import api from './constants/api';
-import { constant } from './constants/constant';
 import { Checkout } from './pages/customer/Checkout';
 import { Register } from './pages/register';
 import { Verify } from './pages/verify';
@@ -25,19 +23,21 @@ import { Payment } from './pages/customer/OrderPayment';
 import { TransitionPage } from './pages/customer/Transition';
 import { PaymentList } from './pages/customer/PaymentList';
 import { OrderList } from './pages/customer/OrderList';
-import { ChatRoom } from './pages/customer/Chatroom';
+import { Chat } from './pages/customer/Chat';
 import ForgetPassword from './pages/ForgetPassword';
 import ChangePassword from './pages/ChangePassword';
 import { TransactionPage } from './pages/admin/TransactionPage';
-import { socketListener } from './constants/socketListener';
-import AdminProductPage from './pages/admin/ProductPage';
+import { socketListener } from './utils/socketListener';
 import { CustomerAddressPage } from './pages/customer/Address';
 import { AuthorizeUser } from './middlewares/auth';
+import { AdminChatRoom } from './components/Chat/AdminChatRoom';
+import { fetchCartItemAndNotif } from './utils/fetchCartItemAndNotif';
 import WarehouseDetailPage from './pages/admin/WarehouseDetailPage';
 import { AdministratorPage } from './pages/admin/AdministratorPage';
 import { AllUsersPage } from './pages/admin/AllUsersPage';
 import { ReportPage } from './pages/admin/ReportPage';
 import CustomerNavBar from './components/customer/NavBar/NavBar';
+import AdminProductPage from './pages/admin/ProductPage';
 import CustomerProductPage from './pages/customer/ProductPage';
 import useIsPathName from './hooks/useIsPathName';
 
@@ -46,10 +46,13 @@ const socketConn = io(import.meta.env.VITE_API_BASE_URL);
 function App() {
   const authUser = useSelector((states) => states.authUser);
   const isAdminPage = useIsPathName('admin');
+  const orderStatus = useSelector((states) => states.orderStatus);
+  const chatAttr = useSelector((states) => states.chatRoom);
   const dispatch = useDispatch();
   const theme = useTheme();
   const [warehouseId, setWarehouseId] = useState([]);
-
+  const [chatAttrAdmin, setChatAttrAdmin] = useState(new Map());
+  
   useEffect(() => {
     dispatch(asyncReceiveUser());
   }, [dispatch]);
@@ -60,22 +63,19 @@ function App() {
     else document.body.style.backgroundColor = theme.palette.background.paper;
   }, [isAdminPage]);
 
-  const fetchCartItem = async () => {
-    if (authUser?.id) {
-      const { data } = await api.get(`/user/details/${authUser?.id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
-      setWarehouseId(data.WarehouseUsers);
-      dispatch({ type: constant.updateOrderStatus, payload: data });
-      dispatch({ type: constant.updateProductOnCart, payload: data.Carts });
-      dispatch({ type: constant.updateUnpaid, payload: data.UserOrder });
-    }
-  };
-
   useEffect(() => {
-    fetchCartItem();
+    setChatAttrAdmin(chatAttr);
+  }, [chatAttr]);
+  useEffect(() => {
+    fetchCartItemAndNotif(authUser, setWarehouseId, dispatch);
     socketConn.connect();
-    socketListener(socketConn, dispatch, warehouseId, authUser?.id);
+    socketListener(
+      socketConn,
+      dispatch,
+      warehouseId,
+      authUser?.id,
+      orderStatus
+    );
 
     // return () => socketConn.disconnect();
   }, [localStorage.getItem('token')]);
@@ -89,6 +89,10 @@ function App() {
           <Alert />
           <LoadingBar />
           <AdminAppBar />
+          <AdminChatRoom
+            chatAttrAdmin={chatAttrAdmin}
+            setChatAttrAdmin={setChatAttrAdmin}
+          />
           <Routes>
             {authUser.isAdmin && (
               <Route path="/admin/products" element={<AdminProductPage />} />
@@ -101,7 +105,10 @@ function App() {
               path="/admin/warehouses/:warehouseId"
               element={<WarehouseDetailPage />}
             />
-            <Route path="/admin/transactions" element={<TransactionPage />} />
+            <Route
+              path="/admin/transactions"
+              element={<TransactionPage warehouseId={warehouseId} />}
+            />
             <Route
               path="/admin/administrator"
               element={<AdministratorPage />}
@@ -119,43 +126,58 @@ function App() {
   }
 
   // CUSTOMER PAGE
-  return (
-    <>
-      <Alert />
-      <LoadingBar />
-      <CustomerAppBar />
-      <Routes>
-        {authUser === null && <Route path="/login" element={<LoginPage />} />}
-        <Route path="/" element={<HomePage />} />
-        <Route path="*" element={<Navigate to="/" />} />
-        <Route path="/cart" element={<Cart />} />
-        {authUser === null && <Route path="/register" element={<Register />} />}
-        {authUser !== null && <Route path="/verify" element={<Verify />} />}
-        <Route path="/cart/shipment" element={<Checkout />} />
-        <Route path="/products" element={<CustomerProductPage />} />
-        <Route path="/products/:productId" element={<ProductDetailPage />} />
-        <Route
-          path="/user/settings"
-          element={
-            <AuthorizeUser>
-              <ProfileDashoard />
-            </AuthorizeUser>
-          }
-        />
-        <Route path="/payment" element={<TransitionPage />} />
-        <Route path="/payment/payment-list" element={<PaymentList />} />
-        <Route path="/payment/:orderId" element={<Payment />} />
-        <Route path="/order-list" element={<OrderList />} />
-        <Route path="/chatroom" element={<ChatRoom />} />
-        {authUser === null && (
+  if (authUser === null) {
+    return (
+      <>
+        <Alert />
+        <LoadingBar />
+        <CustomerAppBar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
-        )}
-        <Route path="/change-password" element={<ChangePassword />} />
-        <Route path="/user/address" element={<CustomerAddressPage />} />
-      </Routes>
-      <CustomerNavBar />
-    </>
-  );
+          <Route path="/products" element={<CustomerProductPage />} />
+          <Route path="/products/:productId" element={<ProductDetailPage />} />
+        </Routes>
+        <CustomerNavBar />
+      </>
+    );
+  }
+  return (
+      <>
+        <Alert />
+        <LoadingBar />
+        <CustomerAppBar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/verify" element={<Verify />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/cart/shipment" element={<Checkout />} />
+          <Route path="/payment" element={<TransitionPage />} />
+          <Route path="/payment/payment-list" element={<PaymentList />} />
+          <Route path="/payment/:orderId" element={<Payment />} />
+          <Route path="/products" element={<CustomerProductPage />} />
+          <Route path="/products/:productId" element={<ProductDetailPage />} />
+          <Route path="/order-list" element={<OrderList />} />
+          <Route path="/chatroom" element={<Chat />} />
+          <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/user/address" element={<CustomerAddressPage />} />
+          <Route
+            path="/user/settings"
+            element={
+              <AuthorizeUser>
+                <ProfileDashoard />
+              </AuthorizeUser>
+            }
+          />
+        </Routes>
+        <CustomerNavBar />
+      </>
+    );
 }
 
 export default App;
