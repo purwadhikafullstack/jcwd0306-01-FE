@@ -20,6 +20,7 @@ import { EditDialog } from './EditDialog';
 
 function AdministratorTableItem() {
   const warehouseAdmin = useSelector((states) => states.administrator);
+  console.log(warehouseAdmin);
   const dispatch = useDispatch();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
@@ -82,7 +83,7 @@ function AdministratorTableItem() {
     <>
       <TableBody>
         {/* When WH-admin not found */}
-        {!warehouseAdmin.length && (
+        {!warehouseAdmin?.length && (
           <TableRow>
             <TableCell colSpan={5}>
               <Typography variant="body2" align="center" ml={10}>
@@ -93,23 +94,23 @@ function AdministratorTableItem() {
         )}
 
         {/* When category exist */}
-        {warehouseAdmin.map((val) => (
+        {warehouseAdmin?.map((val) => (
           <TableRow key={val.id}>
             {/* ID column */}
             <TableCell>{idCounter++}</TableCell>
 
             {/* Name column */}
-            <TableCell>{val.User.firstName}</TableCell>
+            <TableCell>{val?.User?.firstName}</TableCell>
 
             {/* Email column */}
-            <TableCell>{val.User.email}</TableCell>
+            <TableCell>{val?.User?.email}</TableCell>
 
             {/* Warehouse column */}
-            <TableCell>{val.Warehouse.name}</TableCell>
+            <TableCell>{val?.Warehouse?.name}</TableCell>
 
             {/* Warehouse Address */}
             <TableCell>
-              {val.Warehouse.WarehouseAddress.Province.name}
+              {val?.Warehouse?.WarehouseAddress?.Province?.name}
             </TableCell>
 
             {/* Action column */}
@@ -118,7 +119,7 @@ function AdministratorTableItem() {
                 {/* Edit button */}
                 <Tooltip title="Edit WH-admin" arrow>
                   <IconButton
-                    onClick={() => handleEditDialogOpen(val, val.User.email)}
+                    onClick={() => handleEditDialogOpen(val, val?.User?.email)}
                     sx={{ '&:hover': { color: 'info.main' } }}
                   >
                     <EditNoteRounded />
@@ -130,7 +131,7 @@ function AdministratorTableItem() {
                   <IconButton
                     value="categoryId"
                     onClick={() =>
-                      handleDeleteDialogOpen(val.warehouseId, val.User.id)
+                      handleDeleteDialogOpen(val?.warehouseId, val?.User?.id)
                     }
                     sx={{ '&:hover': { color: 'error.main' } }}
                   >

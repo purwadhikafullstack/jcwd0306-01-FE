@@ -13,8 +13,8 @@ export function ReportPage() {
 
   useEffect(() => {
     updateQueryParams({
-      // sortBy: searchParams.get('sortBy') || 'name',
-      // orderBy: searchParams.get('orderBy') || 'ASC',
+      sortBy: searchParams.get('sortBy') || 'id',
+      orderBy: searchParams.get('orderBy') || 'ASC',
       page: searchParams.get('page') || 1,
       perPage: searchParams.get('perPage') || 10,
     });
@@ -24,18 +24,28 @@ export function ReportPage() {
     dispatch(
       asyncGetReports({
         name: searchParams.get('name'),
-        // sortBy: searchParams.get('sortBy'),
-        // orderBy: searchParams.get('orderBy'),
+        sortBy: searchParams.get('sortBy'),
+        orderBy: searchParams.get('orderBy'),
         page: searchParams.get('page'),
         perPage: searchParams.get('perPage'),
+        WH: searchParams.get('WH'),
+        category: searchParams.get('category'),
+        productName: searchParams.get('productName'),
+        startDate: searchParams.get('startDate'),
+        endDate: searchParams.get('endDate'),
       })
     );
   }, [
     dispatch,
-    // searchParams.get('sortBy'),
-    // searchParams.get('orderBy'),
+    searchParams.get('sortBy'),
+    searchParams.get('orderBy'),
     searchParams.get('page'),
     searchParams.get('perPage'),
+    searchParams.get('WH'),
+    searchParams.get('category'),
+    searchParams.get('productName'),
+    searchParams.get('startDate'),
+    searchParams.get('endDate'),
   ]);
 
   return (
