@@ -25,7 +25,9 @@ export function ShoppingSummary({
                 <span>{summaryTransaction.get(key).name}</span>
                 <span className="float-end text-right">
                   {key !== 'totalItems'
-                    ? `Rp${summaryTransaction
+                    ? `${
+                        key === 'totalDiscount' ? '-' : ''
+                      }Rp${summaryTransaction
                         .get(key)
                         .amount.toLocaleString(`id-ID`)}`
                     : `${summaryTransaction

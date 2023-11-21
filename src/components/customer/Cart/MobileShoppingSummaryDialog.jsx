@@ -49,7 +49,9 @@ export default function MobileShoppingSummaryDialog({
                   <div>{summaryTransaction.get(key).name}</div>
                   <div>
                     {key !== 'totalItems'
-                      ? `Rp${summaryTransaction
+                      ? `${
+                          key === 'totalDiscount' ? '-' : ''
+                        }Rp${summaryTransaction
                           .get(key)
                           .amount.toLocaleString(`id-ID`)}`
                       : `${summaryTransaction

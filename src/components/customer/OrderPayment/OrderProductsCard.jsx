@@ -9,7 +9,8 @@ import {
 import { CartItemImage } from '../Cart/CartItemImage';
 
 export function OrderProductCard({ product }) {
-  const price = product?.price || product?.Product?.price;
+  const { price, discount } = product.Product;
+  const finalPrice = product?.price || price - price * discount;
   return (
     <Card>
       <CardContent>
@@ -31,8 +32,12 @@ export function OrderProductCard({ product }) {
                     <small>
                       {product?.quantity} item
                       {product?.quantity > 1 ? 's' : null} (
-                      {product.Product.weight * product.quantity} gr) x Rp
-                      {Number(price).toLocaleString(`id-ID`)}
+                      {product.Product.weight * product.quantity} gr)
+                      <span> x </span>
+                      <del className="d-md-inline d-none">
+                        Rp{Number(price).toLocaleString(`id-ID`)}{' '}
+                      </del>
+                      <b>Rp{Number(finalPrice).toLocaleString(`id-ID`)}</b>
                     </small>
                   </Typography>
                 </div>
@@ -42,7 +47,9 @@ export function OrderProductCard({ product }) {
               <Typography className="text-end" flexShrink={1}>
                 <b>
                   Rp
-                  {Number(price).toLocaleString(`id-ID`)}
+                  {Number(finalPrice * product.quantity).toLocaleString(
+                    `id-ID`
+                  )}
                 </b>
               </Typography>
               <Typography

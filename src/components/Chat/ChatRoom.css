@@ -27,9 +27,13 @@
 .messagesBody {
   margin: 10;
   padding: 6px;
-  min-height: 50vh;
-  max-height: 52vh;
-  overflow-y: 'auto';
-  /* display: 'flex'; */
-  /* flex-direction: 'column-reverse'; */
+  height: 52vh;
+  /* max-height: 52vh; */
+  overflow: 'auto';
+  display: 'flex';
+  flex-direction: 'column-reverse';
+}
+
+#hiddenScrollBar::-webkit-scrollbar {
+  display: 'none';
 }
