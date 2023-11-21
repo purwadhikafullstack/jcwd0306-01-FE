@@ -16,12 +16,7 @@ import { SearchBox } from '../../components/customer/OrderList/Searchbox';
 import { fetchTransaction } from '../../components/admin/TransactionPage/fetchTransaction';
 import { PaginationTable } from '../../components/admin/TransactionPage/PaginationTable';
 import { WarehouseSelect } from '../../components/admin/TransactionPage/WarehouseSelect';
-
-function idSetter(setWarehouseIds, warehouseId = []) {
-  const temp = [];
-  warehouseId.forEach((val) => temp.push(val.warehouseId));
-  return setWarehouseIds(temp);
-}
+import { warehouseIdSetter } from '../../components/admin/TransactionPage/warehouseIdSetter';
 
 export function TransactionPage({ warehouseId }) {
   const userSelector = useSelector((state) => state.authUser);
@@ -38,7 +33,7 @@ export function TransactionPage({ warehouseId }) {
   const xsOnly = useMediaQuery(theme.breakpoints.up('sm'));
 
   useEffect(() => {
-    idSetter(setWarehouseIds, warehouseId);
+    warehouseIdSetter(setWarehouseIds, warehouseId);
   }, [warehouseId]);
 
   useEffect(() => {

@@ -36,10 +36,12 @@ import WarehouseDetailPage from './pages/admin/WarehouseDetailPage';
 import { AdministratorPage } from './pages/admin/AdministratorPage';
 import { AllUsersPage } from './pages/admin/AllUsersPage';
 import { ReportPage } from './pages/admin/ReportPage';
+import { ChatPage } from './pages/admin/ChatPage';
 import CustomerNavBar from './components/customer/NavBar/NavBar';
 import AdminProductPage from './pages/admin/ProductPage';
 import CustomerProductPage from './pages/customer/ProductPage';
 import useIsPathName from './hooks/useIsPathName';
+
 
 const socketConn = io(import.meta.env.VITE_API_BASE_URL);
 
@@ -99,6 +101,10 @@ function App() {
             {authUser.isAdmin && (
               <Route path="/admin/categories" element={<CategoryPage />} />
             )}
+            <Route
+              path="/admin/messages"
+              element={<ChatPage warehouseId={warehouseId} />}
+            />
             {authUser.isAdmin && (
               <Route
                 path="/admin/administrator"

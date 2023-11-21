@@ -29,7 +29,7 @@
   padding: 6px;
   min-height: 50vh;
   max-height: 52vh;
-  overflow-y: 'scroll';
-  display: 'flex';
-  flex-direction: 'column-reverse';
+  overflow-y: 'auto';
+  /* display: 'flex'; */
+  /* flex-direction: 'column-reverse'; */
 }
