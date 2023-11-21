@@ -8,6 +8,8 @@ import { TextInput } from './TextInput';
 import { updateIsRead } from './updateIsRead';
 import { setDataFromSocket } from './setDataFromSocket';
 import { fetchMessages } from './fetchMessages';
+import './ChatRoom.css';
+import { messagesPositionSetter } from './messagesPositionSetter';
 
 const socketConn = io(import.meta.env.VITE_API_BASE_URL);
 
@@ -23,12 +25,9 @@ export function ChatBody({
   const warehouseId = searchParams.get('warehouseId');
   const dispatch = useDispatch();
   const endChatRoom = useRef(null);
-  const scrollToBottom = () => {
-    endChatRoom.current.scrollIntoView({ behaviour: 'smooth' });
-  };
-
+  const scrollToBottom = () => endChatRoom.current.scrollIntoView();
+  console.log(messages.length);
   const handleNext = () => {
-    console.log(page.current);
     page.current += 1;
     fetchMessages(
       userSelector?.id,
@@ -37,8 +36,9 @@ export function ChatBody({
       page?.current,
       totalData
     );
-    console.log(page.current);
   };
+
+  const dummy = useRef(20);
 
   useEffect(() => {
     socketConn.connect();
@@ -67,98 +67,18 @@ export function ChatBody({
           : `Chat room for order-(${orderId})`}
       </Typography>
       <Paper id="style-1" className="messagesBody">
-        {messages.length ? null : (
-          <div>Start writting your message to admin</div>
-        )}
+        {messages.length ? null : <div>Start writting your message</div>}
         <InfiniteScroll
-          dataLength={messages.length}
+          dataLength={20}
           next={handleNext}
-          style={{
-            display: 'flex',
-            flexDirection: 'column-reverse',
-            maxHeight: '50vh',
-          }} // To put endMessage and loader to the top.
-          inverse
+          className="d-flex flex-column-reverse"
+          style={{ maxHeight: '50vh' }}
+          // inverse
           hasMore
           loader={<h4>Loading...</h4>}
           scrollableTarget="messagesBody"
         >
-          {messages.map((msg) => {
-            if (
-              msg?.receiverId === userSelector?.id &&
-              msg?.senderId !== msg?.receiverId
-            )
-              return (
-                <MessageLeft
-                  key={msg?.id}
-                  message={msg?.message}
-                  timestamp={msg?.createdAt}
-                  displayName="Admin"
-                  avatarDisp
-                />
-              );
-            if (
-              msg?.senderId === userSelector?.id &&
-              !msg?.receiverId &&
-              window.location.pathname.split(`/`)[1] === `admin`
-            )
-              return (
-                <MessageLeft
-                  key={msg?.id}
-                  message={msg?.message}
-                  timestamp={msg?.createdAt}
-                  displayName={msg?.Sender?.firstName}
-                  avatarDisp
-                />
-              );
-            if (msg?.senderId === userSelector?.id && !msg?.receiverId)
-              return (
-                <MessageRight
-                  key={msg?.id}
-                  message={msg?.message}
-                  timestamp={msg?.createdAt}
-                  displayName="テスト"
-                  avatarDisp
-                />
-              );
-            if (
-              msg?.senderId === userSelector?.id &&
-              msg?.receiverId &&
-              window.location.pathname.split(`/`)[1] === `admin`
-            )
-              return (
-                <MessageRight
-                  key={msg?.id}
-                  message={msg?.message}
-                  timestamp={msg?.createdAt}
-                  displayName="テスト"
-                  avatarDisp
-                />
-              );
-            if (
-              msg?.senderId === userSelector?.id &&
-              msg?.receiverId === userSelector?.id &&
-              window.location.pathname.split(`/`)[1] !== `admin`
-            )
-              return (
-                <MessageLeft
-                  key={msg?.id}
-                  message={msg?.message}
-                  timestamp={msg?.createdAt}
-                  displayName={msg?.Sender?.firstName}
-                  avatarDisp
-                />
-              );
-            return (
-              <MessageLeft
-                key={msg?.id}
-                message={msg?.message}
-                timestamp={msg?.createdAt}
-                displayName={msg?.Sender?.firstName}
-                avatarDisp
-              />
-            );
-          })}
+          {messages.map((msg) => messagesPositionSetter(msg, userSelector))}
           <div ref={endChatRoom} />
         </InfiniteScroll>
       </Paper>

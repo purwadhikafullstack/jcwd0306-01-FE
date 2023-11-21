@@ -7,9 +7,10 @@ export const fetchMessages = async (
   page,
   totalData
 ) => {
-  console.log(`executed`, page);
+  const receiverId = searchParams.get('receiverId');
+  const orderId = searchParams.get('orderId');
   const { data } = await api.get(
-    `/chat/${userId}/${searchParams.get('orderId')}?page=${page || 1}`
+    `/chat/${receiverId || userId}/${orderId}?page=${page || 1}`
   );
   setMessages(data.rows);
   totalData.current = data.count;

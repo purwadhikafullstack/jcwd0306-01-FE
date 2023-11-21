@@ -37,6 +37,7 @@ import WarehouseDetailPage from './pages/admin/WarehouseDetailPage';
 import { AdministratorPage } from './pages/admin/AdministratorPage';
 import { AllUsersPage } from './pages/admin/AllUsersPage';
 import { ReportPage } from './pages/admin/ReportPage';
+import { ChatPage } from './pages/admin/ChatPage';
 
 const socketConn = io(import.meta.env.VITE_API_BASE_URL);
 
@@ -97,6 +98,10 @@ function App() {
             {authUser.isAdmin && (
               <Route path="/admin/categories" element={<CategoryPage />} />
             )}
+            <Route
+              path="/admin/messages"
+              element={<ChatPage warehouseId={warehouseId} />}
+            />
             <Route path="/admin/warehouses" element={<WarehousePage />} />
             <Route
               path="/admin/warehouses/:warehouseId"

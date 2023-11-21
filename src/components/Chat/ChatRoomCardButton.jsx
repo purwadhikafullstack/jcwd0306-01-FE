@@ -19,6 +19,8 @@ export function ChatRoomCardButton({
         onClick={() => {
           page.current = 1;
           setSearchParams((params) => {
+            if (window.location.pathname.split('/')[1] === 'admin')
+              params.set('receiverId', room.senderId);
             params.set(`orderId`, room.orderId);
             params.set('warehouseId', room.warehouseId);
             return params;
