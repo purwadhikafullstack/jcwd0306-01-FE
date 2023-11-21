@@ -10,19 +10,19 @@ import AccountButton from './AccountButton';
 import NotificationButton from './NotificationButton';
 import MessageButton from './MessageButton';
 import GGLogo from '../../../GGLogo';
-import checkLocationPathName from '../checkLocationPathName';
+import useIsPathName from '../../../../hooks/useIsPathName';
 
 function MainToolbar({ setIsCategoryDrawerOpen }) {
   const authUser = useSelector((states) => states.authUser);
   const theme = useTheme();
-  const isCartPage = checkLocationPathName();
+  const isCartPage = useIsPathName('cart');
 
   return (
     <Toolbar
       sx={{
         gap: 2,
         [theme.breakpoints.down('sm')]: {
-          display: isCartPage ? `none` : `flex`,
+          display: isCartPage ? 'none' : 'flex',
         },
       }}
     >

@@ -48,7 +48,7 @@ function deactivateProductActionCreator(product) {
 
 function asyncGetProducts({
   getType = 'REPLACE',
-  name,
+  search,
   categoryId,
   warehouseId,
   sortBy,
@@ -62,7 +62,24 @@ function asyncGetProducts({
     try {
       dispatch(showLoading());
 
-      const nameQ = name ? `name=${encodeURIComponent(name)}&` : '';
+      const newSortBy = [
+        'id',
+        'name',
+        'description',
+        'price',
+        'weight',
+        'discount',
+        'createdAt',
+        'updatedAt',
+        'deletedAt',
+        'stock',
+        'inactive-stock',
+        'sold',
+      ].includes(sortBy)
+        ? sortBy
+        : 'updatedAt';
+
+      const searchQ = search ? `search=${encodeURIComponent(search)}&` : '';
       const categoryIdQ =
         categoryId && categoryId !== '0'
           ? `categoryId=${encodeURIComponent(categoryId)}&`
@@ -70,17 +87,17 @@ function asyncGetProducts({
       const warehouseIdQ = warehouseId
         ? `warehouseId=${encodeURIComponent(warehouseId)}&`
         : '';
-      const sortByQ = sortBy ? `sortBy=${encodeURIComponent(sortBy)}&` : '';
+      const sortByQ = `sortBy=${encodeURIComponent(newSortBy)}&`;
       const orderByQ = orderBy ? `orderBy=${encodeURIComponent(orderBy)}&` : '';
-      const paranoidQ = paranoid
-        ? `paranoid=${encodeURIComponent(true)}&`
-        : `paranoid=${encodeURIComponent(false)}&`;
-      const isPaginatedQ = isPaginated
-        ? `isPaginated=${encodeURIComponent(true)}&`
-        : `isPaginated=${encodeURIComponent(false)}&`;
+      const paranoidQ =
+        paranoid === false ? `paranoid=${encodeURIComponent(false)}&` : '';
+      const isPaginatedQ =
+        isPaginated === false
+          ? `isPaginated=${encodeURIComponent(false)}&`
+          : '';
       const pageQ = page ? `page=${encodeURIComponent(page)}&` : '';
       const perPageQ = perPage ? `perPage=${encodeURIComponent(perPage)}&` : '';
-      const allQuery = `?${nameQ}${categoryIdQ}${warehouseIdQ}${sortByQ}${orderByQ}${paranoidQ}${isPaginatedQ}${pageQ}${perPageQ}`;
+      const allQuery = `?${searchQ}${categoryIdQ}${warehouseIdQ}${sortByQ}${orderByQ}${paranoidQ}${isPaginatedQ}${pageQ}${perPageQ}`;
 
       const { data } = await api.get(`/products${allQuery}`);
       if (getType === 'PUSH')

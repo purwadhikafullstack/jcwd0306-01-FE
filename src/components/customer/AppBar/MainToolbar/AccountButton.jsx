@@ -1,28 +1,24 @@
-import { Avatar, Box, Button, Tooltip } from '@mui/material';
+import { Avatar, Button, Stack, Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import LogoutIcon from '@mui/icons-material/Logout';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import HomeIcon from '@mui/icons-material/Home';
+import {
+  AccountCircleRounded,
+  AdminPanelSettingsRounded,
+  FavoriteRounded,
+  HomeRounded,
+  LogoutRounded,
+  ReceiptRounded,
+} from '@mui/icons-material';
 import { asyncUnsetAuthUser } from '../../../../states/authUser/action';
-// import api from '../../../../constants/api';
-
-// const apiUrl = import.meta.env.VITE_FE_BASE_URL;
 
 function AccountButton() {
   const authUser = useSelector((states) => states.authUser);
-  const isAdmin = authUser?.isAdmin || false;
   const dispatch = useDispatch();
   const nav = useNavigate();
 
-  const logout = () => {
+  const handleClickLogout = () => {
     dispatch(asyncUnsetAuthUser());
     nav('/');
-  };
-
-  const toProfile = () => {
-    nav('user/address');
   };
 
   return (
@@ -38,31 +34,73 @@ function AccountButton() {
         },
       }}
       title={
-        <Box display="flex" flexDirection="column">
-          <Button onClick={() => nav('/user/settings')}>
-            <AccountCircleIcon fontSize="small" />
-            &nbsp; Profile
-          </Button>
+        <Stack spacing={1}>
+          {/* Admin button */}
+          {authUser.isAdmin && (
+            <Button
+              onClick={() => {
+                nav('/admin/dashboard');
+              }}
+              variant="contained"
+              startIcon={<AdminPanelSettingsRounded />}
+              sx={{ textTransform: 'none' }}
+            >
+              Admin
+            </Button>
+          )}
+
+          {/* Account button */}
           <Button
-            sx={{ display: isAdmin ? 'block' : 'none' }}
-            onClick={() => {
-              nav('/admin/dashboard');
-            }}
+            onClick={() => nav('/user/settings')}
+            variant="contained"
+            startIcon={<AccountCircleRounded />}
+            sx={{ textTransform: 'none' }}
           >
-            <AdminPanelSettingsIcon />
-            Admin Page
+            Akun
           </Button>
-          <Button>My Order</Button>
-          <Button>My Wishlist</Button>
-          <Button onClick={toProfile}>
-            <HomeIcon fontSize="small" />
-            &nbsp; My Address
+
+          {/* Order button */}
+          <Button
+            onClick={() => {
+              nav('/order-list');
+            }}
+            variant="contained"
+            startIcon={<ReceiptRounded />}
+            sx={{ textTransform: 'none' }}
+          >
+            Transaksi
           </Button>
-          <Button color="error" onClick={logout}>
-            <LogoutIcon fontSize="small" />
-            Logout
+
+          {/* Wishlist button */}
+          <Button
+            variant="contained"
+            startIcon={<FavoriteRounded />}
+            sx={{ textTransform: 'none' }}
+          >
+            Wishlist
           </Button>
-        </Box>
+
+          {/* Address button */}
+          <Button
+            onClick={() => nav('/user/address')}
+            variant="contained"
+            startIcon={<HomeRounded />}
+            sx={{ textTransform: 'none' }}
+          >
+            Alamat
+          </Button>
+
+          {/* Logout button */}
+          <Button
+            onClick={handleClickLogout}
+            variant="contained"
+            color="error"
+            startIcon={<LogoutRounded />}
+            sx={{ textTransform: 'none' }}
+          >
+            Keluar
+          </Button>
+        </Stack>
       }
     >
       <Button

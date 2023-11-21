@@ -14,7 +14,7 @@ function MoreProductsButton() {
     dispatch(
       asyncGetProducts({
         getType: 'PUSH',
-        name: searchParams.get('name'),
+        search: searchParams.get('search'),
         categoryId: searchParams.get('categoryId'),
         sortBy: searchParams.get('sortBy'),
         orderBy: searchParams.get('orderBy'),

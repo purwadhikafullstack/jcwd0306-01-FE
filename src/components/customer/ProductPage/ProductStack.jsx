@@ -6,10 +6,10 @@ import {
   useTheme,
 } from '@mui/material';
 import { useSelector } from 'react-redux';
-import ProductCardItem from './ProductCardItem';
-import MoreProductsButton from './MoreProductsButton';
+import ProductCardItem from '../HomePage/ProductCardItem';
+import PaginationStack from './PaginationStack';
 
-function ProductCardList() {
+function ProductStack() {
   const products = useSelector((states) => states.products);
   const theme = useTheme();
   const isSmDown = useMediaQuery(theme.breakpoints.down('sm'));
@@ -34,7 +34,7 @@ function ProductCardList() {
         ))}
       </ImageList>
       {products.length > 0 ? (
-        <MoreProductsButton />
+        <PaginationStack />
       ) : (
         <Typography textAlign="center">Produk Tidak Ditemukan</Typography>
       )}
@@ -42,4 +42,4 @@ function ProductCardList() {
   );
 }
 
-export default ProductCardList;
+export default ProductStack;

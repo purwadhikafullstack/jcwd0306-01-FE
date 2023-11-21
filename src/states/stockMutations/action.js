@@ -25,7 +25,7 @@ function updateStockMutationStatusActionCreator(stockMutation) {
 
 function deleteStockMutationActionCreator(stockMutationId) {
   return {
-    type: ActionType.GET_STOCKMUTATIONS,
+    type: ActionType.DELETE_STOCKMUTATION,
     payload: { stockMutationId },
   };
 }
@@ -60,13 +60,28 @@ function asyncGetStockMutations({
     try {
       dispatch(showLoading());
 
+      const newSortBy = [
+        'id',
+        'status',
+        'quantity',
+        'type',
+        'orderId',
+        'createdAt',
+        'updatedAt',
+        'product-name',
+        'from-wh-name',
+        'to-wh-name',
+      ].includes(sortBy)
+        ? sortBy
+        : 'updatedAt';
+
       const searchQ = search ? `search=${encodeURIComponent(search)}&` : '';
       const warehouseIdQ = warehouseId
         ? `warehouseId=${encodeURIComponent(warehouseId)}&`
         : '';
       const statusQ = status ? `status=${encodeURIComponent(status)}&` : '';
       const typeQ = type ? `type=${encodeURIComponent(type)}&` : '';
-      const sortByQ = sortBy ? `sortBy=${encodeURIComponent(sortBy)}&` : '';
+      const sortByQ = `sortBy=${encodeURIComponent(newSortBy)}&`;
       const orderByQ = orderBy ? `orderBy=${encodeURIComponent(orderBy)}&` : '';
       const pageQ = page ? `page=${encodeURIComponent(page)}&` : '';
       const perPageQ = perPage ? `perPage=${encodeURIComponent(perPage)}&` : '';
@@ -83,17 +98,18 @@ function asyncGetStockMutations({
   };
 }
 
-function asyncUpdateStockMutationStatus(values) {
+function asyncUpdateStockMutationStatus(stockMutationId, values) {
   return async (dispatch) => {
     try {
       dispatch(showLoading());
-      const { data } = await api.patch('/stockmutations', values);
+      const { data } = await api.patch(
+        `/stockmutations/${stockMutationId}`,
+        values
+      );
       dispatch(updateStockMutationStatusActionCreator(data.data));
       dispatch(setAlertActionCreator());
-      return true;
     } catch (err) {
       dispatch(setAlertActionCreator({ err }));
-      return false;
     } finally {
       dispatch(hideLoading());
     }

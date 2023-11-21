@@ -2,25 +2,27 @@ import { useDispatch } from 'react-redux';
 import { useEffect, useRef } from 'react';
 import { InputAdornment, TextField } from '@mui/material';
 import { SearchOutlined } from '@mui/icons-material';
-import useCustomSearchParams from '../../../hooks/useCustomSearchParams';
-import { asyncGetProducts } from '../../../states/products/action';
+import { useParams } from 'react-router-dom';
+import useCustomSearchParams from '../../../../hooks/useCustomSearchParams';
+import { asyncGetStockMutations } from '../../../../states/stockMutations/action';
 
 function SearchInput() {
   const dispatch = useDispatch();
+  const { warehouseId } = useParams();
   const [searchParams, updateQueryParams] = useCustomSearchParams();
   const isFirstRender = useRef(true);
 
   const handleSearch = () => {
     dispatch(
-      asyncGetProducts({
-        getType: 'REPLACE',
+      asyncGetStockMutations({
         search: searchParams.get('search'),
-        categoryId: searchParams.get('categoryId'),
+        status: searchParams.get('status'),
+        type: searchParams.get('type'),
         sortBy: searchParams.get('sortBy'),
-        paranoid: false,
         orderBy: searchParams.get('orderBy'),
         page: searchParams.get('page'),
         perPage: searchParams.get('perPage'),
+        warehouseId,
       })
     );
   };
@@ -40,7 +42,7 @@ function SearchInput() {
       onChange={({ target }) => updateQueryParams({ search: target.value })}
       size="small"
       variant="outlined"
-      placeholder="Cari Produk"
+      placeholder="Cari Mutasi Stok"
       value={searchParams.get('search') || ''}
       sx={{ flexGrow: 1 }}
       InputProps={{

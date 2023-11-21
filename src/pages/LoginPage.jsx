@@ -3,13 +3,12 @@ import {
   Button,
   IconButton,
   InputAdornment,
-  Link,
   TextField,
   Typography,
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -19,8 +18,7 @@ import line from '../assets/line 2.png';
 import { asyncSetAuthUser } from '../states/authUser/action';
 import api from '../constants/api';
 import { setAlertActionCreator } from '../states/alert/action';
-
-const apiUrl = import.meta.env.VITE_FE_BASE_URL;
+import GadgetGalleryLogo from '../components/GadgetGalleryLogo';
 
 function LoginPage() {
   const nav = useNavigate();
@@ -53,8 +51,8 @@ function LoginPage() {
             val: { status: 'success', message: 'login success' },
           })
         );
-        if (data?.data?.data?.user?.isAdmin) return nav('/admin');
-        return nav('/');
+        if (data?.data?.data?.user?.isAdmin) nav('/admin');
+        else nav('/');
       } catch (err) {
         dispatch(
           setAlertActionCreator({
@@ -73,19 +71,11 @@ function LoginPage() {
   }
   return (
     <>
-      <Box
-        width="100%"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        m="20px"
-      >
-        <Typography fontFamily="sans-serif" fontSize="30px" color="green">
-          GadgetGallery
-        </Typography>
-      </Box>
+      <GadgetGalleryLogo
+        sx={{ m: '3rem', fontSize: '3rem', textAlign: 'center' }}
+      />
 
-      <Box display="flex" mt="4rem" justifyContent="space-evenly">
+      <Box display="flex" justifyContent="space-evenly">
         <Box
           maxWidth="100%"
           height="auto"
@@ -97,23 +87,19 @@ function LoginPage() {
             variant="h5"
             display="flex"
             justifyContent="center"
-            fontWeight="500"
+            fontWeight="700"
           >
-            Sign In
+            Masuk
           </Typography>
           <Typography
             display="flex"
             justifyContent="center"
             fontWeight="400"
             fontSize={12}
+            sx={{ '& a': { color: 'primary.main', textDecoration: 'none' } }}
           >
-            don`t have account yet?&nbsp;&nbsp;
-            <a
-              href={`${apiUrl}/register`}
-              style={{ color: 'green', textDecoration: 'none' }}
-            >
-              Register
-            </a>
+            belum punya akun?&nbsp;&nbsp;
+            <Link to="/register">Daftar</Link>
           </Typography>
           <Box
             display="flex"
@@ -176,7 +162,7 @@ function LoginPage() {
           <TextField
             onChange={(e) => inputHandler(e, 'password')}
             id="outlined-basic"
-            label="Password"
+            label="password"
             variant="outlined"
             size="small"
             type={see ? 'text' : 'password'}
@@ -211,20 +197,24 @@ function LoginPage() {
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password ? formik.errors.password : ''}
           />
-          <Typography fontSize="small" sx={{ m: 0.5 }}>
-            forget your password? &nbsp;
-            <Link href="/forget-password" sx={{ textDecoration: 'none' }}>
-              click here
-            </Link>
+          <Typography
+            fontSize="small"
+            sx={{
+              m: 0.5,
+              '& a': { color: 'primary.main', textDecoration: 'none' },
+            }}
+          >
+            lupa password?&nbsp;&nbsp;
+            <Link to="/forget-password">klik disini</Link>
           </Typography>
           <Button
-            variant="outlined"
-            style={{ marginTop: '10px', width: '100%', height: '50px' }}
+            fullWidth
+            variant="contained"
             size="large"
             onClick={formik.handleSubmit}
             disabled={isButtonDisabled}
           >
-            Sign In
+            Masuk
           </Button>
         </Box>
       </Box>
