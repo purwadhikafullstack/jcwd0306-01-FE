@@ -25,6 +25,11 @@ function AccountButton() {
     nav('user/address');
   };
 
+  const buttonStyles = {
+    height: '48px', // Adjust the height as needed
+    justifyContent: 'flex-start',
+  };
+
   return (
     <Tooltip
       disableFocusListener
@@ -39,26 +44,24 @@ function AccountButton() {
       }}
       title={
         <Box display="flex" flexDirection="column">
-          <Button onClick={() => nav('/user/settings')}>
+          <Button onClick={() => nav('/user/settings')} sx={buttonStyles}>
             <AccountCircleIcon fontSize="small" />
             &nbsp; Profile
           </Button>
           <Button
-            sx={{ display: isAdmin ? 'block' : 'none' }}
-            onClick={() => {
-              nav('/admin/dashboard');
-            }}
+            sx={{ ...buttonStyles, display: isAdmin ? 'block' : 'none' }}
+            onClick={() => nav('/admin/dashboard')}
           >
-            <AdminPanelSettingsIcon />
-            Admin Page
+            <AdminPanelSettingsIcon fontSize="small" />
+            &nbsp; Admin Page
           </Button>
-          <Button>My Order</Button>
-          <Button>My Wishlist</Button>
-          <Button onClick={toProfile}>
+          <Button sx={buttonStyles}>My Order</Button>
+          <Button sx={buttonStyles}>My Wishlist</Button>
+          <Button onClick={toProfile} sx={buttonStyles}>
             <HomeIcon fontSize="small" />
             &nbsp; My Address
           </Button>
-          <Button color="error" onClick={logout}>
+          <Button color="error" onClick={logout} sx={buttonStyles}>
             <LogoutIcon fontSize="small" />
             Logout
           </Button>
