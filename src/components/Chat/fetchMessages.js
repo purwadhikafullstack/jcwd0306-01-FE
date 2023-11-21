@@ -12,6 +12,13 @@ export const fetchMessages = async (
   const { data } = await api.get(
     `/chat/${receiverId || userId}/${orderId}?page=${page || 1}`
   );
-  setMessages(data.rows);
+  setMessages((msg) => {
+    const temp = [...msg];
+    data.rows.forEach((val) => {
+      const rec = msg.find((item) => item.id === val.id);
+      if (!rec) temp.push(val);
+    });
+    return temp;
+  });
   totalData.current = data.count;
 };

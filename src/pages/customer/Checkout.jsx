@@ -3,7 +3,6 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { all } from 'axios';
 import { CartItemList } from '../../components/customer/Cart/CartItemList';
 import { StackBorder } from '../../components/customer/Cart/StackBorder';
 import { ShoppingSummary } from '../../components/customer/Cart/ShoppingSummary';
@@ -43,7 +42,6 @@ export function Checkout() {
   const [disableButton, setDisableButton] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const directBuyItem = useLocation().state;
-  console.log(directBuyItem);
   cartCalculator(cart, summaryTransaction, directBuyItem, shippingMethod);
   const grandTotal = grandTotalCalculator(summaryTransaction);
   const defaultAddress = addresses.find((destination) => destination.isDefault);
@@ -67,8 +65,10 @@ export function Checkout() {
 
   async function fetchAddresses() {
     try {
-      const { data } = await api.get(`/user_address/${userSelector?.id}`);
-      setAddresses(data.rows);
+      if (userSelector?.id) {
+        const { data } = await api.get(`/user_address/${userSelector?.id}`);
+        setAddresses(data.rows);
+      }
     } catch (error) {
       dispatch(constant.setError(error));
     }

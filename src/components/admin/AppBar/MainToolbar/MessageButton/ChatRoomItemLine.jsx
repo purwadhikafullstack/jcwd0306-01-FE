@@ -22,7 +22,7 @@ export function ChatRoomItemLine({ item = {} }) {
         }}
       >
         <Row className="m-0 px-1 py-2 border-top border-secondary-subtle w-100">
-          <Col className="p-0" md="auto" key={1}>
+          <Col className="  p-0" md="auto" key={1}>
             <Avatar sx={{ fontSize: '24px', width: '24px', height: '24px' }}>
               <AccountCircleRoundedIcon />
             </Avatar>
@@ -38,19 +38,21 @@ export function ChatRoomItemLine({ item = {} }) {
             <div style={{ textOverflow: 'ellipsis' }}>{item?.message}</div>
           </Col>
           <Col md="auto">
-            <span
-              className="text-light text-center bg-danger z-2 text-decoration-none rounded-pill"
-              style={{
-                top: '1px',
-                right: '0px',
-                minWidth: '11px',
-                height: '15px',
-                fontSize: '11px',
-                padding: '0 3px',
-              }}
-            >
-              !
-            </span>
+            {!item?.isRead ? (
+              <span
+                className="text-light text-center bg-danger z-2 text-decoration-none rounded-pill"
+                style={{
+                  top: '1px',
+                  right: '0px',
+                  minWidth: '11px',
+                  height: '15px',
+                  fontSize: '11px',
+                  padding: '0 3px',
+                }}
+              >
+                !
+              </span>
+            ) : null}
           </Col>
         </Row>
       </Button>

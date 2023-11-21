@@ -16,7 +16,10 @@ export function cartCalculator(
     });
     accumulatorMap.set(`totalDiscount`, {
       ...accumulatorMap.get(`totalDiscount`),
-      amount: directBuyItem.Product.discount * directBuyItem.quantity,
+      amount:
+        directBuyItem.Product.discount *
+        directBuyItem.Product.price *
+        directBuyItem.quantity,
     });
     accumulatorMap.set(`totalItems`, {
       ...accumulatorMap.get(`totalItems`),
@@ -36,7 +39,7 @@ export function cartCalculator(
         ...accumulatorMap.get(`totalDiscount`),
         amount:
           accumulatorMap.get(`totalDiscount`).amount +
-          item.Product.discount * item.quantity,
+          item.Product.discount * item.Product.price * item.quantity,
       });
       accumulatorMap.set(`totalItems`, {
         ...accumulatorMap.get(`totalItems`),
@@ -49,7 +52,8 @@ export function cartCalculator(
 export const grandTotalCalculator = (summaryTransaction = new Map()) => {
   let sum = 0;
   summaryTransaction.forEach((value, key) => {
-    if (key !== 'totalItems') sum = value.amount + sum;
+    if (key === 'totalDiscount') sum = -value.amount + sum;
+    else if (key !== 'totalItems') sum = value.amount + sum;
   });
   return sum;
 };

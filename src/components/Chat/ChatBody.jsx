@@ -3,11 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { MessageLeft, MessageRight } from './Message';
 import { TextInput } from './TextInput';
 import { updateIsRead } from './updateIsRead';
 import { setDataFromSocket } from './setDataFromSocket';
-import { fetchMessages } from './fetchMessages';
 import './ChatRoom.css';
 import { messagesPositionSetter } from './messagesPositionSetter';
 
@@ -19,14 +17,13 @@ export function ChatBody({
   searchParams,
   page,
   totalData,
+  fetchMessages,
 }) {
   const userSelector = useSelector((state) => state.authUser);
   const orderId = searchParams.get('orderId');
   const warehouseId = searchParams.get('warehouseId');
   const dispatch = useDispatch();
-  const endChatRoom = useRef(null);
-  const scrollToBottom = () => endChatRoom.current.scrollIntoView();
-  console.log(messages.length);
+
   const handleNext = () => {
     page.current += 1;
     fetchMessages(
@@ -37,8 +34,6 @@ export function ChatBody({
       totalData
     );
   };
-
-  const dummy = useRef(20);
 
   useEffect(() => {
     socketConn.connect();
@@ -56,9 +51,6 @@ export function ChatBody({
       updateIsRead(setMessages, dispatch, messages, userSelector?.id);
   }, [userSelector, messages]);
 
-  useEffect(() => {
-    scrollToBottom();
-  }, []);
   return (
     <Paper className="paper">
       <Typography variant="h6" pl={2}>
@@ -66,20 +58,28 @@ export function ChatBody({
           ? 'Write message to our staff'
           : `Chat room for order-(${orderId})`}
       </Typography>
-      <Paper id="style-1" className="messagesBody">
+      <Paper
+        id="scrollableDiv"
+        className="messagesBody"
+        sx={{
+          height: '52vh',
+          overflow: 'auto',
+          display: 'flex',
+          flexDirection: 'column-reverse',
+        }}
+      >
         {messages.length ? null : <div>Start writting your message</div>}
         <InfiniteScroll
-          dataLength={20}
+          dataLength={messages.length}
           next={handleNext}
+          id="hiddenScrollBar"
           className="d-flex flex-column-reverse"
-          style={{ maxHeight: '50vh' }}
-          // inverse
-          hasMore
+          inverse
+          hasMore={totalData.current > messages.length}
           loader={<h4>Loading...</h4>}
-          scrollableTarget="messagesBody"
+          scrollableTarget="scrollableDiv"
         >
           {messages.map((msg) => messagesPositionSetter(msg, userSelector))}
-          <div ref={endChatRoom} />
         </InfiniteScroll>
       </Paper>
       <TextInput

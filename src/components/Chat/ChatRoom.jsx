@@ -130,6 +130,7 @@ export function ChatRoom() {
               searchParams={searchParams}
               page={page}
               totalData={totalData}
+              fetchMessages={fetchMessages}
             />
           ) : (
             <Paper className="paper" sx={{ minHeight: '55vh' }}>

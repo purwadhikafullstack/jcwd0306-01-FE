@@ -21,7 +21,7 @@ export default function CitySelect({ addressFormik }) {
     const { data } = await api.get(`/city`, {
       params: { name: cityName, provinceId },
     });
-    setCities(data);
+    setCities(data.rows);
     setIsLoading(false);
   };
   const [val, setVal] = useState({ id: 0, name: '' });
@@ -43,7 +43,9 @@ export default function CitySelect({ addressFormik }) {
     <Autocomplete
       id="city-select"
       sx={{ width: 300 }}
-      options={isLoading ? [{ name: 'loading...' }] : cities}
+      options={
+        isLoading ? [{ name: 'loading...' }] : [val.id ? val : null, ...cities]
+      }
       value={val.id !== 0 ? val : null}
       autoHighlight
       disabled={!addressFormik.values.provinceId}

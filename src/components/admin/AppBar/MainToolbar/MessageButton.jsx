@@ -18,7 +18,7 @@ function MessageButton() {
   };
   useEffect(() => {
     if (userSelector?.id && warehouseId.length) fetchUnreadMsg();
-  }, [userSelector, warehouseId]);
+  }, [userSelector?.id, warehouseId]);
   return (
     <div
       className="position-relative"

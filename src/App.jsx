@@ -42,7 +42,6 @@ import AdminProductPage from './pages/admin/ProductPage';
 import CustomerProductPage from './pages/customer/ProductPage';
 import useIsPathName from './hooks/useIsPathName';
 
-
 const socketConn = io(import.meta.env.VITE_API_BASE_URL);
 
 function App() {

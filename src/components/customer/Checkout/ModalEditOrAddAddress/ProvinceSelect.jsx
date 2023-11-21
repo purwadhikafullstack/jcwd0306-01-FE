@@ -22,7 +22,7 @@ export default function ProvinceSelect({ addressFormik }) {
   const [val, setVal] = useState({ id: 0, name: '' });
   const fetchProvinces = async (provinceName = '') => {
     const { data } = await api.get(`/province?name=${provinceName}`);
-    setProvinces(data);
+    setProvinces(data.rows);
     setIsLoading(false);
   };
 
@@ -46,7 +46,11 @@ export default function ProvinceSelect({ addressFormik }) {
     <Autocomplete
       id="province-select"
       sx={{ width: 300 }}
-      options={isLoading ? [{ name: 'loading...' }] : provinces}
+      options={
+        isLoading
+          ? [{ name: 'loading...' }]
+          : [val.id ? val : null, ...provinces]
+      }
       autoHighlight
       getOptionLabel={(option) => option.name}
       isOptionEqualToValue={(option, value) => option.id === value?.id}
