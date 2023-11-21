@@ -52,7 +52,7 @@ function App() {
   const theme = useTheme();
   const [warehouseId, setWarehouseId] = useState([]);
   const [chatAttrAdmin, setChatAttrAdmin] = useState(new Map());
-  
+
   useEffect(() => {
     dispatch(asyncReceiveUser());
   }, [dispatch]);
@@ -76,7 +76,6 @@ function App() {
       authUser?.id,
       orderStatus
     );
-
     // return () => socketConn.disconnect();
   }, [localStorage.getItem('token')]);
 
@@ -100,6 +99,18 @@ function App() {
             {authUser.isAdmin && (
               <Route path="/admin/categories" element={<CategoryPage />} />
             )}
+            {authUser.isAdmin && (
+              <Route
+                path="/admin/administrator"
+                element={<AdministratorPage />}
+              />
+            )}
+            {authUser.isAdmin && (
+              <Route path="/admin/users" element={<AllUsersPage />} />
+            )}
+            {authUser.isAdmin && (
+              <Route path="/admin/report" element={<ReportPage />} />
+            )}
             <Route path="/admin/warehouses" element={<WarehousePage />} />
             <Route
               path="/admin/warehouses/:warehouseId"
@@ -109,12 +120,6 @@ function App() {
               path="/admin/transactions"
               element={<TransactionPage warehouseId={warehouseId} />}
             />
-            <Route
-              path="/admin/administrator"
-              element={<AdministratorPage />}
-            />
-            <Route path="/admin/users" element={<AllUsersPage />} />
-            <Route path="/admin/report" element={<ReportPage />} />
             <Route path="/admin" element={<DashboardPage />} />
             <Route path="*" element={<Navigate to="/admin" />} />
           </Routes>
@@ -126,27 +131,8 @@ function App() {
   }
 
   // CUSTOMER PAGE
-  if (authUser === null) {
+  if (localStorage.getItem('token')) {
     return (
-      <>
-        <Alert />
-        <LoadingBar />
-        <CustomerAppBar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="*" element={<Navigate to="/" />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/change-password" element={<ChangePassword />} />
-          <Route path="/forget-password" element={<ForgetPassword />} />
-          <Route path="/products" element={<CustomerProductPage />} />
-          <Route path="/products/:productId" element={<ProductDetailPage />} />
-        </Routes>
-        <CustomerNavBar />
-      </>
-    );
-  }
-  return (
       <>
         <Alert />
         <LoadingBar />
@@ -178,6 +164,28 @@ function App() {
         <CustomerNavBar />
       </>
     );
+  }
+  if (authUser === null) {
+    return (
+      <>
+        <Alert />
+        <LoadingBar />
+        <CustomerAppBar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/products" element={<CustomerProductPage />} />
+          <Route path="/products/:productId" element={<ProductDetailPage />} />
+        </Routes>
+        <CustomerNavBar />
+      </>
+    );
+  }
+  return null;
 }
 
 export default App;
