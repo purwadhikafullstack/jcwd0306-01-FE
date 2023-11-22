@@ -10,12 +10,12 @@ function CustomerAddressButton() {
   const userAddress = useSelector((states) => states.userAddress);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isLogin = localStorage.getItem('token');
 
   const display = useMemo(() => {
     const mainAddress = userAddress.find((val) => val.isDefault);
     // kalo gaada main addressnya, kirim ke alamat paling pertama dari table
     const firstAddress = userAddress[0]?.City?.name;
-    const isUserLogin = localStorage.getItem('token');
 
     if (mainAddress) return mainAddress?.City.name || '';
     if (firstAddress) return firstAddress || '';
@@ -37,13 +37,13 @@ function CustomerAddressButton() {
         textTransform: 'none',
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
-        display: isUserLogin ? 'flex' : 'none',
+        // display: isLogin ? 'block' : 'none',
       }}
     >
       <Box component="span" sx={{ color: 'text.secondary', mr: 1 }}>
         Dikirim ke
       </Box>
-      <Box component="span">{display}</Box>
+      <Box component="span">{isLogin ? display : '-'}</Box>
     </Button>
   );
 }

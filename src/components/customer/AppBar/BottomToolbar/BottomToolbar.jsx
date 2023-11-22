@@ -9,8 +9,6 @@ function BottomToolbar() {
   const isSmDown = useMediaQuery(theme.breakpoints.down('sm'));
   const isCartPage = useIsPathName('cart');
 
-  const isUserLogin = localStorage.getItem('token');
-
   useEffect(() => {
     localStorage.getItem('token');
   }, []);

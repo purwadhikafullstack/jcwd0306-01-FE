@@ -22,7 +22,7 @@ function AccountButton() {
   };
 
   const buttonStyles = {
-    height: '48px', // Adjust the height as needed
+    height: '48px',
     justifyContent: 'flex-start',
   };
 
@@ -60,7 +60,6 @@ function AccountButton() {
             sx={buttonStyles}
             variant="contained"
             startIcon={<AccountCircleRounded />}
-            sx={{ textTransform: 'none' }}
           >
             Akun
           </Button>
