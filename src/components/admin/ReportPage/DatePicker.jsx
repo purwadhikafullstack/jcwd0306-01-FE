@@ -37,6 +37,7 @@ export function DatePicker({ open, setIsDateOpen }) {
       updateQueryParams({
         startDate: formattedDate?.startDate,
         endDate: formattedDate?.endDate,
+        page: 1,
       });
     } catch (error) {
       console.error(error);

@@ -29,6 +29,8 @@ import allUsersPaginationReducer from './allUsersPagination/reducer';
 import addressPaginationReducer from './AddressPagination/reducer';
 import salesReportReducer from './salesReport/reducer';
 import reportPaginationReducer from './salesReportPagination/reducer';
+import productHistoryReducer from './productHistory/reducer';
+import productHistoryPaginationReducer from './productHistoryPagination/reducer';
 
 const store = configureStore({
   reducer: {
@@ -61,6 +63,8 @@ const store = configureStore({
     addressPagination: addressPaginationReducer,
     salesReport: salesReportReducer,
     salesReportPagination: reportPaginationReducer,
+    productHistory: productHistoryReducer,
+    productHistoryPagination: productHistoryPaginationReducer,
   },
   middleware: [thunk],
 });
