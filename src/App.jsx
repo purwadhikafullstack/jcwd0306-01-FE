@@ -28,7 +28,7 @@ import ForgetPassword from './pages/ForgetPassword';
 import ChangePassword from './pages/ChangePassword';
 import { TransactionPage } from './pages/admin/TransactionPage';
 import { socketListener } from './utils/socketListener';
-import { CustomerAddressPage } from './pages/customer/Address';
+import { CustomerAddressPage } from './pages/Address';
 import { AuthorizeUser } from './middlewares/auth';
 import { AdminChatRoom } from './components/Chat/AdminChatRoom';
 import { fetchCartItemAndNotif } from './utils/fetchCartItemAndNotif';
@@ -41,6 +41,7 @@ import CustomerNavBar from './components/customer/NavBar/NavBar';
 import AdminProductPage from './pages/admin/ProductPage';
 import CustomerProductPage from './pages/customer/ProductPage';
 import useIsPathName from './hooks/useIsPathName';
+import { MonthlyReport } from './pages/admin/MonthlyReport';
 
 const socketConn = io(import.meta.env.VITE_API_BASE_URL);
 
@@ -125,6 +126,7 @@ function App() {
               path="/admin/transactions"
               element={<TransactionPage warehouseId={warehouseId} />}
             />
+            <Route path="/admin/report/monthly" element={<MonthlyReport />} />
             <Route path="/admin" element={<DashboardPage />} />
             <Route path="*" element={<Navigate to="/admin" />} />
           </Routes>

@@ -1,5 +1,5 @@
 import api from '../../constants/api';
-import { setAlertActionCreator } from '../alert/action';
+import { setAddressPaginationActionCreator } from '../AddressPagination/action';
 
 const ActionType = {
   GET_ADDRESS: 'GET_ADDRESS',
@@ -15,13 +15,20 @@ function getAddressActionCreator(addresses) {
   };
 }
 
-function asyncGetAddress(userId) {
+function asyncGetAddress({ userId, name, page, perPage }) {
   return async (dispatch) => {
     try {
-      const { data } = await api.get(`/user_address/${userId}`);
-      dispatch(getAddressActionCreator(data.rows));
+      const nameQ = name ? `name=${encodeURIComponent(name)}&` : '';
+      const pageQ = page ? `page=${encodeURIComponent(page)}&` : '';
+      const perPageQ = perPage ? `perPage=${encodeURIComponent(perPage)}&` : '';
+      const allQuery = `?${nameQ}${pageQ}${perPageQ}`;
+
+      const { data } = await api.get(
+        `/user_address/${userId}/customerAddress${allQuery}`
+      );
+      dispatch(getAddressActionCreator(data.data));
+      dispatch(setAddressPaginationActionCreator(data.info));
     } catch (error) {
-      // karena error nya di homepage sebelum login, jadi gausah dikasih alert
       console.log(error);
     }
   };

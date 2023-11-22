@@ -4,6 +4,7 @@ import { AddRounded } from '@mui/icons-material';
 import SearchInput from './SearchInput';
 import AdministratorTable from './AdministratorTable';
 import { CreatedDialog } from './CreateDialog/CreateDialog';
+import AdministratorFooter from './AdministratorFooter';
 
 function ContainerAdministrator() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -38,6 +39,9 @@ function ContainerAdministrator() {
         </Stack>
         {/* Category Table */}
         <AdministratorTable />
+
+        {/* Footer */}
+        <AdministratorFooter />
       </Stack>
 
       {/* Create Category Dialog */}

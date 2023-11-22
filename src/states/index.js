@@ -23,6 +23,12 @@ import userAddressReducer from './Address/reducer';
 import stockMutationsReducer from './stockMutations/reducer';
 import stockMutationPaginationReducer from './stockMutationPagination/reducer';
 
+import warehouseAdminPaginationReducer from './AdministratorPagination/reducer';
+import allUsersReducer from './users/reducer';
+import allUsersPaginationReducer from './allUsersPagination/reducer';
+import addressPaginationReducer from './AddressPagination/reducer';
+import salesReportReducer from './salesReport/reducer';
+import reportPaginationReducer from './salesReportPagination/reducer';
 
 const store = configureStore({
   reducer: {
@@ -49,6 +55,12 @@ const store = configureStore({
     userAddress: userAddressReducer,
     stockMutations: stockMutationsReducer,
     stockMutationPagination: stockMutationPaginationReducer,
+    warehouseAdminPagination: warehouseAdminPaginationReducer,
+    allUser: allUsersReducer,
+    allUserPagination: allUsersPaginationReducer,
+    addressPagination: addressPaginationReducer,
+    salesReport: salesReportReducer,
+    salesReportPagination: reportPaginationReducer,
   },
   middleware: [thunk],
 });

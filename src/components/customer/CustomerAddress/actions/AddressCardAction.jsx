@@ -20,7 +20,6 @@ export default function AddressAction({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [defaultAddressDialogOpen, setDefaultAddressDialogOpen] =
     useState(false);
-  const [disableDefaultBtn, setDisableDefaultBtn] = useState(false);
 
   const handleDefaultDialogOpen = () => {
     setDefaultAddressDialogOpen(true);
@@ -60,7 +59,6 @@ export default function AddressAction({
           display: address?.isDefault === true ? 'none' : 'inline-block',
         }}
         onClick={handleDefaultDialogOpen}
-        disabled={disableDefaultBtn}
       >
         Jadikan Alamat Utama
       </Button>

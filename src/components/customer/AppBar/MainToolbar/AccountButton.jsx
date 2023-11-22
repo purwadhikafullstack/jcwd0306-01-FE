@@ -21,6 +21,11 @@ function AccountButton() {
     nav('/');
   };
 
+  const buttonStyles = {
+    height: '48px', // Adjust the height as needed
+    justifyContent: 'flex-start',
+  };
+
   return (
     <Tooltip
       disableFocusListener
@@ -52,6 +57,7 @@ function AccountButton() {
           {/* Account button */}
           <Button
             onClick={() => nav('/user/settings')}
+            sx={buttonStyles}
             variant="contained"
             startIcon={<AccountCircleRounded />}
             sx={{ textTransform: 'none' }}

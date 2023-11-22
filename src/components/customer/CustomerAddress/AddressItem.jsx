@@ -11,24 +11,15 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import CheckIcon from '@mui/icons-material/Check';
 import AddressAction from './actions/AddressCardAction';
 import DrawerActionDialog from './dialogs/DrawerAddressAction';
 import api from '../../../constants/api';
 import { setAlertActionCreator } from '../../../states/alert/action';
-import { asyncReceiveUser } from '../../../states/authUser/action';
 import { asyncGetAddress } from '../../../states/Address/action';
 
-function AddressItem({
-  address,
-  setOpen,
-  setAddressToEdit,
-  isDefaultUpdated,
-  setChoosenAddress,
-  chosenAddress,
-}) {
+function AddressItem({ address, setOpen, setAddressToEdit }) {
   const isDesktop = useMediaQuery('(min-width:600px)');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const authUser = useSelector((states) => states.authUser);
@@ -43,7 +34,7 @@ function AddressItem({
           isDefault: 1,
         }
       );
-      dispatch(asyncGetAddress(authUser?.id));
+      dispatch(asyncGetAddress({ userId: authUser?.id }));
       dispatch(
         setAlertActionCreator({
           val: { status: 'success', message: result?.data },
@@ -67,7 +58,7 @@ function AddressItem({
   const deleteAddress = async () => {
     try {
       await api.delete(`/user_address/${authUser?.id}/${address?.id}`);
-      dispatch(asyncGetAddress(authUser?.id));
+      dispatch(asyncGetAddress({ userId: authUser?.id }));
       dispatch(
         setAlertActionCreator({
           val: {
@@ -82,15 +73,21 @@ function AddressItem({
     }
   };
 
+  // useEffect(() => {
+  //   if (authUser && authUser?.id) {
+  //     dispatch(asyncGetAddress(authUser?.id));
+  //   }
+  // }, [authUser, setDefaultAddress]);
+
   return (
     <Card
       sx={{
         width: isDesktop ? '45rem' : '19rem',
         color: 'black',
         backgroundColor:
-          chosenAddress && chosenAddress.id === address.id
-            ? '#d1f4f9'
-            : 'white',
+          address.isDefault === true
+            ? { backgroundColor: '#d1f4f9' }
+            : { backgroundColor: 'white' },
         ':hover':
           address.isDefault === true
             ? { backgroundColor: '#d1f4f9' }
@@ -116,7 +113,6 @@ function AddressItem({
                   </Typography>
                   <Typography
                     sx={{
-                      fontWeight: 450,
                       backgroundColor: 'grey',
                       color: 'white',
                       p: '2px',
@@ -163,30 +159,6 @@ function AddressItem({
                 justifyContent: 'center',
               }}
             >
-              {chosenAddress && chosenAddress.id === address.id && (
-                <CheckIcon
-                  sx={{
-                    marginRight: '8px',
-                    color: 'green',
-                    display: isDesktop ? 'inline-block' : 'none',
-                  }}
-                />
-              )}
-              <Button
-                variant="contained"
-                fullWidth={!isDesktop}
-                sx={{
-                  display:
-                    chosenAddress && chosenAddress.id === address.id
-                      ? 'none'
-                      : 'inline-block',
-                }}
-                onClick={() => {
-                  setChoosenAddress(address);
-                }}
-              >
-                Pilih
-              </Button>
               {address.isDefault ? (
                 <Button
                   onClick={() => {

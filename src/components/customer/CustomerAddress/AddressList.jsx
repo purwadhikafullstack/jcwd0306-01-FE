@@ -1,15 +1,10 @@
 import { ImageList } from '@mui/material';
+import { useSelector } from 'react-redux';
 import AddressItem from './AddressItem';
 
-function AddressList({
-  addresses,
-  setOpen,
-  setAddressToEdit,
-  setIsDefaultUpdated,
-  isDefaultUpdated,
-  setChoosenAddress,
-  chosenAddress,
-}) {
+function AddressList({ setOpen, setAddressToEdit }) {
+  const globalAddress = useSelector((state) => state.userAddress);
+
   return (
     <ImageList
       cols={1}
@@ -21,18 +16,14 @@ function AddressList({
         boxShadow: 4,
       }}
     >
-      {addresses && addresses.length > 0 ? (
-        addresses.map((address, idx) => (
+      {globalAddress && globalAddress.length > 0 ? (
+        globalAddress.map((address, idx) => (
           <AddressItem
             key={address?.id}
             address={address}
             idx={idx}
             setOpen={setOpen}
             setAddressToEdit={setAddressToEdit}
-            setIsDefaultUpdated={setIsDefaultUpdated}
-            isDefaultUpdated={isDefaultUpdated}
-            setChoosenAddress={setChoosenAddress}
-            chosenAddress={chosenAddress}
           />
         ))
       ) : (
