@@ -43,9 +43,7 @@ export default function CitySelect({ addressFormik }) {
     <Autocomplete
       id="city-select"
       sx={{ width: 300 }}
-      options={
-        isLoading ? [{ name: 'loading...' }] : [val.id ? val : null, ...cities]
-      }
+      options={isLoading ? [{ name: 'loading...' }] : cities}
       value={val.id !== 0 ? val : null}
       autoHighlight
       disabled={!addressFormik.values.provinceId}
