@@ -1,11 +1,25 @@
 /* eslint-disable no-plusplus */
-import { TableBody, TableCell, TableRow, Typography } from '@mui/material';
+import {
+  Button,
+  TableBody,
+  TableCell,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
+import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
+import { useState } from 'react';
 import formatDate from '../../../utils/salesReport/formatDate';
+import { StockMutationDetail } from './detail/StockMutationDetail';
 
 function ProductHistoryTableItem() {
   const productHistory = useSelector((states) => states.productHistory);
+  const [smOpen, setSmOpen] = useState(false);
+
+  const handleSmOpen = () => {
+    setSmOpen(true);
+  };
 
   let idCounter = 1;
   return (
@@ -40,8 +54,15 @@ function ProductHistoryTableItem() {
             {val?.User?.firstName ? val?.User?.firstName : '-'}
           </TableCell>
           <TableCell>{formatDate(moment, val?.createdAt)}</TableCell>
+          <TableCell>
+            <Button size="small" onClick={() => handleSmOpen()}>
+              Detail <ArrowOutwardIcon sx={{ maxWidth: 15 }} />
+            </Button>
+          </TableCell>
         </TableRow>
       ))}
+      {/* detail */}
+      <StockMutationDetail open={smOpen} setSmOpen={setSmOpen} />
     </TableBody>
   );
 }

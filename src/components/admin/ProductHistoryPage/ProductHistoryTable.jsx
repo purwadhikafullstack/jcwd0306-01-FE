@@ -76,6 +76,7 @@ function ProductHistoryTable() {
               <SortLabelTableCell label="type">Type </SortLabelTableCell>
               <SortLabelTableCell label="adminName">Admin</SortLabelTableCell>
               <SortLabelTableCell label="date">Date</SortLabelTableCell>
+              <TableCell sx={{ color: 'white' }}>Action</TableCell>
             </TableRow>
           </TableHead>
 
