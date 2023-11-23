@@ -46,11 +46,7 @@ export default function ProvinceSelect({ addressFormik }) {
     <Autocomplete
       id="province-select"
       sx={{ width: 300 }}
-      options={
-        isLoading
-          ? [{ name: 'loading...' }]
-          : [val.id ? val : null, ...provinces]
-      }
+      options={isLoading ? [{ name: 'loading...' }] : provinces}
       autoHighlight
       getOptionLabel={(option) => option.name}
       isOptionEqualToValue={(option, value) => option.id === value?.id}
