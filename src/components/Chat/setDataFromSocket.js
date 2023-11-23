@@ -5,11 +5,21 @@ export const setDataFromSocket = (
   searchParams,
   record,
   setMessages,
-  messages = []
+  messages
 ) => {
   try {
-    const rec = messages.find((val) => val?.id === record.id);
-    if (!rec) setMessages((msg) => [record, ...msg]);
+    const orderId = Number(searchParams.get('orderId'));
+    const warehouseId = Number(searchParams.get('warehouseId'));
+    if (
+      (window.location.pathname.split('/')[1] === 'admin' &&
+        warehouseId === record.warehouseId &&
+        orderId === record.orderId) ||
+      orderId === record.orderId
+    ) {
+      const rec = messages.find((val) => val?.id === record.id);
+      if (!rec && orderId === record.orderId)
+        setMessages((msg) => [record, ...msg]);
+    }
   } catch (error) {
     dispatch(constant.setError(error));
   }

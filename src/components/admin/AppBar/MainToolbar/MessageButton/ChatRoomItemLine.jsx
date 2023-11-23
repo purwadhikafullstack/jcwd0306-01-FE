@@ -17,6 +17,7 @@ export function ChatRoomItemLine({ item = {} }) {
               ['receiverId', item?.senderId],
               ['orderId', item?.orderId],
               ['warehouseId', item?.warehouseId],
+              ['name', `${item?.Sender?.firstName} ${item?.Sender?.lastName}`],
             ]),
           });
         }}

@@ -8,8 +8,8 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChatBody } from './ChatBody';
-import api from '../../constants/api';
 import { updateIsRead } from './updateIsRead';
+import { fetchMessages } from './fetchMessages';
 
 export function AdminChatRoom({ chatAttrAdmin, setChatAttrAdmin }) {
   const [messages, setMessages] = useState([]);
@@ -17,7 +17,7 @@ export function AdminChatRoom({ chatAttrAdmin, setChatAttrAdmin }) {
   const totalData = useRef(0);
   const userSelector = useSelector((state) => state.authUser);
   const receiverId = chatAttrAdmin.get('receiverId');
-  const orderId = chatAttrAdmin.get('orderId');
+  const userName = chatAttrAdmin.get('name');
   const dispatch = useDispatch();
   const page = useRef(1);
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -27,21 +27,24 @@ export function AdminChatRoom({ chatAttrAdmin, setChatAttrAdmin }) {
         [`receiverId`, 0],
         [`orderId`, 0],
         [`warehouseId`, 0],
+        ['name', ''],
       ])
     );
-  const fetchMessages = async () => {
-    if (!orderId && !receiverId) return;
-    const { data } = await api.get(
-      `/chat/${receiverId}/${orderId}?page=${page.current}`
-    );
-    setMessages((msg) => [...msg, ...data.rows]);
-    updateIsRead(setMessages, dispatch, messages, userSelector?.id);
-  };
 
   useEffect(() => {
     page.current = 1;
-    fetchMessages();
+    fetchMessages(
+      receiverId,
+      chatAttrAdmin,
+      setMessages,
+      page.current,
+      totalData
+    );
   }, [chatAttrAdmin]);
+
+  useEffect(() => {
+    updateIsRead(setMessages, dispatch, messages, userSelector?.id);
+  }, [userSelector, messages]);
 
   return (
     <Dialog
@@ -50,14 +53,13 @@ export function AdminChatRoom({ chatAttrAdmin, setChatAttrAdmin }) {
       fullScreen={fullScreen}
       open={Boolean(chatAttrAdmin.get('receiverId'))}
     >
-      <DialogTitle>(name here)</DialogTitle>
+      <DialogTitle>To: {userName}</DialogTitle>
       <DialogContent>
         <ChatBody
           messages={messages}
           page={page}
           setMessages={setMessages}
           searchParams={chatAttrAdmin}
-          fetchMessages={fetchMessages}
           totalData={totalData}
         />
       </DialogContent>

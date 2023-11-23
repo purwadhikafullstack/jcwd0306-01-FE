@@ -14,10 +14,14 @@ import './ChatRoom.css';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { ArrowBack } from '@mui/icons-material';
+import { io } from 'socket.io-client';
 import { ChatBody } from './ChatBody';
 import { ChatRoomCardButton } from './ChatRoomCardButton';
 import { fetchMessages } from './fetchMessages';
 import { fetchChatRooms } from './fetchChatRooms';
+import { socketListenerCardButton } from '../admin/ChatPage/socketListenerCardButton';
+
+const socketConn = io(import.meta.env.VITE_API_BASE_URL);
 
 export function ChatRoom() {
   const userSelector = useSelector((state) => state.authUser);
@@ -31,7 +35,16 @@ export function ChatRoom() {
   const smallerScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
-    if (userSelector?.id && searchParams.get(`orderId`))
+    socketConn.connect();
+    if (userSelector?.id)
+      socketListenerCardButton(
+        socketConn,
+        setChatRooms,
+        searchParams,
+        null,
+        userSelector?.id
+      );
+    if (userSelector?.id && searchParams.get(`orderId`)) {
       fetchMessages(
         userSelector.id,
         searchParams,
@@ -39,8 +52,9 @@ export function ChatRoom() {
         page?.current,
         totalData
       );
+    }
     if (searchParams.get(`orderId`)) setShowInput(true);
-  }, [searchParams, userSelector, page?.current]);
+  }, [searchParams, userSelector]);
 
   useEffect(() => {
     if (userSelector?.id) fetchChatRooms(userSelector?.id, setChatRooms);
@@ -130,7 +144,6 @@ export function ChatRoom() {
               searchParams={searchParams}
               page={page}
               totalData={totalData}
-              fetchMessages={fetchMessages}
             />
           ) : (
             <Paper className="paper" sx={{ minHeight: '55vh' }}>

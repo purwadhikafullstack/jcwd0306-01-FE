@@ -1,6 +1,6 @@
 import { Paper, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { io } from 'socket.io-client';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { TextInput } from './TextInput';
@@ -8,6 +8,7 @@ import { updateIsRead } from './updateIsRead';
 import { setDataFromSocket } from './setDataFromSocket';
 import './ChatRoom.css';
 import { messagesPositionSetter } from './messagesPositionSetter';
+import { fetchMessages } from './fetchMessages';
 
 const socketConn = io(import.meta.env.VITE_API_BASE_URL);
 
@@ -17,12 +18,12 @@ export function ChatBody({
   searchParams,
   page,
   totalData,
-  fetchMessages,
 }) {
   const userSelector = useSelector((state) => state.authUser);
   const orderId = searchParams.get('orderId');
   const warehouseId = searchParams.get('warehouseId');
   const dispatch = useDispatch();
+  console.log(messages);
 
   const handleNext = () => {
     page.current += 1;
@@ -38,18 +39,20 @@ export function ChatBody({
   useEffect(() => {
     socketConn.connect();
     if (window.location.pathname.split('/')[1] === 'admin')
-      socketConn.on(`channel-WHID-${warehouseId}-${orderId}`, ({ record }) =>
+      socketConn.on(`channel-WHID-${warehouseId}`, ({ record }) =>
         setDataFromSocket(dispatch, searchParams, record, setMessages, messages)
       );
-    socketConn.on(`channel-USER-${userSelector?.id}-${orderId}`, ({ record }) =>
-      setDataFromSocket(dispatch, searchParams, record, setMessages, messages)
-    );
-  }, [searchParams, userSelector]);
+    else
+      socketConn.on(`channel-USER-${userSelector?.id}`, ({ record }) =>
+        setDataFromSocket(dispatch, searchParams, record, setMessages, messages)
+      );
+    return () => socketConn.disconnect();
+  }, [searchParams, userSelector, messages.length]);
 
   useEffect(() => {
     if (userSelector?.id)
       updateIsRead(setMessages, dispatch, messages, userSelector?.id);
-  }, [userSelector, messages]);
+  });
 
   return (
     <Paper className="paper">
