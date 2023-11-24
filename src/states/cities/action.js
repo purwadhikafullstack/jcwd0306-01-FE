@@ -20,7 +20,7 @@ function asyncGetCities({ provinceId }) {
       const { data } = await api.get(
         `/city?provinceId=${encodeURIComponent(provinceId)}`
       );
-      dispatch(getCitiesActionCreator(data));
+      dispatch(getCitiesActionCreator(data.rows));
     } catch (err) {
       dispatch(setAlertActionCreator({ err }));
     } finally {

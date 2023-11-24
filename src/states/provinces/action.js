@@ -18,7 +18,7 @@ function asyncGetProvinces() {
     try {
       dispatch(showLoading());
       const { data } = await api.get('/province');
-      dispatch(getProvincesActionCreator(data));
+      dispatch(getProvincesActionCreator(data.rows));
     } catch (err) {
       dispatch(setAlertActionCreator({ err }));
     } finally {
