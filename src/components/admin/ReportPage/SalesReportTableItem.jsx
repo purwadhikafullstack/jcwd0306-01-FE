@@ -21,13 +21,13 @@ function SalesReportTableItem() {
 
   const [open, setOpen] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
-  const [transaction, setTransaction] = useState({});
+  const [order, setOrder] = useState({});
 
   const fetchDetailOrder = async (orderId) => {
     try {
       setIsFetching(true);
       const { data } = await api.get(`/order/${orderId}`);
-      setTransaction(data);
+      setOrder(data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -43,8 +43,6 @@ function SalesReportTableItem() {
       val?.OrderProducts?.reduce((sum, product) => sum + product.quantity, 0) >
       0
   );
-
-  // console.log(filteredReportData);
 
   return (
     <TableBody>
@@ -103,11 +101,7 @@ function SalesReportTableItem() {
       {isFetching ? (
         <ModalLoading open={open} />
       ) : (
-        <ModalDetailTransaction
-          open={open}
-          setOpen={setOpen}
-          order={transaction}
-        />
+        <ModalDetailTransaction open={open} setOpen={setOpen} order={order} />
       )}
     </TableBody>
   );

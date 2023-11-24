@@ -42,6 +42,7 @@ import AdminProductPage from './pages/admin/ProductPage';
 import CustomerProductPage from './pages/customer/ProductPage';
 import useIsPathName from './hooks/useIsPathName';
 import { MonthlyReport } from './pages/admin/MonthlyReport';
+import { ProductHistoryPage } from './pages/admin/ProductHistoryPage';
 
 const socketConn = io(import.meta.env.VITE_API_BASE_URL);
 
@@ -127,6 +128,10 @@ function App() {
               element={<TransactionPage warehouseId={warehouseId} />}
             />
             <Route path="/admin/report/monthly" element={<MonthlyReport />} />
+            <Route
+              path="/admin/product-history"
+              element={<ProductHistoryPage />}
+            />
             <Route path="/admin" element={<DashboardPage />} />
             <Route path="*" element={<Navigate to="/admin" />} />
           </Routes>
