@@ -10,6 +10,7 @@ import {
   ShoppingCartRounded,
   SupervisorAccountRounded,
   WarehouseRounded,
+  History,
 } from '@mui/icons-material';
 import ReceiptLongRoundedIcon from '@mui/icons-material/ReceiptLongRounded';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -63,6 +64,9 @@ function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
           </ListItem>
           <ListItem text="Laporan" to="/admin/report">
             <AssessmentRounded />
+          </ListItem>
+          <ListItem text="Product History" to="/admin/product-history">
+            <History />
           </ListItem>
           <ListItem text="Messages" to="/admin/messages">
             <Mail />

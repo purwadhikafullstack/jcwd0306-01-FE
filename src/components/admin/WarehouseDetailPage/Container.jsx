@@ -17,7 +17,7 @@ function Container() {
         <WarehouseAddressContainer />
       </TabPanel>
       {(authUser.isAdmin ||
-        authUser.WarehouseUsers[0]?.warehouseId === warehouse.id) && (
+        authUser.WarehouseUser.warehouseId === warehouse.id) && (
         // Only super admin or warehouse admin can see this component
         <>
           <TabPanel value="products">

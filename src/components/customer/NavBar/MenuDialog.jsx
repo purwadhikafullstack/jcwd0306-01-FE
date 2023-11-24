@@ -69,7 +69,7 @@ function MenuDialog({ isMenuDialogOpen, setIsMenuDialogOpen }) {
         },
       },
     ];
-    if (authUser.isAdmin || authUser.WarehouseUsers[0]?.deletedAt === null) {
+    if (authUser.isAdmin || authUser.WarehouseUser.deletedAt === null) {
       menu.unshift({
         label: 'Admin',
         color: 'primary',

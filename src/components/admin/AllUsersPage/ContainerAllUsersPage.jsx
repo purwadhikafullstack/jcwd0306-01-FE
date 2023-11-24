@@ -1,6 +1,5 @@
-import { Button, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 // import { useState } from 'react';
-import { AddRounded } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import SearchInput from './SearchInput';
 import AllUsersTable from './AllUsersTable';
@@ -49,16 +48,6 @@ function ContainerAllUsersPage() {
       <Stack spacing={2} direction={{ xs: 'column', md: 'row' }}>
         {/* Search Users Input */}
         <SearchInput />
-
-        {/* Create Category Button */}
-        <Button
-          onClick={null}
-          variant="contained"
-          startIcon={<AddRounded />}
-          sx={{ textTransform: 'none' }}
-        >
-          WH - Admin
-        </Button>
       </Stack>
       {/* All Users Table */}
       <AllUsersTable users={users} whAdmin={whAdmin} />
