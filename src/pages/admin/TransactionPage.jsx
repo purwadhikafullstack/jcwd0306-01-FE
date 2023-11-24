@@ -50,7 +50,8 @@ export function TransactionPage({ warehouseId }) {
         setTotalPage,
         setCount,
         dispatch,
-        searchParams
+        searchParams,
+        warehouseIds
       );
     }
   }, [userSelector, searchParams]);

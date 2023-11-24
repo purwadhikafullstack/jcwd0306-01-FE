@@ -23,7 +23,6 @@ export function ChatBody({
   const orderId = searchParams.get('orderId');
   const warehouseId = searchParams.get('warehouseId');
   const dispatch = useDispatch();
-  console.log(messages);
 
   const handleNext = () => {
     page.current += 1;

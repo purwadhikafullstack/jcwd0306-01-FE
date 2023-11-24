@@ -177,7 +177,7 @@ function App() {
       </>
     );
   }
-  if (authUser === null) {
+  if (!localStorage.getItem('token')) {
     return (
       <>
         <Alert />
@@ -185,13 +185,13 @@ function App() {
         <CustomerAppBar />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="*" element={<Navigate to="/" />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/products" element={<CustomerProductPage />} />
           <Route path="/products/:productId" element={<ProductDetailPage />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
         <CustomerNavBar />
       </>

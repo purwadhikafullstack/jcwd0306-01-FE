@@ -16,7 +16,7 @@ export function OrderProductCard({ product }) {
       <CardContent>
         <Grid container className="w-100">
           <Grid container className="w-100 flex-row justify-content-between">
-            <Grid item flexGrow={1}>
+            <Grid item flexGrow={1} xs={12} sm={9}>
               <Stack direction="row" gap={1} alignItems="center">
                 <CartItemImage product={product} width="50px" />
                 <div>
@@ -34,10 +34,12 @@ export function OrderProductCard({ product }) {
                       {product?.quantity > 1 ? 's' : null} (
                       {product.Product.weight * product.quantity} gr)
                       <span> x </span>
-                      <del className="d-md-inline d-none">
-                        Rp{Number(price).toLocaleString(`id-ID`)}{' '}
-                      </del>
-                      <b>Rp{Number(finalPrice).toLocaleString(`id-ID`)}</b>
+                      {discount ? (
+                        <del className="d-md-inline d-none">
+                          Rp{Number(price).toLocaleString(`id-ID`)}
+                        </del>
+                      ) : null}
+                      <b> Rp{Number(finalPrice).toLocaleString(`id-ID`)}</b>
                     </small>
                   </Typography>
                 </div>
