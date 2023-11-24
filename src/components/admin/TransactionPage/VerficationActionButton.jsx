@@ -36,50 +36,63 @@ export function VerficationActionButton({
   return (
     <Stack gap={1} borderTop="4px solid gainsboro" pt={2} pb={1}>
       <Stack direction="row" justifyContent="center" gap={4}>
-        <Button
-          variant="contained"
-          color="error"
-          onClick={() => {
-            setShow('cancel');
-            setOpen(false);
-            setActionName('reject and cancel this transaction');
-            setStatus('rejected');
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="outlined"
-          color="warning"
-          sx={{ display: order?.status === 'verifying' ? 'inline' : 'none' }}
-          disabled={isLoading}
-          onClick={() => {
-            setShow('reject');
-            setOpen(false);
-            setActionName(`reject this transaction's payment`);
-            setStatus('unpaid');
-          }}
-        >
-          Reject
-        </Button>
-        <Button
-          disabled={isLoading}
-          sx={{ display: order?.status === 'verifying' ? 'inline' : 'none' }}
-          onClick={() => {
-            setShow('confirm');
-            setOpen(false);
-            setActionName('confirm this payment');
-            setStatus('processed');
-          }}
-        >
-          Confirm
-        </Button>
-        <Button
-          disabled={isLoading}
-          sx={{ display: order?.status === 'processed' ? 'inline' : 'none' }}
-        >
-          Send
-        </Button>
+        {['unpaid', 'verifying', 'processed'].includes(order.status) && (
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              setShow('cancel');
+              setOpen(false);
+              setActionName('reject and cancel this transaction');
+              setStatus('rejected');
+            }}
+          >
+            Cancel
+          </Button>
+        )}
+        {order.status === 'verifying' && (
+          <>
+            <Button
+              variant="contained"
+              color="warning"
+              disabled={isLoading}
+              onClick={() => {
+                setShow(true);
+                setOpen(false);
+                setActionName("reject this transaction's payment");
+                setStatus('unpaid');
+              }}
+            >
+              Reject
+            </Button>
+            <Button
+              variant="contained"
+              disabled={isLoading}
+              onClick={() => {
+                setShow(true);
+                setOpen(false);
+                setActionName('confirm this payment');
+                setStatus('processed');
+              }}
+            >
+              Confirm
+            </Button>
+          </>
+        )}
+        {order.status === 'processed' && (
+          <Button
+            variant="contained"
+            disabled={isLoading}
+            onClick={() => {
+              setShow(true);
+              setOpen(false);
+              setActionName('send this order');
+              setStatus('shipped');
+            }}
+          >
+            Send
+          </Button>
+        )}
       </Stack>
       <ConfirmationModal
         action={action.fn}
