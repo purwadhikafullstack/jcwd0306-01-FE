@@ -14,9 +14,11 @@ export const fetchTransaction = async (
   setTotalPage,
   setCount,
   dispatch,
-  searchParams
+  searchParams,
+  warehouseIds
 ) => {
   try {
+    const whId = JSON.parse(searchParams.get('warehouseId'));
     setIsLoading(true);
     const { data } = await api.get(`/order`, {
       params: {
@@ -24,7 +26,7 @@ export const fetchTransaction = async (
         limit: searchParams.get(`limit`) || 5,
         status: setStatus(searchParams),
         text: searchParams.get(`name`),
-        warehouseId: JSON.parse(searchParams.get('warehouseId')),
+        warehouseId: whId || warehouseIds,
       },
     });
     setTransactions(data.rows);

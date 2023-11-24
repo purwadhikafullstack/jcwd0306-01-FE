@@ -11,7 +11,6 @@ export function TransactionList({
   setOpen,
   fetchDetailTransaction,
 }) {
-  console.log(order);
   const dispatch = useDispatch();
   return (
     <StyledTableRow key={order?.id}>
