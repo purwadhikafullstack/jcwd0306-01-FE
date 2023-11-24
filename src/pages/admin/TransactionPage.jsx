@@ -1,5 +1,6 @@
 import {
   Button,
+  CircularProgress,
   Container,
   Stack,
   Typography,
@@ -33,17 +34,22 @@ export function TransactionPage({ warehouseId }) {
   const xsOnly = useMediaQuery(theme.breakpoints.up('sm'));
 
   useEffect(() => {
-    warehouseIdSetter(setWarehouseIds, warehouseId);
+    if (warehouseId.length) warehouseIdSetter(setWarehouseIds, warehouseId);
   }, [warehouseId]);
 
   useEffect(() => {
-    setSearchParams((params) =>
-      params.set('warehouseId', JSON.stringify(warehouseIds))
-    );
+    if (warehouseIds.length)
+      setSearchParams((params) => {
+        params.set('warehouseId', JSON.stringify(warehouseIds));
+        return params;
+      });
   }, [warehouseIds]);
 
   useEffect(() => {
-    if (userSelector?.id) {
+    if (
+      userSelector?.id &&
+      (warehouseIds.length || searchParams.get('warehouseId'))
+    ) {
       fetchTransaction(
         setIsLoading,
         setTransactions,
@@ -102,11 +108,16 @@ export function TransactionPage({ warehouseId }) {
           </Stack>
         ) : null}
         <Stack>
-          <TransactionTable
-            transactions={transactions}
-            isLoading={isLoading}
-            setTransactions={setTransactions}
-          />
+          {isLoading ? (
+            <CircularProgress />
+          ) : (
+            <TransactionTable
+              transactions={transactions}
+              isLoading={isLoading}
+              setTransactions={setTransactions}
+            />
+          )}
+
           <PaginationTable
             count={count}
             searchParams={searchParams}
