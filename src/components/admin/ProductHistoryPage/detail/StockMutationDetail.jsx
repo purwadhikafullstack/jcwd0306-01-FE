@@ -11,6 +11,7 @@ import { HeaderModal } from '../../../HeaderModal';
 import { StatusMutation } from './StatusMutation';
 import { Products } from './Products';
 import { WarehouseSender } from './WarehouseSender';
+import { WarehouseReceiver } from './WarehouseReceiver';
 
 const Transition = React.forwardRef((props, ref) => (
   <Fade ref={ref} {...props} />
@@ -38,6 +39,7 @@ export function StockMutationDetail({ open, setSmOpen }) {
           <StatusMutation />
           <Products />
           <WarehouseSender />
+          <WarehouseReceiver />
         </Stack>
       </DialogContent>
     </Dialog>

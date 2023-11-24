@@ -64,7 +64,7 @@ function ProductHistoryTable() {
       <TableContainer component={Paper} sx={{ borderRadius: 0.5 }}>
         <Table aria-label="Category Table">
           <TableHead>
-            <TableRow sx={{ bgcolor: '#636362' }}>
+            <TableRow sx={{ bgcolor: 'primary.main' }}>
               <TableCell sx={{ color: 'white' }}>No</TableCell>
               <SortLabelTableCell label="productName">
                 Product
@@ -73,6 +73,9 @@ function ProductHistoryTable() {
                 Warehouse
               </SortLabelTableCell>
               <SortLabelTableCell label="quantity">Qty</SortLabelTableCell>
+              <SortLabelTableCell label="updatedStock">
+                <span style={{ textAlign: 'center' }}>Updated Stock</span>
+              </SortLabelTableCell>
               <SortLabelTableCell label="type">Type </SortLabelTableCell>
               <SortLabelTableCell label="adminName">Admin</SortLabelTableCell>
               <SortLabelTableCell label="date">Date</SortLabelTableCell>

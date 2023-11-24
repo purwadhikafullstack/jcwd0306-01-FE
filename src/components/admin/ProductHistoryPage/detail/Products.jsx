@@ -15,11 +15,16 @@ export function Products() {
                 className="w-100 flex-row justify-content-between"
               >
                 <Grid item flexGrow={1}>
-                  <Stack direction="row" gap={1} alignItems="center">
+                  <Stack
+                    direction="row"
+                    gap={1}
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
                     <img
                       src={`${
                         import.meta.env.VITE_API_BASE_URL
-                      }/products/images/${2}`}
+                      }/products/images/${1}`}
                       alt="product"
                       width="100px"
                     />
@@ -32,6 +37,9 @@ export function Products() {
                         {/* {product?.Product?.name} */}ProductName
                         {/* </Link> */}
                       </Typography>
+                    </div>
+                    <div>
+                      <Typography>Quantity: 1</Typography>
                     </div>
                   </Stack>
                 </Grid>
