@@ -84,7 +84,7 @@ function App() {
   // ADMIN PAGE
   if (isAdminPage) {
     if (authUser == null) return null;
-    if (authUser.isAdmin || authUser.WarehouseUsers[0]?.deletedAt === null) {
+    if (authUser.isAdmin || authUser.WarehouseUser.deletedAt === null) {
       return (
         <>
           <Alert />

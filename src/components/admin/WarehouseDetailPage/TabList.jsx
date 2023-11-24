@@ -43,10 +43,7 @@ function TabList() {
 
   useEffect(() => {
     if (
-      !(
-        authUser.isAdmin ||
-        authUser.WarehouseUsers[0]?.warehouseId === warehouse.id
-      )
+      !(authUser.isAdmin || authUser.WarehouseUser.warehouseId === warehouse.id)
     ) {
       setTabNames((prevState) =>
         prevState.filter(

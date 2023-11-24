@@ -11,8 +11,7 @@ export const fetchCartItemAndNotif = async (
       const { data } = await api.get(`/user/details/${authUser?.id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
-      const tempWarehouse = [];
-      data.WarehouseUsers.forEach((val) => tempWarehouse.push(val.warehouseId));
+      const tempWarehouse = [data.WarehouseUser.warehouseId];
       setWarehouseId(data.WarehouseUsers);
       dispatch({
         type: constant.setWarehouseUser,
