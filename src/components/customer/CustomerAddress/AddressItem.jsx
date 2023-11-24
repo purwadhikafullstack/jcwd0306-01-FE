@@ -34,7 +34,7 @@ function AddressItem({ address, setOpen, setAddressToEdit }) {
           isDefault: 1,
         }
       );
-      dispatch(asyncGetAddress({ userId: authUser?.id }));
+      if (authUser?.id) dispatch(asyncGetAddress({ userId: authUser?.id }));
       dispatch(
         setAlertActionCreator({
           val: { status: 'success', message: result?.data },
@@ -58,7 +58,7 @@ function AddressItem({ address, setOpen, setAddressToEdit }) {
   const deleteAddress = async () => {
     try {
       await api.delete(`/user_address/${authUser?.id}/${address?.id}`);
-      dispatch(asyncGetAddress({ userId: authUser?.id }));
+      if (authUser?.id) dispatch(asyncGetAddress({ userId: authUser?.id }));
       dispatch(
         setAlertActionCreator({
           val: {

@@ -1,11 +1,13 @@
 import { useTheme } from '@emotion/react';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ContainerProductHistory from '../../components/admin/ProductHistoryPage/ContainerProductHistory';
 import { asyncGetProductHistory } from '../../states/productHistory/action';
 import useCustomSearchParams from '../../hooks/useCustomSearchParams';
 
 export function ProductHistoryPage() {
+  const authUser = useSelector((states) => states.authUser);
+  const id = authUser?.WarehouseUser?.warehouseId || null;
   const theme = useTheme();
   const dispatch = useDispatch();
   const [searchParams, updateQueryParams] = useCustomSearchParams();
@@ -31,6 +33,7 @@ export function ProductHistoryPage() {
         productName: searchParams.get('productName'),
         startDate: searchParams.get('startDate'),
         endDate: searchParams.get('endDate'),
+        warehouseId: id,
       })
     );
   }, [
@@ -44,6 +47,7 @@ export function ProductHistoryPage() {
     searchParams.get('productName'),
     searchParams.get('startDate'),
     searchParams.get('endDate'),
+    id,
   ]);
 
   return (

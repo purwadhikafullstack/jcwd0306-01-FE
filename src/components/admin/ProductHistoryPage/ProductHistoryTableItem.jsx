@@ -19,7 +19,6 @@ import api from '../../../constants/api';
 function ProductHistoryTableItem() {
   const productHistory = useSelector((states) => states.productHistory);
   const authUser = useSelector((states) => states.authUser);
-  console.log(authUser);
   const [smOpen, setSmOpen] = useState(false);
   const [orderDetailOpen, setOrderDetailOpen] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
@@ -53,8 +52,8 @@ function ProductHistoryTableItem() {
   };
 
   const handleDetailOpen = (val) => {
-    if (val?.type === 'manual') alert('manual');
-    else if (val?.type === 'stock-mutation') {
+    // if (val?.type === 'manual') alert('manual');
+    if (val?.type === 'stock-mutation') {
       fetchStockMutation(val?.stockMutationId);
       setSmOpen(true);
     } else {

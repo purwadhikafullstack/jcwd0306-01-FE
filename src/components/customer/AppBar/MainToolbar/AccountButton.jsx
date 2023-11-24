@@ -21,11 +21,6 @@ function AccountButton() {
     nav('/');
   };
 
-  const buttonStyles = {
-    height: '48px',
-    justifyContent: 'flex-start',
-  };
-
   return (
     <Tooltip
       disableFocusListener
@@ -41,7 +36,7 @@ function AccountButton() {
       title={
         <Stack spacing={1}>
           {/* Admin button */}
-          {authUser.isAdmin && (
+          {(authUser.isAdmin || authUser.WarehouseUser) && (
             <Button
               onClick={() => {
                 nav('/admin/dashboard');
@@ -57,7 +52,6 @@ function AccountButton() {
           {/* Account button */}
           <Button
             onClick={() => nav('/user/settings')}
-            sx={buttonStyles}
             variant="contained"
             startIcon={<AccountCircleRounded />}
           >

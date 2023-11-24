@@ -22,6 +22,7 @@ function asyncGetProductHistory({
   productName,
   startDate,
   endDate,
+  warehouseId,
 } = {}) {
   return async (dispatch) => {
     try {
@@ -39,7 +40,11 @@ function asyncGetProductHistory({
         : '';
       const endDateQ = endDate ? `endDate=${encodeURIComponent(endDate)}&` : '';
 
-      const allQuery = `?${nameQ}${sortByQ}${orderByQ}${pageQ}${perPageQ}${WHQ}${productNameQ}${startDateQ}${endDateQ}`;
+      const warehouseIdQ = warehouseId
+        ? `warehouseId=${encodeURIComponent(warehouseId)}&`
+        : '';
+
+      const allQuery = `?${nameQ}${sortByQ}${orderByQ}${pageQ}${perPageQ}${WHQ}${productNameQ}${startDateQ}${endDateQ}${warehouseIdQ}`;
 
       const { data } = await api.get(`/product-history${allQuery}`);
 

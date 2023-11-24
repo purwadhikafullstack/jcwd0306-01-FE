@@ -9,15 +9,35 @@ import {
   useTheme,
 } from '@mui/material';
 import { MenuRounded } from '@mui/icons-material';
+import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 import GadgetGalleryLogo from '../../../GadgetGalleryLogo';
 import GGLogo from '../../../GGLogo';
 import AccountButton from './AccountButton';
 import NotificationButton from './NotificationButton';
 import MessageButton from './MessageButton';
+import api from '../../../../constants/api';
 
 function MainToolbar({ setIsDrawerOpen }) {
+  const authUser = useSelector((states) => states.authUser);
   const theme = useTheme();
   const isMdDown = useMediaQuery(theme.breakpoints.down('md'));
+  const [whName, setWhName] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await api.get(
+          `/warehouses/${authUser?.WarehouseUser?.warehouseId}`
+        );
+        setWhName(res?.data?.data?.name);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, [authUser]);
 
   return (
     <Toolbar sx={{ gap: 2 }}>
@@ -34,7 +54,7 @@ function MainToolbar({ setIsDrawerOpen }) {
         )}
 
         <Typography color="text.secondary" variant="subtitle2" fontSize="1rem">
-          Admin
+          {authUser?.isAdmin ? 'Admin' : `Warehouse Admin: ${whName}`}
         </Typography>
       </Stack>
 

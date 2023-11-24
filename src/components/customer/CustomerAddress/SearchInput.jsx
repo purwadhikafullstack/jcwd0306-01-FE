@@ -11,14 +11,15 @@ function SearchInput() {
   const [searchParams, updateQueryParams] = useCustomSearchParams();
 
   const handleSearch = () => {
-    dispatch(
-      asyncGetAddress({
-        userId: authUser?.id,
-        name: searchParams.get('name'),
-        page: searchParams.get('page'),
-        perPage: searchParams.get('perPage'),
-      })
-    );
+    if (authUser?.id)
+      dispatch(
+        asyncGetAddress({
+          userId: authUser?.id,
+          name: searchParams.get('name'),
+          page: searchParams.get('page'),
+          perPage: searchParams.get('perPage'),
+        })
+      );
   };
 
   useEffect(() => {
