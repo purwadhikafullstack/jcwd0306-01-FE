@@ -18,6 +18,8 @@ export function ChatBody({
   searchParams,
   page,
   totalData,
+  setDisableButton,
+  disableButton,
 }) {
   const userSelector = useSelector((state) => state.authUser);
   const orderId = searchParams.get('orderId');
@@ -88,6 +90,8 @@ export function ChatBody({
         searchParams={searchParams}
         setMessages={setMessages}
         messages={messages}
+        setDisableButton={setDisableButton}
+        disableButton={disableButton}
       />
     </Paper>
   );

@@ -7,18 +7,20 @@ export function ChatRoomCardButton({
   searchParams,
   page,
   whId,
+  disableButton,
 }) {
   const userSelector = useSelector((state) => state.authUser);
   return (
     <Card
       className={
-        Number(searchParams.get('orderId')) === room.orderId
+        Number(searchParams.get('orderId')) === room?.orderId
           ? 'bg-info-subtle'
           : 'transparent'
       }
     >
       <Button
         className="d-flex w-100 flex-column-reverse position-relative"
+        disabled={disableButton}
         onClick={() => {
           page.current = 1;
           setSearchParams((params) => {
@@ -32,7 +34,7 @@ export function ChatRoomCardButton({
       >
         <CardContent className="p-2">Order-{room.orderId}</CardContent>
         {!room.isRead &&
-        (room.receiverId === userSelector.id ||
+        (room.receiverId === userSelector?.id ||
           (window.location.pathname.split('/')[1] === 'admin' &&
             whId.findIndex((val) => val === room.warehouseId) !== -1)) ? (
           <span

@@ -48,7 +48,9 @@ export function TransactionPage({ warehouseId }) {
   useEffect(() => {
     if (
       userSelector?.id &&
-      (warehouseIds.length || searchParams.get('warehouseId'))
+      (warehouseIds.length ||
+        searchParams.get('warehouseId') ||
+        userSelector?.isAdmin)
     ) {
       fetchTransaction(
         setIsLoading,
@@ -57,7 +59,8 @@ export function TransactionPage({ warehouseId }) {
         setCount,
         dispatch,
         searchParams,
-        warehouseIds
+        warehouseIds,
+        userSelector
       );
     }
   }, [userSelector, searchParams]);
