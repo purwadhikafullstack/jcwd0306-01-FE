@@ -43,7 +43,7 @@ export function TransactionPage({ warehouseId }) {
   }, [warehouseIds]);
 
   useEffect(() => {
-    if (userSelector?.id) {
+    if (userSelector?.id && warehouseIds.length) {
       fetchTransaction(
         setIsLoading,
         setTransactions,

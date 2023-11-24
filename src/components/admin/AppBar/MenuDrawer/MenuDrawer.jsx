@@ -4,6 +4,7 @@ import {
   DashboardRounded,
   Inventory2Rounded,
   LogoutRounded,
+  Mail,
   NavigateBeforeRounded,
   SettingsRounded,
   ShoppingCartRounded,
@@ -62,6 +63,9 @@ function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
           </ListItem>
           <ListItem text="Laporan" to="/admin/report">
             <AssessmentRounded />
+          </ListItem>
+          <ListItem text="Messages" to="/admin/messages">
+            <Mail />
           </ListItem>
         </List>
 

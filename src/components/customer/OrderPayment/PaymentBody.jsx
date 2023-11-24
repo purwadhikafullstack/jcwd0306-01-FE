@@ -86,6 +86,7 @@ export function PaymentBody({ orderData, setOrderData }) {
           <div className="d-flex justify-content-even gap-3 mt-3">
             <Button
               variant="contained"
+              color="error"
               className={
                 orderData?.status !== `unpaid` || hiddenCancel
                   ? 'd-none'

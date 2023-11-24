@@ -20,6 +20,7 @@ import { ChatRoomCardButton } from './ChatRoomCardButton';
 import { fetchMessages } from './fetchMessages';
 import { fetchChatRooms } from './fetchChatRooms';
 import { socketListenerCardButton } from '../admin/ChatPage/socketListenerCardButton';
+import { isRoomDisplayed } from './IsRoomDisplayed';
 
 const socketConn = io(import.meta.env.VITE_API_BASE_URL);
 
@@ -35,6 +36,7 @@ export function ChatRoom() {
   const smallerScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
+    isRoomDisplayed(searchParams, chatRooms, setChatRooms);
     socketConn.connect();
     if (userSelector?.id)
       socketListenerCardButton(

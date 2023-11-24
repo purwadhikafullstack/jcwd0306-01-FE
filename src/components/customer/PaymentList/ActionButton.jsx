@@ -27,6 +27,7 @@ export function ActionButton({ order = {}, setOrderDetail, setOpen }) {
       />
       <div className="d-flex gap-2">
         <Button
+          variant="outlined"
           onClick={() =>
             nav(
               `/chatroom?orderId=${order?.plain_id}&warehouseId=${order?.warehouseId}`
@@ -40,6 +41,7 @@ export function ActionButton({ order = {}, setOrderDetail, setOpen }) {
         </Button>
         <Button
           variant="contained"
+          color="error"
           className={
             hiddenCancle || order.status !== 'unpaid'
               ? 'd-none'
@@ -63,10 +65,11 @@ export function ActionButton({ order = {}, setOrderDetail, setOpen }) {
           Cancel Transaction
         </Button>
         {order?.status === 'unpaid' ? (
-          <Button variant="outlined">
+          <Button variant="contained">
             <Link
               href={`/payment/${order.id}`}
               className="text-decoration-none"
+              sx={{ color: 'white' }}
             >
               See Details
             </Link>
