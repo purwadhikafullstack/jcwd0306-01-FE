@@ -5,10 +5,15 @@ import { useState } from 'react';
 import api from '../../constants/api';
 import { constant } from '../../constants/constant';
 
-export function TextInput({ searchParams, messages, setMessages }) {
+export function TextInput({
+  searchParams,
+  messages,
+  setMessages,
+  setDisableButton,
+  disableButton,
+}) {
   const userSelector = useSelector((state) => state.authUser);
   const dispatch = useDispatch();
-  const [disableButton, setDisableButton] = useState(false);
   const handlePostMessage = async () => {
     try {
       const message = document.getElementById('standard-text').value;

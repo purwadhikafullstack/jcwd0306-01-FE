@@ -30,6 +30,7 @@ export function ChatRoom() {
   const [chatRooms, setChatRooms] = useState([]);
   const [messages, setMessages] = useState([]);
   const [showInput, setShowInput] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
   const totalData = useRef(0);
   const page = useRef(1);
   const theme = useTheme();
@@ -84,6 +85,7 @@ export function ChatRoom() {
             >
               <Button
                 className="d-flex w-100"
+                disabled={disableButton}
                 onClick={() => {
                   setShowInput(true);
                   page.current = 1;
@@ -111,6 +113,7 @@ export function ChatRoom() {
                     setSearchParams={setSearchParams}
                     room={room}
                     page={page}
+                    disableButton={disableButton}
                   />
                 ))
               : null}
@@ -146,6 +149,8 @@ export function ChatRoom() {
               searchParams={searchParams}
               page={page}
               totalData={totalData}
+              setDisableButton={setDisableButton}
+              disableButton={disableButton}
             />
           ) : (
             <Paper className="paper" sx={{ minHeight: '55vh' }}>

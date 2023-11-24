@@ -15,7 +15,8 @@ export const fetchTransaction = async (
   setCount,
   dispatch,
   searchParams,
-  warehouseIds
+  warehouseIds,
+  userSelector
 ) => {
   try {
     const whId = JSON.parse(searchParams.get('warehouseId'));
@@ -26,7 +27,7 @@ export const fetchTransaction = async (
         limit: searchParams.get(`limit`) || 5,
         status: setStatus(searchParams),
         text: searchParams.get(`name`),
-        warehouseId: whId || warehouseIds,
+        ...(!userSelector?.isAdmin && { warehouseId: whId || warehouseIds }),
       },
     });
     setTransactions(data.rows);

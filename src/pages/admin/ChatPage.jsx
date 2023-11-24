@@ -7,9 +7,10 @@ import {
   Paper,
   Stack,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { ArrowBack } from '@mui/icons-material';
 import { io } from 'socket.io-client';
@@ -28,9 +29,12 @@ export function ChatPage({ warehouseId = [] }) {
   const [whId, setWhId] = useState([]);
   const [messages, setMessages] = useState([]);
   const [showInput, setShowInput] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
   const receiverId = searchParams.get('receiverId');
   const page = useRef(1);
   const totalData = useRef(0);
+  const theme = useTheme();
+  const smallerScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     warehouseIdSetter(setWhId, warehouseId);
@@ -59,7 +63,17 @@ export function ChatPage({ warehouseId = [] }) {
             Messages
           </Typography>
           <Grid container spacing={1}>
-            <Grid item md={3}>
+            <Grid
+              item
+              md={3}
+              xs={12}
+              sx={{
+                display:
+                  smallerScreen && searchParams.get(`orderId`)
+                    ? 'none'
+                    : 'block',
+              }}
+            >
               <Card
                 sx={{
                   minHeight: '74vh',
@@ -79,17 +93,30 @@ export function ChatPage({ warehouseId = [] }) {
                             page={page}
                             setMessages={setMessages}
                             whId={whId}
+                            disableButton={disableButton}
                           />
                         ))
-                      : null}
+                      : 'You have no chat room'}
                   </Stack>
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item md={9} xs={12}>
+            <Grid
+              item
+              md={9}
+              xs={12}
+              sx={{
+                display:
+                  smallerScreen && !searchParams.get(`orderId`)
+                    ? 'none'
+                    : 'block',
+                position: 'relative',
+              }}
+            >
               <Card>
                 <CardContent>
                   <Button
+                    disabled={disableButton}
                     onClick={() => {
                       setShowInput(false);
                       setSearchParams((params) => {
@@ -110,6 +137,8 @@ export function ChatPage({ warehouseId = [] }) {
                       searchParams={searchParams}
                       page={page}
                       totalData={totalData}
+                      setDisableButton={setDisableButton}
+                      disableButton={disableButton}
                     />
                   ) : (
                     <Paper className="paper" sx={{ minHeight: '55vh' }}>
