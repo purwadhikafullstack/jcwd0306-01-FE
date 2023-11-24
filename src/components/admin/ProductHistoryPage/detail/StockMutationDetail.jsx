@@ -17,7 +17,7 @@ const Transition = React.forwardRef((props, ref) => (
   <Fade ref={ref} {...props} />
 ));
 
-export function StockMutationDetail({ open, setSmOpen }) {
+export function StockMutationDetail({ open, setSmOpen, data }) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   return (
@@ -36,10 +36,10 @@ export function StockMutationDetail({ open, setSmOpen }) {
       />
       <DialogContent>
         <Stack gap={2}>
-          <StatusMutation />
-          <Products />
-          <WarehouseSender />
-          <WarehouseReceiver />
+          <StatusMutation data={data} />
+          <Products data={data} />
+          <WarehouseSender data={data} />
+          <WarehouseReceiver data={data} />
         </Stack>
       </DialogContent>
     </Dialog>

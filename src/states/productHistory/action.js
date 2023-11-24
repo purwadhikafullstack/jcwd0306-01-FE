@@ -41,7 +41,6 @@ function asyncGetProductHistory({
 
       const allQuery = `?${nameQ}${sortByQ}${orderByQ}${pageQ}${perPageQ}${WHQ}${productNameQ}${startDateQ}${endDateQ}`;
 
-      console.log(WHQ);
       const { data } = await api.get(`/product-history${allQuery}`);
 
       dispatch(getProductHistoryActionCreator(data?.data));

@@ -1,6 +1,7 @@
 import { Card, CardContent, Grid, Stack, Typography } from '@mui/material';
 
-export function Products() {
+export function Products({ data }) {
+  const imageId = data?.Product?.ProductImages[0].id;
   return (
     <Stack gap={1} borderTop="4px solid gainsboro" pb={1} pt={2}>
       <Typography>
@@ -24,22 +25,20 @@ export function Products() {
                     <img
                       src={`${
                         import.meta.env.VITE_API_BASE_URL
-                      }/products/images/${1}`}
+                      }/products/images/${imageId}`}
                       alt="product"
                       width="100px"
                     />
                     <div>
-                      <Typography>
+                      <Typography color="primary.main">
                         {/* <Link
                           href={`/products/${product?.productId}`}
                           className="text-decoration-none"
                         > */}
-                        {/* {product?.Product?.name} */}ProductName
+                        {data?.Product?.name}
                         {/* </Link> */}
                       </Typography>
-                    </div>
-                    <div>
-                      <Typography>Quantity: 1</Typography>
+                      <Typography>Quantity: {data?.quantity}</Typography>
                     </div>
                   </Stack>
                 </Grid>

@@ -1,15 +1,15 @@
 import { Stack, Typography } from '@mui/material';
+import moment from 'moment';
+import formatDate from '../../../../utils/salesReport/formatDate';
 
-export function StatusMutation() {
+export function StatusMutation({ data }) {
   return (
     <Stack gap={1}>
       <Stack direction="row" justifyContent="space-between">
         <Typography>Mutation ID</Typography>
-        <Typography>
-          {/* {order?.createdAt ? new Date(order?.createdAt).toDateString() : null} */}
-          27
-        </Typography>
+        <Typography>{data?.id}</Typography>
       </Stack>
+
       <Stack direction="row" justifyContent="space-between">
         <Typography>Status</Typography>
         <Typography
@@ -18,16 +18,18 @@ export function StatusMutation() {
             textTransform: 'capitalize',
           }}
         >
-          {/* <b>{order?.status}</b> */}mutation.status
+          {data?.status}
         </Typography>
       </Stack>
 
       <Stack direction="row" justifyContent="space-between">
+        <Typography>Mutation Type</Typography>
+        <Typography>{data?.type}</Typography>
+      </Stack>
+
+      <Stack direction="row" justifyContent="space-between">
         <Typography>Mutation date</Typography>
-        <Typography>
-          {/* {order?.createdAt ? new Date(order?.createdAt).toDateString() : null} */}
-          12 november 2023
-        </Typography>
+        <Typography>{formatDate(moment, data?.createdAt)}</Typography>
       </Stack>
     </Stack>
   );

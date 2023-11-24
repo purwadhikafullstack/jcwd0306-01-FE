@@ -18,10 +18,13 @@ import api from '../../../constants/api';
 
 function ProductHistoryTableItem() {
   const productHistory = useSelector((states) => states.productHistory);
+  const authUser = useSelector((states) => states.authUser);
+  console.log(authUser);
   const [smOpen, setSmOpen] = useState(false);
-  const [order, setOrder] = useState(false);
   const [orderDetailOpen, setOrderDetailOpen] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
+  const [order, setOrder] = useState(false);
+  const [stockMutationData, setStockMutationData] = useState({});
 
   const fetchDetailOrder = async (orderId) => {
     try {
@@ -35,10 +38,26 @@ function ProductHistoryTableItem() {
     }
   };
 
+  const fetchStockMutation = async (stockMutationId) => {
+    try {
+      setIsFetching(true);
+      const { data } = await api.get(
+        `/product-history/stock-mutation/${stockMutationId}`
+      );
+      setStockMutationData(data?.data[0]);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
   const handleDetailOpen = (val) => {
     if (val?.type === 'manual') alert('manual');
-    else if (val?.type === 'stock-mutation') setSmOpen(true);
-    else {
+    else if (val?.type === 'stock-mutation') {
+      fetchStockMutation(val?.stockMutationId);
+      setSmOpen(true);
+    } else {
       fetchDetailOrder(val?.orderId);
       setOrderDetailOpen(true);
     }
@@ -86,23 +105,35 @@ function ProductHistoryTableItem() {
             {val?.User?.firstName ? val?.User?.firstName : '-'}
           </TableCell>
           <TableCell>{formatDate(moment, val?.createdAt)}</TableCell>
-          <TableCell>
-            <Button size="small" onClick={() => handleDetailOpen(val)}>
-              Detail <ArrowOutwardIcon sx={{ maxWidth: 15 }} />
-            </Button>
+          <TableCell sx={{ textAlign: 'center' }}>
+            {val?.type === 'manual' ? (
+              '-'
+            ) : (
+              <Button size="small" onClick={() => handleDetailOpen(val)}>
+                Detail <ArrowOutwardIcon sx={{ maxWidth: 15 }} />
+              </Button>
+            )}
           </TableCell>
         </TableRow>
       ))}
       {/* detail */}
-      <StockMutationDetail open={smOpen} setSmOpen={setSmOpen} />
       {isFetching ? (
         <ModalLoading open={isFetching} />
       ) : (
-        <ModalDetailTransaction
-          open={orderDetailOpen}
-          setOpen={setOrderDetailOpen}
-          order={order}
-        />
+        <>
+          {/* Type: Order */}
+          <ModalDetailTransaction
+            open={orderDetailOpen}
+            setOpen={setOrderDetailOpen}
+            order={order}
+          />
+          {/* Type: stock-mutation */}
+          <StockMutationDetail
+            open={smOpen}
+            setSmOpen={setSmOpen}
+            data={stockMutationData}
+          />
+        </>
       )}
     </TableBody>
   );

@@ -1,6 +1,6 @@
 import { Stack, Typography, Grid } from '@mui/material';
 
-export function WarehouseReceiver({ order = {} }) {
+export function WarehouseReceiver({ data }) {
   return (
     <Stack gap={1} borderTop="4px solid gainsboro" pt={2} pb={1}>
       <Typography>
@@ -14,10 +14,10 @@ export function WarehouseReceiver({ order = {} }) {
           :
         </Grid>
         <Grid item xs={8.5} ml={1}>
-          {order?.shippingMethod}
+          {data?.toWarehouse?.name}
         </Grid>
       </Grid>
-      <Grid container>
+      <Grid container display={data?.type === 'order' ? 'none' : ''}>
         <Grid item xs={3}>
           Admin
         </Grid>
@@ -25,7 +25,7 @@ export function WarehouseReceiver({ order = {} }) {
           :
         </Grid>
         <Grid item display="flex" xs={8.5} alignItems="center" ml={1}>
-          {order?.shippingReceipt || '-'}
+          {data?.requestAdmin?.firstName} {data?.requestAdmin?.lastName}
         </Grid>
       </Grid>
       <Grid container>
@@ -37,12 +37,9 @@ export function WarehouseReceiver({ order = {} }) {
         </Grid>
         <Grid item ml={1} xs={8.5}>
           <Typography>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, at.
-            Tempore unde quo repudiandae voluptate? Dolorem hic possimus
-            delectus quibusdam.
+            {data?.toWarehouse?.WarehouseAddress?.City?.name}, &nbsp;
+            {data?.toWarehouse?.WarehouseAddress?.Province?.name}
           </Typography>
-          <Typography>{order?.UserAddress?.receiverPhone}jalan</Typography>
-          <Typography>{order?.UserAddress}jalan</Typography>
         </Grid>
       </Grid>
     </Stack>
