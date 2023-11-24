@@ -1,5 +1,5 @@
 import api from '../../../constants/api';
-import { constant } from '../../../constants/constant';
+import { setAlertActionCreator } from '../../../states/alert/action';
 
 const updateArray = (setArr, arr = [{}], transaction = {}) => {
   const temp = [...arr];
@@ -23,16 +23,17 @@ const handleUpdateStatus = async (
     setIsLoading(true);
     const temp = { ...transaction };
     delete temp.paymentProof;
-    const { data } = await api.patch(`/order/${transaction?.id}`, {
+    await api.patch(`/order/${transaction?.id}`, {
       ...temp,
       status,
       adminId: adminSelector?.id,
     });
     updateArray(setTransactions, transactions, transaction);
     setOpen(false);
-  } catch (error) {
+  } catch (err) {
     setOpen(true);
-    dispatch(constant.setError(error));
+    // dispatch(constant.setError(err));
+    dispatch(setAlertActionCreator({ err }));
   } finally {
     setShow('');
     setIsLoading(false);

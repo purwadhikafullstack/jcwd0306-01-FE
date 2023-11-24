@@ -76,7 +76,7 @@ function EditDialog({ warehouse, isEditDialogOpen, setIsEditDialogOpen }) {
                 <FormikOutlinedInput
                   name="country"
                   label="Negara"
-                  inputProps={{ disabled: true }}
+                  inputProps={{ readOnly: true }}
                 />
                 <FormikSelect
                   name="provinceId"
