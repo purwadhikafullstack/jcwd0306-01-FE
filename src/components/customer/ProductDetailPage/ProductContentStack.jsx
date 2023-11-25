@@ -32,7 +32,9 @@ function ProductContentStack() {
             {product.discount > 0 && (
               <Stack direction="row" spacing={1}>
                 <Chip
-                  label={`${product.discount * 100}%`}
+                  label={new Intl.NumberFormat('id-ID', {
+                    style: 'percent',
+                  }).format(product.discount)}
                   color="error"
                   size="small"
                 />

@@ -129,7 +129,11 @@ function ProductTableItem() {
               </TableCell>
               {/* Discount column */}
               <TableCell>
-                <Box sx={{ minWidth: '8rem' }}>{val.discount * 100}</Box>
+                <Box sx={{ minWidth: '8rem' }}>
+                  {new Intl.NumberFormat('id-ID', {
+                    style: 'percent',
+                  }).format(val.discount)}
+                </Box>
               </TableCell>
               {/* Description column */}
               <DescriptionTableCell text={val.description} />

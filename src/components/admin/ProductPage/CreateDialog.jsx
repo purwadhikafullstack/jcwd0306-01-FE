@@ -140,7 +140,9 @@ function CreateDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
                     inputProps: { min: 0, max: 1, step: 0.01 },
                     endAdornment: (
                       <InputAdornment position="end">
-                        {`≈ ${(formik.values.discount * 100).toFixed(2)}%`}
+                        {`≈ ${new Intl.NumberFormat('id-ID', {
+                          style: 'percent',
+                        }).format(formik.values.discount)}`}
                       </InputAdornment>
                     ),
                   }}
