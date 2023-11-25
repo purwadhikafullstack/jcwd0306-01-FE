@@ -53,7 +53,6 @@ function App() {
   const chatAttr = useSelector((states) => states.chatRoom);
   const dispatch = useDispatch();
   const theme = useTheme();
-  const [warehouseId, setWarehouseId] = useState([]);
   const [chatAttrAdmin, setChatAttrAdmin] = useState(new Map());
 
   useEffect(() => {
@@ -70,7 +69,7 @@ function App() {
     setChatAttrAdmin(chatAttr);
   }, [chatAttr]);
   useEffect(() => {
-    if (authUser?.id) fetchCartItemAndNotif(authUser, setWarehouseId, dispatch);
+    if (authUser?.id) fetchCartItemAndNotif(authUser, dispatch);
     socketConn.connect();
     if (authUser?.id)
       socketListener(socketConn, dispatch, authUser, orderStatus);

@@ -8,16 +8,17 @@ export const socketListener = (
   orderStatus = {}
 ) => {
   socketConnection.connect();
-  [authUser?.WarehouseUser].forEach((whs) => {
-    socketConnection.on(`warehouse-${whs.warehouseId}`, (msg) => {
-      dispatch(
-        setAlertActionCreator({
-          val: { status: 'info', message: msg?.message },
-        })
-      );
-      document.getElementById('startBubleNotification').click();
+  if (authUser?.WarehouseUser)
+    [authUser?.WarehouseUser].forEach((whs) => {
+      socketConnection.on(`warehouse-${whs.warehouseId}`, (msg) => {
+        dispatch(
+          setAlertActionCreator({
+            val: { status: 'info', message: msg?.message },
+          })
+        );
+        document.getElementById('startBubleNotification').click();
+      });
     });
-  });
   socketConnection.on(`unpaid-${authUser?.id}`, (payload) => {
     dispatch(
       setAlertActionCreator({

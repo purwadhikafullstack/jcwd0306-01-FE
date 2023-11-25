@@ -27,7 +27,9 @@ export const fetchTransaction = async (
         limit: searchParams.get(`limit`) || 5,
         status: setStatus(searchParams),
         text: searchParams.get(`name`),
-        ...(!userSelector?.isAdmin && { warehouseId: whId || warehouseIds }),
+        ...(!userSelector?.WarehouseUSer && {
+          warehouseId: whId || warehouseIds,
+        }),
       },
     });
     setTransactions(data.rows);

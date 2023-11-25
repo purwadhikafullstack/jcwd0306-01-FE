@@ -45,7 +45,7 @@ export function TransactionPage() {
     );
 
   useEffect(() => {
-    if (userSelector?.id)
+    if (userSelector?.WarehouseUser)
       warehouseIdSetter(setWarehouseIds, [userSelector?.WarehouseUser]);
   }, [userSelector?.id]);
 
