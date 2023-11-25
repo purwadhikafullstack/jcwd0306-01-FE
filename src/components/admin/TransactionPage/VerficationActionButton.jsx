@@ -9,6 +9,7 @@ export function VerficationActionButton({
   setOpen,
   transactions,
   setTransactions,
+  receipt,
 }) {
   const adminSelector = useSelector((state) => state.authUser);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +29,8 @@ export function VerficationActionButton({
         transactions,
         adminSelector,
         order,
-        status
+        status,
+        receipt
       );
     },
   };
@@ -82,7 +84,7 @@ export function VerficationActionButton({
         {order.status === 'processed' && (
           <Button
             variant="contained"
-            disabled={isLoading}
+            disabled={isLoading || !receipt}
             onClick={() => {
               setShow(true);
               setOpen(false);

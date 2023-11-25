@@ -115,9 +115,8 @@ function App() {
             {authUser.isAdmin && (
               <Route path="/admin/users" element={<AllUsersPage />} />
             )}
-            {authUser.isAdmin && (
-              <Route path="/admin/report" element={<ReportPage />} />
-            )}
+            <Route path="/admin/report" element={<ReportPage />} />
+
             <Route path="/admin/warehouses" element={<WarehousePage />} />
             <Route
               path="/admin/warehouses/:warehouseId"

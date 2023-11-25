@@ -80,9 +80,11 @@ function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
               <SupervisorAccountRounded />
             </ListItem>
           )}
-          <ListItem text="Users" to="/admin/users">
-            <PeopleOutlineIcon />
-          </ListItem>
+          {authUser.isAdmin && (
+            <ListItem text="Users" to="/admin/users">
+              <PeopleOutlineIcon />
+            </ListItem>
+          )}
           <ListItem text="Pengaturan" to="/admin/general">
             <SettingsRounded />
           </ListItem>
