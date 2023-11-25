@@ -6,7 +6,9 @@ export const fetchCartItemAndNotif = async (authUser, dispatch) => {
     if (authUser?.WarehouseUser) {
       dispatch({
         type: constant.setWarehouseUser,
-        payload: [authUser?.WarehouseUser.warehouseId], // ganti di sini aja kalo dari one to one ke one to many,
+        payload: authUser?.isAdmin
+          ? authUser?.WarehouseUsers
+          : [authUser?.WarehouseUser.warehouseId], // ganti di sini aja kalo dari one to one ke one to many,
       });
     }
     if (authUser?.id && authUser?.isCustomer) {

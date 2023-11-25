@@ -45,8 +45,13 @@ export function TransactionPage() {
     );
 
   useEffect(() => {
-    if (userSelector?.WarehouseUser)
-      warehouseIdSetter(setWarehouseIds, [userSelector?.WarehouseUser]);
+    if (userSelector?.id)
+      warehouseIdSetter(
+        setWarehouseIds,
+        userSelector?.isAdmin
+          ? userSelector?.WarehouseUsers
+          : [userSelector?.WarehouseUser]
+      );
   }, [userSelector?.id]);
 
   useEffect(() => {
@@ -55,7 +60,7 @@ export function TransactionPage() {
         params.set('warehouseId', JSON.stringify(warehouseIds));
         return params;
       });
-  }, [warehouseIds]);
+  }, [warehouseIds.length]);
 
   useEffect(() => {
     if (

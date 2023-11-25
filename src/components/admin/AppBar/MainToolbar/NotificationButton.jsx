@@ -34,7 +34,6 @@ function NotificationButton() {
       socketConn.on(
         `warehouseNotification-${userSelector?.WarehouseUser?.warehouseId}`,
         (number) => {
-          console.log(number);
           setNotification((total) => total + number);
         }
       );
