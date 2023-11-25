@@ -19,7 +19,7 @@ import { PaginationTable } from '../../components/admin/TransactionPage/Paginati
 import { WarehouseSelect } from '../../components/admin/TransactionPage/WarehouseSelect';
 import { warehouseIdSetter } from '../../components/admin/TransactionPage/warehouseIdSetter';
 
-export function TransactionPage({ warehouseId }) {
+export function TransactionPage() {
   const userSelector = useSelector((state) => state.authUser);
   const [searchParams, setSearchParams] = useSearchParams();
   const [transactions, setTransactions] = useState([]);
@@ -32,10 +32,22 @@ export function TransactionPage({ warehouseId }) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const xsOnly = useMediaQuery(theme.breakpoints.up('sm'));
+  const executeFetchTransaction = () =>
+    fetchTransaction(
+      setIsLoading,
+      setTransactions,
+      setTotalPage,
+      setCount,
+      dispatch,
+      searchParams,
+      warehouseIds,
+      userSelector
+    );
 
   useEffect(() => {
-    if (warehouseId.length) warehouseIdSetter(setWarehouseIds, warehouseId);
-  }, [warehouseId]);
+    if (userSelector?.id)
+      warehouseIdSetter(setWarehouseIds, [userSelector?.WarehouseUser]);
+  }, [userSelector?.id]);
 
   useEffect(() => {
     if (warehouseIds.length)
@@ -51,18 +63,8 @@ export function TransactionPage({ warehouseId }) {
       (warehouseIds.length ||
         searchParams.get('warehouseId') ||
         userSelector?.isAdmin)
-    ) {
-      fetchTransaction(
-        setIsLoading,
-        setTransactions,
-        setTotalPage,
-        setCount,
-        dispatch,
-        searchParams,
-        warehouseIds,
-        userSelector
-      );
-    }
+    )
+      executeFetchTransaction();
   }, [userSelector, searchParams]);
   return (
     <Container className="p-0">
@@ -118,6 +120,7 @@ export function TransactionPage({ warehouseId }) {
               transactions={transactions}
               isLoading={isLoading}
               setTransactions={setTransactions}
+              fetchTransaction={() => executeFetchTransaction()}
             />
           )}
 

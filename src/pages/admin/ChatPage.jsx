@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ArrowBack } from '@mui/icons-material';
 import { io } from 'socket.io-client';
+import { useSelector } from 'react-redux';
 import { warehouseIdSetter } from '../../components/admin/TransactionPage/warehouseIdSetter';
 import { ChatRoomCardButton } from '../../components/Chat/ChatRoomCardButton';
 import { fetchRooms } from '../../components/admin/ChatPage/fetchRooms';
@@ -23,7 +24,7 @@ import { socketListenerCardButton } from '../../components/admin/ChatPage/socket
 
 const socketConn = io(import.meta.env.VITE_API_BASE_URL);
 
-export function ChatPage({ warehouseId = [] }) {
+export function ChatPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [rooms, setRooms] = useState([]);
   const [whId, setWhId] = useState([]);
@@ -31,14 +32,15 @@ export function ChatPage({ warehouseId = [] }) {
   const [showInput, setShowInput] = useState(false);
   const [disableButton, setDisableButton] = useState(false);
   const receiverId = searchParams.get('receiverId');
+  const userSelector = useSelector((state) => state.authUser);
   const page = useRef(1);
   const totalData = useRef(0);
   const theme = useTheme();
   const smallerScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
-    warehouseIdSetter(setWhId, warehouseId);
-  }, [warehouseId]);
+    warehouseIdSetter(setWhId, [userSelector?.WarehouseUser]);
+  }, [userSelector]);
 
   useEffect(() => {
     fetchMessages(

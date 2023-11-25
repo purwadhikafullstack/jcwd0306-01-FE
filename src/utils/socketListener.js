@@ -4,12 +4,11 @@ import { constant } from '../constants/constant';
 export const socketListener = (
   socketConnection,
   dispatch,
-  warehouses = [],
-  userId = 0,
+  authUser,
   orderStatus = {}
 ) => {
   socketConnection.connect();
-  warehouses.forEach((whs) => {
+  [authUser?.WarehouseUser].forEach((whs) => {
     socketConnection.on(`warehouse-${whs.warehouseId}`, (msg) => {
       dispatch(
         setAlertActionCreator({
@@ -19,7 +18,7 @@ export const socketListener = (
       document.getElementById('startBubleNotification').click();
     });
   });
-  socketConnection.on(`unpaid-${userId}`, (payload) => {
+  socketConnection.on(`unpaid-${authUser?.id}`, (payload) => {
     dispatch(
       setAlertActionCreator({
         val: { status: 'info', message: payload?.message },
@@ -28,7 +27,7 @@ export const socketListener = (
     dispatch({ type: constant.addUnpaid, payload: payload?.data });
     document.getElementById('startBubleNotification').click();
   });
-  socketConnection.on(`notification-${userId}`, (payload) => {
+  socketConnection.on(`notification-${authUser?.id}`, (payload) => {
     const { key, value } = payload;
     dispatch(
       setAlertActionCreator({

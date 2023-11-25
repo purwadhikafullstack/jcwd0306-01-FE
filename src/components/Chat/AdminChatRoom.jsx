@@ -13,10 +13,12 @@ import { fetchMessages } from './fetchMessages';
 
 export function AdminChatRoom({ chatAttrAdmin, setChatAttrAdmin }) {
   const [messages, setMessages] = useState([]);
+  const [disableButton, setDisableButton] = useState(false);
   const theme = useTheme();
   const totalData = useRef(0);
   const userSelector = useSelector((state) => state.authUser);
   const receiverId = chatAttrAdmin.get('receiverId');
+  const orderId = chatAttrAdmin.get('orderId');
   const userName = chatAttrAdmin.get('name');
   const dispatch = useDispatch();
   const page = useRef(1);
@@ -33,13 +35,14 @@ export function AdminChatRoom({ chatAttrAdmin, setChatAttrAdmin }) {
 
   useEffect(() => {
     page.current = 1;
-    fetchMessages(
-      receiverId,
-      chatAttrAdmin,
-      setMessages,
-      page.current,
-      totalData
-    );
+    if (receiverId && orderId)
+      fetchMessages(
+        receiverId,
+        chatAttrAdmin,
+        setMessages,
+        page.current,
+        totalData
+      );
   }, [chatAttrAdmin]);
 
   useEffect(() => {
@@ -61,6 +64,8 @@ export function AdminChatRoom({ chatAttrAdmin, setChatAttrAdmin }) {
           setMessages={setMessages}
           searchParams={chatAttrAdmin}
           totalData={totalData}
+          setDisableButton={setDisableButton}
+          disableButton={disableButton}
         />
       </DialogContent>
     </Dialog>

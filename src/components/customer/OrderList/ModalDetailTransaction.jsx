@@ -22,6 +22,7 @@ export function ModalDetailTransaction({
   imgSrc,
   transactions,
   setTransactions,
+  fetchTransaction,
 }) {
   const handleClose = () => setOpen(false);
   const theme = useTheme();
@@ -57,6 +58,7 @@ export function ModalDetailTransaction({
                 setOpen={setOpen}
                 transactions={transactions}
                 setTransactions={setTransactions}
+                fetchTransaction={fetchTransaction}
               />
             </>
           ) : null}
