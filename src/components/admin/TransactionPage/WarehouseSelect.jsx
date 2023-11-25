@@ -4,13 +4,14 @@ import Checkbox from '@mui/material/Checkbox';
 import { Button, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import api from '../../../constants/api';
 
 export function WarehouseSelect({ warehouseIds = [], setWarehouseIds }) {
   const [show, setShow] = useState(false);
-  const [warehouses, setWarehouses] = useState([]);
-
+  const [warehouses, setWarehouses] = useState(warehouseIds);
   const userSelector = useSelector((state) => state.authUser);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const fetchWarehouseCityName = async () => {
     const { data } = await api.get(`/warehouses/admin/${userSelector?.id}`, {
@@ -19,8 +20,23 @@ export function WarehouseSelect({ warehouseIds = [], setWarehouseIds }) {
     setWarehouses(data);
   };
 
+  const handleChange = () => {
+    const whIdNodeList = document.getElementsByName('warehouseIdCheckBox');
+    const temp = [];
+    whIdNodeList.forEach((node) => {
+      if (node.checked) temp.push(Number(node.value));
+    });
+    setSearchParams((params) => {
+      params.set('warehouseId', JSON.stringify(temp));
+      return params;
+    });
+  };
+
   useEffect(() => {
-    if (warehouseIds.length && userSelector?.id) fetchWarehouseCityName();
+    const fetchCityName = setTimeout(() => {
+      if (warehouseIds.length && userSelector?.id) fetchWarehouseCityName();
+    }, 500);
+    return () => clearTimeout(fetchCityName);
   }, [warehouseIds, userSelector]);
   return (
     <Stack className="position-relative" style={{ flexGrow: 2 }}>
@@ -45,9 +61,8 @@ export function WarehouseSelect({ warehouseIds = [], setWarehouseIds }) {
                 defaultChecked
                 value={whse?.id}
                 name="warehouseIdCheckBox"
-                onChange={() =>
-                  document.getElementsByName('warehouseIdCheckBox')
-                }
+                disabled={warehouses.length === 1}
+                onChange={handleChange}
               />
             }
             label={`${whse?.id} ${whse?.WarehouseAddress?.City?.name}`}

@@ -14,7 +14,11 @@ import { constant } from '../../../constants/constant';
 import { ModalLoading } from '../../customer/OrderList/ModalDetailTransaction/ModalLoading';
 import { ImageDetail } from '../../ImageDetail';
 
-export function TransactionTable({ transactions = [], setTransactions }) {
+export function TransactionTable({
+  transactions = [],
+  setTransactions,
+  fetchTransaction,
+}) {
   const [transaction, setTransaction] = useState({});
   const [isFetching, setIsFetching] = useState(false);
   const [open, setOpen] = useState(false);
@@ -99,6 +103,7 @@ export function TransactionTable({ transactions = [], setTransactions }) {
           imgSrc={imgSrc}
           transactions={transactions}
           setTransactions={setTransactions}
+          fetchTransaction={fetchTransaction}
         />
       )}
       <ImageDetail

@@ -9,6 +9,7 @@ export function VerficationActionButton({
   setOpen,
   transactions,
   setTransactions,
+  fetchTransaction,
   receipt,
 }) {
   const adminSelector = useSelector((state) => state.authUser);
@@ -19,8 +20,8 @@ export function VerficationActionButton({
   const dispatch = useDispatch();
   const action = {
     name: actionName,
-    fn: () => {
-      handleUpdateStatus(
+    fn: async () => {
+      await handleUpdateStatus(
         dispatch,
         setOpen,
         setShow,
@@ -32,6 +33,7 @@ export function VerficationActionButton({
         status,
         receipt
       );
+      await fetchTransaction();
     },
   };
 

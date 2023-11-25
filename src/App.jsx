@@ -53,7 +53,6 @@ function App() {
   const chatAttr = useSelector((states) => states.chatRoom);
   const dispatch = useDispatch();
   const theme = useTheme();
-  const [warehouseId, setWarehouseId] = useState([]);
   const [chatAttrAdmin, setChatAttrAdmin] = useState(new Map());
 
   useEffect(() => {
@@ -70,17 +69,11 @@ function App() {
     setChatAttrAdmin(chatAttr);
   }, [chatAttr]);
   useEffect(() => {
-    fetchCartItemAndNotif(authUser, setWarehouseId, dispatch);
+    if (authUser?.id) fetchCartItemAndNotif(authUser, dispatch);
     socketConn.connect();
-    socketListener(
-      socketConn,
-      dispatch,
-      warehouseId,
-      authUser?.id,
-      orderStatus
-    );
-    // return () => socketConn.disconnect();
-  }, [localStorage.getItem('token')]);
+    if (authUser?.id)
+      socketListener(socketConn, dispatch, authUser, orderStatus);
+  }, [authUser?.id]);
 
   // ADMIN PAGE
   if (isAdminPage) {
@@ -102,10 +95,7 @@ function App() {
             {authUser.isAdmin && (
               <Route path="/admin/categories" element={<CategoryPage />} />
             )}
-            <Route
-              path="/admin/messages"
-              element={<ChatPage warehouseId={warehouseId} />}
-            />
+            <Route path="/admin/messages" element={<ChatPage />} />
             {authUser.isAdmin && (
               <Route
                 path="/admin/administrator"
@@ -122,10 +112,7 @@ function App() {
               path="/admin/warehouses/:warehouseId"
               element={<WarehouseDetailPage />}
             />
-            <Route
-              path="/admin/transactions"
-              element={<TransactionPage warehouseId={warehouseId} />}
-            />
+            <Route path="/admin/transactions" element={<TransactionPage />} />
             <Route path="/admin/report/monthly" element={<MonthlyReport />} />
             <Route
               path="/admin/product-history"
