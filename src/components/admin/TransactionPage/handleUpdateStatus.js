@@ -20,7 +20,8 @@ const handleUpdateStatus = async (
   transactions = [],
   adminSelector = {},
   transaction = {},
-  status = 'unpaid'
+  status = 'unpaid',
+  receipt = ''
 ) => {
   try {
     setIsLoading(true);
@@ -30,6 +31,7 @@ const handleUpdateStatus = async (
       ...temp,
       status,
       adminId: adminSelector?.id,
+      shippingReceipt: receipt,
     });
     updateArray(setTransactions, transactions, transaction);
     setOpen(false);

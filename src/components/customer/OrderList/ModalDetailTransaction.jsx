@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { Fade, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { Fade, Stack, TextField, useMediaQuery, useTheme } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
+import { useState } from 'react';
 import { StatusInvoice } from './ModalDetailTransaction/StatusInvoice';
 import { Products } from './ModalDetailTransaction/Products';
 import { ShippingInfo } from './ModalDetailTransaction/ShippingInfo';
@@ -27,6 +28,11 @@ export function ModalDetailTransaction({
   const handleClose = () => setOpen(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const [receipt, setreceipt] = useState(null);
+
+  const handleChange = (e) => {
+    setreceipt(e.target.value);
+  };
 
   return (
     <Dialog
@@ -53,12 +59,21 @@ export function ModalDetailTransaction({
                 setShow={setShow}
                 setOpen={setOpen}
               />
+              {order.status === 'processed' && (
+                <TextField
+                  label="input shipping receipt"
+                  onChange={handleChange}
+                  error={!receipt}
+                  required
+                />
+              )}
               <VerficationActionButton
                 order={order}
                 setOpen={setOpen}
                 transactions={transactions}
                 setTransactions={setTransactions}
                 fetchTransaction={fetchTransaction}
+                receipt={receipt}
               />
             </>
           ) : null}

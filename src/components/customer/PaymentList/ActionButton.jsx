@@ -5,8 +5,11 @@ import EmailIcon from '@mui/icons-material/Email';
 import { useNavigate } from 'react-router-dom';
 import { ConfirmationModal } from '../../ConfirmationModal';
 import { handleCancel } from '../OrderPayment/handleCancle';
+import { setAlertActionCreator } from '../../../states/alert/action';
+import api from '../../../constants/api';
 
 export function ActionButton({ order = {}, setOrderDetail, setOpen }) {
+  console.log(order);
   const [hiddenCancle, setHiddenCancle] = useState(false);
   const [disableButton, setDisableButton] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -15,6 +18,16 @@ export function ActionButton({ order = {}, setOrderDetail, setOpen }) {
   const userSelector = useSelector((state) => state.authUser);
   const unpaid = useSelector((state) => state.order);
   const nav = useNavigate();
+
+  const receivePackage = async () => {
+    try {
+      await api.patch(`/order/${order.id}/status/receipt`);
+      dispatch(setAlertActionCreator());
+      window.location.reload();
+    } catch (err) {
+      dispatch(setAlertActionCreator({ err }));
+    }
+  };
 
   return (
     <>
@@ -63,6 +76,15 @@ export function ActionButton({ order = {}, setOrderDetail, setOpen }) {
           disabled={disableButton}
         >
           Cancel Transaction
+        </Button>
+        <Button
+          variant="contained"
+          sx={{ display: order?.status !== 'shipped' ? 'none' : 'block' }}
+          onClick={async () => {
+            await receivePackage();
+          }}
+        >
+          Receive Package
         </Button>
         {order?.status === 'unpaid' ? (
           <Button variant="contained">
