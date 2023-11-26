@@ -5,19 +5,19 @@ import useCustomSearchParams from '../../../hooks/useCustomSearchParams';
 
 const tabColors = [
   {
-    backgroundColor: 'rgb(209,36,144)',
+    backgroundColor: 'rgb(25,171,168)',
     backgroundImage:
-      'linear-gradient(225deg, rgba(209,36,144,1) 50%, rgba(154,32,106,1) 100%)',
-  },
-  {
-    backgroundColor: 'rgb(64,177,71)',
-    backgroundImage:
-      'linear-gradient(225deg, rgba(64,177,71,1) 50%, rgba(12,139,70,1) 100%)',
+      'linear-gradient(225deg, rgba(25,171,168,1) 50%, rgba(5,114,169,1) 100%)',
   },
   {
     backgroundColor: 'rgb(253,192,3)',
     backgroundImage:
       'linear-gradient(225deg, rgba(253,192,3,1) 50%, rgba(233,142,25,1) 100%)',
+  },
+  {
+    backgroundColor: 'rgb(64,177,71)',
+    backgroundImage:
+      'linear-gradient(225deg, rgba(64,177,71,1) 50%, rgba(12,139,70,1) 100%)',
   },
   {
     backgroundColor: 'rgb(120,31,181)',
@@ -58,7 +58,7 @@ function TabList() {
     <Tabs
       value={searchParams.get('tab') || 'information'}
       aria-label="Warehouse Detail Tabs"
-      variant="scrollable"
+      variant="fullWidth"
       onChange={(e, val) => updateQueryParams({ tab: val })}
       TabIndicatorProps={{
         sx: {
@@ -92,12 +92,9 @@ function TabList() {
       }}
       sx={{
         position: 'relative',
-        maxWidth: 'lg',
+        maxWidth: 'sm',
         mx: 'auto',
-        '& div.MuiTabs-flexContainer': {
-          gap: '0.5rem',
-          justifyContent: 'center',
-        },
+        '& div.MuiTabs-flexContainer': { gap: '0.5rem' },
         '& button': {
           width: '10rem',
           height: '3.5rem',
