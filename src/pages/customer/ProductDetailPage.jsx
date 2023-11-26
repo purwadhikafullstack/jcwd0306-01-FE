@@ -20,7 +20,7 @@ function ProductDetailPage() {
     <>
       <main
         style={{
-          maxWidth: theme.breakpoints.values.lg,
+          maxWidth: theme.breakpoints.values.lg + 100,
           padding: '1rem',
           marginLeft: 'auto',
           marginRight: 'auto',

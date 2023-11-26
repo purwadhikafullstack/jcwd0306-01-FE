@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -19,6 +20,7 @@ import {
   asyncGetProducts,
 } from '../../../states/products/action';
 import CategoriesInput from './CategoriesInput';
+import FormikReactQuill from '../../FormikReactQuill';
 
 function CreateDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
   const dispatch = useDispatch();
@@ -147,11 +149,9 @@ function CreateDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
                     ),
                   }}
                 />
-                <FormikOutlinedInput
-                  name="description"
-                  label="Deskripsi"
-                  inputProps={{ multiline: true, rows: 10 }}
-                />
+                <Box sx={{ '& .ql-tooltip': { position: 'sticky' } }}>
+                  <FormikReactQuill name="description" label="Deskripsi" />
+                </Box>
                 <ImageInput />
                 <CategoriesInput />
               </Stack>
@@ -159,7 +159,8 @@ function CreateDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
             <DialogActions sx={{ justifyContent: 'center' }}>
               <Button
                 onClick={() => setIsCreateDialogOpen(false)}
-                variant="outlined"
+                variant="contained"
+                color="error"
               >
                 Batal
               </Button>

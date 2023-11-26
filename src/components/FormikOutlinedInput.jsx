@@ -5,6 +5,7 @@ import {
   OutlinedInput,
 } from '@mui/material';
 import { Field } from 'formik';
+import { shape, string } from 'prop-types';
 
 function FormikOutlinedInput({ name, label, inputProps }) {
   return (
@@ -35,5 +36,15 @@ function FormikOutlinedInput({ name, label, inputProps }) {
     </Field>
   );
 }
+
+FormikOutlinedInput.defaultProps = {
+  inputProps: {},
+};
+
+FormikOutlinedInput.propTypes = {
+  name: string.isRequired,
+  label: string.isRequired,
+  inputProps: shape({}),
+};
 
 export default FormikOutlinedInput;

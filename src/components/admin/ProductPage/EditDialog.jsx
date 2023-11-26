@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -16,6 +17,7 @@ import ImageInput from './ImageInput';
 import CategoriesInput from './CategoriesInput';
 import { asyncEditProduct } from '../../../states/products/action';
 import DeleteSavedImageField from './DeleteSavedImageField';
+import FormikReactQuill from '../../FormikReactQuill';
 
 function EditDialog({ product, isEditDialogOpen, setIsEditDialogOpen }) {
   const dispatch = useDispatch();
@@ -142,11 +144,9 @@ function EditDialog({ product, isEditDialogOpen, setIsEditDialogOpen }) {
                     ),
                   }}
                 />
-                <FormikOutlinedInput
-                  name="description"
-                  label="Deskripsi"
-                  inputProps={{ multiline: true, rows: 10 }}
-                />
+                <Box sx={{ '& .ql-tooltip': { position: 'sticky' } }}>
+                  <FormikReactQuill name="description" label="Deskripsi" />
+                </Box>
                 <ImageInput />
                 <DeleteSavedImageField />
                 <CategoriesInput />
@@ -155,7 +155,8 @@ function EditDialog({ product, isEditDialogOpen, setIsEditDialogOpen }) {
             <DialogActions sx={{ justifyContent: 'center' }}>
               <Button
                 onClick={() => setIsEditDialogOpen(false)}
-                variant="outlined"
+                variant="contained"
+                color="error"
               >
                 Batal
               </Button>
