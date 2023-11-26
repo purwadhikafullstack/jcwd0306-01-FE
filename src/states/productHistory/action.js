@@ -1,4 +1,5 @@
 import api from '../../constants/api';
+import { setAlertActionCreator } from '../alert/action';
 import { setProductHistoryPaginationActionCreator } from '../productHistoryPagination/action';
 
 const ActionType = {
@@ -50,8 +51,8 @@ function asyncGetProductHistory({
 
       dispatch(getProductHistoryActionCreator(data?.data));
       dispatch(setProductHistoryPaginationActionCreator(data?.info));
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      dispatch(setAlertActionCreator({ err }));
     }
   };
 }

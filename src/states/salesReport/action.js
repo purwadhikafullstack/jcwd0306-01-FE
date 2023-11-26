@@ -1,4 +1,6 @@
+import { hideLoading, showLoading } from 'react-redux-loading-bar';
 import api from '../../constants/api';
+import { setAlertActionCreator } from '../alert/action';
 import { setReportPaginationActionCreator } from '../salesReportPagination/action';
 
 const ActionType = {
@@ -23,9 +25,11 @@ function asyncGetReports({
   productName,
   startDate,
   endDate,
+  warehouseId,
 } = {}) {
   return async (dispatch) => {
     try {
+      dispatch(showLoading());
       const nameQ = name ? `name=${encodeURIComponent(name)}&` : '';
       const sortByQ = sortBy ? `sortBy=${encodeURIComponent(sortBy)}&` : '';
       const orderByQ = orderBy ? `orderBy=${encodeURIComponent(orderBy)}&` : '';
@@ -42,17 +46,19 @@ function asyncGetReports({
         ? `startDate=${encodeURIComponent(startDate)}&`
         : '';
       const endDateQ = endDate ? `endDate=${encodeURIComponent(endDate)}&` : '';
-
-      const allQuery = `?${nameQ}${sortByQ}${orderByQ}${pageQ}${perPageQ}${WHQ}${categoryQ}${productNameQ}${startDateQ}${endDateQ}`;
-
+      const warehouseIdQ = warehouseId
+        ? `warehouseId=${encodeURIComponent(warehouseId)}&`
+        : '';
+      const allQuery = `?${nameQ}${sortByQ}${orderByQ}${pageQ}${perPageQ}${WHQ}${categoryQ}${productNameQ}${startDateQ}${endDateQ}${warehouseIdQ}`;
       const { data } = await api.get(`/sales-reports${allQuery}`);
-
       dispatch(getAllReportActionCreator(data?.data?.data?.result));
       dispatch(
         setReportPaginationActionCreator(data?.data?.data?.paginationInfo)
       );
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      dispatch(setAlertActionCreator({ err }));
+    } finally {
+      dispatch(hideLoading());
     }
   };
 }

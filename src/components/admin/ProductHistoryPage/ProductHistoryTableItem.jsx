@@ -18,7 +18,6 @@ import api from '../../../constants/api';
 
 function ProductHistoryTableItem() {
   const productHistory = useSelector((states) => states.productHistory);
-  const authUser = useSelector((states) => states.authUser);
   const [smOpen, setSmOpen] = useState(false);
   const [orderDetailOpen, setOrderDetailOpen] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
@@ -62,7 +61,6 @@ function ProductHistoryTableItem() {
     }
   };
 
-  let idCounter = 1;
   return (
     <TableBody>
       {/* When Stock-History not found */}
@@ -85,8 +83,8 @@ function ProductHistoryTableItem() {
             ':hover': { bgcolor: '#f5f5f5' },
           }}
         >
-          {/* ID column */}
-          <TableCell>{idCounter++}</TableCell>
+          {/* No column */}
+          <TableCell>{index + 1}</TableCell>
 
           {/* Name column */}
           <TableCell>{val?.Product?.name}</TableCell>
@@ -94,16 +92,38 @@ function ProductHistoryTableItem() {
           {/* Email column */}
           <TableCell>{val?.Warehouse?.name}</TableCell>
 
-          {/* Warehouse column */}
-          <TableCell>{val?.quantity}</TableCell>
+          {/* quantity column */}
+          <TableCell sx={{ textAlign: 'center' }}>
+            <span
+              style={{
+                color: val?.quantity.toString().includes('-') ? 'red' : 'green',
+                fontWeight: 'bold',
+                fontSize: '15px',
+              }}
+            >
+              {val?.quantity.toString().includes('-')
+                ? val?.quantity
+                : `+${val?.quantity}`}
+            </span>
+          </TableCell>
+
+          {/* updated stock column */}
           <TableCell sx={{ textAlign: 'center' }}>
             {val?.updatedStock}
           </TableCell>
+
+          {/* type column */}
           <TableCell>{val?.type}</TableCell>
+
+          {/* admin name column */}
           <TableCell sx={{ textAlign: 'center' }}>
             {val?.User?.firstName ? val?.User?.firstName : '-'}
           </TableCell>
+
+          {/* date column */}
           <TableCell>{formatDate(moment, val?.createdAt)}</TableCell>
+
+          {/* Button Detail column */}
           <TableCell sx={{ textAlign: 'center' }}>
             {val?.type === 'manual' ? (
               '-'
