@@ -72,7 +72,7 @@ function ProductHistoryTable() {
               <SortLabelTableCell label="warehouse">
                 Warehouse
               </SortLabelTableCell>
-              <SortLabelTableCell label="quantity">Qty</SortLabelTableCell>
+              <SortLabelTableCell label="quantity">Quantity</SortLabelTableCell>
               <SortLabelTableCell label="updatedStock">
                 <span style={{ textAlign: 'center' }}>Updated Stock</span>
               </SortLabelTableCell>

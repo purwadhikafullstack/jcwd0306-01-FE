@@ -7,7 +7,6 @@ import useCustomSearchParams from '../../hooks/useCustomSearchParams';
 
 export function ProductHistoryPage() {
   const authUser = useSelector((states) => states.authUser);
-  console.log(authUser);
   const id = authUser?.WarehouseUser?.warehouseId || null;
   const theme = useTheme();
   const dispatch = useDispatch();

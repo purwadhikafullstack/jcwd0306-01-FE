@@ -1,11 +1,14 @@
 import { useTheme } from '@mui/material';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ContainerReportPage from '../../components/admin/ReportPage/ContainerReportPage';
 import useCustomSearchParams from '../../hooks/useCustomSearchParams';
 import { asyncGetReports } from '../../states/salesReport/action';
 
 export function ReportPage() {
+  const authUser = useSelector((states) => states.authUser);
+  const id = authUser?.WarehouseUser?.warehouseId;
+  console.log(id);
   const theme = useTheme();
   const dispatch = useDispatch();
 
@@ -33,6 +36,7 @@ export function ReportPage() {
         productName: searchParams.get('productName'),
         startDate: searchParams.get('startDate'),
         endDate: searchParams.get('endDate'),
+        warehouseId: id,
       })
     );
   }, [
@@ -46,6 +50,7 @@ export function ReportPage() {
     searchParams.get('productName'),
     searchParams.get('startDate'),
     searchParams.get('endDate'),
+    id,
   ]);
 
   return (
