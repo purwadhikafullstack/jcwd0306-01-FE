@@ -14,7 +14,7 @@ function ProductDetailPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(asyncGetProduct(productId));
-  }, []);
+  }, [dispatch, productId]);
 
   return (
     <>
