@@ -1,10 +1,15 @@
-import { Button, Card, CardContent, Grid, Stack } from '@mui/material';
+import { Card, CardContent, Grid, Stack } from '@mui/material';
 import { HeaderDate } from '../PaymentList/HeaderDate';
 import { TotalPayment } from '../PaymentList/TotalPayment';
 import { ActionButton } from '../PaymentList/ActionButton';
 import { OrderProduct } from './OrderProduct';
 
-export function OrderListItem({ order = {}, setOrderDetail, setOpen }) {
+export function OrderListItem({
+  order = {},
+  setOrders,
+  setOrderDetail,
+  setOpen,
+}) {
   return (
     <Card>
       <CardContent>
@@ -31,6 +36,7 @@ export function OrderListItem({ order = {}, setOrderDetail, setOpen }) {
               order={order}
               setOrderDetail={setOrderDetail}
               setOpen={setOpen}
+              setOrders={setOrders}
             />
           </Stack>
         </Stack>

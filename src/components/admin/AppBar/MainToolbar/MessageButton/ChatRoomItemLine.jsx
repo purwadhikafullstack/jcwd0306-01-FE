@@ -2,25 +2,42 @@ import { Avatar, Button } from '@mui/material';
 import { Col, Row } from 'react-bootstrap';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import { constant } from '../../../../../constants/constant';
 
 export function ChatRoomItemLine({ item = {} }) {
+  const pathnameList = window.location.pathname.split(`/`);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const isAdminChatPage = pathnameList[1] + pathnameList[2] === 'adminmessages';
+
   const dispatch = useDispatch();
   return (
     <Row className="m-0">
       <Button
         className="text-decoration-none text-black d-flex justify-content-start"
-        onClick={() => {
-          dispatch({
-            type: constant.setChatRoom,
-            payload: new Map([
-              ['receiverId', item?.senderId],
-              ['orderId', item?.orderId],
-              ['warehouseId', item?.warehouseId],
-              ['name', `${item?.Sender?.firstName} ${item?.Sender?.lastName}`],
-            ]),
-          });
-        }}
+        onClick={
+          isAdminChatPage
+            ? () =>
+                setSearchParams((params) => {
+                  params.set(`receiverId`, item?.senderId);
+                  params.set(`orderId`, item?.orderId);
+                  params.set(`warehouseId`, item?.warehouseId);
+                  return params;
+                })
+            : () =>
+                dispatch({
+                  type: constant.setChatRoom,
+                  payload: new Map([
+                    ['receiverId', item?.senderId],
+                    ['orderId', item?.orderId],
+                    ['warehouseId', item?.warehouseId],
+                    [
+                      'name',
+                      `${item?.Sender?.firstName} ${item?.Sender?.lastName}`,
+                    ],
+                  ]),
+                })
+        }
       >
         <Row className="m-0 px-1 py-2 border-top border-secondary-subtle w-100">
           <Col className="  p-0" md="auto" key={1}>
