@@ -1,9 +1,11 @@
 import { MessageLeft, MessageRight } from './Message';
 
 export function messagesPositionSetter(msg, userSelector) {
-  if (msg?.receiverId === userSelector?.id && msg?.senderId !== msg?.receiverId)
+  const { receiverId, senderId } = msg;
+  const isAdminPage = window.location.pathname.split(`/`)[1] === `admin`;
+  if (receiverId === userSelector?.id && senderId !== receiverId)
     return (
-      <MessageLeft
+      <MessageRight
         key={msg?.id}
         message={msg?.message}
         timestamp={msg?.createdAt}
@@ -11,13 +13,9 @@ export function messagesPositionSetter(msg, userSelector) {
         avatarDisp
       />
     );
-  if (
-    msg?.senderId === userSelector?.id &&
-    !msg?.receiverId &&
-    window.location.pathname.split(`/`)[1] === `admin`
-  )
+  if (senderId === userSelector?.id && receiverId && isAdminPage)
     return (
-      <MessageLeft
+      <MessageRight
         key={msg?.id}
         message={msg?.message}
         timestamp={msg?.createdAt}
@@ -25,7 +23,18 @@ export function messagesPositionSetter(msg, userSelector) {
         avatarDisp
       />
     );
-  if (msg?.senderId === userSelector?.id && !msg?.receiverId)
+  if (senderId && receiverId && isAdminPage)
+    return (
+      <MessageRight
+        key={msg?.id}
+        senderId={msg?.senderId}
+        message={msg?.message}
+        timestamp={msg?.createdAt}
+        displayName={msg?.Sender?.firstName}
+        avatarDisp
+      />
+    );
+  if (senderId === userSelector?.id && receiverId)
     return (
       <MessageRight
         key={msg?.id}
@@ -36,8 +45,8 @@ export function messagesPositionSetter(msg, userSelector) {
       />
     );
   if (
-    msg?.senderId === userSelector?.id &&
-    msg?.receiverId &&
+    senderId === userSelector?.id &&
+    receiverId &&
     window.location.pathname.split(`/`)[1] === `admin`
   )
     return (
@@ -50,12 +59,12 @@ export function messagesPositionSetter(msg, userSelector) {
       />
     );
   if (
-    msg?.senderId === userSelector?.id &&
-    msg?.receiverId === userSelector?.id &&
+    senderId === userSelector?.id &&
+    receiverId === userSelector?.id &&
     window.location.pathname.split(`/`)[1] !== `admin`
   )
     return (
-      <MessageLeft
+      <MessageRight
         key={msg?.id}
         message={msg?.message}
         timestamp={msg?.createdAt}

@@ -39,7 +39,10 @@ export function ChatPage() {
   const smallerScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
-    warehouseIdSetter(setWhId, [userSelector?.WarehouseUser]);
+    warehouseIdSetter(
+      setWhId,
+      [userSelector?.WarehouseUser] || userSelector?.WarehouseUsers
+    );
   }, [userSelector]);
 
   useEffect(() => {

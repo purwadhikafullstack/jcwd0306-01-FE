@@ -8,8 +8,12 @@ import { handleCancel } from '../OrderPayment/handleCancle';
 import { setAlertActionCreator } from '../../../states/alert/action';
 import api from '../../../constants/api';
 
-export function ActionButton({ order = {}, setOrderDetail, setOpen }) {
-  console.log(order);
+export function ActionButton({
+  order = {},
+  setOrderDetail,
+  setOpen,
+  setOrders,
+}) {
   const [hiddenCancle, setHiddenCancle] = useState(false);
   const [disableButton, setDisableButton] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -70,6 +74,7 @@ export function ActionButton({ order = {}, setOrderDetail, setOpen }) {
               userSelector,
               order,
               setHiddenCancle,
+              setOrders,
               unpaid
             );
           }}

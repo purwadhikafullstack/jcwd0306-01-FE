@@ -27,6 +27,7 @@ export function ChatBody({
   const dispatch = useDispatch();
 
   const handleNext = () => {
+    // eslint-disable-next-line no-param-reassign
     page.current += 1;
     fetchMessages(
       userSelector?.id,
