@@ -34,7 +34,8 @@ export function ChatBody({
       searchParams,
       setMessages,
       page?.current,
-      totalData
+      totalData,
+      setDisableButton
     );
   };
 
