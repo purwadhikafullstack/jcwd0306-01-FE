@@ -22,8 +22,8 @@ export function ChatBody({
   disableButton,
 }) {
   const userSelector = useSelector((state) => state.authUser);
-  const [orderId, setOrderId] = useState(0);
-  const [warehouseId, setWarehouseId] = useState(0);
+  const orderId = Number(searchParams.get('orderId'));
+  const warehouseId = Number(searchParams.get('warehouseId'));
   const dispatch = useDispatch();
 
   const handleNext = () => {
@@ -39,32 +39,14 @@ export function ChatBody({
     );
   };
   useEffect(() => {
-    setOrderId(Number(searchParams.get('orderId')));
-    setWarehouseId(Number(searchParams.get('warehouseId')));
-  }, [searchParams.get('orderId'), searchParams.get('warehouseId')]);
-  useEffect(() => {
     socketConn.connect();
     if (window.location.pathname.split('/')[1] === 'admin' && warehouseId)
       socketConn.on(`channel-WHID-${warehouseId}`, ({ record }) =>
-        setDataFromSocket(
-          dispatch,
-          record,
-          setMessages,
-          messages,
-          warehouseId,
-          orderId
-        )
+        setDataFromSocket(dispatch, searchParams, record, setMessages, messages)
       );
     else if (userSelector?.id)
       socketConn.on(`channel-USER-${userSelector?.id}`, ({ record }) =>
-        setDataFromSocket(
-          dispatch,
-          record,
-          setMessages,
-          messages,
-          warehouseId,
-          orderId
-        )
+        setDataFromSocket(dispatch, searchParams, record, setMessages, messages)
       );
     return () => socketConn.removeAllListeners();
   }, [userSelector?.id, warehouseId, orderId]);

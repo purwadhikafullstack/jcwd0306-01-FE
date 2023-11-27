@@ -2,20 +2,14 @@ import { constant } from '../../constants/constant';
 
 export const setDataFromSocket = (
   dispatch,
+  searchParams,
   record,
   setMessages,
-  messages,
-  warehouseId,
-  orderId
+  messages
 ) => {
   try {
-    console.log(
-      222,
-      orderId,
-      record?.orderId,
-      warehouseId,
-      record?.warehouseId
-    );
+    const orderId = Number(searchParams.get('orderId'));
+    const warehouseId = Number(searchParams.get('warehouseId'));
     if (
       (window.location.pathname.split('/')[1] === 'admin' &&
         warehouseId === record?.warehouseId &&
@@ -23,10 +17,8 @@ export const setDataFromSocket = (
       orderId === record?.orderId
     ) {
       const rec = messages.find((val) => val?.id === record?.id);
-      console.log(`check 1`, !rec && orderId === record?.orderId);
       if (!rec && orderId === record?.orderId)
         setMessages((msg) => {
-          console.log(msg[0].orderId);
           if (msg[0]?.orderId === record?.orderId) return [record, ...msg];
         });
     }
