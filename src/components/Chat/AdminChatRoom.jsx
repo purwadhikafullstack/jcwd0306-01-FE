@@ -41,7 +41,8 @@ export function AdminChatRoom({ chatAttrAdmin, setChatAttrAdmin }) {
         chatAttrAdmin,
         setMessages,
         page.current,
-        totalData
+        totalData,
+        setDisableButton
       );
   }, [chatAttrAdmin]);
 
