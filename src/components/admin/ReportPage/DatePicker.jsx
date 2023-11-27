@@ -5,11 +5,13 @@ import { DateRangePicker } from 'react-date-range';
 import { useState } from 'react';
 import { Button, Dialog, DialogActions } from '@mui/material';
 import moment from 'moment';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { asyncGetReports } from '../../../states/salesReport/action';
 import useCustomSearchParams from '../../../hooks/useCustomSearchParams';
 
 export function DatePicker({ open, setIsDateOpen }) {
+  const authUser = useSelector((states) => states.authUser);
+  const id = authUser?.WarehouseUser?.warehouseId;
   const dispatch = useDispatch();
   const [searchParams, updateQueryParams] = useCustomSearchParams();
 
@@ -33,7 +35,7 @@ export function DatePicker({ open, setIsDateOpen }) {
   const handleSubmit = async () => {
     try {
       const formattedDate = formatDate(date[0]);
-      dispatch(asyncGetReports(formattedDate));
+      dispatch(asyncGetReports({ ...formattedDate, warehouseId: id }));
       updateQueryParams({
         startDate: formattedDate?.startDate,
         endDate: formattedDate?.endDate,

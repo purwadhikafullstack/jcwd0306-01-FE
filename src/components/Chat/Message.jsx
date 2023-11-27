@@ -1,5 +1,6 @@
 import { Avatar } from '@mui/material';
 import './Message.css';
+import { useSelector } from 'react-redux';
 
 export function MessageLeft({ message, timestamp, photoURL, displayName }) {
   const date = new Date(timestamp);
@@ -30,10 +31,19 @@ export function MessageLeft({ message, timestamp, photoURL, displayName }) {
   );
 }
 
-export function MessageRight({ message, timestamp }) {
+export function MessageRight({ message, timestamp, displayName, senderId }) {
+  const userSelector = useSelector((state) => state.authUser);
   const date = new Date(timestamp);
   return (
     <div className="messageRowRight">
+      {senderId && userSelector?.id !== senderId ? (
+        <div
+          className="d-flex"
+          style={{ fontSize: '0.7em', paddingTop: '10px' }}
+        >
+          admin-{displayName}
+        </div>
+      ) : null}
       <div className="messageOrange">
         <p className="messageContent">{message || 'no message'}</p>
         <div className="messageTimeStampRight" style={{ fontSize: '0.7em' }}>

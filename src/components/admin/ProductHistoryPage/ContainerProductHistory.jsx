@@ -5,6 +5,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import DateRangeIcon from '@mui/icons-material/DateRange';
+import { useSelector } from 'react-redux';
 import SearchInput from './SearchInput';
 import ProductHistoryTable from './ProductHistoryTable';
 import ProductHistoryFooter from './productHistoryFooter';
@@ -14,6 +15,7 @@ import { SelectByProductName } from '../ReportPage/SelectComponents/SelectByProd
 import { DatePicker } from '../ReportPage/DatePicker';
 
 function ContainerProductHistory() {
+  const authUser = useSelector((states) => states.authUser);
   const [open, setOpen] = useState(false);
   const [productOpen, setProductOpen] = useState(false);
   const [isDateOpen, setIsDateOpen] = useState(false);
@@ -96,7 +98,11 @@ function ContainerProductHistory() {
               <Button
                 onClick={setDialogFilterOpen}
                 startIcon={<WarehouseRounded />}
-                sx={{ height: '48px', justifyContent: 'flex-start' }}
+                sx={{
+                  height: '48px',
+                  justifyContent: 'flex-start',
+                  display: authUser?.WarehouseUser?.warehouseId ? 'none' : '',
+                }}
               >
                 By Warehouse
               </Button>

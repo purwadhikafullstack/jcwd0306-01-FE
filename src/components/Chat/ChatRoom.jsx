@@ -53,7 +53,8 @@ export function ChatRoom() {
         searchParams,
         setMessages,
         page?.current,
-        totalData
+        totalData,
+        setDisableButton
       );
     }
     if (searchParams.get(`orderId`)) setShowInput(true);
@@ -98,7 +99,9 @@ export function ChatRoom() {
                     userSelector.id,
                     searchParams,
                     setMessages,
-                    page.current
+                    page.current,
+                    totalData,
+                    setDisableButton
                   );
                 }}
               >

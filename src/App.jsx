@@ -51,7 +51,6 @@ function App() {
   const orderStatus = useSelector((states) => states.orderStatus);
   const chatAttr = useSelector((states) => states.chatRoom);
   const dispatch = useDispatch();
-  const [warehouseId, setWarehouseId] = useState([]);
   const [chatAttrAdmin, setChatAttrAdmin] = useState(new Map());
 
   useEffect(() => {
@@ -62,17 +61,11 @@ function App() {
     setChatAttrAdmin(chatAttr);
   }, [chatAttr]);
   useEffect(() => {
-    fetchCartItemAndNotif(authUser, setWarehouseId, dispatch);
+    if (authUser?.id) fetchCartItemAndNotif(authUser, dispatch);
     socketConn.connect();
-    socketListener(
-      socketConn,
-      dispatch,
-      warehouseId,
-      authUser?.id,
-      orderStatus
-    );
-    // return () => socketConn.disconnect();
-  }, [localStorage.getItem('token')]);
+    if (authUser?.id)
+      socketListener(socketConn, dispatch, authUser, orderStatus);
+  }, [authUser?.id]);
 
   // ADMIN PAGE
   if (isAdminPage) {
@@ -94,10 +87,7 @@ function App() {
             {authUser.isAdmin && (
               <Route path="/admin/categories" element={<CategoryPage />} />
             )}
-            <Route
-              path="/admin/messages"
-              element={<ChatPage warehouseId={warehouseId} />}
-            />
+            <Route path="/admin/messages" element={<ChatPage />} />
             {authUser.isAdmin && (
               <Route
                 path="/admin/administrator"
@@ -107,18 +97,14 @@ function App() {
             {authUser.isAdmin && (
               <Route path="/admin/users" element={<AllUsersPage />} />
             )}
-            {authUser.isAdmin && (
-              <Route path="/admin/report" element={<ReportPage />} />
-            )}
+            <Route path="/admin/report" element={<ReportPage />} />
+
             <Route path="/admin/warehouses" element={<WarehousePage />} />
             <Route
               path="/admin/warehouses/:warehouseId"
               element={<WarehouseDetailPage />}
             />
-            <Route
-              path="/admin/transactions"
-              element={<TransactionPage warehouseId={warehouseId} />}
-            />
+            <Route path="/admin/transactions" element={<TransactionPage />} />
             <Route path="/admin/report/monthly" element={<MonthlyReport />} />
             <Route
               path="/admin/product-history"
@@ -144,7 +130,6 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="*" element={<Navigate to="/" />} />
-          <Route path="/verify" element={<Verify />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/cart/shipment" element={<Checkout />} />
           <Route path="/payment" element={<TransitionPage />} />
@@ -179,6 +164,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify" element={<Verify />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/products" element={<CustomerProductPage />} />

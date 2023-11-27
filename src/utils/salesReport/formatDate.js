@@ -1,5 +1,5 @@
 function formatDate(moment, dateString) {
-  const formattedDate = moment(dateString).format('dddd, D MMMM YYYY');
+  const formattedDate = moment(dateString).format('ddd, MMM DD YYYY HH:mm:ss');
   return formattedDate;
 }
 

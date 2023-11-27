@@ -9,6 +9,8 @@ export function VerficationActionButton({
   setOpen,
   transactions,
   setTransactions,
+  fetchTransaction,
+  receipt,
 }) {
   const adminSelector = useSelector((state) => state.authUser);
   const [isLoading, setIsLoading] = useState(false);
@@ -18,8 +20,8 @@ export function VerficationActionButton({
   const dispatch = useDispatch();
   const action = {
     name: actionName,
-    fn: () => {
-      handleUpdateStatus(
+    fn: async () => {
+      await handleUpdateStatus(
         dispatch,
         setOpen,
         setShow,
@@ -28,8 +30,10 @@ export function VerficationActionButton({
         transactions,
         adminSelector,
         order,
-        status
+        status,
+        receipt
       );
+      await fetchTransaction();
     },
   };
 
@@ -82,7 +86,7 @@ export function VerficationActionButton({
         {order.status === 'processed' && (
           <Button
             variant="contained"
-            disabled={isLoading}
+            disabled={isLoading || !receipt}
             onClick={() => {
               setShow(true);
               setOpen(false);

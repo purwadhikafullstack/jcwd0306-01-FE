@@ -1,17 +1,14 @@
-// import { DeleteRounded, EditNoteRounded } from '@mui/icons-material';
 import {
   Avatar,
-  // IconButton,
-  // Stack,
   TableBody,
   TableCell,
   TableRow,
-  // Tooltip,
   Typography,
 } from '@mui/material';
-// import { useSelector } from 'react-redux';
 import { useSelector } from 'react-redux';
+import moment from 'moment/moment';
 import { Roles } from './Roles';
+import formatDate from '../../../utils/salesReport/formatDate';
 
 function AllUsersTableItem({ whAdmin }) {
   const authUser = useSelector((state) => state.authUser);
@@ -57,6 +54,9 @@ function AllUsersTableItem({ whAdmin }) {
 
           {/* Email column */}
           <TableCell>{val.email}</TableCell>
+
+          {/* Join Date Column */}
+          <TableCell>{formatDate(moment, val.createdAt)}</TableCell>
 
           {/* Role column */}
           <TableCell>

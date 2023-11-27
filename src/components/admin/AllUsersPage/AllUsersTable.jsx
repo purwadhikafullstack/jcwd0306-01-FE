@@ -22,6 +22,7 @@ function AllUsersTable({ users, whAdmin }) {
             </SortLabelTableCell>
             <SortLabelTableCell label="lastName">Last Name</SortLabelTableCell>
             <SortLabelTableCell label="email">Email</SortLabelTableCell>
+            <TableCell sx={{ color: 'white' }}>Join Date</TableCell>
             <TableCell sx={{ color: 'white' }}>Role</TableCell>
           </TableRow>
         </TableHead>

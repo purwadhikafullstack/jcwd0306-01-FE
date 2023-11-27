@@ -14,8 +14,6 @@ import {
 } from '@mui/icons-material';
 import ReceiptLongRoundedIcon from '@mui/icons-material/ReceiptLongRounded';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import TodayIcon from '@mui/icons-material/Today';
-import DonutLargeIcon from '@mui/icons-material/DonutLarge';
 import { Button, Drawer, List, ListSubheader, Stack } from '@mui/material';
 import { useSelector } from 'react-redux';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
@@ -80,9 +78,11 @@ function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
               <SupervisorAccountRounded />
             </ListItem>
           )}
-          <ListItem text="Users" to="/admin/users">
-            <PeopleOutlineIcon />
-          </ListItem>
+          {authUser.isAdmin && (
+            <ListItem text="Users" to="/admin/users">
+              <PeopleOutlineIcon />
+            </ListItem>
+          )}
           <ListItem text="Pengaturan" to="/admin/general">
             <SettingsRounded />
           </ListItem>
@@ -93,14 +93,8 @@ function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
 
         {/* Sales Menu */}
         <List subheader={<ListSubheader>Sales</ListSubheader>}>
-          <ListItem text="Daily" to="#">
-            <TodayIcon />
-          </ListItem>
           <ListItem text="Monthly" to="/admin/report/monthly">
             <CalendarMonthIcon />
-          </ListItem>
-          <ListItem text="Breakdown" to="#">
-            <DonutLargeIcon />
           </ListItem>
         </List>
 

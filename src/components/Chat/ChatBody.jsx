@@ -27,32 +27,34 @@ export function ChatBody({
   const dispatch = useDispatch();
 
   const handleNext = () => {
+    // eslint-disable-next-line no-param-reassign
     page.current += 1;
     fetchMessages(
       userSelector?.id,
       searchParams,
       setMessages,
       page?.current,
-      totalData
+      totalData,
+      setDisableButton
     );
   };
 
   useEffect(() => {
     socketConn.connect();
-    if (window.location.pathname.split('/')[1] === 'admin')
+    if (window.location.pathname.split('/')[1] === 'admin' && warehouseId)
       socketConn.on(`channel-WHID-${warehouseId}`, ({ record }) =>
         setDataFromSocket(dispatch, searchParams, record, setMessages, messages)
       );
-    else
+    else if (userSelector?.id)
       socketConn.on(`channel-USER-${userSelector?.id}`, ({ record }) =>
         setDataFromSocket(dispatch, searchParams, record, setMessages, messages)
       );
     return () => socketConn.disconnect();
-  }, [searchParams, userSelector, messages.length]);
+  }, [userSelector?.id, warehouseId]);
 
   useEffect(() => {
     if (userSelector?.id)
-      updateIsRead(setMessages, dispatch, messages, userSelector?.id);
+      updateIsRead(setMessages, dispatch, messages, userSelector);
   });
 
   return (

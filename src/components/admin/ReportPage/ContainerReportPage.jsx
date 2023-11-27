@@ -28,6 +28,7 @@ import { SelectByProductName } from './SelectComponents/SelectByProductName';
 import { DatePicker } from './DatePicker';
 
 function ContainerReportPage() {
+  const authUser = useSelector((states) => states.authUser);
   const salesReportPagination = useSelector(
     (states) => states.salesReportPagination
   );
@@ -117,7 +118,11 @@ function ContainerReportPage() {
               <Button
                 onClick={setDialogFilterOpen}
                 startIcon={<WarehouseRounded />}
-                sx={{ height: '48px', justifyContent: 'flex-start' }}
+                sx={{
+                  height: '48px',
+                  justifyContent: 'flex-start',
+                  display: !authUser.isAdmin ? 'none' : '',
+                }}
               >
                 By Warehouse
               </Button>
@@ -137,7 +142,7 @@ function ContainerReportPage() {
               </Button>
               <Button
                 size="small"
-                sx={{ color: 'grey', justifyContent: 'flex-start' }}
+                sx={{ color: '#f86373', justifyContent: 'flex-start' }}
                 onClick={handleRemoveFilter}
                 startIcon={<FilterAltOffIcon />}
               >

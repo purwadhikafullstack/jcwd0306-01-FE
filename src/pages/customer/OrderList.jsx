@@ -55,6 +55,7 @@ export function OrderList() {
               orders.map((order) => (
                 <OrderListItem
                   order={order}
+                  setOrders={setOrders}
                   key={order?.id}
                   setOrderDetail={setOrderDetail}
                   setOpen={setOpen}
