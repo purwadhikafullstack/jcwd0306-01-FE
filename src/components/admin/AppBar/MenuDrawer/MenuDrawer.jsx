@@ -52,11 +52,9 @@ function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
               <Inventory2Rounded />
             </ListItem>
           )}
-          {authUser.isAdmin && (
-            <ListItem text="Kategori" to="/admin/categories">
-              <CategoryRounded />
-            </ListItem>
-          )}
+          <ListItem text="Kategori" to="/admin/categories">
+            <CategoryRounded />
+          </ListItem>
           <ListItem text="Transaksi" to="/admin/transactions">
             <ReceiptLongRoundedIcon />
           </ListItem>

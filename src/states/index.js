@@ -3,6 +3,7 @@ import { loadingBarReducer } from 'react-redux-loading-bar';
 import thunk from 'redux-thunk';
 import alertReducer from './alert/reducer';
 import categoriesReducer from './categories/reducer';
+import categoryPaginationReducer from './categoryPagination/reducer';
 import cartReducer from './cart/reducer';
 import productsReducer from './products/reducer';
 import productPaginationReducer from './productPagination/reducer';
@@ -22,7 +23,6 @@ import administratorReducer from './Administrator/reducer';
 import userAddressReducer from './Address/reducer';
 import stockMutationsReducer from './stockMutations/reducer';
 import stockMutationPaginationReducer from './stockMutationPagination/reducer';
-
 import warehouseAdminPaginationReducer from './AdministratorPagination/reducer';
 import allUsersReducer from './users/reducer';
 import allUsersPaginationReducer from './allUsersPagination/reducer';
@@ -38,6 +38,7 @@ const store = configureStore({
     alert: alertReducer,
     carousels: carouselsReducer,
     categories: categoriesReducer,
+    categoryPagination: categoryPaginationReducer,
     cart: cartReducer,
     product: productReducer,
     products: productsReducer,
