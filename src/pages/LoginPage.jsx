@@ -1,8 +1,10 @@
 import {
   Box,
   Button,
+  Divider,
   IconButton,
   InputAdornment,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material';
@@ -14,7 +16,6 @@ import { useState } from 'react';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import google from '../assets/google.png';
-import line from '../assets/line 2.png';
 import { asyncSetAuthUser } from '../states/authUser/action';
 import { setAlertActionCreator } from '../states/alert/action';
 import GadgetGalleryLogo from '../components/GadgetGalleryLogo';
@@ -132,29 +133,27 @@ function LoginPage() {
               Google
             </Typography>
           </Box>
-          <Box display="flex" justifyContent="center" mt={2}>
-            <img
-              src={line}
-              alt=""
-              style={{
-                maxWidth: '100%',
-                height: 'auto',
-                width: '80px',
-                marginRight: '8px',
+          <Stack direction="row" spacing={1} alignItems="center" mt="10px">
+            <Divider
+              sx={{
+                flexGrow: 1,
+                height: '0.3rem',
+                width: '1rem',
+                bgcolor: 'divider',
+                borderRadius: '1rem',
               }}
             />
-            <span style={{ fontSize: '13px' }}>atau login dengan</span>
-            <img
-              src={line}
-              alt=""
-              style={{
-                maxWidth: '100%',
-                height: 'auto',
-                width: '80px',
-                marginLeft: '5px',
+            <Typography fontSize="0.8rem">atau login dengan</Typography>
+            <Divider
+              sx={{
+                flexGrow: 1,
+                height: '0.3rem',
+                width: '1rem',
+                bgcolor: 'divider',
+                borderRadius: '1rem',
               }}
             />
-          </Box>
+          </Stack>
           <TextField
             onChange={(e) => inputHandler(e, 'email')}
             id="outlined-basic"

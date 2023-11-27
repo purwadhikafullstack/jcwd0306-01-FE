@@ -1,4 +1,4 @@
-import { Switch, TableCell, Tooltip } from '@mui/material';
+import { Switch, TableCell, Tooltip, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import {
   instanceOf,
@@ -12,13 +12,36 @@ import {
   asyncActivateProduct,
   asyncDeactivateProduct,
 } from '../../../states/products/action';
+import useSwal from '../../../hooks/useSwal';
 
 function StatusTableCell({ product }) {
   const dispatch = useDispatch();
+  const Swal = useSwal();
 
-  const handleToggleStatus = (event, newValue) => {
-    if (newValue) dispatch(asyncActivateProduct(event.target.value));
-    else dispatch(asyncDeactivateProduct(event.target.value));
+  const handleToggleStatus = async (event, newValue) => {
+    await Swal.fire({
+      icon: 'warning',
+      title: (
+        <Typography>
+          {`${product.name} akan`}
+          <Typography
+            component="span"
+            sx={{ fontWeight: 600, '&::before': { content: '" "' } }}
+          >
+            {newValue ? 'diaktifkan' : 'dinonaktifkan'}
+          </Typography>
+        </Typography>
+      ),
+      showDenyButton: true,
+      denyButtonText: 'Batalkan',
+      showConfirmButton: true,
+      confirmButtonText: 'Konfirmasi',
+      showLoaderOnConfirm: true,
+      preConfirm: async () => {
+        if (newValue) await dispatch(asyncActivateProduct(event.target.value));
+        else await dispatch(asyncDeactivateProduct(event.target.value));
+      },
+    });
   };
 
   return (
@@ -48,6 +71,7 @@ function StatusTableCell({ product }) {
 StatusTableCell.propTypes = {
   product: shape({
     id: number.isRequired,
+    name: string.isRequired,
     deletedAt: oneOfType([instanceOf(Date), string, oneOf([null])]),
   }).isRequired,
 };

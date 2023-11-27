@@ -16,7 +16,7 @@ function QuantityInput() {
   return (
     <Field name="quantity">
       {({ field, form, meta }) => (
-        <FormControl required error={meta.touched && !!meta.error}>
+        <FormControl required error={!!meta.error}>
           <Stack direction="row" alignItems="center" spacing={1.5}>
             {/* Quantity input */}
             <Stack
@@ -27,10 +27,7 @@ function QuantityInput() {
                 borderColor: 'primary.main',
                 borderRadius: 1,
                 '& *': { fontSize: '1rem' },
-                '& > button': {
-                  width: 'fit-content',
-                  height: 'fit-content',
-                },
+                '& > button': { width: 'fit-content', height: 'fit-content' },
               }}
             >
               <IconButton

@@ -112,10 +112,10 @@ export function ProfileDashoard() {
     },
     validationSchema: Yup.object().shape({
       oldPassword: Yup.string()
-        .min(5, 'at least 8 characters')
+        .min(8, 'at least 8 characters')
         .required('Required'),
       newPassword: Yup.string()
-        .min(5, 'at least 8 characters')
+        .min(8, 'at least 8 characters')
         .required('Required'),
     }),
     enableReinitialize: true,
@@ -163,7 +163,7 @@ export function ProfileDashoard() {
 
   return (
     <Container sx={{ mt: 3, p: 2 }}>
-      <Card sx={{ p: 2, backgroundColor: '#FBFCFE' }}>
+      <Card sx={{ p: 2, boxShadow: 5 }}>
         {/* title */}
         <Box sx={{ mb: 1 }}>
           <Typography variant="h5">My Profile</Typography>
@@ -189,12 +189,12 @@ export function ProfileDashoard() {
                 position: 'relative',
                 bottom: '43px',
                 right: '-40px',
-                bgcolor: 'white',
+                bgcolor: 'grey.50',
                 boxShadow: 2,
-                ':hover': { bgcolor: '#FBFCFE' },
+                '&:hover': { bgcolor: 'grey.400' },
               }}
             >
-              <EditIcon />
+              <EditIcon sx={{ color: 'grey.700' }} />
               <input
                 type="file"
                 onChange={handleFileChange}

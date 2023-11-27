@@ -82,7 +82,11 @@ function ProductTableItem() {
             <TableCell>{val.sold}</TableCell>
 
             {/* Discount column */}
-            <TableCell>{val.discount * 100}</TableCell>
+            <TableCell>
+              {new Intl.NumberFormat('id-ID', {
+                style: 'percent',
+              }).format(val.discount)}
+            </TableCell>
 
             {/* Description column */}
             <DescriptionTableCell text={val.description} />

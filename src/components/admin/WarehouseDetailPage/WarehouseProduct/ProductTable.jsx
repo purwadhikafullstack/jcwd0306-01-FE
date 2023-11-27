@@ -49,7 +49,7 @@ function ProductTable() {
             <SortLabelTableCell label="weight">Berat (gr)</SortLabelTableCell>
 
             {/* Discount */}
-            <SortLabelTableCell label="discount">Diskon (%)</SortLabelTableCell>
+            <SortLabelTableCell label="discount">Diskon</SortLabelTableCell>
 
             {/* Description */}
             <SortLabelTableCell label="description">

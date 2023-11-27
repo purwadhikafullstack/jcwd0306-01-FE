@@ -1,16 +1,20 @@
-import { Box, Button, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Divider,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import google from '../assets/google.png';
-import line from '../assets/line 2.png';
 import api from '../constants/api';
 import { setAlertActionCreator } from '../states/alert/action';
 import GadgetGalleryLogo from '../components/GadgetGalleryLogo';
 import loginWithGoogle from '../lib/loginWithGoogle';
-// import { setAlertActionCreator } from '../states/alert/action';
-// import GGLogo from '../assets/GadgetGallery Logo 2.png';
 
 function Register() {
   const dispatch = useDispatch();
@@ -56,17 +60,6 @@ function Register() {
       />
 
       <Box display="flex" justifyContent="space-evenly">
-        {/* <Box>
-          <img
-            src={GGLogo}
-            alt=""
-            style={{ maxWidth: '100%', height: 'auto', width: '200px' }}
-          />
-          <Typography variant="h5">Jual Beli Gadget Terpercaya</Typography>
-          <Typography>
-            Gabung dan rasakan kemudahan bertransaksi di GadgetGallery!
-          </Typography>
-        </Box> */}
         <Box
           maxWidth="100%"
           height="auto"
@@ -112,29 +105,27 @@ function Register() {
               Google
             </Typography>
           </Box>
-          <Box display="flex" justifyContent="center" mt={2}>
-            <img
-              src={line}
-              alt=""
-              style={{
-                maxWidth: '100%',
-                height: 'auto',
-                width: '80px',
-                marginRight: '8px',
+          <Stack direction="row" spacing={1} alignItems="center" mt="10px">
+            <Divider
+              sx={{
+                flexGrow: 1,
+                height: '0.3rem',
+                width: '1rem',
+                bgcolor: 'divider',
+                borderRadius: '1rem',
               }}
             />
-            <span style={{ fontSize: '13px' }}>atau daftar dengan</span>
-            <img
-              src={line}
-              alt=""
-              style={{
-                maxWidth: '100%',
-                height: 'auto',
-                width: '80px',
-                marginLeft: '5px',
+            <Typography fontSize="0.8rem">atau daftar dengan</Typography>
+            <Divider
+              sx={{
+                flexGrow: 1,
+                height: '0.3rem',
+                width: '1rem',
+                bgcolor: 'divider',
+                borderRadius: '1rem',
               }}
             />
-          </Box>
+          </Stack>
           <TextField
             onChange={(e) => inputHandler(e, 'email')}
             id="outlined-basic"

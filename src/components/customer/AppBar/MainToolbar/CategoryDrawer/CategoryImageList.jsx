@@ -20,7 +20,7 @@ function CategoryImageList({ setIsCategoryDrawerOpen }) {
     <ImageList
       cols={isMdUp ? 6 : 4}
       gap={10}
-      variant="masonry"
+      variant="standard"
       sx={{
         maxWidth: theme.breakpoints.values.lg,
         [theme.breakpoints.up('lg')]: { mx: 'auto' },
@@ -40,7 +40,13 @@ function CategoryImageList({ setIsCategoryDrawerOpen }) {
             });
             setIsCategoryDrawerOpen(false);
           }}
-          sx={{ p: 0, borderRadius: 1, overflow: 'clip', boxShadow: 3 }}
+          sx={{
+            p: 0,
+            borderRadius: 1,
+            overflow: 'clip',
+            boxShadow: 3,
+            aspectRatio: '1 / 1',
+          }}
         >
           <img
             src={`${import.meta.env.VITE_API_BASE_URL}/categories/${

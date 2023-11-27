@@ -13,20 +13,44 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { asyncDeleteCategory } from '../../../states/categories/action';
 import EditDialog from './EditDialog';
+import useSwal from '../../../hooks/useSwal';
 
 function CategoryTableItem() {
   const dispatch = useDispatch();
   const categories = useSelector((states) => states.categories);
   const [category, setCategory] = useState({});
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const Swal = useSwal();
 
   const handleEditButton = (val) => {
     setCategory(val);
     setIsEditDialogOpen(true);
   };
 
-  const handleDeleteButton = (categoryId) => {
-    dispatch(asyncDeleteCategory(categoryId));
+  const handleDeleteButton = async (val) => {
+    await Swal.fire({
+      icon: 'warning',
+      title: (
+        <Typography>
+          Kategori
+          <Typography
+            component="span"
+            sx={{ fontWeight: 600, '&::before, &::after': { content: '" "' } }}
+          >
+            {val.name}
+          </Typography>
+          akan dihapus secara permanen
+        </Typography>
+      ),
+      showDenyButton: true,
+      denyButtonText: 'Batalkan',
+      showConfirmButton: true,
+      confirmButtonText: 'Konfirmasi',
+      showLoaderOnConfirm: true,
+      preConfirm: async () => {
+        await dispatch(asyncDeleteCategory(val.id));
+      },
+    });
   };
 
   return (
@@ -93,7 +117,7 @@ function CategoryTableItem() {
                 <Tooltip title="Hapus kategori" arrow>
                   <IconButton
                     value="categoryId"
-                    onClick={() => handleDeleteButton(val.id)}
+                    onClick={() => handleDeleteButton(val)}
                     sx={{ '&:hover': { color: 'error.main' } }}
                   >
                     <DeleteRounded />
