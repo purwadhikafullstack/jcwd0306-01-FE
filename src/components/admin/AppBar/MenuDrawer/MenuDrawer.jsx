@@ -13,7 +13,6 @@ import {
   History,
 } from '@mui/icons-material';
 import ReceiptLongRoundedIcon from '@mui/icons-material/ReceiptLongRounded';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { Button, Drawer, List, ListSubheader, Stack } from '@mui/material';
 import { useSelector } from 'react-redux';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
@@ -88,13 +87,6 @@ function MenuDrawer({ isDrawerOpen, setIsDrawerOpen }) {
           </ListItem>
           <ListItem text="Halaman Utama" to="/">
             <ShoppingCartRounded />
-          </ListItem>
-        </List>
-
-        {/* Sales Menu */}
-        <List subheader={<ListSubheader>Sales</ListSubheader>}>
-          <ListItem text="Monthly" to="/admin/report/monthly">
-            <CalendarMonthIcon />
           </ListItem>
         </List>
 
