@@ -1,8 +1,9 @@
-import { Divider, Stack, Typography } from '@mui/material';
+import { Button, Divider, Stack, Typography } from '@mui/material';
 import { Form, Formik } from 'formik';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { number, string, object } from 'yup';
+import { useNavigate } from 'react-router-dom';
 import ChatButton from './ChatButton';
 import ShareButton from './ShareButton';
 import AddToCartButton from './AddToCartButton';
@@ -12,9 +13,12 @@ import NoteInput from './NoteInput';
 import { createCart } from '../../../../states/cart/action';
 
 function ProductActionStack() {
+  const authUser = useSelector((states) => states.authUser);
   const product = useSelector((states) => states.product);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [stackTop, setStackTop] = useState(null);
+  const [validationSchema, setValidationSchema] = useState();
 
   const stackRef = useCallback((node) => {
     if (node !== null) {
@@ -32,11 +36,25 @@ function ProductActionStack() {
     }
   }, []);
 
-  const initialValues = { quantity: 1, note: '', submitButton: '' };
-  const validationSchema = object({
-    quantity: number().integer().min(1).max(product.stock).required(),
-    note: string(),
-  });
+  const initialValues = useMemo(
+    () => ({ quantity: 1, note: '', submitButton: '' }),
+    []
+  );
+
+  useEffect(() => {
+    setValidationSchema(
+      object({
+        quantity: number()
+          .integer()
+          .test('is-zero', 'Stok habis', () => product.stock !== 0)
+          .min(1)
+          .max(product.stock)
+          .required(),
+        note: string(),
+      })
+    );
+  }, [product]);
+
   const onSubmit = (values, { resetForm }) => {
     if (values.submitButton === 'add-to-cart') {
       dispatch(
@@ -48,17 +66,20 @@ function ProductActionStack() {
       ).then((isSuccess) => {
         if (isSuccess) resetForm();
       });
-    } else {
-      console.log(values);
-      // dispatch(
-      //   asyncDirectBuy({
-      //     id: product.id,
-      //     quantity: values.quantity,
-      //     note: values.note,
-      //   })
-      // ).then((isSuccess) => {
-      //   if (isSuccess) resetForm();
-      // });
+    } else if (values.submitButton === 'direct-buy') {
+      navigate('/cart/shipment', {
+        state: {
+          productId: product.id,
+          quantity: values.quantity,
+          note: values.note,
+          userId: authUser.id,
+          isChecked: 1,
+          Product: {
+            ...product,
+            ProductImages: [{ id: product.imageIds[0] }],
+          },
+        },
+      });
     }
   };
 
@@ -107,10 +128,9 @@ function ProductActionStack() {
                   variant="subtitle2"
                   sx={{ alignSelf: 'end', color: 'text.disabled' }}
                 >
-                  Rp
-                  {(formik.values.quantity * product.price).toLocaleString(
+                  {`Rp${(formik.values.quantity * product.price).toLocaleString(
                     'id-ID'
-                  )}
+                  )}`}
                 </Typography>
               )}
 
@@ -124,21 +144,36 @@ function ProductActionStack() {
                   Subtotal
                 </Typography>
                 <Typography fontSize="1.1rem" fontWeight={700}>
-                  Rp
-                  {(
+                  {`Rp${(
                     formik.values.quantity *
                     product.price *
                     (1 - product.discount)
-                  ).toLocaleString('id-ID')}
+                  ).toLocaleString('id-ID')}`}
                 </Typography>
               </Stack>
             </Stack>
 
             {/* Submit button */}
-            <Stack spacing={1}>
-              <AddToCartButton />
-              <DirectBuyButton />
-            </Stack>
+            {authUser !== null && authUser.isCustomer && (
+              <Stack spacing={1}>
+                <AddToCartButton />
+                <DirectBuyButton />
+              </Stack>
+            )}
+            {authUser !== null && !authUser.isCustomer && (
+              <Typography color="error" textAlign="center">
+                Anda bukan customer
+              </Typography>
+            )}
+            {authUser === null && (
+              <Button
+                onClick={() => navigate('/login')}
+                variant="contained"
+                sx={{ textTransform: 'none' }}
+              >
+                Masuk untuk belanja
+              </Button>
+            )}
 
             {/* Sub actions */}
             <Stack direction="row" spacing={1}>

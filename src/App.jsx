@@ -1,7 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { useTheme } from '@mui/material';
 import { io } from 'socket.io-client';
 import { LoginPage } from './pages/LoginPage';
 import Alert from './components/Alert';
@@ -52,18 +51,11 @@ function App() {
   const orderStatus = useSelector((states) => states.orderStatus);
   const chatAttr = useSelector((states) => states.chatRoom);
   const dispatch = useDispatch();
-  const theme = useTheme();
   const [chatAttrAdmin, setChatAttrAdmin] = useState(new Map());
 
   useEffect(() => {
     dispatch(asyncReceiveUser());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (isAdminPage)
-      document.body.style.backgroundColor = theme.palette.action.selected;
-    else document.body.style.backgroundColor = theme.palette.background.paper;
-  }, [isAdminPage]);
 
   useEffect(() => {
     setChatAttrAdmin(chatAttr);
@@ -138,7 +130,6 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="*" element={<Navigate to="/" />} />
-          <Route path="/verify" element={<Verify />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/cart/shipment" element={<Checkout />} />
           <Route path="/payment" element={<TransitionPage />} />
@@ -173,6 +164,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify" element={<Verify />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/products" element={<CustomerProductPage />} />

@@ -14,13 +14,13 @@ function ProductDetailPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(asyncGetProduct(productId));
-  }, []);
+  }, [dispatch, productId]);
 
   return (
     <>
       <main
         style={{
-          maxWidth: theme.breakpoints.values.lg,
+          maxWidth: theme.breakpoints.values.lg + 100,
           padding: '1rem',
           marginLeft: 'auto',
           marginRight: 'auto',

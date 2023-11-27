@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -6,6 +7,7 @@ import {
   DialogTitle,
   InputAdornment,
   Stack,
+  Typography,
 } from '@mui/material';
 import { Form, Formik } from 'formik';
 import { mixed, number, object, string, array } from 'yup';
@@ -19,10 +21,13 @@ import {
   asyncGetProducts,
 } from '../../../states/products/action';
 import CategoriesInput from './CategoriesInput';
+import FormikReactQuill from '../../FormikReactQuill';
+import useSwal from '../../../hooks/useSwal';
 
 function CreateDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
+  const Swal = useSwal();
 
   const initialValues = {
     name: '',
@@ -63,34 +68,55 @@ function CreateDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
       .required(),
   });
 
-  const onSubmit = (values, { resetForm }) => {
-    const formData = new FormData();
-    formData.append('name', values.name);
-    formData.append('price', values.price);
-    formData.append('weight', values.weight);
-    formData.append('discount', values.discount);
-    formData.append('description', values.description);
-    formData.append('categoryIds', JSON.stringify(values.categoryIds));
-    values.images.forEach((image) => {
-      formData.append('images', image);
-    });
-    dispatch(asyncCreateProduct(formData)).then((isSuccess) => {
-      if (isSuccess) {
-        dispatch(
-          asyncGetProducts({
-            getType: 'REPLACE',
-            search: searchParams.get('search'),
-            categoryId: searchParams.get('categoryId'),
-            sortBy: searchParams.get('sortBy'),
-            paranoid: false,
-            orderBy: searchParams.get('orderBy'),
-            page: searchParams.get('page'),
-            perPage: searchParams.get('perPage'),
-          })
-        );
-        resetForm();
-        setIsCreateDialogOpen(false);
-      }
+  const onSubmit = async (values, { resetForm }) => {
+    await Swal.fire({
+      icon: 'warning',
+      title: (
+        <Typography>
+          Produk
+          <Typography
+            component="span"
+            sx={{ fontWeight: 600, '&::before, &::after': { content: '" "' } }}
+          >
+            {values.name}
+          </Typography>
+          akan ditambahkan
+        </Typography>
+      ),
+      showDenyButton: true,
+      denyButtonText: 'Batalkan',
+      showConfirmButton: true,
+      confirmButtonText: 'Konfirmasi',
+      showLoaderOnConfirm: true,
+      preConfirm: async () => {
+        const formData = new FormData();
+        formData.append('name', values.name);
+        formData.append('price', values.price);
+        formData.append('weight', values.weight);
+        formData.append('discount', values.discount);
+        formData.append('description', values.description);
+        formData.append('categoryIds', JSON.stringify(values.categoryIds));
+        values.images.forEach((image) => {
+          formData.append('images', image);
+        });
+        const isSuccess = await dispatch(asyncCreateProduct(formData));
+        if (isSuccess) {
+          await dispatch(
+            asyncGetProducts({
+              getType: 'REPLACE',
+              search: searchParams.get('search'),
+              categoryId: searchParams.get('categoryId'),
+              sortBy: searchParams.get('sortBy'),
+              paranoid: false,
+              orderBy: searchParams.get('orderBy'),
+              page: searchParams.get('page'),
+              perPage: searchParams.get('perPage'),
+            })
+          );
+          resetForm();
+          setIsCreateDialogOpen(false);
+        }
+      },
     });
   };
 
@@ -140,33 +166,34 @@ function CreateDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
                     inputProps: { min: 0, max: 1, step: 0.01 },
                     endAdornment: (
                       <InputAdornment position="end">
-                        {`≈ ${(formik.values.discount * 100).toFixed(2)}%`}
+                        {`≈ ${new Intl.NumberFormat('id-ID', {
+                          style: 'percent',
+                        }).format(formik.values.discount)}`}
                       </InputAdornment>
                     ),
                   }}
                 />
-                <FormikOutlinedInput
-                  name="description"
-                  label="Deskripsi"
-                  inputProps={{ multiline: true, rows: 10 }}
-                />
+                <Box sx={{ '& .ql-tooltip': { position: 'sticky' } }}>
+                  <FormikReactQuill name="description" label="Deskripsi" />
+                </Box>
                 <ImageInput />
                 <CategoriesInput />
               </Stack>
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
               <Button
-                onClick={() => setIsCreateDialogOpen(false)}
-                variant="outlined"
-              >
-                Batal
-              </Button>
-              <Button
                 type="submit"
                 variant="contained"
                 disabled={!formik.isValid || !formik.dirty}
               >
                 Simpan
+              </Button>
+              <Button
+                onClick={() => setIsCreateDialogOpen(false)}
+                variant="contained"
+                color="error"
+              >
+                Batal
               </Button>
             </DialogActions>
           </Form>

@@ -1,5 +1,6 @@
 import jwtDecode from 'jwt-decode';
 import api from '../../constants/api';
+import { setAlertActionCreator } from '../alert/action';
 
 const ActionType = {
   SET_AUTH_USER: 'SET_AUTH_USER',
@@ -37,14 +38,41 @@ function asyncUpdateAuthUser({ userId, formData }) {
   };
 }
 
-function asyncSetAuthUser({ email, password }) {
+function asyncSetAuthUser({
+  email,
+  password,
+  providerId,
+  nav,
+  firstName,
+  lastName,
+  uid,
+}) {
   return async (dispatch) => {
-    const { data } = await api.post('/user/login', { email, password });
-    const authUser = data.data.user;
+    try {
+      const { data } = await api.post(`/user/login?providerId=${providerId}`, {
+        email,
+        password,
+        firstName,
+        lastName,
+        uid,
+      });
+      const authUser = data.data.user;
 
-    localStorage.setItem('token', data.data.token);
-    window.location.reload();
-    dispatch(setAuthUserActionCreator(authUser));
+      localStorage.setItem('token', data.data.token);
+
+      if (data?.data?.user?.isAdmin) nav('/admin');
+      else nav('/');
+      window.location.reload();
+      dispatch(setAuthUserActionCreator(authUser));
+
+      dispatch(
+        setAlertActionCreator({
+          val: { status: 'success', message: 'login success' },
+        })
+      );
+    } catch (err) {
+      dispatch(setAlertActionCreator({ err }));
+    }
   };
 }
 

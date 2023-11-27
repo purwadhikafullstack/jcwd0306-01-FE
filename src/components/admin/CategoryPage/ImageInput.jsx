@@ -11,7 +11,7 @@ function ImageInput() {
           variant="outlined"
           error={meta.touched && !!meta.error}
         >
-          <FormLabel htmlFor="image_input">Category Image</FormLabel>
+          <FormLabel htmlFor="image_input">Gambar Kategori</FormLabel>
           <Avatar
             component="label"
             htmlFor="image_input"

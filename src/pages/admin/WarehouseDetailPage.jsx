@@ -5,7 +5,7 @@ import { Box, Typography } from '@mui/material';
 import { asyncGetProducts } from '../../states/products/action';
 import Container from '../../components/admin/WarehouseDetailPage/Container';
 import { asyncGetWarehouse } from '../../states/warehouse/action';
-import BgImage from '../../../assets/footer/bg-top-footer.svg';
+import BgImage from '../../assets/background1.svg';
 import { asyncGetStockMutations } from '../../states/stockMutations/action';
 
 function WarehouseDetailPage() {

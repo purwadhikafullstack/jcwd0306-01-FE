@@ -69,12 +69,11 @@ function ProductCardItem({ product }) {
                 <Typography
                   color="error"
                   sx={{ fontWeight: '500', fontSize: '80%' }}
-                >{`${product.discount * 100}%`}</Typography>
-                {/* <Chip
-                  label={`${product.discount * 100}%`}
-                  color="error"
-                  size="small"
-                /> */}
+                >
+                  {new Intl.NumberFormat('id-ID', {
+                    style: 'percent',
+                  }).format(product.discount)}
+                </Typography>
               </Stack>
             )}
             <Stack direction="row" spacing={0.5} alignItems="center">

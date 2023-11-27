@@ -1,8 +1,11 @@
 import { AddOutlined } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import { Field } from 'formik';
+import { useSelector } from 'react-redux';
 
 function AddToCartButton() {
+  const product = useSelector((states) => states.product);
+
   return (
     <Field name="submitButton">
       {({ field, form }) => (
@@ -10,7 +13,7 @@ function AddToCartButton() {
           onClick={async ({ target }) => {
             await form.setFieldValue(field.name, target.value);
           }}
-          disabled={!form.isValid}
+          disabled={!form.isValid || product.stock === 0}
           type="submit"
           name={field.name}
           value="add-to-cart"

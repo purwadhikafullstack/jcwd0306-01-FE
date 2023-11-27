@@ -1,8 +1,10 @@
 import {
   Box,
   Button,
+  Divider,
   IconButton,
   InputAdornment,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material';
@@ -14,11 +16,11 @@ import { useState } from 'react';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import google from '../assets/google.png';
-import line from '../assets/line 2.png';
 import { asyncSetAuthUser } from '../states/authUser/action';
-import api from '../constants/api';
 import { setAlertActionCreator } from '../states/alert/action';
 import GadgetGalleryLogo from '../components/GadgetGalleryLogo';
+import api from '../constants/api';
+import loginWithGoogle from '../lib/loginWithGoogle';
 
 function LoginPage() {
   const nav = useNavigate();
@@ -40,25 +42,36 @@ function LoginPage() {
     onSubmit: async () => {
       try {
         setButtonDisabled(true);
-        const data = await api.post('/user/login', formik.values);
         const authData = {
           email: formik.values.email,
           password: formik.values.password,
+          nav,
         };
+        const data = await api.post(`/user/login`, authData);
+
+        const isNotSetPasswordWithGoogle =
+          data.data.data.isNotCreatePassword === true;
+
+        if (isNotSetPasswordWithGoogle) {
+          dispatch(
+            setAlertActionCreator({
+              val: {
+                status: 'info',
+                message:
+                  'you`re not set password yet, please set password first!',
+              },
+            })
+          );
+          return setTimeout(
+            () => nav(`/verify?email=${formik.values.email}`),
+            3000
+          );
+        }
+
         dispatch(asyncSetAuthUser(authData));
-        dispatch(
-          setAlertActionCreator({
-            val: { status: 'success', message: 'login success' },
-          })
-        );
-        if (data?.data?.data?.user?.isAdmin) nav('/admin');
-        else nav('/');
       } catch (err) {
-        dispatch(
-          setAlertActionCreator({
-            val: { status: 'error', message: err?.response.data.message },
-          })
-        );
+        dispatch(setAlertActionCreator({ err }));
+        console.log(err);
       } finally {
         setButtonDisabled(false);
       }
@@ -109,7 +122,7 @@ function LoginPage() {
             border="1px solid grey"
             borderRadius={5}
             sx={{ cursor: 'pointer' }}
-            onClick={() => alert('hello')}
+            onClick={() => loginWithGoogle(dispatch, nav)}
           >
             <img
               src={google}
@@ -120,29 +133,27 @@ function LoginPage() {
               Google
             </Typography>
           </Box>
-          <Box display="flex" justifyContent="center" mt={2}>
-            <img
-              src={line}
-              alt=""
-              style={{
-                maxWidth: '100%',
-                height: 'auto',
-                width: '80px',
-                marginRight: '8px',
+          <Stack direction="row" spacing={1} alignItems="center" mt="10px">
+            <Divider
+              sx={{
+                flexGrow: 1,
+                height: '0.3rem',
+                width: '1rem',
+                bgcolor: 'divider',
+                borderRadius: '1rem',
               }}
             />
-            <span style={{ fontSize: '13px' }}>atau login dengan</span>
-            <img
-              src={line}
-              alt=""
-              style={{
-                maxWidth: '100%',
-                height: 'auto',
-                width: '80px',
-                marginLeft: '5px',
+            <Typography fontSize="0.8rem">atau login dengan</Typography>
+            <Divider
+              sx={{
+                flexGrow: 1,
+                height: '0.3rem',
+                width: '1rem',
+                bgcolor: 'divider',
+                borderRadius: '1rem',
               }}
             />
-          </Box>
+          </Stack>
           <TextField
             onChange={(e) => inputHandler(e, 'email')}
             id="outlined-basic"

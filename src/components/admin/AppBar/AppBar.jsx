@@ -1,9 +1,12 @@
-import { AppBar as MuiAppBar } from '@mui/material';
+import { AppBar as MuiAppBar, useMediaQuery, useTheme } from '@mui/material';
 import { useState } from 'react';
 import MainToolbar from './MainToolbar/MainToolbar';
 import MenuDrawer from './MenuDrawer/MenuDrawer';
+import BottomToolbar from './BottomToolbar/BottomToolbar';
 
 function AppBar() {
+  const theme = useTheme();
+  const isMdDown = useMediaQuery(theme.breakpoints.down('md'));
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   return (
@@ -14,6 +17,7 @@ function AppBar() {
       >
         {/* Main Toolbar */}
         <MainToolbar setIsDrawerOpen={setIsDrawerOpen} />
+        {isMdDown && <BottomToolbar />}
       </MuiAppBar>
 
       {/* Menu Drawer */}
