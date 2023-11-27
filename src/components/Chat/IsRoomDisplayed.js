@@ -1,12 +1,9 @@
-export const isRoomDisplayed = (searchParams, chatRooms, setChatRooms) => {
+export const isRoomDisplayed = (searchParams, chatRooms) => {
   const orderId = Number(searchParams.get('orderId'));
-  const warehouseId = Number(searchParams.get('warehouseId'));
   if (orderId && orderId !== 'null') {
     const rec = chatRooms.find((room) => room.orderId === orderId);
-    if (!rec)
-      setChatRooms((room) => [
-        { orderId, warehouseId, id: Math.random() * 100000 },
-        ...room,
-      ]);
+    if (rec) return true;
+    return false;
   }
+  return false;
 };

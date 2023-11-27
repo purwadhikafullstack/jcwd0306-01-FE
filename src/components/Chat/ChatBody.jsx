@@ -1,6 +1,6 @@
 import { Paper, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { TextInput } from './TextInput';
@@ -22,8 +22,8 @@ export function ChatBody({
   disableButton,
 }) {
   const userSelector = useSelector((state) => state.authUser);
-  const orderId = searchParams.get('orderId');
-  const warehouseId = searchParams.get('warehouseId');
+  const orderId = Number(searchParams.get('orderId'));
+  const warehouseId = Number(searchParams.get('warehouseId'));
   const dispatch = useDispatch();
 
   const handleNext = () => {
@@ -38,7 +38,6 @@ export function ChatBody({
       setDisableButton
     );
   };
-
   useEffect(() => {
     socketConn.connect();
     if (window.location.pathname.split('/')[1] === 'admin' && warehouseId)
@@ -49,8 +48,8 @@ export function ChatBody({
       socketConn.on(`channel-USER-${userSelector?.id}`, ({ record }) =>
         setDataFromSocket(dispatch, searchParams, record, setMessages, messages)
       );
-    return () => socketConn.disconnect();
-  }, [userSelector?.id, warehouseId]);
+    return () => socketConn.removeAllListeners();
+  }, [userSelector?.id, warehouseId, orderId]);
 
   useEffect(() => {
     if (userSelector?.id)
