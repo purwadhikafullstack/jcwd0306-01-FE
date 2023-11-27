@@ -1,6 +1,6 @@
 import { Paper, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { TextInput } from './TextInput';
@@ -22,8 +22,8 @@ export function ChatBody({
   disableButton,
 }) {
   const userSelector = useSelector((state) => state.authUser);
-  const orderId = searchParams.get('orderId');
-  const warehouseId = searchParams.get('warehouseId');
+  const [orderId, setOrderId] = useState(0);
+  const [warehouseId, setWarehouseId] = useState(0);
   const dispatch = useDispatch();
 
   const handleNext = () => {
@@ -38,19 +38,36 @@ export function ChatBody({
       setDisableButton
     );
   };
-
+  useEffect(() => {
+    setOrderId(Number(searchParams.get('orderId')));
+    setWarehouseId(Number(searchParams.get('warehouseId')));
+  }, [searchParams.get('orderId'), searchParams.get('warehouseId')]);
   useEffect(() => {
     socketConn.connect();
     if (window.location.pathname.split('/')[1] === 'admin' && warehouseId)
       socketConn.on(`channel-WHID-${warehouseId}`, ({ record }) =>
-        setDataFromSocket(dispatch, searchParams, record, setMessages, messages)
+        setDataFromSocket(
+          dispatch,
+          record,
+          setMessages,
+          messages,
+          warehouseId,
+          orderId
+        )
       );
     else if (userSelector?.id)
       socketConn.on(`channel-USER-${userSelector?.id}`, ({ record }) =>
-        setDataFromSocket(dispatch, searchParams, record, setMessages, messages)
+        setDataFromSocket(
+          dispatch,
+          record,
+          setMessages,
+          messages,
+          warehouseId,
+          orderId
+        )
       );
-    return () => socketConn.disconnect();
-  }, [userSelector?.id, warehouseId]);
+    return () => socketConn.removeAllListeners();
+  }, [userSelector?.id, warehouseId, orderId]);
 
   useEffect(() => {
     if (userSelector?.id)

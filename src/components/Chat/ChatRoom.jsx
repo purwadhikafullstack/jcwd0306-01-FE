@@ -37,7 +37,6 @@ export function ChatRoom() {
   const smallerScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
-    isRoomDisplayed(searchParams, chatRooms, setChatRooms);
     socketConn.connect();
     if (userSelector?.id)
       socketListenerCardButton(
@@ -61,7 +60,8 @@ export function ChatRoom() {
   }, [searchParams, userSelector]);
 
   useEffect(() => {
-    if (userSelector?.id) fetchChatRooms(userSelector?.id, setChatRooms);
+    if (userSelector?.id)
+      fetchChatRooms(userSelector?.id, setChatRooms, searchParams);
   }, [userSelector]);
   return (
     <div className="container" style={{ padding: '0' }}>

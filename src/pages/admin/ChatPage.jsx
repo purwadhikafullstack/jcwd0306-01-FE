@@ -38,6 +38,8 @@ export function ChatPage() {
   const theme = useTheme();
   const smallerScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
+  console.log(messages);
+
   useEffect(() => {
     warehouseIdSetter(
       setWhId,
@@ -61,7 +63,7 @@ export function ChatPage() {
   useEffect(() => {
     socketConn.connect();
     socketListenerCardButton(socketConn, setRooms, searchParams, whId);
-    if (whId.length) fetchRooms(whId, setRooms);
+    if (whId.length) fetchRooms(whId, setRooms, searchParams);
   }, [whId.length]);
   return (
     <Container>
