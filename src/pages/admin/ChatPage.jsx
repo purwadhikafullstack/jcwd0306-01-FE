@@ -62,7 +62,7 @@ export function ChatPage() {
     socketConn.connect();
     socketListenerCardButton(socketConn, setRooms, searchParams, whId);
     if (whId.length) fetchRooms(whId, setRooms);
-  }, [whId]);
+  }, [whId.length]);
   return (
     <Container>
       <Card>
