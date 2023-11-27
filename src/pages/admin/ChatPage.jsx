@@ -41,7 +41,9 @@ export function ChatPage() {
   useEffect(() => {
     warehouseIdSetter(
       setWhId,
-      [userSelector?.WarehouseUser] || userSelector?.WarehouseUsers
+      userSelector?.WarehouseUser
+        ? [userSelector?.WarehouseUser]
+        : userSelector?.WarehouseUsers
     );
   }, [userSelector]);
 
@@ -51,7 +53,8 @@ export function ChatPage() {
       searchParams,
       setMessages,
       page.current,
-      totalData
+      totalData,
+      setDisableButton
     );
   }, [searchParams]);
 
