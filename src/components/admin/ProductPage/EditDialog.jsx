@@ -7,6 +7,7 @@ import {
   DialogTitle,
   InputAdornment,
   Stack,
+  Typography,
 } from '@mui/material';
 import { Form, Formik } from 'formik';
 import { array, mixed, object, number as num, string as str } from 'yup';
@@ -18,9 +19,11 @@ import CategoriesInput from './CategoriesInput';
 import { asyncEditProduct } from '../../../states/products/action';
 import DeleteSavedImageField from './DeleteSavedImageField';
 import FormikReactQuill from '../../FormikReactQuill';
+import useSwal from '../../../hooks/useSwal';
 
 function EditDialog({ product, isEditDialogOpen, setIsEditDialogOpen }) {
   const dispatch = useDispatch();
+  const Swal = useSwal();
 
   const initialValues = {
     name: product.name,
@@ -61,33 +64,57 @@ function EditDialog({ product, isEditDialogOpen, setIsEditDialogOpen }) {
     imageIdsToDelete: array().of(num().integer().min(1)),
   });
 
-  const onSubmit = (values, { resetForm }) => {
-    const formData = new FormData();
-    if (values.name !== product.name) formData.append('name', values.name);
-    if (values.price !== product.price) formData.append('price', values.price);
-    if (values.weight !== product.weight)
-      formData.append('weight', values.weight);
-    if (values.discount !== product.discount)
-      formData.append('discount', values.discount);
-    if (values.description !== product.description)
-      formData.append('description', values.description);
-    formData.append('categoryIds', JSON.stringify(values.categoryIds));
-    if (values.images.length !== 0) {
-      values.images.forEach((image) => {
-        formData.append('images', image);
-      });
-    }
-    if (values.imageIdsToDelete.length !== 0) {
-      formData.append(
-        'imageIdsToDelete',
-        JSON.stringify(values.imageIdsToDelete)
-      );
-    }
-    dispatch(asyncEditProduct(product.id, formData)).then((isSuccess) => {
-      if (isSuccess) {
-        resetForm();
-        setIsEditDialogOpen(false);
-      }
+  const onSubmit = async (values, { resetForm }) => {
+    await Swal.fire({
+      icon: 'warning',
+      title: (
+        <Typography>
+          Produk
+          <Typography
+            component="span"
+            sx={{ fontWeight: 600, '&::before, &::after': { content: '" "' } }}
+          >
+            {product.name}
+          </Typography>
+          akan diubah
+        </Typography>
+      ),
+      showDenyButton: true,
+      denyButtonText: 'Batalkan',
+      showConfirmButton: true,
+      confirmButtonText: 'Konfirmasi',
+      showLoaderOnConfirm: true,
+      preConfirm: async () => {
+        const formData = new FormData();
+        if (values.name !== product.name) formData.append('name', values.name);
+        if (values.price !== product.price)
+          formData.append('price', values.price);
+        if (values.weight !== product.weight)
+          formData.append('weight', values.weight);
+        if (values.discount !== product.discount)
+          formData.append('discount', values.discount);
+        if (values.description !== product.description)
+          formData.append('description', values.description);
+        formData.append('categoryIds', JSON.stringify(values.categoryIds));
+        if (values.images.length !== 0) {
+          values.images.forEach((image) => {
+            formData.append('images', image);
+          });
+        }
+        if (values.imageIdsToDelete.length !== 0) {
+          formData.append(
+            'imageIdsToDelete',
+            JSON.stringify(values.imageIdsToDelete)
+          );
+        }
+        const isSuccess = await dispatch(
+          asyncEditProduct(product.id, formData)
+        );
+        if (isSuccess) {
+          resetForm();
+          setIsEditDialogOpen(false);
+        }
+      },
     });
   };
 
@@ -154,18 +181,18 @@ function EditDialog({ product, isEditDialogOpen, setIsEditDialogOpen }) {
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
               <Button
-                onClick={() => setIsEditDialogOpen(false)}
-                variant="contained"
-                color="error"
-              >
-                Batal
-              </Button>
-              <Button
                 type="submit"
                 variant="contained"
                 disabled={!formik.isValid || !formik.dirty}
               >
                 Simpan
+              </Button>
+              <Button
+                onClick={() => setIsEditDialogOpen(false)}
+                variant="contained"
+                color="error"
+              >
+                Batal
               </Button>
             </DialogActions>
           </Form>
