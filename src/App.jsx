@@ -138,7 +138,6 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="*" element={<Navigate to="/" />} />
-          <Route path="/verify" element={<Verify />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/cart/shipment" element={<Checkout />} />
           <Route path="/payment" element={<TransitionPage />} />
@@ -173,6 +172,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify" element={<Verify />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/products" element={<CustomerProductPage />} />

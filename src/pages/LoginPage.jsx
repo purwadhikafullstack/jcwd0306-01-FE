@@ -16,9 +16,10 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import google from '../assets/google.png';
 import line from '../assets/line 2.png';
 import { asyncSetAuthUser } from '../states/authUser/action';
-import api from '../constants/api';
 import { setAlertActionCreator } from '../states/alert/action';
 import GadgetGalleryLogo from '../components/GadgetGalleryLogo';
+import api from '../constants/api';
+import loginWithGoogle from '../lib/loginWithGoogle';
 
 function LoginPage() {
   const nav = useNavigate();
@@ -40,25 +41,36 @@ function LoginPage() {
     onSubmit: async () => {
       try {
         setButtonDisabled(true);
-        const data = await api.post('/user/login', formik.values);
         const authData = {
           email: formik.values.email,
           password: formik.values.password,
+          nav,
         };
+        const data = await api.post(`/user/login`, authData);
+
+        const isNotSetPasswordWithGoogle =
+          data.data.data.isNotCreatePassword === true;
+
+        if (isNotSetPasswordWithGoogle) {
+          dispatch(
+            setAlertActionCreator({
+              val: {
+                status: 'info',
+                message:
+                  'you`re not set password yet, please set password first!',
+              },
+            })
+          );
+          return setTimeout(
+            () => nav(`/verify?email=${formik.values.email}`),
+            3000
+          );
+        }
+
         dispatch(asyncSetAuthUser(authData));
-        dispatch(
-          setAlertActionCreator({
-            val: { status: 'success', message: 'login success' },
-          })
-        );
-        if (data?.data?.data?.user?.isAdmin) nav('/admin');
-        else nav('/');
       } catch (err) {
-        dispatch(
-          setAlertActionCreator({
-            val: { status: 'error', message: err?.response.data.message },
-          })
-        );
+        dispatch(setAlertActionCreator({ err }));
+        console.log(err);
       } finally {
         setButtonDisabled(false);
       }
@@ -109,7 +121,7 @@ function LoginPage() {
             border="1px solid grey"
             borderRadius={5}
             sx={{ cursor: 'pointer' }}
-            onClick={() => alert('hello')}
+            onClick={() => loginWithGoogle(dispatch, nav)}
           >
             <img
               src={google}

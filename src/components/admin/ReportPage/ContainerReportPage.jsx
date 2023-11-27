@@ -121,7 +121,7 @@ function ContainerReportPage() {
                 sx={{
                   height: '48px',
                   justifyContent: 'flex-start',
-                  display: !authUser.isAdmin ? 'none' : 'block',
+                  display: !authUser.isAdmin ? 'none' : '',
                 }}
               >
                 By Warehouse

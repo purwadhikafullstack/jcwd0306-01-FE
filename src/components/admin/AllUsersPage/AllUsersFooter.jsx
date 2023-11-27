@@ -6,7 +6,6 @@ const PER_PAGE_VALUES = [10, 25, 50, 75, 100];
 
 function AllUsersFooter() {
   const allUsersPagination = useSelector((states) => states.allUserPagination);
-  console.log({ allUsersPagination });
   const [searchParams, updateQueryParams] = useCustomSearchParams();
 
   return (
