@@ -5,11 +5,12 @@ export const updateIsRead = async (
   setMessages,
   dispatch,
   messages = [],
-  userId = 0
+  userSelector
 ) => {
   try {
     const temp = [];
     if (window.location.pathname.split('/')[1] === 'admin') {
+      if (userSelector?.isAdmin) return;
       messages.forEach((msg) => {
         if (!msg.receiverId && !msg.isRead) {
           msg.isRead = true;
@@ -18,7 +19,7 @@ export const updateIsRead = async (
       });
     } else {
       messages.forEach((msg) => {
-        if (msg.receiverId === userId && !msg.isRead) {
+        if (msg.receiverId === userSelector?.id && !msg.isRead) {
           msg.isRead = true;
           temp.push(msg);
         }

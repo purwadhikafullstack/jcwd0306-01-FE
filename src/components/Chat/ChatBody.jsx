@@ -53,7 +53,7 @@ export function ChatBody({
 
   useEffect(() => {
     if (userSelector?.id)
-      updateIsRead(setMessages, dispatch, messages, userSelector?.id);
+      updateIsRead(setMessages, dispatch, messages, userSelector);
   });
 
   return (
