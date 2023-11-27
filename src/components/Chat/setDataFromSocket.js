@@ -18,7 +18,9 @@ export const setDataFromSocket = (
     ) {
       const rec = messages.find((val) => val?.id === record.id);
       if (!rec && orderId === record.orderId)
-        setMessages((msg) => [record, ...msg]);
+        setMessages((msg) => {
+          if (msg[0].orderId === record.orderId) return [record, ...msg];
+        });
     }
   } catch (error) {
     dispatch(constant.setError(error));

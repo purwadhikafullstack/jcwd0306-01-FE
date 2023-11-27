@@ -41,16 +41,16 @@ export function ChatBody({
 
   useEffect(() => {
     socketConn.connect();
-    if (window.location.pathname.split('/')[1] === 'admin')
+    if (window.location.pathname.split('/')[1] === 'admin' && warehouseId)
       socketConn.on(`channel-WHID-${warehouseId}`, ({ record }) =>
         setDataFromSocket(dispatch, searchParams, record, setMessages, messages)
       );
-    else
+    else if (userSelector?.id)
       socketConn.on(`channel-USER-${userSelector?.id}`, ({ record }) =>
         setDataFromSocket(dispatch, searchParams, record, setMessages, messages)
       );
     return () => socketConn.disconnect();
-  }, [searchParams, userSelector, messages.length]);
+  }, [userSelector?.id, warehouseId]);
 
   useEffect(() => {
     if (userSelector?.id)
