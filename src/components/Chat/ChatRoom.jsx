@@ -99,7 +99,9 @@ export function ChatRoom() {
                     userSelector.id,
                     searchParams,
                     setMessages,
-                    page.current
+                    page.current,
+                    totalData,
+                    setDisableButton
                   );
                 }}
               >
