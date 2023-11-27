@@ -20,6 +20,7 @@ export const setDataFromSocket = (
       if (!rec && orderId === record.orderId)
         setMessages((msg) => {
           if (msg[0].orderId === record.orderId) return [record, ...msg];
+          return [record];
         });
     }
   } catch (error) {
