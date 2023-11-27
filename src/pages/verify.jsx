@@ -1,10 +1,8 @@
-import { Image } from '@mui/icons-material';
 import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import YupPassword from 'yup-password';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import api from '../constants/api';
 import { setAlertActionCreator } from '../states/alert/action';
@@ -40,7 +38,7 @@ export function Verify() {
     }),
     onSubmit: async () => {
       try {
-        const res = await api.patch('/user/verify', formik.values);
+        await api.patch('/user/verify', formik.values);
         dispatch(
           setAlertActionCreator({
             val: { status: 'success', message: 'verification success' },

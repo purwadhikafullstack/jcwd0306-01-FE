@@ -101,9 +101,7 @@ function ContainerProductHistory() {
                 sx={{
                   height: '48px',
                   justifyContent: 'flex-start',
-                  display: authUser?.WarehouseUser?.warehouseId
-                    ? 'none'
-                    : 'block',
+                  display: authUser?.WarehouseUser?.warehouseId ? 'none' : '',
                 }}
               >
                 By Warehouse

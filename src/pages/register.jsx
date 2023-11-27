@@ -2,17 +2,19 @@ import { Box, Button, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import google from '../assets/google.png';
 import line from '../assets/line 2.png';
 import api from '../constants/api';
 import { setAlertActionCreator } from '../states/alert/action';
 import GadgetGalleryLogo from '../components/GadgetGalleryLogo';
+import loginWithGoogle from '../lib/loginWithGoogle';
 // import { setAlertActionCreator } from '../states/alert/action';
 // import GGLogo from '../assets/GadgetGallery Logo 2.png';
 
 function Register() {
   const dispatch = useDispatch();
+  const nav = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -99,7 +101,7 @@ function Register() {
             border="1px solid grey"
             borderRadius={3}
             sx={{ cursor: 'pointer' }}
-            onClick={() => alert('hello')}
+            onClick={() => loginWithGoogle(dispatch, nav)}
           >
             <img
               src={google}
