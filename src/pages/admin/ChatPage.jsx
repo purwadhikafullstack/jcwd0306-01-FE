@@ -38,8 +38,6 @@ export function ChatPage() {
   const theme = useTheme();
   const smallerScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  console.log(messages);
-
   useEffect(() => {
     warehouseIdSetter(
       setWhId,

@@ -32,7 +32,7 @@ export function TransactionList({
       </StyledTableCell>
       <StyledTableCell align="right">
         Rp
-        {Number(order.total + order.shippingPrice).toLocaleString(`id-ID`)}
+        {Number(order.total).toLocaleString(`id-ID`)}
       </StyledTableCell>
       <StyledTableCell align="center" className="d-none d-sm-table-cell">
         <div className="d-flex gap-1 justify-content-center">

@@ -55,5 +55,5 @@ export const grandTotalCalculator = (summaryTransaction = new Map()) => {
     if (key === 'totalDiscount') sum = -value.amount + sum;
     else if (key !== 'totalItems') sum = value.amount + sum;
   });
-  return sum;
+  return Math.ceil(sum);
 };

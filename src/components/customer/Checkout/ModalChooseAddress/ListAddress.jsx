@@ -1,7 +1,6 @@
 import ListItemButton from '@mui/material/ListItemButton';
 import { Button } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { handleDelete, handleSetDefault } from './handleFunction';
 import { fullAddressFormatter } from './fullAddressFormatter';
 import { ConfirmationModal } from '../../../ConfirmationModal';
@@ -18,7 +17,7 @@ export function ListAddress({
   setAddresses,
 }) {
   const dispatch = useDispatch();
-  const userSelector = { id: 5 };
+  const userSelector = useSelector((state) => state.authUser);
   const deleteAddress = () =>
     handleDelete(
       dispatch,

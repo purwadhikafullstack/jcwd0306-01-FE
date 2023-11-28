@@ -26,7 +26,7 @@ export const handleDelete = async (
     const temp = [...addresses];
     temp.splice(index, 1);
     setAddresses(temp);
-    setOpen()
+    setOpen();
   } catch (error) {
     dispatch(setAlertActionCreator(error?.response?.data || error?.message));
   }
@@ -50,6 +50,6 @@ export const handleSetDefault = async (
     });
     changeDefault(setAddresses, temp, destination);
   } catch (error) {
-    dispatch(setAlertActionCreator(error?.response?.data || error?.message));
+    dispatch(constant.setError(error));
   }
 };
