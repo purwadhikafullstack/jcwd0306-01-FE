@@ -32,8 +32,9 @@ function SortDialog({ isSortDialogOpen, setIsSortDialogOpen }) {
             aria-labelledby="sort-products-radio-label"
             name="sort-products-radio"
             value={
-              `${searchParams.get('sortBy')}-${searchParams.get('orderBy')}` ||
-              'updatedAt-desc'
+              searchParams.get('sortBy') && searchParams.get('orderBy')
+                ? `${searchParams.get('sortBy')}-${searchParams.get('orderBy')}`
+                : 'updatedAt-desc'
             }
             onChange={(e, newValue) => {
               const [sortBy, orderBy] = newValue.split('-');

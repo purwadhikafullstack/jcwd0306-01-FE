@@ -20,14 +20,13 @@ function StockMutationContainer() {
 
   useEffect(() => {
     setSearchParams({
-      tab: searchParams.get('tab'),
+      tab: searchParams.get('tab') || '',
       search: searchParams.get('search') || '',
       sortBy: 'updatedAt',
       orderBy: 'desc',
       page: 1,
       perPage: 10,
     });
-    return setSearchParams;
   }, []);
 
   useEffect(() => {

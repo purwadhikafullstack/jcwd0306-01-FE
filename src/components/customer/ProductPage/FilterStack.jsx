@@ -38,7 +38,7 @@ function FilterStack() {
               <RadioGroup
                 aria-labelledby="filter-category-products-radio-label"
                 name="filter-category-products-radio"
-                value={searchParams.get('categoryId') || 0}
+                value={+searchParams.get('categoryId') || 0}
                 onChange={(e, newValue) => {
                   updateQueryParams({ categoryId: newValue });
                 }}
