@@ -73,7 +73,7 @@ function ContainerDashboard() {
       }}
     >
       {/* Top Cards */}
-      <Stack spacing={3} direction="row">
+      <Stack spacing={3} direction={{ xs: 'column', md: 'row' }}>
         <TotalSalesCard totalSales={totalSales} />
         <TotalOrderCard totalOrder={totalOrder} />
         <TotalProductCard totalProduct={totalProduct} />
@@ -82,16 +82,16 @@ function ContainerDashboard() {
 
       {/* Mid Card */}
       <Stack
-        spacing={10}
+        spacing={{ xs: 3, md: 10 }}
         mt={10}
-        direction="row"
+        direction={{ xs: 'column', md: 'row' }}
         sx={{
           p: 2,
           bgcolor: 'background.paper',
           borderRadius: 1,
         }}
       >
-        <div style={{ width: '50%' }}>
+        <div style={{ width: { xs: '100%', md: '50%' } }}>
           <OrderStatusChart />
         </div>
         <div style={{ width: '100%' }}>
