@@ -21,7 +21,7 @@ export default function CitySelect({ addressFormik }) {
     const { data } = await api.get(`/city`, {
       params: { name: cityName, provinceId },
     });
-    setCities(data);
+    setCities(data.rows);
     setIsLoading(false);
   };
   const [val, setVal] = useState({ id: 0, name: '' });

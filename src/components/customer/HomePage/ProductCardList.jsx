@@ -30,16 +30,7 @@ function ProductCardList() {
         sx={{ p: 1 }}
       >
         {products.map((product) => (
-          <ProductCardItem
-            key={product.id}
-            image={`${import.meta.env.VITE_API_BASE_URL}/products/images/${
-              product.imageIds[0]
-            }`}
-            id={product.id}
-            name={product.name}
-            price={product.price}
-            sold={product.sold}
-          />
+          <ProductCardItem key={product.id} product={product} />
         ))}
       </ImageList>
       {products.length > 0 ? (

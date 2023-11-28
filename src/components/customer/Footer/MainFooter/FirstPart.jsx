@@ -4,7 +4,7 @@ import {
   EmailRounded,
   HeadsetMicRounded,
 } from '@mui/icons-material';
-import GadgetGallery from '../../../../../assets/logo/GadgetGalleryLogo.png';
+import GadgetGallery from '../../../../assets/GadgetGalleryLogo.png';
 
 function FirstPart() {
   return (

@@ -7,6 +7,7 @@ import {
   TableRow,
 } from '@mui/material';
 import AllUsersTableItem from './AllUsersTableItem';
+import SortLabelTableCell from './SortLabelTableCell';
 
 function AllUsersTable({ users, whAdmin }) {
   return (
@@ -16,11 +17,13 @@ function AllUsersTable({ users, whAdmin }) {
           <TableRow sx={{ bgcolor: 'primary.main' }}>
             <TableCell sx={{ color: 'white' }}>No</TableCell>
             <TableCell sx={{ color: 'white' }}>Image</TableCell>
-            <TableCell sx={{ color: 'white' }}>First Name</TableCell>
-            <TableCell sx={{ color: 'white' }}>Last Name</TableCell>
-            <TableCell sx={{ color: 'white' }}>Email</TableCell>
+            <SortLabelTableCell label="firstName">
+              First Name
+            </SortLabelTableCell>
+            <SortLabelTableCell label="lastName">Last Name</SortLabelTableCell>
+            <SortLabelTableCell label="email">Email</SortLabelTableCell>
+            <TableCell sx={{ color: 'white' }}>Join Date</TableCell>
             <TableCell sx={{ color: 'white' }}>Role</TableCell>
-            <TableCell />
           </TableRow>
         </TableHead>
         <AllUsersTableItem users={users} whAdmin={whAdmin} />

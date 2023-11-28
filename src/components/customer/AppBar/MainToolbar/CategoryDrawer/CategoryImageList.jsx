@@ -6,10 +6,13 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
+import { func } from 'prop-types';
 import { useSelector } from 'react-redux';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 
-function CategoryImageList() {
+function CategoryImageList({ setIsCategoryDrawerOpen }) {
   const categories = useSelector((states) => states.categories);
+  const navigate = useNavigate();
   const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
 
@@ -17,7 +20,7 @@ function CategoryImageList() {
     <ImageList
       cols={isMdUp ? 6 : 4}
       gap={10}
-      variant="masonry"
+      variant="standard"
       sx={{
         maxWidth: theme.breakpoints.values.lg,
         [theme.breakpoints.up('lg')]: { mx: 'auto' },
@@ -28,7 +31,22 @@ function CategoryImageList() {
         <ImageListItem
           key={category.id}
           component={Button}
-          sx={{ p: 0, borderRadius: 1, overflow: 'clip', boxShadow: 3 }}
+          onClick={() => {
+            navigate({
+              pathname: '/products',
+              search: createSearchParams({
+                categoryId: category.id,
+              }).toString(),
+            });
+            setIsCategoryDrawerOpen(false);
+          }}
+          sx={{
+            p: 0,
+            borderRadius: 1,
+            overflow: 'clip',
+            boxShadow: 3,
+            aspectRatio: '1 / 1',
+          }}
         >
           <img
             src={`${import.meta.env.VITE_API_BASE_URL}/categories/${
@@ -43,5 +61,9 @@ function CategoryImageList() {
     </ImageList>
   );
 }
+
+CategoryImageList.propTypes = {
+  setIsCategoryDrawerOpen: func.isRequired,
+};
 
 export default CategoryImageList;

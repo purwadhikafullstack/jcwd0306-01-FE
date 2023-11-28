@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogTitle,
   Stack,
+  Typography,
 } from '@mui/material';
 import { Form, Formik } from 'formik';
 import { mixed, object, string as str } from 'yup';
@@ -13,9 +14,11 @@ import { bool, func, number, shape, string } from 'prop-types';
 import FormikOutlinedInput from '../../FormikOutlinedInput';
 import { asyncEditCategory } from '../../../states/categories/action';
 import ImageInput from './ImageInput';
+import useSwal from '../../../hooks/useSwal';
 
 function EditDialog({ category, isEditDialogOpen, setIsEditDialogOpen }) {
   const dispatch = useDispatch();
+  const Swal = useSwal();
 
   const initialValues = {
     name: category.name || '',
@@ -43,27 +46,44 @@ function EditDialog({ category, isEditDialogOpen, setIsEditDialogOpen }) {
       }),
   });
 
-  const onSubmit = (values, { resetForm }) => {
-    const formData = new FormData();
-    if (values.name !== category.name) formData.append('name', values.name);
-    if (values.image) formData.append('image', values.image);
-    dispatch(asyncEditCategory({ categoryId: category.id, formData })).then(
-      (isSuccess) => {
+  const onSubmit = async (values, { resetForm }) => {
+    await Swal.fire({
+      icon: 'question',
+      title: (
+        <Typography>
+          Kategori
+          <Typography
+            component="span"
+            sx={{ fontWeight: 600, '&::before, &::after': { content: '" "' } }}
+          >
+            {category.name}
+          </Typography>
+          akan diubah
+        </Typography>
+      ),
+      showDenyButton: true,
+      denyButtonText: 'Batalkan',
+      showConfirmButton: true,
+      confirmButtonText: 'Konfirmasi',
+      showLoaderOnConfirm: true,
+      preConfirm: async () => {
+        const formData = new FormData();
+        if (values.name !== category.name) formData.append('name', values.name);
+        if (values.image) formData.append('image', values.image);
+        const isSuccess = await dispatch(
+          asyncEditCategory({ categoryId: category.id, formData })
+        );
         if (isSuccess) {
           URL.revokeObjectURL(values.imageURL);
           resetForm();
           setIsEditDialogOpen(false);
         }
-      }
-    );
+      },
+    });
   };
 
   return (
-    <Dialog
-      fullWidth
-      open={isEditDialogOpen}
-      onClose={() => setIsEditDialogOpen(false)}
-    >
+    <Dialog fullWidth open={isEditDialogOpen}>
       <Formik
         validateOnMount
         initialValues={initialValues}
@@ -83,17 +103,18 @@ function EditDialog({ category, isEditDialogOpen, setIsEditDialogOpen }) {
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
               <Button
-                onClick={() => setIsEditDialogOpen(false)}
-                variant="outlined"
-              >
-                Batal
-              </Button>
-              <Button
                 type="submit"
                 variant="contained"
                 disabled={!formik.isValid || !formik.dirty}
               >
                 Simpan
+              </Button>
+              <Button
+                onClick={() => setIsEditDialogOpen(false)}
+                variant="contained"
+                color="error"
+              >
+                Batal
               </Button>
             </DialogActions>
           </Form>

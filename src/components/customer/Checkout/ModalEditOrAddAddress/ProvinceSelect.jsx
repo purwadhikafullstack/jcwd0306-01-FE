@@ -22,7 +22,7 @@ export default function ProvinceSelect({ addressFormik }) {
   const [val, setVal] = useState({ id: 0, name: '' });
   const fetchProvinces = async (provinceName = '') => {
     const { data } = await api.get(`/province?name=${provinceName}`);
-    setProvinces(data);
+    setProvinces(data.rows);
     setIsLoading(false);
   };
 

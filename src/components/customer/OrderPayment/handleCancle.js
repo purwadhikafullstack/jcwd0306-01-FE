@@ -2,6 +2,13 @@ import api from '../../../constants/api';
 import { constant } from '../../../constants/constant';
 import { deleteUnpaid } from '../../../states/order/action';
 
+const updateOrders = (orders = [], orderData = {}) => {
+  const temp = [...orders];
+  const index = orders.findIndex((order) => order?.id === orderData?.id);
+  if (index !== -1) temp[index].status = 'cancelled';
+  return temp;
+};
+
 export const handleCancel = async (
   setShowConfirmModal,
   setAction,
@@ -11,6 +18,7 @@ export const handleCancel = async (
   userSelector,
   orderData,
   setHiddenCancle,
+  setOrders,
   unpaid = []
 ) => {
   setShowConfirmModal(true);
@@ -28,6 +36,7 @@ export const handleCancel = async (
           constant.setSuccess('Success cancelling this transaction')
         );
         if (nav) setTimeout(() => nav(`/`), 2000);
+        if (setOrders) setOrders((orders) => updateOrders(orders, orderData));
       } catch (error) {
         dispatch(constant.setError(error));
       } finally {

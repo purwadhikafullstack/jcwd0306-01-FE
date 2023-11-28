@@ -1,6 +1,7 @@
 import { Button } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useDispatch } from 'react-redux';
 import { constant } from '../../../constants/constant';
 import { StyledTableCell, StyledTableRow } from './StyledTableCellAndRow';
 
@@ -10,6 +11,7 @@ export function TransactionList({
   setOpen,
   fetchDetailTransaction,
 }) {
+  const dispatch = useDispatch();
   return (
     <StyledTableRow key={order?.id}>
       <StyledTableCell
@@ -19,7 +21,7 @@ export function TransactionList({
         width="3%"
         sx={{ display: { xs: 'none', md: 'table-cell' } }}
       >
-        {idx + 1}
+        {order?.warehouseId}
       </StyledTableCell>
       <StyledTableCell align="right">{order?.id}</StyledTableCell>
       <StyledTableCell
@@ -61,7 +63,23 @@ export function TransactionList({
               <MenuIcon />
             </span>
           </Button>
-          <Button sx={{ p: 0 }}>
+          <Button
+            sx={{ p: 0 }}
+            onClick={() => {
+              dispatch({
+                type: constant.setChatRoom,
+                payload: new Map([
+                  ['receiverId', order?.userId],
+                  ['orderId', order?.id],
+                  ['warehouseId', order?.warehouseId],
+                  [
+                    'name',
+                    `${order?.User?.firstName} ${order?.User?.lastName}`,
+                  ],
+                ]),
+              });
+            }}
+          >
             <span className="d-none d-md-inline">Message</span>
             <span className="d-md-none d-inline">
               <SendIcon />

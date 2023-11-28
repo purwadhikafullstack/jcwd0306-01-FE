@@ -1,5 +1,8 @@
+import { io } from 'socket.io-client';
 import api from '../../../constants/api';
-import { constant } from '../../../constants/constant';
+import { setAlertActionCreator } from '../../../states/alert/action';
+
+const socketLocal = io(window.location.host);
 
 const updateArray = (setArr, arr = [{}], transaction = {}) => {
   const temp = [...arr];
@@ -17,24 +20,29 @@ const handleUpdateStatus = async (
   transactions = [],
   adminSelector = {},
   transaction = {},
-  status = 'unpaid'
+  status = 'unpaid',
+  receipt = ''
 ) => {
   try {
     setIsLoading(true);
     const temp = { ...transaction };
     delete temp.paymentProof;
-    const { data } = await api.patch(`/order/${transaction?.id}`, {
+    await api.patch(`/order/${transaction?.id}`, {
       ...temp,
       status,
       adminId: adminSelector?.id,
+      shippingReceipt: receipt,
     });
     updateArray(setTransactions, transactions, transaction);
     setOpen(false);
-    setShow('');
-  } catch (error) {
+    if (status === 'unpaid' || status === 'processed')
+      socketLocal.emit('update_status', -1);
+  } catch (err) {
     setOpen(true);
-    dispatch(constant.setError(error));
+    // dispatch(constant.setError(err));
+    dispatch(setAlertActionCreator({ err }));
   } finally {
+    setShow('');
     setIsLoading(false);
   }
 };

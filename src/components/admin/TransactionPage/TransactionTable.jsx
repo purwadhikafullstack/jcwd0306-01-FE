@@ -14,7 +14,11 @@ import { constant } from '../../../constants/constant';
 import { ModalLoading } from '../../customer/OrderList/ModalDetailTransaction/ModalLoading';
 import { ImageDetail } from '../../ImageDetail';
 
-export function TransactionTable({ transactions = [], setTransactions }) {
+export function TransactionTable({
+  transactions = [],
+  setTransactions,
+  fetchTransaction,
+}) {
   const [transaction, setTransaction] = useState({});
   const [isFetching, setIsFetching] = useState(false);
   const [open, setOpen] = useState(false);
@@ -50,7 +54,7 @@ export function TransactionTable({ transactions = [], setTransactions }) {
               align="center"
               sx={{ display: { xs: 'none', md: 'table-cell' } }}
             >
-              No
+              WHID
             </StyledTableCell>
             <StyledTableCell align="center">ID</StyledTableCell>
             <StyledTableCell align="center">Status</StyledTableCell>
@@ -66,15 +70,26 @@ export function TransactionTable({ transactions = [], setTransactions }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {transactions.map((order, idx) => (
-            <TransactionList
-              key={order?.id}
-              idx={idx}
-              order={order}
-              setOpen={setOpen}
-              fetchDetailTransaction={fetchDetailTransaction}
-            />
-          ))}
+          {transactions.length ? (
+            transactions.map((order, idx) => (
+              <TransactionList
+                key={order?.id}
+                idx={idx}
+                order={order}
+                setOpen={setOpen}
+                fetchDetailTransaction={fetchDetailTransaction}
+              />
+            ))
+          ) : (
+            <TableRow>
+              <StyledTableCell />
+              <StyledTableCell />
+              <StyledTableCell />
+              <StyledTableCell sx={{ textAlign: 'center' }}>
+                No item match
+              </StyledTableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
       {isFetching ? (
@@ -88,6 +103,7 @@ export function TransactionTable({ transactions = [], setTransactions }) {
           imgSrc={imgSrc}
           transactions={transactions}
           setTransactions={setTransactions}
+          fetchTransaction={fetchTransaction}
         />
       )}
       <ImageDetail

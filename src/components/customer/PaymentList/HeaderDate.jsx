@@ -1,4 +1,4 @@
-import { Avatar, Grid, Stack } from '@mui/material';
+import { Avatar, Button, Grid, Stack } from '@mui/material';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import { constant } from '../../../constants/constant';
 
@@ -42,14 +42,18 @@ export function HeaderDate({ order = {} }) {
           justifyContent="end"
           sx={{ textAlign: 'end' }}
         >
-          <span>Pay before</span>
-          <small className="text-primary">
-            {new Date(
-              new Date(order?.createdAt).setDate(
-                new Date(order?.createdAt).getDate() + 1
-              )
-            ).toDateString()}
-          </small>
+          {order?.status !== 'unpaid' ? null : (
+            <>
+              <span>Pay before</span>
+              <small className="text-primary">
+                {new Date(
+                  new Date(order?.createdAt).setDate(
+                    new Date(order?.createdAt).getDate() + 1
+                  )
+                ).toDateString()}
+              </small>
+            </>
+          )}
         </Stack>
       </Grid>
     </>

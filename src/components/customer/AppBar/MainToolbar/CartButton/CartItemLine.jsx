@@ -17,7 +17,12 @@ export function CartItemLine({ item }) {
               style={{ width: '40px' }}
             />
           </Col>
-          <Col className="px-1 py-0" key={2}>
+          <Col
+            className="px-1 py-0"
+            md="auto"
+            key={2}
+            style={{ textOverflow: 'ellipsis', maxWidth: '200px' }}
+          >
             <div className="text-truncate">
               <b>{item?.Product?.name}</b>
             </div>
@@ -27,9 +32,8 @@ export function CartItemLine({ item }) {
             </div>
           </Col>
           <Col
-            md="auto"
-            className="text-warning d-flex align-items-center p-0 text-end"
-            style={{ height: `inherit` }}
+            className="text-warning d-flex align-items-center justify-content-end p-0"
+            style={{ height: `inherit`, textAlign: 'right', width: '90px' }}
             key={3}
           >
             Rp{item?.Product?.price.toLocaleString(`id-ID`)}

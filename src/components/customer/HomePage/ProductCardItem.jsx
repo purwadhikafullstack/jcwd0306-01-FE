@@ -7,18 +7,14 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { arrayOf, number, shape, string } from 'prop-types';
 import { Link } from 'react-router-dom';
 
-function ProductCardItem({ id, image, name, price, sold }) {
+function ProductCardItem({ product }) {
   return (
-    <Card
-      sx={{
-        minWidth: '10rem',
-        boxShadow: 2,
-      }}
-    >
+    <Card sx={{ minWidth: '10rem', boxShadow: 2 }}>
       <Link
-        to={`/products/${id}`}
+        to={`/products/${product.id}`}
         style={{ color: 'inherit', textDecoration: 'inherit' }}
       >
         <CardActionArea
@@ -32,11 +28,13 @@ function ProductCardItem({ id, image, name, price, sold }) {
         >
           <CardMedia
             component="img"
-            image={image}
-            alt={name}
+            image={`${import.meta.env.VITE_API_BASE_URL}/products/images/${
+              product.imageIds[0]
+            }`}
+            alt={product.name}
             sx={{ aspectRatio: '1 / 1' }}
           />
-          <CardContent component={Stack} spacing={0.5}>
+          <CardContent component={Stack} spacing={0.5} maxWidth="100%">
             <Typography
               variant="caption"
               sx={{
@@ -48,13 +46,38 @@ function ProductCardItem({ id, image, name, price, sold }) {
                 WebkitLineClamp: 3,
               }}
             >
-              {name}
+              {product.name}
             </Typography>
             <Typography noWrap fontSize="80%" variant="subtitle2">
-              Rp{price.toLocaleString('id-ID')}
+              {`Rp${(product.price * (1 - product.discount)).toLocaleString(
+                'id-ID'
+              )}`}
             </Typography>
+            {product.discount > 0 && (
+              <Stack direction="row" spacing={0.5} alignItems="center">
+                <Typography
+                  component="del"
+                  noWrap
+                  sx={{
+                    color: 'text.disabled',
+                    fontWeight: '500',
+                    fontSize: '80%',
+                  }}
+                >
+                  {`Rp${product.price.toLocaleString('id-ID')}`}
+                </Typography>
+                <Typography
+                  color="error"
+                  sx={{ fontWeight: '500', fontSize: '80%' }}
+                >
+                  {new Intl.NumberFormat('id-ID', {
+                    style: 'percent',
+                  }).format(product.discount)}
+                </Typography>
+              </Stack>
+            )}
             <Stack direction="row" spacing={0.5} alignItems="center">
-              {sold > 0 ? (
+              {product.sold > 0 ? (
                 <StarRounded sx={{ color: '#FFC400', fontSize: '1rem' }} />
               ) : (
                 <StarBorderRounded
@@ -65,7 +88,7 @@ function ProductCardItem({ id, image, name, price, sold }) {
                 •
               </Typography>
               <Typography noWrap fontSize="60%" variant="caption">
-                {sold} terjual
+                {product.sold} terjual
               </Typography>
             </Stack>
           </CardContent>
@@ -74,5 +97,16 @@ function ProductCardItem({ id, image, name, price, sold }) {
     </Card>
   );
 }
+
+ProductCardItem.propTypes = {
+  product: shape({
+    id: number.isRequired,
+    name: string.isRequired,
+    imageIds: arrayOf(number).isRequired,
+    price: number.isRequired,
+    discount: number.isRequired,
+    sold: number.isRequired,
+  }).isRequired,
+};
 
 export default ProductCardItem;

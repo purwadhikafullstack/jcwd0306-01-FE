@@ -14,7 +14,7 @@ function SearchInput() {
     dispatch(
       asyncGetProducts({
         getType: 'REPLACE',
-        name: searchParams.get('name'),
+        search: searchParams.get('search'),
         categoryId: searchParams.get('categoryId'),
         sortBy: searchParams.get('sortBy'),
         paranoid: false,
@@ -33,15 +33,15 @@ function SearchInput() {
 
     const timerId = setTimeout(handleSearch, 300);
     return () => clearTimeout(timerId);
-  }, [searchParams.get('name')]);
+  }, [searchParams.get('search')]);
 
   return (
     <TextField
-      onChange={({ target }) => updateQueryParams({ name: target.value })}
+      onChange={({ target }) => updateQueryParams({ search: target.value })}
       size="small"
       variant="outlined"
       placeholder="Cari Produk"
-      value={searchParams.get('name') || ''}
+      value={searchParams.get('search') || ''}
       sx={{ flexGrow: 1 }}
       InputProps={{
         startAdornment: (

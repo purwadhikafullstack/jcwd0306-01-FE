@@ -6,7 +6,7 @@ import {
   VerifiedRounded,
 } from '@mui/icons-material';
 import GadgetGalleryLogo from '../../GadgetGalleryLogo';
-import BgImage from '../../../../assets/footer/bg-top-footer.svg';
+import BgImage from '../../../assets/background1.svg';
 
 function TopFooter() {
   const theme = useTheme();

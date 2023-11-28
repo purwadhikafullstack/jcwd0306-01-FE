@@ -16,7 +16,8 @@ export function ImagePayment({ imgSrc, setOpen }) {
           alt="paymentProof receipt"
           src={imgSrc}
           style={{
-            height: '300px',
+            width: '100%',
+            maxWidth: '800px',
             objectFit: 'cover',
           }}
         />

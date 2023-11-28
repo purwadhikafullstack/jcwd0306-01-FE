@@ -1,10 +1,10 @@
-import { Button, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 // import { useState } from 'react';
-import { AddRounded } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import SearchInput from './SearchInput';
 import AllUsersTable from './AllUsersTable';
 import api from '../../../constants/api';
+import AllUsersFooter from './AllUsersFooter';
 // import SearchInput from './SearchInput';
 // import AdministratorTable from './AdministratorTable';
 // import { CreatedDialog } from './CreateDialog/CreateDialog';
@@ -33,43 +33,28 @@ function ContainerAllUsersPage() {
   }, []);
 
   return (
-    <>
-      <Stack
-        spacing={3}
-        sx={{
-          p: 2,
-          bgcolor: 'background.paper',
-          borderRadius: 1,
-        }}
-      >
-        {/* Title */}
-        <Typography fontWeight={800} fontSize="1.2rem">
-          All Users
-        </Typography>
-        <Stack spacing={2} direction={{ xs: 'column', md: 'row' }}>
-          {/* Search Users Input */}
-          <SearchInput />
-
-          {/* Create Category Button */}
-          <Button
-            onClick={null}
-            variant="contained"
-            startIcon={<AddRounded />}
-            sx={{ textTransform: 'none' }}
-          >
-            WH - Admin
-          </Button>
-        </Stack>
-        {/* Category Table */}
-        <AllUsersTable users={users} whAdmin={whAdmin} />
+    <Stack
+      spacing={3}
+      sx={{
+        p: 2,
+        bgcolor: 'background.paper',
+        borderRadius: 1,
+      }}
+    >
+      {/* Title */}
+      <Typography fontWeight={800} fontSize="1.2rem">
+        List Of All Users
+      </Typography>
+      <Stack spacing={2} direction={{ xs: 'column', md: 'row' }}>
+        {/* Search Users Input */}
+        <SearchInput />
       </Stack>
+      {/* All Users Table */}
+      <AllUsersTable users={users} whAdmin={whAdmin} />
 
-      {/* Create Category Dialog */}
-      {/* <CreatedDialog
-        isCreateDialogOpen={isCreateDialogOpen}
-        setIsCreateDialogOpen={setIsCreateDialogOpen}
-      /> */}
-    </>
+      {/* Footer */}
+      <AllUsersFooter />
+    </Stack>
   );
 }
 

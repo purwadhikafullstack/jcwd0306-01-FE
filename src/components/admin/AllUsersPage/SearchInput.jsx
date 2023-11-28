@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { InputAdornment, TextField } from '@mui/material';
 import { SearchOutlined } from '@mui/icons-material';
 import useCustomSearchParams from '../../../hooks/useCustomSearchParams';
-import { asyncGetCategories } from '../../../states/categories/action';
+import { asyncGetUsers } from '../../../states/users/action';
 
 function SearchInput() {
   const dispatch = useDispatch();
@@ -11,7 +11,7 @@ function SearchInput() {
 
   const handleSearch = () => {
     dispatch(
-      asyncGetCategories({
+      asyncGetUsers({
         name: searchParams.get('name'),
         sortBy: searchParams.get('sortBy'),
         orderBy: searchParams.get('orderBy'),

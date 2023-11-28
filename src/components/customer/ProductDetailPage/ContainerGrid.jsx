@@ -4,7 +4,6 @@ import ProductImageTab from './ProductImageTab';
 import ProductContentStack from './ProductContentStack';
 import ProductDetailStack from './ProductDetailStack';
 import ProductReportStack from './ProductReportStack';
-import ProductShipmentStack from './ProductShipmentStack';
 import ProductActionStack from './ProductActionStack/ProductActionStack';
 
 function ContainerGrid() {
@@ -30,7 +29,7 @@ function ContainerGrid() {
         <Grid item xs={12}>
           <ProductDetailStack />
         </Grid>
-        <Grid
+        {/* <Grid
           item
           xs={12}
           component={Divider}
@@ -38,7 +37,7 @@ function ContainerGrid() {
         />
         <Grid item xs={12}>
           <ProductShipmentStack />
-        </Grid>
+        </Grid> */}
         <Grid
           item
           xs={12}

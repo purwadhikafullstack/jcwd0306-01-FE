@@ -1,26 +1,26 @@
 import {
   Box,
   Button,
+  Divider,
   IconButton,
   InputAdornment,
-  Link,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import google from '../assets/google.png';
-import line from '../assets/line 2.png';
 import { asyncSetAuthUser } from '../states/authUser/action';
-import api from '../constants/api';
 import { setAlertActionCreator } from '../states/alert/action';
-
-const apiUrl = import.meta.env.VITE_FE_BASE_URL;
+import GadgetGalleryLogo from '../components/GadgetGalleryLogo';
+import api from '../constants/api';
+import loginWithGoogle from '../lib/loginWithGoogle';
 
 function LoginPage() {
   const nav = useNavigate();
@@ -42,25 +42,36 @@ function LoginPage() {
     onSubmit: async () => {
       try {
         setButtonDisabled(true);
-        const data = await api.post('/user/login', formik.values);
         const authData = {
           email: formik.values.email,
           password: formik.values.password,
+          nav,
         };
+        const data = await api.post(`/user/login`, authData);
+
+        const isNotSetPasswordWithGoogle =
+          data.data.data.isNotCreatePassword === true;
+
+        if (isNotSetPasswordWithGoogle) {
+          dispatch(
+            setAlertActionCreator({
+              val: {
+                status: 'info',
+                message:
+                  'you`re not set password yet, please set password first!',
+              },
+            })
+          );
+          return setTimeout(
+            () => nav(`/verify?email=${formik.values.email}`),
+            3000
+          );
+        }
+
         dispatch(asyncSetAuthUser(authData));
-        dispatch(
-          setAlertActionCreator({
-            val: { status: 'success', message: 'login success' },
-          })
-        );
-        if (data?.data?.data?.user?.isAdmin) return nav('/admin');
-        return nav('/');
       } catch (err) {
-        dispatch(
-          setAlertActionCreator({
-            val: { status: 'error', message: err?.response.data.message },
-          })
-        );
+        dispatch(setAlertActionCreator({ err }));
+        console.log(err);
       } finally {
         setButtonDisabled(false);
       }
@@ -73,19 +84,11 @@ function LoginPage() {
   }
   return (
     <>
-      <Box
-        width="100%"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        m="20px"
-      >
-        <Typography fontFamily="sans-serif" fontSize="30px" color="green">
-          GadgetGallery
-        </Typography>
-      </Box>
+      <GadgetGalleryLogo
+        sx={{ m: '3rem', fontSize: '3rem', textAlign: 'center' }}
+      />
 
-      <Box display="flex" mt="4rem" justifyContent="space-evenly">
+      <Box display="flex" justifyContent="space-evenly">
         <Box
           maxWidth="100%"
           height="auto"
@@ -97,23 +100,19 @@ function LoginPage() {
             variant="h5"
             display="flex"
             justifyContent="center"
-            fontWeight="500"
+            fontWeight="700"
           >
-            Sign In
+            Masuk
           </Typography>
           <Typography
             display="flex"
             justifyContent="center"
             fontWeight="400"
             fontSize={12}
+            sx={{ '& a': { color: 'primary.main', textDecoration: 'none' } }}
           >
-            don`t have account yet?&nbsp;&nbsp;
-            <a
-              href={`${apiUrl}/register`}
-              style={{ color: 'green', textDecoration: 'none' }}
-            >
-              Register
-            </a>
+            belum punya akun?&nbsp;&nbsp;
+            <Link to="/register">Daftar</Link>
           </Typography>
           <Box
             display="flex"
@@ -123,7 +122,7 @@ function LoginPage() {
             border="1px solid grey"
             borderRadius={5}
             sx={{ cursor: 'pointer' }}
-            onClick={() => alert('hello')}
+            onClick={() => loginWithGoogle(dispatch, nav)}
           >
             <img
               src={google}
@@ -134,29 +133,27 @@ function LoginPage() {
               Google
             </Typography>
           </Box>
-          <Box display="flex" justifyContent="center" mt={2}>
-            <img
-              src={line}
-              alt=""
-              style={{
-                maxWidth: '100%',
-                height: 'auto',
-                width: '80px',
-                marginRight: '8px',
+          <Stack direction="row" spacing={1} alignItems="center" mt="10px">
+            <Divider
+              sx={{
+                flexGrow: 1,
+                height: '0.3rem',
+                width: '1rem',
+                bgcolor: 'divider',
+                borderRadius: '1rem',
               }}
             />
-            <span style={{ fontSize: '13px' }}>atau login dengan</span>
-            <img
-              src={line}
-              alt=""
-              style={{
-                maxWidth: '100%',
-                height: 'auto',
-                width: '80px',
-                marginLeft: '5px',
+            <Typography fontSize="0.8rem">atau login dengan</Typography>
+            <Divider
+              sx={{
+                flexGrow: 1,
+                height: '0.3rem',
+                width: '1rem',
+                bgcolor: 'divider',
+                borderRadius: '1rem',
               }}
             />
-          </Box>
+          </Stack>
           <TextField
             onChange={(e) => inputHandler(e, 'email')}
             id="outlined-basic"
@@ -176,7 +173,7 @@ function LoginPage() {
           <TextField
             onChange={(e) => inputHandler(e, 'password')}
             id="outlined-basic"
-            label="Password"
+            label="password"
             variant="outlined"
             size="small"
             type={see ? 'text' : 'password'}
@@ -211,20 +208,24 @@ function LoginPage() {
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password ? formik.errors.password : ''}
           />
-          <Typography fontSize="small" sx={{ m: 0.5 }}>
-            forget your password? &nbsp;
-            <Link href="/forget-password" sx={{ textDecoration: 'none' }}>
-              click here
-            </Link>
+          <Typography
+            fontSize="small"
+            sx={{
+              m: 0.5,
+              '& a': { color: 'primary.main', textDecoration: 'none' },
+            }}
+          >
+            lupa password?&nbsp;&nbsp;
+            <Link to="/forget-password">klik disini</Link>
           </Typography>
           <Button
-            variant="outlined"
-            style={{ marginTop: '10px', width: '100%', height: '50px' }}
+            fullWidth
+            variant="contained"
             size="large"
             onClick={formik.handleSubmit}
             disabled={isButtonDisabled}
           >
-            Sign In
+            Masuk
           </Button>
         </Box>
       </Box>

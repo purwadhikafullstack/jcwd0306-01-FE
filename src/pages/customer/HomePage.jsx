@@ -18,7 +18,7 @@ function HomePage() {
     dispatch(
       asyncGetProducts({
         getType: 'REPLACE',
-        name: searchParams.get('name'),
+        search: searchParams.get('search'),
         categoryId: searchParams.get('categoryId'),
         sortBy: searchParams.get('sortBy'),
         orderBy: searchParams.get('orderBy'),

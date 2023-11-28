@@ -1,40 +1,44 @@
 import { TableCell, Typography } from '@mui/material';
 import { string } from 'prop-types';
-import { useEffect, useState } from 'react';
-
-const MAX_TEXT_CHAR = 150;
+import { useEffect, useMemo, useState } from 'react';
 
 function DescriptionTableCell({ text }) {
   const [resultText, setResultText] = useState();
+  const MAX_LENGTH = useMemo(() => 150, []);
+  const plainText = useMemo(() => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'text/html');
+    return doc.body.textContent;
+  }, [text]);
 
   useEffect(() => {
-    setResultText(text.slice(0, MAX_TEXT_CHAR));
-  }, [text]);
+    setResultText(plainText.slice(0, MAX_LENGTH));
+  }, [plainText]);
 
   const toggleIsTruncated = () => {
     setResultText((prevState) =>
-      prevState === text ? text.slice(0, MAX_TEXT_CHAR) : text
+      prevState === plainText ? plainText.slice(0, MAX_LENGTH) : plainText
     );
   };
 
   return (
-    <TableCell>
+    <TableCell sx={{ wordBreak: 'break-word' }}>
       <Typography
         component="span"
         variant="caption"
         sx={{ width: '20rem', display: 'inline-block' }}
       >
         {resultText}
-        {text.length > MAX_TEXT_CHAR && (
+        {plainText.length > MAX_LENGTH && (
           <Typography
             component="span"
             variant="caption"
             onClick={toggleIsTruncated}
             sx={{ fontWeight: 600, cursor: 'pointer' }}
           >
-            {text !== resultText
+            {plainText !== resultText
               ? '...lihat selengkapnya'
-              : 'Tampilkan sedikit'}
+              : ' Tampilkan sedikit'}
           </Typography>
         )}
       </Typography>

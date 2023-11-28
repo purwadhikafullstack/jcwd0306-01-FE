@@ -33,6 +33,7 @@ module.exports = {
         trailingComma: 'es5',
       },
     ],
+    'react/no-danger': 'off',
     'react/prop-types': 'off',
     'no-underscore-dangle': 'off',
     'import/prefer-default-export': 'off',

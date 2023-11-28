@@ -2,6 +2,7 @@ import { NotificationsNoneOutlined } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { NotificationShowUp } from './NotificationButton/NotificationShowUp';
 import { orderStatusCalculator } from './NotificationButton/orderStatusCalculator';
 
@@ -10,6 +11,7 @@ function NotificationButton() {
   const [show, setShow] = useState(false);
   const unpaid = useSelector((state) => state.order);
   const orderStatus = useSelector((state) => state.orderStatus);
+  const navigate = useNavigate();
 
   const totalNotification = orderStatusCalculator(unpaid, orderStatus);
 
@@ -38,11 +40,14 @@ function NotificationButton() {
           {totalNotification}
         </span>
       ) : null}
-      <a href={unpaidOrder.length ? '/payment/payment-list' : '/order-list'}>
-        <IconButton color="text">
-          <NotificationsNoneOutlined />
-        </IconButton>
-      </a>
+      <IconButton
+        color="text"
+        onClick={() =>
+          navigate(unpaidOrder.length ? '/payment/payment-list' : '/order-list')
+        }
+      >
+        <NotificationsNoneOutlined />
+      </IconButton>
       <NotificationShowUp
         show={show}
         setShow={setShow}

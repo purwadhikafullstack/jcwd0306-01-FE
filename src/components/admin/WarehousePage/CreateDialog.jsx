@@ -76,7 +76,7 @@ function CreateDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
                 <FormikOutlinedInput
                   name="country"
                   label="Negara"
-                  inputProps={{ disabled: true }}
+                  inputProps={{ readOnly: true }}
                 />
                 <FormikSelect
                   name="provinceId"

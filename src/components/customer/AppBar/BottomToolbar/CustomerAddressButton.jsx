@@ -1,37 +1,34 @@
 import { ExpandMoreOutlined, PlaceOutlined } from '@mui/icons-material';
-import { Box, Button, useTheme } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import checkLocationPathName from '../checkLocationPathName';
-import defaultAddressParameter from '../../../../utils/defaultAddressParameter';
+import { useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { asyncGetAddress } from '../../../../states/Address/action';
 
 function CustomerAddressButton() {
   const authUser = useSelector((state) => state.authUser);
-  const globalAddress = useSelector((states) => states.userAddress);
-  const isCartPage = checkLocationPathName();
-  const theme = useTheme();
+  const userAddress = useSelector((states) => states.userAddress);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const mainAddress = globalAddress.find(defaultAddressParameter);
-  // kalo gaada main addressnya, kirim ke alamat paling pertama dari table, kalo gaada kasih tulisan (tambah alamat)
-  const firstAddress = globalAddress[0]?.City?.name;
+  const isLogin = localStorage.getItem('token');
 
-  let display;
+  const display = useMemo(() => {
+    const mainAddress = userAddress.find((val) => val.isDefault);
+    // kalo gaada main addressnya, kirim ke alamat paling pertama dari table
+    const firstAddress = userAddress[0]?.City?.name;
 
-  if (mainAddress) {
-    display = mainAddress?.City.name || '';
-  } else if (firstAddress) {
-    display = firstAddress || '';
-  } else {
-    display = '-';
-  }
+    if (mainAddress) return mainAddress?.City.name || '';
+    if (firstAddress) return firstAddress || '';
+    return '-';
+  }, [userAddress]);
 
   useEffect(() => {
-    dispatch(asyncGetAddress(authUser?.id));
+    if (authUser?.id) dispatch(asyncGetAddress({ userId: authUser?.id }));
   }, [authUser?.id]);
 
   return (
     <Button
+      onClick={() => navigate('/user/address')}
       color="text"
       size="small"
       startIcon={<PlaceOutlined />}
@@ -40,15 +37,13 @@ function CustomerAddressButton() {
         textTransform: 'none',
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,
-        [theme.breakpoints.down('sm')]: {
-          display: isCartPage ? `none` : `flex`,
-        },
+        // display: isLogin ? 'block' : 'none',
       }}
     >
       <Box component="span" sx={{ color: 'text.secondary', mr: 1 }}>
         Dikirim ke
       </Box>
-      <Box component="span">{display}</Box>
+      <Box component="span">{isLogin ? display : '-'}</Box>
     </Button>
   );
 }

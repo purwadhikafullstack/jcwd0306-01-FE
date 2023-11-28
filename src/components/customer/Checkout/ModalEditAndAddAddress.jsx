@@ -61,7 +61,7 @@ export function ModalEditAndAddAddress({
           addressToEdit
         );
         if (window.location.pathname === '/user/address')
-          dispatch(asyncGetAddress(authUser?.id));
+          if (authUser?.id) dispatch(asyncGetAddress({ userId: authUser?.id }));
         // page /user/address
         dispatch(
           setAlertActionCreator({

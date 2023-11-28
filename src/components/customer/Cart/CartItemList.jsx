@@ -15,6 +15,8 @@ export function CartItemList({ cart, product, address }) {
   const { stock } = product;
   const dispatch = useDispatch();
   const userSelector = useSelector((state) => state.authUser);
+  const { price, discount } = product.Product;
+  const priceAfterDiscount = price * (1 - discount);
 
   const editQuantity = async (number) => {
     setQuantity(quantity + number);
@@ -79,7 +81,16 @@ export function CartItemList({ cart, product, address }) {
                   {product.Product.weight * quantity} gram)
                 </div>
                 <div>
-                  <b>Rp{product?.Product?.price.toLocaleString(`id-ID`)}</b>
+                  {discount ? (
+                    <span className="d-flex gap-1">
+                      <del>
+                        <small>Rp{price.toLocaleString(`id-ID`)}</small>
+                      </del>
+                      <b>Rp{priceAfterDiscount.toLocaleString(`id-ID`)}</b>
+                    </span>
+                  ) : (
+                    <b>Rp{price.toLocaleString(`id-ID`)}</b>
+                  )}
                 </div>
               </div>
             </div>
