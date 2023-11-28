@@ -124,6 +124,7 @@ export function ChatPage() {
               <Card>
                 <CardContent>
                   <Button
+                    sx={{ display: !smallerScreen ? 'none' : 'block' }}
                     disabled={disableButton}
                     onClick={() => {
                       setShowInput(false);

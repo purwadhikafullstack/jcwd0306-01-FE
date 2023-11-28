@@ -23,7 +23,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export function SearchBox() {
+export function SearchBox({ setName }) {
   return (
     <div className="border border-secondary-subtle mx-3 position-relative rounded-pill">
       <SearchIconWrapper>
@@ -33,6 +33,7 @@ export function SearchBox() {
         placeholder="Search…"
         inputProps={{ 'aria-label': 'search' }}
         fullWidth
+        onChange={(e) => setName(e.target.value)}
       />
     </div>
   );
