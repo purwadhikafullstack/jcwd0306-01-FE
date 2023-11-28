@@ -1,6 +1,7 @@
 import { hideLoading, showLoading } from 'react-redux-loading-bar';
 import { setAlertActionCreator } from '../alert/action';
 import api from '../../constants/api';
+import { setWarehousePaginationActionCreator } from '../warehousePagination/action';
 
 const ActionType = {
   GET_WAREHOUSES: 'GET_WAREHOUSES',
@@ -45,12 +46,30 @@ function deactivateWarehouseActionCreator(warehouse) {
   };
 }
 
-function asyncGetWarehouses() {
+function asyncGetWarehouses({
+  search,
+  sortBy,
+  orderBy,
+  pagination = false,
+  page,
+  perPage,
+} = {}) {
   return async (dispatch) => {
     try {
       dispatch(showLoading());
-      const { data } = await api.get('/warehouses');
+
+      const searchQ = search ? `search=${encodeURIComponent(search)}&` : '';
+      const sortByQ = sortBy ? `sortBy=${encodeURIComponent(sortBy)}&` : '';
+      const orderByQ = orderBy ? `orderBy=${encodeURIComponent(orderBy)}&` : '';
+      const paginationQ =
+        pagination === true ? `pagination=${encodeURIComponent(true)}&` : '';
+      const pageQ = page ? `page=${encodeURIComponent(page)}&` : '';
+      const perPageQ = perPage ? `perPage=${encodeURIComponent(perPage)}&` : '';
+      const allQuery = `?${searchQ}${sortByQ}${orderByQ}${paginationQ}${pageQ}${perPageQ}`;
+
+      const { data } = await api.get(`/warehouses${allQuery}`);
       dispatch(getWarehousesActionCreator(data.data));
+      dispatch(setWarehousePaginationActionCreator(data.info));
     } catch (err) {
       dispatch(setAlertActionCreator({ err }));
     } finally {

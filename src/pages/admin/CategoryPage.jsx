@@ -10,6 +10,7 @@ function CategoryPage() {
 
   useEffect(() => {
     setSearchParams({
+      search: searchParams.get('search') || '',
       sortBy: searchParams.get('sortBy') || 'updatedAt',
       orderBy: searchParams.get('orderBy') || 'desc',
       page: searchParams.get('page') || 1,
