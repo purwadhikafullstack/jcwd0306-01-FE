@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogTitle,
   Stack,
+  Typography,
 } from '@mui/material';
 import { Form, Formik } from 'formik';
 import { number, object, string } from 'yup';
@@ -15,10 +16,12 @@ import FormikOutlinedInput from '../../FormikOutlinedInput';
 import { asyncGetProvinces } from '../../../states/provinces/action';
 import FormikSelect from '../../FormikSelect';
 import FormikSelectCity from './FormikSelectCity';
+import useSwal from '../../../hooks/useSwal';
 
 function EditDialog({ warehouse, isEditDialogOpen, setIsEditDialogOpen }) {
   const provinces = useSelector((states) => states.provinces);
   const dispatch = useDispatch();
+  const Swal = useSwal();
 
   useEffect(() => {
     dispatch(asyncGetProvinces());
@@ -44,12 +47,35 @@ function EditDialog({ warehouse, isEditDialogOpen, setIsEditDialogOpen }) {
     detail: string().required(),
   });
 
-  const onSubmit = (values, { resetForm }) => {
-    dispatch(asyncEditWarehouse(warehouse.id, values)).then((isSuccess) => {
-      if (isSuccess) {
-        resetForm();
-        setIsEditDialogOpen(false);
-      }
+  const onSubmit = async (values, { resetForm }) => {
+    await Swal.fire({
+      icon: 'warning',
+      title: (
+        <Typography>
+          Gudang
+          <Typography
+            component="span"
+            sx={{ fontWeight: 600, '&::before, &::after': { content: '" "' } }}
+          >
+            {warehouse.name}
+          </Typography>
+          akan diubah
+        </Typography>
+      ),
+      showDenyButton: true,
+      denyButtonText: 'Batalkan',
+      showConfirmButton: true,
+      confirmButtonText: 'Konfirmasi',
+      showLoaderOnConfirm: true,
+      preConfirm: async () => {
+        const isSuccess = await dispatch(
+          asyncEditWarehouse(warehouse.id, values)
+        );
+        if (isSuccess) {
+          resetForm();
+          setIsEditDialogOpen(false);
+        }
+      },
     });
   };
 
@@ -97,17 +123,18 @@ function EditDialog({ warehouse, isEditDialogOpen, setIsEditDialogOpen }) {
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
               <Button
-                onClick={() => setIsEditDialogOpen(false)}
-                variant="outlined"
-              >
-                Batal
-              </Button>
-              <Button
                 type="submit"
                 variant="contained"
                 disabled={!formik.isValid || !formik.dirty}
               >
                 Simpan
+              </Button>
+              <Button
+                onClick={() => setIsEditDialogOpen(false)}
+                variant="contained"
+                color="error"
+              >
+                Batal
               </Button>
             </DialogActions>
           </Form>

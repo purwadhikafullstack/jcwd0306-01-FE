@@ -4,6 +4,11 @@ import WarehouseItem from './WarehouseItem';
 
 const itemColors = [
   {
+    backgroundColor: 'rgb(25,171,168)',
+    backgroundImage:
+      'linear-gradient(225deg, rgba(25,171,168,1) 50%, rgba(5,114,169,1) 100%)',
+  },
+  {
     backgroundColor: 'rgb(209,36,144)',
     backgroundImage:
       'linear-gradient(225deg, rgba(209,36,144,1) 50%, rgba(154,32,106,1) 100%)',
@@ -22,11 +27,6 @@ const itemColors = [
     backgroundColor: 'rgb(120,31,181)',
     backgroundImage:
       'linear-gradient(225deg, rgba(120,31,181,1) 50%, rgba(52,34,112,1) 100%)',
-  },
-  {
-    backgroundColor: 'rgb(25,171,168)',
-    backgroundImage:
-      'linear-gradient(225deg, rgba(25,171,168,1) 50%, rgba(5,114,169,1) 100%)',
   },
 ];
 

@@ -15,25 +15,53 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { number, shape, string } from 'prop-types';
+import {
+  instanceOf,
+  number,
+  oneOf,
+  oneOfType,
+  shape,
+  string,
+} from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
   asyncActivateWarehouse,
   asyncDeactivateWarehouse,
 } from '../../../states/warehouses/action';
 import EditDialog from './EditDialog';
+import useSwal from '../../../hooks/useSwal';
 
 function WarehouseItem({ warehouse, bgColor }) {
   const authUser = useSelector((states) => states.authUser);
   const dispatch = useDispatch();
+  const Swal = useSwal();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  const activateWarehouse = () => {
-    dispatch(asyncActivateWarehouse(warehouse.id));
-  };
-
-  const deactivateWarehouse = () => {
-    dispatch(asyncDeactivateWarehouse(warehouse.id));
+  const updateWarehouseActivation = async () => {
+    await Swal.fire({
+      icon: 'warning',
+      title: (
+        <Typography>
+          {`Gudang ${warehouse.name} akan`}
+          <Typography
+            component="span"
+            sx={{ fontWeight: 600, '&::before': { content: '" "' } }}
+          >
+            {warehouse.deletedAt ? 'diaktifkan' : 'dinonaktifkan'}
+          </Typography>
+        </Typography>
+      ),
+      showDenyButton: true,
+      denyButtonText: 'Batalkan',
+      showConfirmButton: true,
+      confirmButtonText: 'Konfirmasi',
+      showLoaderOnConfirm: true,
+      preConfirm: async () => {
+        if (warehouse.deletedAt)
+          await dispatch(asyncActivateWarehouse(warehouse.id));
+        else await dispatch(asyncDeactivateWarehouse(warehouse.id));
+      },
+    });
   };
 
   return (
@@ -77,35 +105,21 @@ function WarehouseItem({ warehouse, bgColor }) {
         {authUser.isAdmin && (
           <CardActions sx={{ justifyContent: 'center', bgcolor: 'inherit' }}>
             {/* Active / Deactivate Warehouse Button */}
-            {warehouse.deletedAt === null ? (
-              <Button
-                onClick={deactivateWarehouse}
-                size="small"
-                variant="contained"
-                startIcon={<CancelRounded />}
-                color="error"
-                sx={{
-                  width: 'fit-content',
-                  textTransform: 'none',
-                }}
-              >
-                Nonaktifkan
-              </Button>
-            ) : (
-              <Button
-                onClick={activateWarehouse}
-                size="small"
-                variant="contained"
-                startIcon={<CheckCircleRounded />}
-                color="success"
-                sx={{
-                  width: 'fit-content',
-                  textTransform: 'none',
-                }}
-              >
-                Aktifkan
-              </Button>
-            )}
+            <Button
+              onClick={updateWarehouseActivation}
+              size="small"
+              variant="contained"
+              startIcon={
+                warehouse.deletedAt ? <CheckCircleRounded /> : <CancelRounded />
+              }
+              color={warehouse.deletedAt ? 'success' : 'error'}
+              sx={{
+                width: 'fit-content',
+                textTransform: 'none',
+              }}
+            >
+              {warehouse.deletedAt ? 'Aktifkan' : 'Nonaktifkan'}
+            </Button>
 
             {/* Edit Warehouse Button */}
             <Button
@@ -142,7 +156,7 @@ WarehouseItem.propTypes = {
       City: shape({ name: string }),
       Province: shape({ name: string }),
     }),
-    deletedAt: string,
+    deletedAt: oneOfType([instanceOf(Date), string, oneOf([null])]),
   }).isRequired,
   bgColor: shape({ backgroundColor: string, backgroundImage: string })
     .isRequired,
