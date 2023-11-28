@@ -1,6 +1,6 @@
 import { Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   TotalSalesCard,
   TotalOrderCard,
@@ -13,16 +13,21 @@ import { setAlertActionCreator } from '../../../states/alert/action';
 import api from '../../../constants/api';
 
 function ContainerDashboard() {
+  const dispatch = useDispatch();
+  const authUser = useSelector((states) => states.authUser);
+  const isWarehouseAdmin = authUser?.WarehouseUser?.warehouseId;
   const [totalUser, setTotalUser] = useState(0);
   const [totalProduct, setTotalProduct] = useState(0);
+  const [totalProductWarehouse, setTotalProductWarehouse] = useState(0);
   const [totalOrder, setTotalOrder] = useState(0);
+  const [totalOrderWarehouse, setTotalOrderWarehouse] = useState(0);
   const [totalSales, setTotalSales] = useState(0);
-  const dispatch = useDispatch();
+  const [totalSalesWarehouse, setTotalSalesWarehouse] = useState(0);
 
   const fetchUser = async () => {
     try {
       const { data } = await api.get('/user/getAll');
-      setTotalUser(data?.data?.length);
+      setTotalUser(data?.info?.totalUsers);
     } catch (err) {
       dispatch(setAlertActionCreator({ err }));
     }
@@ -30,8 +35,27 @@ function ContainerDashboard() {
 
   const fetchProduct = async () => {
     try {
-      const { data } = await api.get('/products');
-      setTotalProduct(data?.data?.length);
+      const { data } = await api.get('/products/total');
+      const totalStockSum = data.data.reduce(
+        (sum, item) => sum + item.stock,
+        0
+      );
+      setTotalProduct(totalStockSum);
+    } catch (err) {
+      dispatch(setAlertActionCreator({ err }));
+    }
+  };
+
+  const fetchProductWarehouse = async () => {
+    try {
+      const { data } = await api.get(
+        `/products/total?warehouseId=${isWarehouseAdmin}`
+      );
+      const totalStockSum = data.data.rows.reduce(
+        (sum, item) => sum + item.stock,
+        0
+      );
+      setTotalProductWarehouse(totalStockSum);
     } catch (err) {
       dispatch(setAlertActionCreator({ err }));
     }
@@ -46,6 +70,17 @@ function ContainerDashboard() {
     }
   };
 
+  const fetchOrderByWarehouse = async () => {
+    try {
+      const { data } = await api.get(
+        `/sales-reports/${isWarehouseAdmin}/order`
+      );
+      setTotalOrderWarehouse(data?.data?.count);
+    } catch (err) {
+      dispatch(setAlertActionCreator({ err }));
+    }
+  };
+
   const fetchSales = async () => {
     try {
       const { data } = await api.get('sales-reports/revenue');
@@ -55,11 +90,31 @@ function ContainerDashboard() {
     }
   };
 
+  const fetchSalesByWarehouse = async () => {
+    try {
+      const { data } = await api.get(
+        `sales-reports/${isWarehouseAdmin}/revenue`
+      );
+      setTotalSalesWarehouse(
+        data?.data?.reduce((sum, order) => sum + order.total, 0)
+      );
+    } catch (err) {
+      dispatch(setAlertActionCreator({ err }));
+    }
+  };
+
   useEffect(() => {
-    fetchUser();
-    fetchProduct();
-    fetchOrder();
-    fetchSales();
+    if (isWarehouseAdmin) {
+      fetchOrderByWarehouse();
+      fetchSalesByWarehouse();
+      fetchProductWarehouse();
+    }
+    if (authUser.isAdmin) {
+      fetchUser();
+      fetchProduct();
+      fetchOrder();
+      fetchSales();
+    }
   }, []);
 
   return (
@@ -74,9 +129,18 @@ function ContainerDashboard() {
     >
       {/* Top Cards */}
       <Stack spacing={3} direction={{ xs: 'column', md: 'row' }}>
-        <TotalSalesCard totalSales={totalSales} />
-        <TotalOrderCard totalOrder={totalOrder} />
-        <TotalProductCard totalProduct={totalProduct} />
+        <TotalSalesCard
+          totalSales={totalSales}
+          totalSalesWarehouse={totalSalesWarehouse}
+        />
+        <TotalOrderCard
+          totalOrder={totalOrder}
+          totalOrderWarehouse={totalOrderWarehouse}
+        />
+        <TotalProductCard
+          totalProduct={totalProduct}
+          totalProductWarehouse={totalProductWarehouse}
+        />
         <TotalUserCard totalUser={totalUser} />
       </Stack>
 
