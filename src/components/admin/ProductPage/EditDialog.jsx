@@ -13,6 +13,7 @@ import { Form, Formik } from 'formik';
 import { array, mixed, object, number as num, string as str } from 'yup';
 import { useDispatch } from 'react-redux';
 import { arrayOf, bool, func, number, shape, string } from 'prop-types';
+import { useMemo } from 'react';
 import FormikOutlinedInput from '../../FormikOutlinedInput';
 import ImageInput from './ImageInput';
 import CategoriesInput from './CategoriesInput';
@@ -25,44 +26,51 @@ function EditDialog({ product, isEditDialogOpen, setIsEditDialogOpen }) {
   const dispatch = useDispatch();
   const Swal = useSwal();
 
-  const initialValues = {
-    name: product.name,
-    price: product.price,
-    weight: product.weight,
-    discount: product.discount,
-    description: product.description,
-    categoryIds: product.Categories?.map((val) => val.id),
-    images: [],
-    imageIdsToDelete: [],
-    savedImageIds: product.imageIds,
-  };
+  const initialValues = useMemo(
+    () => ({
+      name: product.name,
+      price: product.price,
+      weight: product.weight,
+      discount: product.discount,
+      description: product.description,
+      categoryIds: product.Categories?.map((val) => val.id),
+      images: [],
+      imageIdsToDelete: [],
+      savedImageIds: product.imageIds,
+    }),
+    [product]
+  );
 
-  const validationSchema = object({
-    name: str().required(),
-    price: num().integer().min(0).required(),
-    weight: num().min(0).required(),
-    discount: num().min(0).max(1).required(),
-    description: str().required(),
-    categoryIds: array().of(num().integer().min(1)),
-    images: array().of(
-      mixed()
-        .required()
-        .test(
-          'is-file',
-          'Image must be a file',
-          (value) => value instanceof File
-        )
-        .test('is-image', 'File must be an image', (value) =>
-          value.type.startsWith('image/')
-        )
-        .test(
-          'file-size',
-          'File size must be ≤ 1MB',
-          (value) => value.size <= 1024 * 1024 // 1MB = 1024 * 1024 bytes
-        )
-    ),
-    imageIdsToDelete: array().of(num().integer().min(1)),
-  });
+  const validationSchema = useMemo(
+    () =>
+      object({
+        name: str().required(),
+        price: num().integer().min(0).required(),
+        weight: num().min(0).required(),
+        discount: num().min(0).max(1).required(),
+        description: str().required(),
+        categoryIds: array().of(num().integer().min(1)),
+        images: array().of(
+          mixed()
+            .required()
+            .test(
+              'is-file',
+              'Image must be a file',
+              (value) => value instanceof File
+            )
+            .test('is-image', 'File must be an image', (value) =>
+              value.type.startsWith('image/')
+            )
+            .test(
+              'file-size',
+              'File size must be ≤ 1MB',
+              (value) => value.size <= 1024 * 1024 // 1MB = 1024 * 1024 bytes
+            )
+        ),
+        imageIdsToDelete: array().of(num().integer().min(1)),
+      }),
+    []
+  );
 
   const onSubmit = async (values, { resetForm }) => {
     await Swal.fire({

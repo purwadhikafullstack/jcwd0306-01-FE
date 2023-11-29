@@ -12,7 +12,7 @@ import { Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { bool, func, number } from 'prop-types';
 import { object, number as num } from 'yup';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import FormikOutlinedInput from '../../../FormikOutlinedInput';
 import {
@@ -21,6 +21,7 @@ import {
 } from '../../../../states/product/action';
 import QuantityInput from './QuantityInput';
 import { asyncGetProducts } from '../../../../states/products/action';
+import useSwal from '../../../../hooks/useSwal';
 
 function UpdateStockDialog({
   productId,
@@ -32,7 +33,7 @@ function UpdateStockDialog({
   const { warehouseId } = useParams();
   const [searchParams] = useSearchParams();
   const [warehouseProduct, setWarehouseProduct] = useState(null);
-  const [validationSchema, setValidationSchema] = useState(null);
+  const Swal = useSwal();
 
   useEffect(() => {
     dispatch(asyncGetProduct(productId));
@@ -48,46 +49,67 @@ function UpdateStockDialog({
     }
   }, [product]);
 
-  useEffect(() => {
+  const initialValues = useMemo(() => ({ quantity: 0 }), []);
+
+  const validationSchema = useMemo(() => {
     if (warehouseProduct !== null) {
-      setValidationSchema(
-        object({
-          quantity: num()
-            .integer()
-            .min(warehouseProduct.stock * -1)
-            .required(),
-        })
-      );
+      return object({
+        quantity: num()
+          .integer()
+          .min(warehouseProduct.stock * -1)
+          .required(),
+      });
     }
+    return null;
   }, [warehouseProduct]);
 
-  const initialValues = { quantity: 0 };
-
-  const onSubmit = (values, { resetForm }) => {
-    dispatch(
-      asyncUpdateWarehouseProductStock({
-        productId: product.id,
-        warehouseId: warehouseProduct.warehouseId,
-        quantity: values.quantity,
-      })
-    ).then((isSuccess) => {
-      if (isSuccess) {
-        resetForm();
-        setIsUpdateStockDialogOpen(false);
-        dispatch(
-          asyncGetProducts({
-            getType: 'REPLACE',
-            search: searchParams.get('search'),
-            categoryId: searchParams.get('categoryId'),
-            sortBy: searchParams.get('sortBy'),
-            orderBy: searchParams.get('orderBy'),
-            paranoid: false,
-            page: searchParams.get('page'),
-            perPage: searchParams.get('perPage'),
-            warehouseId,
+  const onSubmit = async (values, { resetForm }) => {
+    await Swal.fire({
+      icon: 'warning',
+      title: (
+        <Typography>
+          {`Stok ${product.name} akan`}
+          <Typography
+            component="span"
+            sx={{ fontWeight: 600, '&::before': { content: '" "' } }}
+          >
+            {`${values.quantity > 0 ? 'ditambah' : 'dikurangi'} ${Math.abs(
+              values.quantity
+            )}`}
+          </Typography>
+        </Typography>
+      ),
+      showDenyButton: true,
+      denyButtonText: 'Batalkan',
+      showConfirmButton: true,
+      confirmButtonText: 'Konfirmasi',
+      showLoaderOnConfirm: true,
+      preConfirm: async () => {
+        const isSuccess = await dispatch(
+          asyncUpdateWarehouseProductStock({
+            productId: product.id,
+            warehouseId: warehouseProduct.warehouseId,
+            quantity: values.quantity,
           })
         );
-      }
+        if (isSuccess) {
+          resetForm();
+          setIsUpdateStockDialogOpen(false);
+          await dispatch(
+            asyncGetProducts({
+              getType: 'REPLACE',
+              search: searchParams.get('search'),
+              categoryId: searchParams.get('categoryId'),
+              sortBy: searchParams.get('sortBy'),
+              orderBy: searchParams.get('orderBy'),
+              paranoid: false,
+              page: searchParams.get('page'),
+              perPage: searchParams.get('perPage'),
+              warehouseId,
+            })
+          );
+        }
+      },
     });
   };
 
@@ -142,17 +164,18 @@ function UpdateStockDialog({
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
               <Button
-                onClick={() => setIsUpdateStockDialogOpen(false)}
-                variant="outlined"
-              >
-                Batal
-              </Button>
-              <Button
                 type="submit"
                 variant="contained"
                 disabled={!formik.isValid || !formik.dirty}
               >
                 Simpan
+              </Button>
+              <Button
+                onClick={() => setIsUpdateStockDialogOpen(false)}
+                variant="contained"
+                color="error"
+              >
+                Batal
               </Button>
             </DialogActions>
           </Form>

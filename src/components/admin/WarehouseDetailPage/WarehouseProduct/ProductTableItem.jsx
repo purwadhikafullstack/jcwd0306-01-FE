@@ -57,9 +57,11 @@ function ProductTableItem() {
           products.map((val, idx) => (
             <TableRow key={val.id} hover>
               {/* No. column */}
-              <TableCell>{productPagination.offset + idx + 1}</TableCell>
+              <TableCell align="center">
+                {productPagination.offset + idx + 1}
+              </TableCell>
               {/* Status column */}
-              <TableCell>
+              <TableCell align="center">
                 {val.deletedAt === null ? (
                   <Tooltip title="Status: Aktif">
                     <CheckCircleRounded color="success" />
@@ -71,7 +73,7 @@ function ProductTableItem() {
                 )}
               </TableCell>
               {/* Image column */}
-              <TableCell>
+              <TableCell align="center">
                 <Avatar
                   variant="square"
                   alt={val.name}
@@ -128,7 +130,7 @@ function ProductTableItem() {
                 <Box sx={{ minWidth: '8rem' }}>{val.weight}</Box>
               </TableCell>
               {/* Discount column */}
-              <TableCell>
+              <TableCell align="center">
                 <Box sx={{ minWidth: '8rem' }}>
                   {new Intl.NumberFormat('id-ID', {
                     style: 'percent',
@@ -138,7 +140,7 @@ function ProductTableItem() {
               {/* Description column */}
               <DescriptionTableCell text={val.description} />
               {/* Category column */}
-              <TableCell>
+              <TableCell align="center">
                 <Box sx={{ minWidth: '5rem' }}>
                   {val.Categories.map((category) => (
                     <Chip
@@ -150,7 +152,7 @@ function ProductTableItem() {
                 </Box>
               </TableCell>
               {/* createdAt column */}
-              <TableCell>
+              <TableCell align="center">
                 <Box sx={{ minWidth: '12rem' }}>
                   {new Date(val.WarehouseProducts[0].createdAt).toLocaleString(
                     'id-ID',
@@ -159,7 +161,7 @@ function ProductTableItem() {
                 </Box>
               </TableCell>
               {/* updatedAt column */}
-              <TableCell>
+              <TableCell align="center">
                 <Box sx={{ minWidth: '12rem' }}>
                   {new Date(val.WarehouseProducts[0].updatedAt).toLocaleString(
                     'id-ID',

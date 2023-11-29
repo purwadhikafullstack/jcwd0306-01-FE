@@ -53,7 +53,6 @@ function CategoryImageList({ setIsCategoryDrawerOpen }) {
               category.id
             }/image`}
             alt={category.name}
-            loading="lazy"
           />
           <ImageListItemBar title={category.name} />
         </ImageListItem>

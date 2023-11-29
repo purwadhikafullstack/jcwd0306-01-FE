@@ -14,6 +14,7 @@ import { mixed, number, object, string, array } from 'yup';
 import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { bool, func } from 'prop-types';
+import { useMemo } from 'react';
 import FormikOutlinedInput from '../../FormikOutlinedInput';
 import ImageInput from './ImageInput';
 import {
@@ -29,44 +30,51 @@ function CreateDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
   const [searchParams] = useSearchParams();
   const Swal = useSwal();
 
-  const initialValues = {
-    name: '',
-    price: 0,
-    weight: 0,
-    discount: 0,
-    description: '',
-    categoryIds: [],
-    images: [],
-  };
+  const initialValues = useMemo(
+    () => ({
+      name: '',
+      price: 0,
+      weight: 0,
+      discount: 0,
+      description: '',
+      categoryIds: [],
+      images: [],
+    }),
+    []
+  );
 
-  const validationSchema = object({
-    name: string().required(),
-    price: number().integer().min(0).required(),
-    weight: number().min(0).required(),
-    discount: number().min(0).max(1).required(),
-    description: string().required(),
-    categoryIds: array().of(number().integer().min(1)),
-    images: array()
-      .of(
-        mixed()
-          .required()
-          .test(
-            'is-file',
-            'Image must be a file',
-            (value) => value instanceof File
+  const validationSchema = useMemo(
+    () =>
+      object({
+        name: string().required(),
+        price: number().integer().min(0).required(),
+        weight: number().min(0).required(),
+        discount: number().min(0).max(1).required(),
+        description: string().required(),
+        categoryIds: array().of(number().integer().min(1)),
+        images: array()
+          .of(
+            mixed()
+              .required()
+              .test(
+                'is-file',
+                'Image must be a file',
+                (value) => value instanceof File
+              )
+              .test('is-image', 'File must be an image', (value) =>
+                value.type.startsWith('image/')
+              )
+              .test(
+                'file-size',
+                'File size must be ≤ 1MB',
+                (value) => value.size <= 1024 * 1024 // 1MB = 1024 * 1024 bytes
+              )
           )
-          .test('is-image', 'File must be an image', (value) =>
-            value.type.startsWith('image/')
-          )
-          .test(
-            'file-size',
-            'File size must be ≤ 1MB',
-            (value) => value.size <= 1024 * 1024 // 1MB = 1024 * 1024 bytes
-          )
-      )
-      .min(1)
-      .required(),
-  });
+          .min(1)
+          .required(),
+      }),
+    []
+  );
 
   const onSubmit = async (values, { resetForm }) => {
     await Swal.fire({
