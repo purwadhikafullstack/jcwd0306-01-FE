@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { object } from 'prop-types';
 import api from '../../../../constants/api';
 
 export const addressInitialValues = {
