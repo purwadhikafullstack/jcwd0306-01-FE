@@ -98,6 +98,7 @@ export function Checkout() {
       if (userSelector?.id)
         fetchAddresses(userSelector, setAddresses, dispatch, name);
     }, 500);
+    return () => clearTimeout(fetching);
   }, [userSelector?.id, name]);
   return (
     <Container className="mx-auto p-0 mt-3" fluid="lg">
