@@ -3,7 +3,7 @@ import { constant } from '../constants/constant';
 
 export const fetchCartItemAndNotif = async (authUser, dispatch) => {
   try {
-    if (authUser?.WarehouseUser) {
+    if (authUser?.isAdmin || authUser?.WarehouseUser) {
       dispatch({
         type: constant.setWarehouseUser,
         payload: authUser?.isAdmin
