@@ -31,6 +31,7 @@ export function SearchBox({ setName }) {
       </SearchIconWrapper>
       <StyledInputBase
         placeholder="Search…"
+        id="searchAddressForm"
         inputProps={{ 'aria-label': 'search' }}
         fullWidth
         onChange={(e) => setName(e.target.value)}

@@ -23,7 +23,11 @@ export default function ModalChooseAddress({
   setShippingMethod,
   setName,
 }) {
-  const handleClose = () => setOpen('');
+  const handleClose = () => {
+    setOpen('');
+    setName('');
+    document.getElementById('searchAddressForm').value = '';
+  };
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
