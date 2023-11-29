@@ -1,5 +1,7 @@
+import { hideLoading, showLoading } from 'react-redux-loading-bar';
 import api from '../../constants/api';
 import { setAllUsersPaginationActionCreator } from '../allUsersPagination/action';
+import { setAlertActionCreator } from '../alert/action';
 
 const ActionType = {
   GET_USERS: 'GET_USERS',
@@ -15,6 +17,7 @@ function getUsersActionCreator(users) {
 function asyncGetUsers({ name, sortBy, orderBy, page, perPage } = {}) {
   return async (dispatch) => {
     try {
+      dispatch(showLoading());
       const nameQ = name ? `name=${encodeURIComponent(name)}&` : '';
       const sortByQ = sortBy ? `sortBy=${encodeURIComponent(sortBy)}&` : '';
       const orderByQ = orderBy ? `orderBy=${encodeURIComponent(orderBy)}&` : '';
@@ -27,7 +30,9 @@ function asyncGetUsers({ name, sortBy, orderBy, page, perPage } = {}) {
       dispatch(getUsersActionCreator(data.data.data));
       dispatch(setAllUsersPaginationActionCreator(data.data.info));
     } catch (err) {
-      console.log(err);
+      dispatch(setAlertActionCreator({ err }));
+    } finally {
+      dispatch(hideLoading());
     }
   };
 }

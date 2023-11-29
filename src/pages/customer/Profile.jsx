@@ -23,16 +23,25 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import Collapse from '@mui/material/Collapse';
+import { useNavigate } from 'react-router';
 import api from '../../constants/api';
 import { setAlertActionCreator } from '../../states/alert/action';
-import { asyncUpdateAuthUser } from '../../states/authUser/action';
+import {
+  asyncUpdateAuthUser,
+  updateUserImageActionCreator,
+} from '../../states/authUser/action';
+import { AvatarDetail } from '../../components/customer/ProfilePage/AvatarDetail';
 
 export function ProfileDashoard() {
   const authUser = useSelector((states) => states.authUser);
+  console.log(authUser);
+  const userImage = useSelector((states) => states.authUser?.imageUrl);
   const [isButtonDisabled, setButtonDisabled] = useState(false);
   const [see, setSee] = useState(false);
+  const nav = useNavigate();
   const [seeOldPassword, setSeeOldPassword] = useState(false);
   const [seeNewPassword, setSeeNewPassword] = useState(false);
+  const [avatarDetailOpen, setAvatarDetailOpen] = useState(false);
   const [image, setImage] = useState(null);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -40,28 +49,26 @@ export function ProfileDashoard() {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setImage(URL.createObjectURL(file));
-
-    // Create a FormData object to send the file
     const formData = new FormData();
     formData.append('file', file);
 
-    // Send the file to the backend
     api
       .patch(`/user/edit/${authUser?.id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
-      .then(async (response) => {
-        console.log('File uploaded successfully:', response.data);
+      .then(async () => {
+        const imageUrl = URL.createObjectURL(file);
+        dispatch(updateUserImageActionCreator(imageUrl));
         dispatch(
           setAlertActionCreator({
             val: { status: 'success', message: 'Edit Success' },
           })
         );
       })
-      .catch((error) => {
-        console.error('Error uploading file:', error);
+      .catch((err) => {
+        dispatch(setAlertActionCreator({ err }));
       });
   };
 
@@ -78,26 +85,18 @@ export function ProfileDashoard() {
     onSubmit: async () => {
       try {
         setButtonDisabled(true);
-        // await api.patch(`/user/edit/${authUser?.id}`, formik.values);
         const userId = authUser?.id;
         const formData = formik.values;
 
-        const fetchUser = await api.get(`/user/${authUser?.id}`);
-        // console.log(fetchUser?.data?.data?.user);
-
+        await api.get(`/user/${authUser?.id}`);
         dispatch(asyncUpdateAuthUser({ userId, formData }));
-
         dispatch(
           setAlertActionCreator({
             val: { status: 'success', message: 'Edit Success' },
           })
         );
       } catch (err) {
-        dispatch(
-          setAlertActionCreator({
-            val: { status: 'error', message: err?.message },
-          })
-        );
+        dispatch(setAlertActionCreator({ err }));
       } finally {
         setButtonDisabled(false);
       }
@@ -130,11 +129,7 @@ export function ProfileDashoard() {
         );
       } catch (err) {
         formik2.resetForm();
-        dispatch(
-          setAlertActionCreator({
-            val: { status: 'error', message: err?.response.data.data },
-          })
-        );
+        dispatch(setAlertActionCreator({ err }));
         setLoading(false);
       } finally {
         formik2.resetForm();
@@ -161,6 +156,14 @@ export function ProfileDashoard() {
     authUser?.id
   }/image`;
 
+  const resendVerification = () => {
+    nav('/verify');
+  };
+
+  const handleAvatarClick = () => {
+    setAvatarDetailOpen(true);
+  };
+
   return (
     <Container sx={{ mt: 3, p: 2 }}>
       <Card sx={{ p: 2, backgroundColor: '#FBFCFE' }}>
@@ -168,7 +171,7 @@ export function ProfileDashoard() {
         <Box sx={{ mb: 1 }}>
           <Typography variant="h5">My Profile</Typography>
           <Typography level="body-sm">
-            Customize how your profile information will appear to the networks.
+            Customize how your profile information will appear to the Website.
           </Typography>
         </Box>
         <Divider />
@@ -180,10 +183,18 @@ export function ProfileDashoard() {
         >
           {/* avatar */}
           <Stack direction="column" spacing={1} alignItems="center">
-            <Avatar
-              sx={{ minHeight: 120, minWidth: 120, position: 'relative' }}
-              src={image || gambarProfil}
-            />
+            <div onClick={handleAvatarClick} style={{ cursor: 'pointer' }}>
+              <Avatar
+                key={authUser?.imageUrl}
+                sx={{
+                  minHeight: 120,
+                  minWidth: 120,
+                  position: 'relative',
+                  cursor: 'pointer',
+                }}
+                src={image || gambarProfil || userImage}
+              />
+            </div>
             <IconButton
               sx={{
                 position: 'relative',
@@ -191,7 +202,8 @@ export function ProfileDashoard() {
                 right: '-40px',
                 bgcolor: 'white',
                 boxShadow: 2,
-                ':hover': { bgcolor: '#FBFCFE' },
+                cursor: 'pointer',
+                ':hover': { bgcolor: '#b6c1bc', cursor: 'pointer' },
               }}
             >
               <EditIcon />
@@ -209,7 +221,12 @@ export function ProfileDashoard() {
                 }}
               />
             </IconButton>
-            {/* <ImageInput /> */}
+            {/* Avatar Detail */}
+            <AvatarDetail
+              open={avatarDetailOpen}
+              setOpen={setAvatarDetailOpen}
+              imgSrc={gambarProfil}
+            />
           </Stack>
           {/* biodata */}
           <Stack spacing={1} sx={{ flexGrow: 1 }}>
@@ -266,6 +283,28 @@ export function ProfileDashoard() {
                 variant="outlined"
                 disabled
               />
+            </FormControl>
+
+            <FormLabel>Status</FormLabel>
+            <FormControl sx={{ gap: 1, maxWidth: 225 }}>
+              <TextField
+                size="small"
+                id="outlined-basic-email"
+                value={
+                  authUser?.isVerified === true ? 'verified' : 'unverified'
+                }
+                variant="outlined"
+                disabled
+              />
+              <Button
+                variant="contained"
+                size="small"
+                onClick={() => resendVerification()}
+                disabled={isButtonDisabled}
+                sx={{ display: authUser?.isVerified === true ? 'none' : '' }}
+              >
+                Verify my Account
+              </Button>
             </FormControl>
 
             {/* CHANGE PASSWORD */}
@@ -409,7 +448,7 @@ export function ProfileDashoard() {
               Cancel
             </Button>
             <Button
-              variant="outlined"
+              variant="contained"
               disabled={isButtonDisabled}
               onClick={formik.handleSubmit}
             >

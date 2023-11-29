@@ -147,6 +147,7 @@ function App() {
           <Route path="/chatroom" element={<Chat />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/user/address" element={<CustomerAddressPage />} />
+          <Route path="/verify" element={<Verify />} />
           <Route
             path="/user/settings"
             element={

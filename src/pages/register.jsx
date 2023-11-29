@@ -3,18 +3,18 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import google from '../assets/google.png';
 import line from '../assets/line 2.png';
 import api from '../constants/api';
 import { setAlertActionCreator } from '../states/alert/action';
 import GadgetGalleryLogo from '../components/GadgetGalleryLogo';
 import loginWithGoogle from '../lib/loginWithGoogle';
-// import { setAlertActionCreator } from '../states/alert/action';
-// import GGLogo from '../assets/GadgetGallery Logo 2.png';
 
 function Register() {
   const dispatch = useDispatch();
   const nav = useNavigate();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -27,6 +27,7 @@ function Register() {
     }),
     onSubmit: async () => {
       try {
+        setIsButtonDisabled(true);
         await api.post('/user/register', formik.values);
 
         dispatch(
@@ -40,6 +41,9 @@ function Register() {
             val: { status: 'error', message: err?.response.data.message },
           })
         );
+        setIsButtonDisabled(true);
+      } finally {
+        setIsButtonDisabled(false);
       }
     },
   });
@@ -56,17 +60,6 @@ function Register() {
       />
 
       <Box display="flex" justifyContent="space-evenly">
-        {/* <Box>
-          <img
-            src={GGLogo}
-            alt=""
-            style={{ maxWidth: '100%', height: 'auto', width: '200px' }}
-          />
-          <Typography variant="h5">Jual Beli Gadget Terpercaya</Typography>
-          <Typography>
-            Gabung dan rasakan kemudahan bertransaksi di GadgetGallery!
-          </Typography>
-        </Box> */}
         <Box
           maxWidth="100%"
           height="auto"
@@ -200,6 +193,7 @@ function Register() {
             fullWidth
             variant="contained"
             size="large"
+            disabled={isButtonDisabled}
             onClick={formik.handleSubmit}
             sx={{ mt: '10px' }}
           >

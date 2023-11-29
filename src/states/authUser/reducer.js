@@ -11,6 +11,12 @@ function authUserReducer(authUser = null, action = {}) {
     case ActionType.UPDATE_AUTH_USER:
       return { ...authUser, ...action.payload };
 
+    case ActionType.UPDATE_USER_IMAGE:
+      return { ...authUser, imageUrl: action.payload };
+
+    case ActionType.DELETE_USER_IMAGE:
+      return { ...authUser, imageUrl: null };
+
     default:
       return authUser;
   }
