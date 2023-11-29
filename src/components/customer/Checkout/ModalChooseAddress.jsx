@@ -21,6 +21,7 @@ export default function ModalChooseAddress({
   setAddresses,
   setAddressToEdit,
   setShippingMethod,
+  setName,
 }) {
   const handleClose = () => setOpen('');
   const theme = useTheme();
@@ -38,7 +39,7 @@ export default function ModalChooseAddress({
       >
         <HeaderModal handleClose={handleClose} Title="Choose Address" />
         <div className="my-3">
-          <SearchBox />
+          <SearchBox setName={setName} />
         </div>
         <Button
           variant="white"

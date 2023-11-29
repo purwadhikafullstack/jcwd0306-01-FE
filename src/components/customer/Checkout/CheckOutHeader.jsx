@@ -17,6 +17,7 @@ export function CheckOutHeader({
   originWarehouse,
   disableButton,
   isLoading,
+  setName,
 }) {
   const [showModal, setShowModal] = useState('');
   const [addressToEdit, setAddressToEdit] = useState({});
@@ -65,6 +66,7 @@ export function CheckOutHeader({
             setAddresses={setAddresses}
             setAddressToEdit={setAddressToEdit}
             setShippingMethod={setShippingMethod}
+            setName={setName}
           />
           <ModalEditAndAddAddress
             open={showModal}
