@@ -1,6 +1,7 @@
 import { DeleteRounded, EditNoteRounded } from '@mui/icons-material';
 import {
   Avatar,
+  Box,
   IconButton,
   Stack,
   TableBody,
@@ -16,8 +17,10 @@ import EditDialog from './EditDialog';
 import useSwal from '../../../hooks/useSwal';
 
 function CategoryTableItem() {
-  const dispatch = useDispatch();
+  const authUser = useSelector((states) => states.authUser);
   const categories = useSelector((states) => states.categories);
+  const categoryPagination = useSelector((states) => states.categoryPagination);
+  const dispatch = useDispatch();
   const [category, setCategory] = useState({});
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const Swal = useSwal();
@@ -59,7 +62,7 @@ function CategoryTableItem() {
         {/* When category not found */}
         {!categories.length && (
           <TableRow>
-            <TableCell colSpan={5}>
+            <TableCell colSpan={7}>
               <Typography variant="body2" align="center">
                 Kategori tidak ditemukan
               </Typography>
@@ -68,13 +71,15 @@ function CategoryTableItem() {
         )}
 
         {/* When category exist */}
-        {categories.map((val) => (
-          <TableRow key={val.id}>
-            {/* ID column */}
-            <TableCell>{val.id}</TableCell>
+        {categories.map((val, idx) => (
+          <TableRow key={val.id} hover>
+            {/* No. column */}
+            <TableCell align="center">
+              {categoryPagination.offset + idx + 1}
+            </TableCell>
 
             {/* Image column */}
-            <TableCell>
+            <TableCell align="center">
               <Avatar
                 variant="square"
                 alt={val.name}
@@ -85,56 +90,72 @@ function CategoryTableItem() {
             </TableCell>
 
             {/* Name column */}
-            <TableCell>{val.name}</TableCell>
-
-            {/* Total products column */}
-            <TableCell>{val.totalProducts}</TableCell>
-
-            {/* createdAt column */}
             <TableCell>
-              {new Date(val.createdAt).toLocaleDateString('id-ID')}
-            </TableCell>
-
-            {/* updatedAt column */}
-            <TableCell>
-              {new Date(val.updatedAt).toLocaleDateString('id-ID')}
+              <Box sx={{ minWidth: '15rem' }}>{val.name}</Box>
             </TableCell>
 
             {/* Action column */}
-            <TableCell>
-              <Stack direction="row">
-                {/* Edit button */}
-                <Tooltip title="Edit kategori" arrow>
-                  <IconButton
-                    onClick={() => handleEditButton(val)}
-                    sx={{ '&:hover': { color: 'info.main' } }}
-                  >
-                    <EditNoteRounded />
-                  </IconButton>
-                </Tooltip>
+            {authUser.isAdmin && (
+              <TableCell>
+                <Stack direction="row">
+                  {/* Edit button */}
+                  <Tooltip title="Edit kategori" arrow>
+                    <IconButton
+                      onClick={() => handleEditButton(val)}
+                      sx={{ '&:hover': { color: 'info.main' } }}
+                    >
+                      <EditNoteRounded />
+                    </IconButton>
+                  </Tooltip>
 
-                {/* Delete button */}
-                <Tooltip title="Hapus kategori" arrow>
-                  <IconButton
-                    value="categoryId"
-                    onClick={() => handleDeleteButton(val)}
-                    sx={{ '&:hover': { color: 'error.main' } }}
-                  >
-                    <DeleteRounded />
-                  </IconButton>
-                </Tooltip>
-              </Stack>
+                  {/* Delete button */}
+                  <Tooltip title="Hapus kategori" arrow>
+                    <IconButton
+                      value="categoryId"
+                      onClick={() => handleDeleteButton(val)}
+                      sx={{ '&:hover': { color: 'error.main' } }}
+                    >
+                      <DeleteRounded />
+                    </IconButton>
+                  </Tooltip>
+                </Stack>
+              </TableCell>
+            )}
+
+            {/* Total products column */}
+            <TableCell align="center">
+              <Box sx={{ minWidth: '8rem' }}>{val.totalProducts}</Box>
+            </TableCell>
+
+            {/* createdAt column */}
+            <TableCell align="center">
+              <Box sx={{ minWidth: '12rem' }}>
+                {new Date(val.createdAt).toLocaleString('id-ID', {
+                  timeZoneName: 'short',
+                })}
+              </Box>
+            </TableCell>
+
+            {/* updatedAt column */}
+            <TableCell align="center">
+              <Box sx={{ minWidth: '12rem' }}>
+                {new Date(val.updatedAt).toLocaleString('id-ID', {
+                  timeZoneName: 'short',
+                })}
+              </Box>
             </TableCell>
           </TableRow>
         ))}
       </TableBody>
 
       {/* Edit Dialog */}
-      <EditDialog
-        category={category}
-        isEditDialogOpen={isEditDialogOpen}
-        setIsEditDialogOpen={setIsEditDialogOpen}
-      />
+      {authUser.isAdmin && (
+        <EditDialog
+          category={category}
+          isEditDialogOpen={isEditDialogOpen}
+          setIsEditDialogOpen={setIsEditDialogOpen}
+        />
+      )}
     </>
   );
 }

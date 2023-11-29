@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import { InputAdornment, TextField } from '@mui/material';
 import { SearchOutlined } from '@mui/icons-material';
 import useCustomSearchParams from '../../../hooks/useCustomSearchParams';
-import { asyncGetCategories } from '../../../states/categories/action';
+import { asyncGetWarehouses } from '../../../states/warehouses/action';
 
 function SearchInput() {
   const dispatch = useDispatch();
@@ -12,7 +12,7 @@ function SearchInput() {
 
   const handleSearch = () => {
     dispatch(
-      asyncGetCategories({
+      asyncGetWarehouses({
         search: searchParams.get('search'),
         sortBy: searchParams.get('sortBy'),
         orderBy: searchParams.get('orderBy'),
@@ -38,7 +38,7 @@ function SearchInput() {
       onChange={({ target }) => updateQueryParams({ search: target.value })}
       size="small"
       variant="outlined"
-      placeholder="Cari Kategori"
+      placeholder="Cari Gudang"
       value={searchParams.get('search') || ''}
       sx={{ flexGrow: 1 }}
       InputProps={{

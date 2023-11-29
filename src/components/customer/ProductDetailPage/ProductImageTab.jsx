@@ -1,7 +1,9 @@
 import { TabContext, TabPanel } from '@mui/lab';
 import { Stack, Tab, Tabs } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
+import InnerImageZoom from 'react-inner-image-zoom';
 import { useSelector } from 'react-redux';
+import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
 
 function ProductImageTab() {
   const product = useSelector((states) => states.product);
@@ -46,18 +48,17 @@ function ProductImageTab() {
               width: '100%',
               aspectRatio: '1 / 1',
               m: '0 !important',
+              '& > *': { borderRadius: 1 },
             }}
           >
-            <img
+            <InnerImageZoom
               src={`${
                 import.meta.env.VITE_API_BASE_URL
               }/products/images/${imageId}`}
-              alt={`Product ${product.id} - ${imageId}`}
-              style={{
-                width: '100%',
-                height: '100%',
-                borderRadius: 10,
-              }}
+              width="100%"
+              height="100%"
+              fullscreenOnMobile
+              imgAttributes={{ alt: `Product ${product.id} - ${imageId}` }}
             />
           </TabPanel>
         ))}

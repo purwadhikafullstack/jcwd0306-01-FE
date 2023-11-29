@@ -20,13 +20,14 @@ function Container() {
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
   return (
-    <Grid container spacing={1} rowGap={3}>
+    <Grid container spacing={0.1} rowGap={1}>
       <Grid item xs={12} md={2.5} lg={2}>
         {isMdDown ? (
           <>
             <Stack direction="row" spacing={1}>
               <Box flexGrow={1} />
               <Button
+                size="small"
                 onClick={() => setIsSortDrawerOpen(true)}
                 variant="outlined"
                 sx={{ borderRadius: '10rem' }}
@@ -34,6 +35,7 @@ function Container() {
                 <SortRounded />
               </Button>
               <Button
+                size="small"
                 onClick={() => setIsFilterDrawerOpen(true)}
                 variant="outlined"
                 sx={{ borderRadius: '10rem' }}

@@ -5,11 +5,23 @@ import { useSearchParams } from 'react-router-dom';
 import Container from '../../components/customer/ProductPage/Container';
 import { asyncGetCategories } from '../../states/categories/action';
 import { asyncGetProducts } from '../../states/products/action';
+import Footer from '../../components/customer/Footer/Footer';
 
 function ProductPage() {
   const dispatch = useDispatch();
   const theme = useTheme();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    setSearchParams({
+      search: searchParams.get('search') || '',
+      categoryId: searchParams.get('categoryId') || 0,
+      sortBy: searchParams.get('sortBy') || 'updatedAt',
+      orderBy: searchParams.get('orderBy') || 'desc',
+      page: searchParams.get('page') || 1,
+      perPage: searchParams.get('perPage') || 10,
+    });
+  }, []);
 
   useEffect(() => {
     dispatch(asyncGetCategories());
@@ -34,16 +46,20 @@ function ProductPage() {
   ]);
 
   return (
-    <main
-      style={{
-        maxWidth: theme.breakpoints.values.lg + 100,
-        padding: '1rem',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-      }}
-    >
-      <Container />
-    </main>
+    <>
+      <main
+        style={{
+          maxWidth: theme.breakpoints.values.lg + 100,
+          paddingTop: '1rem',
+          paddingBottom: '1rem',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+        }}
+      >
+        <Container />
+      </main>
+      <Footer />
+    </>
   );
 }
 

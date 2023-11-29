@@ -73,7 +73,14 @@ function CreateDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
         const isSuccess = await dispatch(asyncCreateCategory(formData));
         if (isSuccess) {
           await dispatch(
-            asyncGetCategories({ name: searchParams.get('name') })
+            asyncGetCategories({
+              search: searchParams.get('search'),
+              sortBy: searchParams.get('sortBy'),
+              orderBy: searchParams.get('orderBy'),
+              pagination: true,
+              page: searchParams.get('page'),
+              perPage: searchParams.get('perPage'),
+            })
           );
           URL.revokeObjectURL(values.imageURL);
           resetForm();

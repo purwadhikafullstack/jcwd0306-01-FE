@@ -10,6 +10,7 @@ function Container() {
   const authUser = useSelector((states) => states.authUser);
   const warehouse = useSelector((states) => states.warehouse);
   const [searchParams] = useSearchParams();
+
   return (
     <TabContext value={searchParams.get('tab') || 'information'}>
       <TabList />
