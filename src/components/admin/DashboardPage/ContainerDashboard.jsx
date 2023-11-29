@@ -1,5 +1,5 @@
-import { Stack } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Stack, useTheme } from '@mui/material';
+import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   TotalSalesCard,
@@ -11,11 +11,13 @@ import { MonthlyBar } from './Charts/MonthlyBar';
 import { OrderStatusChart } from './Charts/OrderStatusPieChart';
 import { setAlertActionCreator } from '../../../states/alert/action';
 import api from '../../../constants/api';
+import ModeContext from '../../../contexts/ModeContext';
 
 function ContainerDashboard() {
   const dispatch = useDispatch();
   const authUser = useSelector((states) => states.authUser);
   const isWarehouseAdmin = authUser?.WarehouseUser?.warehouseId;
+  const theme = useTheme();
   const [totalUser, setTotalUser] = useState(0);
   const [totalProduct, setTotalProduct] = useState(0);
   const [totalProductWarehouse, setTotalProductWarehouse] = useState(0);
@@ -23,6 +25,7 @@ function ContainerDashboard() {
   const [totalOrderWarehouse, setTotalOrderWarehouse] = useState(0);
   const [totalSales, setTotalSales] = useState(0);
   const [totalSalesWarehouse, setTotalSalesWarehouse] = useState(0);
+  const { mode } = useContext(ModeContext);
 
   const fetchUser = async () => {
     try {
@@ -123,7 +126,7 @@ function ContainerDashboard() {
       spacing={3}
       sx={{
         p: 2,
-        bgcolor: 'background.paper',
+        bgcolor: mode === 'dark' ? '#3c3d3d' : theme.palette.background.default,
         borderRadius: 1,
       }}
     >
@@ -151,7 +154,10 @@ function ContainerDashboard() {
         direction={{ xs: 'column', md: 'row' }}
         sx={{
           p: 2,
-          bgcolor: 'background.paper',
+          bgcolor:
+            mode === 'dark'
+              ? theme.palette.background.paper
+              : theme.palette.background.default,
           borderRadius: 1,
         }}
       >

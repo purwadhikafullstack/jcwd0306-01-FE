@@ -1,6 +1,7 @@
 import { Pie } from 'react-chartjs-2';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import api from '../../../../constants/api';
+import ModeContext from '../../../../contexts/ModeContext';
 
 export function OrderStatusChart() {
   const [orderStatusData, setOrderStatusData] = useState({
@@ -12,7 +13,7 @@ export function OrderStatusChart() {
     cancelled: 0,
     rejected: 0,
   });
-
+  const { mode } = useContext(ModeContext);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -93,9 +94,15 @@ export function OrderStatusChart() {
       data={data}
       options={{
         plugins: {
+          legend: {
+            labels: {
+              color: mode === 'dark' ? 'white' : 'black',
+            },
+          },
           title: {
             display: true,
             text: 'Order Status',
+            color: mode === 'dark' ? 'white' : 'black',
           },
         },
       }}
