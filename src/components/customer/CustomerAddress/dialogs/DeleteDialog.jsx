@@ -5,12 +5,15 @@ function DeleteDialog({ isOpen, onClose, deleteAddress }) {
     <Dialog open={isOpen} onClose={onClose}>
       <DialogTitle>apakah anda yakin ingin menghapus alamat?</DialogTitle>
       <DialogActions>
-        <Button onClick={onClose}>tidak</Button>
+        <Button onClick={onClose} variant="outlined">
+          tidak
+        </Button>
         <Button
           onClick={() => {
             deleteAddress();
             onClose();
           }}
+          variant="contained"
         >
           ya
         </Button>

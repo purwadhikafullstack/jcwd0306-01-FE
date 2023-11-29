@@ -8,7 +8,6 @@ import { StackBorder } from '../../components/customer/Cart/StackBorder';
 import { ShoppingSummary } from '../../components/customer/Cart/ShoppingSummary';
 import { MobileShoppingSummary } from '../../components/customer/Cart/MobileShoppingSummary';
 import { CheckOutHeader } from '../../components/customer/Checkout/CheckOutHeader';
-import api from '../../constants/api';
 import { fetchShippingOptions } from '../../components/customer/Checkout/fetchShippingOptions';
 import {
   cartCalculator,
@@ -16,7 +15,7 @@ import {
 } from '../../components/customer/Cart/cartCalculator';
 import { checkCartLength } from '../../components/customer/Checkout/isCartEmpty';
 import { createNewTransaction } from '../../components/customer/Checkout/createNewTransaction';
-import { constant } from '../../constants/constant';
+import { fetchAddresses } from '../../components/customer/Checkout/ModalChooseAddress/fetchAddresses';
 
 export function Checkout() {
   const allItemsInCart = useSelector((state) => state.cart);
@@ -41,6 +40,7 @@ export function Checkout() {
   const [originWarehouse, setOriginWarehouse] = useState({});
   const [disableButton, setDisableButton] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState('');
   const directBuyItem = useLocation().state;
   cartCalculator(cart, summaryTransaction, directBuyItem, shippingMethod);
   const grandTotal = grandTotalCalculator(summaryTransaction);
@@ -62,17 +62,6 @@ export function Checkout() {
       grandTotal,
       unpaid
     );
-
-  async function fetchAddresses() {
-    try {
-      if (userSelector?.id) {
-        const { data } = await api.get(`/user_address/${userSelector?.id}`);
-        setAddresses(data.rows);
-      }
-    } catch (error) {
-      dispatch(constant.setError(error));
-    }
-  }
 
   useEffect(() => {
     const isCartEmpty = checkCartLength(cart, directBuyItem, dispatch, nav);
@@ -105,8 +94,12 @@ export function Checkout() {
   }, [address, cart.length, directBuyItem?.quantity]);
 
   useEffect(() => {
-    if (userSelector?.id) fetchAddresses();
-  }, [userSelector?.id]);
+    const fetching = setTimeout(() => {
+      if (userSelector?.id)
+        fetchAddresses(userSelector, setAddresses, dispatch, name);
+    }, 500);
+    return () => clearTimeout(fetching);
+  }, [userSelector?.id, name]);
   return (
     <Container className="mx-auto p-0 mt-3" fluid="lg">
       <Row
@@ -127,6 +120,7 @@ export function Checkout() {
             disableButton={disableButton}
             setDisableButton={setDisableButton}
             isLoading={isLoading}
+            setName={setName}
           />
           <StackBorder />
           {directBuyItem?.productId ? (

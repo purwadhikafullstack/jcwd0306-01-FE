@@ -6,7 +6,7 @@ function warehousesReducer(warehouses = [], action = {}) {
       return action.payload.warehouses;
 
     case ActionType.CREATE_WAREHOUSE:
-      return [...warehouses, action.payload.warehouse];
+      return [action.payload.warehouse, ...warehouses];
 
     case ActionType.EDIT_WAREHOUSE:
       return warehouses.map((warehouse) => {

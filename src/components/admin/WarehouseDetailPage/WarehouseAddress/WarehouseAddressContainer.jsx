@@ -8,10 +8,17 @@ import {
   Stack,
 } from '@mui/material';
 import { useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
+import { useEffect } from 'react';
 import WarehouseAddressItem from './WarehouseAddressItem';
 
 function WarehouseAddressContainer() {
   const warehouse = useSelector((states) => states.warehouse);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    setSearchParams({ tab: searchParams.get('tab') || '' });
+  }, []);
 
   return (
     <Accordion defaultExpanded>

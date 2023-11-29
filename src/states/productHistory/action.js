@@ -1,3 +1,4 @@
+import { hideLoading, showLoading } from 'react-redux-loading-bar';
 import api from '../../constants/api';
 import { setAlertActionCreator } from '../alert/action';
 import { setProductHistoryPaginationActionCreator } from '../productHistoryPagination/action';
@@ -27,6 +28,7 @@ function asyncGetProductHistory({
 } = {}) {
   return async (dispatch) => {
     try {
+      dispatch(showLoading());
       const nameQ = name ? `name=${encodeURIComponent(name)}&` : '';
       const sortByQ = sortBy ? `sortBy=${encodeURIComponent(sortBy)}&` : '';
       const orderByQ = orderBy ? `orderBy=${encodeURIComponent(orderBy)}&` : '';
@@ -53,6 +55,8 @@ function asyncGetProductHistory({
       dispatch(setProductHistoryPaginationActionCreator(data?.info));
     } catch (err) {
       dispatch(setAlertActionCreator({ err }));
+    } finally {
+      dispatch(hideLoading());
     }
   };
 }

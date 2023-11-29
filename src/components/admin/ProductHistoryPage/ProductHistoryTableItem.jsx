@@ -9,12 +9,13 @@ import {
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import formatDate from '../../../utils/salesReport/formatDate';
 import { StockMutationDetail } from './detail/StockMutationDetail';
 import { ModalDetailTransaction } from '../../customer/OrderList/ModalDetailTransaction';
 import { ModalLoading } from '../../customer/OrderList/ModalDetailTransaction/ModalLoading';
 import api from '../../../constants/api';
+import ModeContext from '../../../contexts/ModeContext';
 
 function ProductHistoryTableItem() {
   const productHistory = useSelector((states) => states.productHistory);
@@ -23,6 +24,12 @@ function ProductHistoryTableItem() {
   const [isFetching, setIsFetching] = useState(false);
   const [order, setOrder] = useState(false);
   const [stockMutationData, setStockMutationData] = useState({});
+  const { mode } = useContext(ModeContext);
+
+  const isDarkMode = mode === 'dark';
+  const evenRowColor = isDarkMode ? '#1a1a1a' : 'white';
+  const oddRowColor = isDarkMode ? '#262626' : '#d2f5f9';
+  const hoverColor = isDarkMode ? '#333333' : '#f5f5f5';
 
   const fetchDetailOrder = async (orderId) => {
     try {
@@ -79,8 +86,8 @@ function ProductHistoryTableItem() {
         <TableRow
           key={val.id}
           sx={{
-            bgcolor: index % 2 === 0 ? 'white' : '#d2f5f9',
-            ':hover': { bgcolor: '#f5f5f5' },
+            bgcolor: index % 2 === 0 ? evenRowColor : oddRowColor,
+            ':hover': { bgcolor: hoverColor },
           }}
         >
           {/* No column */}

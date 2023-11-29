@@ -11,6 +11,7 @@ import DirectBuyButton from './DirectBuyButton';
 import QuantityInput from './QuantityInput';
 import NoteInput from './NoteInput';
 import { createCart } from '../../../../states/cart/action';
+import { constant } from '../../../../constants/constant';
 
 function ProductActionStack() {
   const authUser = useSelector((states) => states.authUser);
@@ -67,6 +68,10 @@ function ProductActionStack() {
         if (isSuccess) resetForm();
       });
     } else if (values.submitButton === 'direct-buy') {
+      if (!authUser?.isVerified)
+        return dispatch(
+          constant.setError({ message: 'Your account is not verified' })
+        );
       navigate('/cart/shipment', {
         state: {
           productId: product.id,

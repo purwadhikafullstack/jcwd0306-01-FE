@@ -15,6 +15,7 @@ function AccountButton() {
   const authUser = useSelector((states) => states.authUser);
   const dispatch = useDispatch();
   const nav = useNavigate();
+  const userImage = useSelector((state) => state.authUser.imageUrl);
 
   const handleClickLogout = () => {
     dispatch(asyncUnsetAuthUser());
@@ -108,9 +109,10 @@ function AccountButton() {
         startIcon={
           <Avatar
             alt={authUser.firstName}
-            src={`${import.meta.env.VITE_API_BASE_URL}/user/${
-              authUser.id
-            }/image`}
+            src={
+              userImage ||
+              `${import.meta.env.VITE_API_BASE_URL}/user/${authUser?.id}/image`
+            }
           />
         }
         sx={{ textTransform: 'none' }}

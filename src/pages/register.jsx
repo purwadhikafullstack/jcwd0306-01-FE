@@ -10,6 +10,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import google from '../assets/google.png';
 import api from '../constants/api';
 import { setAlertActionCreator } from '../states/alert/action';
@@ -19,6 +20,7 @@ import loginWithGoogle from '../lib/loginWithGoogle';
 function Register() {
   const dispatch = useDispatch();
   const nav = useNavigate();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -31,6 +33,7 @@ function Register() {
     }),
     onSubmit: async () => {
       try {
+        setIsButtonDisabled(true);
         await api.post('/user/register', formik.values);
 
         dispatch(
@@ -44,6 +47,9 @@ function Register() {
             val: { status: 'error', message: err?.response.data.message },
           })
         );
+        setIsButtonDisabled(true);
+      } finally {
+        setIsButtonDisabled(false);
       }
     },
   });
@@ -191,6 +197,7 @@ function Register() {
             fullWidth
             variant="contained"
             size="large"
+            disabled={isButtonDisabled}
             onClick={formik.handleSubmit}
             sx={{ mt: '10px' }}
           >

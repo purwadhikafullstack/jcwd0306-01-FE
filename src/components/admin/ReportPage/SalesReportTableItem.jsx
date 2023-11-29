@@ -9,21 +9,28 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import formatDate from '../../../utils/salesReport/formatDate';
 import formatCurrency from '../../../utils/salesReport/formatCurrency';
 import api from '../../../constants/api';
 import { ModalDetailTransaction } from '../../customer/OrderList/ModalDetailTransaction';
 import { ModalLoading } from '../../customer/OrderList/ModalDetailTransaction/ModalLoading';
 import { setAlertActionCreator } from '../../../states/alert/action';
+import ModeContext from '../../../contexts/ModeContext';
 
 function SalesReportTableItem() {
   const reportData = useSelector((states) => states.salesReport);
   const dispatch = useDispatch();
+  const { mode } = useContext(ModeContext);
 
   const [open, setOpen] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [order, setOrder] = useState({});
+
+  const isDarkMode = mode === 'dark';
+  const evenRowColor = isDarkMode ? '#1a1a1a' : 'white';
+  const oddRowColor = isDarkMode ? '#262626' : '#d2f5f9';
+  const hoverColor = isDarkMode ? '#333333' : '#f5f5f5';
 
   const fetchDetailOrder = async (orderId) => {
     try {
@@ -68,8 +75,8 @@ function SalesReportTableItem() {
           <TableRow
             key={val.id}
             sx={{
-              bgcolor: index % 2 === 0 ? 'white' : '#d2f5f9',
-              ':hover': { bgcolor: '#f5f5f5' },
+              bgcolor: index % 2 === 0 ? evenRowColor : oddRowColor,
+              ':hover': { bgcolor: hoverColor },
             }}
           >
             {/* No column */}

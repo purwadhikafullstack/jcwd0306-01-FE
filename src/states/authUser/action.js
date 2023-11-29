@@ -1,4 +1,5 @@
 import jwtDecode from 'jwt-decode';
+import { hideLoading, showLoading } from 'react-redux-loading-bar';
 import api from '../../constants/api';
 import { setAlertActionCreator } from '../alert/action';
 
@@ -6,9 +7,23 @@ const ActionType = {
   SET_AUTH_USER: 'SET_AUTH_USER',
   UNSET_AUTH_USER: 'UNSET_AUTH_USER',
   UPDATE_AUTH_USER: 'UPDATE_AUTH_USER',
+  UPDATE_USER_IMAGE: 'UPDATE_USER_IMAGE',
+  DELETE_USER_IMAGE: 'DELETE_USER_IMAGE',
 };
 
 // arguments
+function deleteUserImageActionCreator() {
+  return {
+    type: ActionType.DELETE_USER_IMAGE,
+  };
+}
+function updateUserImageActionCreator(imageUrl) {
+  return {
+    type: ActionType.UPDATE_USER_IMAGE,
+    payload: imageUrl,
+  };
+}
+
 function setAuthUserActionCreator(authUser) {
   return {
     type: ActionType.SET_AUTH_USER,
@@ -28,12 +43,17 @@ function updateAuthUserActionCreator(updatedUser) {
     payload: updatedUser,
   };
 }
-
 // functions
+function asyncDeleteImage(userId) {
+  return async (dispatch) => {
+    await api.delete(`/user/${userId}`);
+    dispatch(deleteUserImageActionCreator());
+  };
+}
+
 function asyncUpdateAuthUser({ userId, formData }) {
   return async (dispatch) => {
     const { data } = await api.patch(`/user/edit/${userId}`, formData);
-
     dispatch(updateAuthUserActionCreator(data.data));
   };
 }
@@ -46,25 +66,25 @@ function asyncSetAuthUser({
   firstName,
   lastName,
   uid,
+  photoURL,
 }) {
   return async (dispatch) => {
     try {
+      dispatch(showLoading());
       const { data } = await api.post(`/user/login?providerId=${providerId}`, {
         email,
         password,
         firstName,
         lastName,
         uid,
+        photoURL,
       });
       const authUser = data.data.user;
-
       localStorage.setItem('token', data.data.token);
-
       if (data?.data?.user?.isAdmin) nav('/admin');
       else nav('/');
       window.location.reload();
       dispatch(setAuthUserActionCreator(authUser));
-
       dispatch(
         setAlertActionCreator({
           val: { status: 'success', message: 'login success' },
@@ -72,6 +92,8 @@ function asyncSetAuthUser({
       );
     } catch (err) {
       dispatch(setAlertActionCreator({ err }));
+    } finally {
+      dispatch(hideLoading());
     }
   };
 }
@@ -86,11 +108,13 @@ function asyncUnsetAuthUser() {
 function asyncRegisterUser(formData) {
   return async (dispatch) => {
     try {
-      // POST user register
+      dispatch(showLoading());
       const { data } = await api.post('/user/register', formData);
       dispatch(setAuthUserActionCreator(data.data.user));
-    } catch (error) {
-      console.log(error?.response?.data?.message || error?.message);
+    } catch (err) {
+      dispatch(setAlertActionCreator({ err }));
+    } finally {
+      dispatch(hideLoading());
     }
   };
 }
@@ -98,15 +122,16 @@ function asyncRegisterUser(formData) {
 function asyncReceiveUser() {
   return async (dispatch) => {
     try {
+      dispatch(showLoading());
       const token = localStorage.getItem('token');
       const { id } = jwtDecode(token);
-
       const { data } = await api.get(`/user/${id}`);
-
       localStorage.setItem('token', data.data.token);
       dispatch(setAuthUserActionCreator(data.data.user));
-    } catch {
+    } catch (err) {
       dispatch(asyncUnsetAuthUser());
+    } finally {
+      dispatch(hideLoading());
     }
   };
 }
@@ -121,4 +146,7 @@ export {
   asyncReceiveUser,
   updateAuthUserActionCreator,
   asyncUpdateAuthUser,
+  updateUserImageActionCreator,
+  deleteUserImageActionCreator,
+  asyncDeleteImage,
 };

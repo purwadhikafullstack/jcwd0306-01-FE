@@ -21,8 +21,13 @@ export default function ModalChooseAddress({
   setAddresses,
   setAddressToEdit,
   setShippingMethod,
+  setName,
 }) {
-  const handleClose = () => setOpen('');
+  const handleClose = () => {
+    setOpen('');
+    setName('');
+    document.getElementById('searchAddressForm').value = '';
+  };
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -38,7 +43,7 @@ export default function ModalChooseAddress({
       >
         <HeaderModal handleClose={handleClose} Title="Choose Address" />
         <div className="my-3">
-          <SearchBox />
+          <SearchBox setName={setName} />
         </div>
         <Button
           variant="white"

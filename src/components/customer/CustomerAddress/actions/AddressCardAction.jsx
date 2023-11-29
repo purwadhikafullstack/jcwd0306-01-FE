@@ -80,8 +80,12 @@ export default function AddressAction({
         sx={{
           fontSize: isDesktop ? '13px' : '10px',
           display: address?.isDefault === true ? 'none' : 'inline-block',
+          color: 'white',
+          bgcolor: '#ff372f',
+          ':hover': { bgcolor: 'red' },
         }}
         onClick={handleDeleteDialogOpen}
+        size="small"
       >
         Hapus
       </Button>

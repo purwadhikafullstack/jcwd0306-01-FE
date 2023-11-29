@@ -43,7 +43,7 @@ export function ShoppingSummary({
               Rp{grandTotal.toLocaleString(`id-ID`)}
             </span>
           </ListGroup.Item>
-          <ListGroup.Item className="px-0">Promo Code: takada</ListGroup.Item>
+          {/* <ListGroup.Item className="px-0">Promo Code: takada</ListGroup.Item> */}
         </ListGroup>
         <ButtonShoppingSummary
           disableButton={disableButton}

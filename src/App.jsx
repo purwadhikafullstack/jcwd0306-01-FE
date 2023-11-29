@@ -83,9 +83,7 @@ function App() {
             {authUser.isAdmin && (
               <Route path="/admin/products" element={<AdminProductPage />} />
             )}
-            {authUser.isAdmin && (
-              <Route path="/admin/categories" element={<CategoryPage />} />
-            )}
+            <Route path="/admin/categories" element={<CategoryPage />} />
             <Route path="/admin/messages" element={<ChatPage />} />
             {authUser.isAdmin && (
               <Route
@@ -139,6 +137,7 @@ function App() {
           <Route path="/chatroom" element={<Chat />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/user/address" element={<CustomerAddressPage />} />
+          <Route path="/verify" element={<Verify />} />
           <Route
             path="/user/settings"
             element={

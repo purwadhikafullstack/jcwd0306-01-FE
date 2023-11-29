@@ -20,7 +20,7 @@ function CategoriesInput() {
 
   useEffect(() => {
     dispatch(asyncGetCategories({ sortBy: 'name', orderBy: 'asc' }));
-  }, []);
+  }, [dispatch]);
 
   return (
     <FieldArray name="categoryIds">

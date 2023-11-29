@@ -33,40 +33,35 @@ function SortStack() {
               <RadioGroup
                 aria-labelledby="sort-products-radio-label"
                 name="sort-products-radio"
-                value={searchParams.get('sort') || 'newest'}
+                value={
+                  searchParams.get('sortBy') && searchParams.get('orderBy')
+                    ? `${searchParams.get('sortBy')}-${searchParams.get(
+                        'orderBy'
+                      )}`
+                    : 'updatedAt-desc'
+                }
                 onChange={(e, newValue) => {
-                  if (newValue === 'newest')
-                    updateQueryParams({
-                      sort: newValue,
-                      sortBy: 'updatedAt',
-                      orderBy: 'desc',
-                    });
-                  else if (newValue === 'price-l-to-h')
-                    updateQueryParams({
-                      sort: newValue,
-                      sortBy: 'price',
-                      orderBy: 'asc',
-                    });
-                  else if (newValue === 'price-h-to-l')
-                    updateQueryParams({
-                      sort: newValue,
-                      sortBy: 'price',
-                      orderBy: 'desc',
-                    });
+                  const [sortBy, orderBy] = newValue.split('-');
+                  updateQueryParams({ sortBy, orderBy });
                 }}
               >
                 <FormControlLabel
-                  value="newest"
+                  value="sold-desc"
+                  control={<Radio size="small" />}
+                  label="Terlaris"
+                />
+                <FormControlLabel
+                  value="updatedAt-desc"
                   control={<Radio size="small" />}
                   label="Terbaru"
                 />
                 <FormControlLabel
-                  value="price-l-to-h"
+                  value="price-asc"
                   control={<Radio size="small" />}
                   label="Harga terendah"
                 />
                 <FormControlLabel
-                  value="price-h-to-l"
+                  value="price-desc"
                   control={<Radio size="small" />}
                   label="Harga tertinggi"
                 />

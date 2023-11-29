@@ -38,8 +38,6 @@ export function ChatPage() {
   const theme = useTheme();
   const smallerScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  console.log(messages);
-
   useEffect(() => {
     warehouseIdSetter(
       setWhId,
@@ -126,6 +124,7 @@ export function ChatPage() {
               <Card>
                 <CardContent>
                   <Button
+                    sx={{ display: !smallerScreen ? 'none' : 'block' }}
                     disabled={disableButton}
                     onClick={() => {
                       setShowInput(false);

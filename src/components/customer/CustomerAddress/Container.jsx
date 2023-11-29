@@ -6,7 +6,7 @@ import AddressList from './AddressList';
 import SearchInput from './SearchInput';
 import { ModalEditAndAddAddress } from '../Checkout/ModalEditAndAddAddress';
 import { asyncGetAddress } from '../../../states/Address/action';
-import AddressFooter from './AdministratorFooter';
+import AddressFooter from './AddressFooter';
 
 function Container() {
   const dispatch = useDispatch();
@@ -61,7 +61,7 @@ function Container() {
         {/* Address List */}
         <AddressList
           setOpen={setShowModal}
-          setAddressToEdit={setAddressToEdit} // new
+          setAddressToEdit={setAddressToEdit}
         />
 
         {/* Footer */}

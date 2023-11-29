@@ -1,6 +1,7 @@
 import { hideLoading, showLoading } from 'react-redux-loading-bar';
 import { setAlertActionCreator } from '../alert/action';
 import api from '../../constants/api';
+import { setCategoryPaginationActionCreator } from '../categoryPagination/action';
 
 const ActionType = {
   GET_CATEGORIES: 'GET_CATEGORIES',
@@ -37,18 +38,30 @@ function deleteCategoryActionCreator(categoryId) {
   };
 }
 
-function asyncGetCategories({ name, sortBy, orderBy } = {}) {
+function asyncGetCategories({
+  search,
+  sortBy,
+  orderBy,
+  pagination = false,
+  page,
+  perPage,
+} = {}) {
   return async (dispatch) => {
     try {
       dispatch(showLoading());
 
-      const nameQ = name ? `name=${encodeURIComponent(name)}&` : '';
+      const searchQ = search ? `search=${encodeURIComponent(search)}&` : '';
       const sortByQ = sortBy ? `sortBy=${encodeURIComponent(sortBy)}&` : '';
       const orderByQ = orderBy ? `orderBy=${encodeURIComponent(orderBy)}&` : '';
-      const allQuery = `?${nameQ}${sortByQ}${orderByQ}`;
+      const paginationQ =
+        pagination === true ? `pagination=${encodeURIComponent(true)}&` : '';
+      const pageQ = page ? `page=${encodeURIComponent(page)}&` : '';
+      const perPageQ = perPage ? `perPage=${encodeURIComponent(perPage)}&` : '';
+      const allQuery = `?${searchQ}${sortByQ}${orderByQ}${paginationQ}${pageQ}${perPageQ}`;
 
       const { data } = await api.get(`/categories${allQuery}`);
       dispatch(getCategoriesActionCreator(data.data));
+      dispatch(setCategoryPaginationActionCreator(data.info));
     } catch (err) {
       dispatch(setAlertActionCreator({ err }));
     } finally {

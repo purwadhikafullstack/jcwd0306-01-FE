@@ -25,7 +25,7 @@ export function SelectByCategory({ open, setOpen }) {
 
   useEffect(() => {
     dispatch(asyncGetCategories());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>

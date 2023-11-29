@@ -1,5 +1,4 @@
 import { useDispatch } from 'react-redux';
-import { useTheme } from '@mui/material';
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { asyncGetCategories } from '../../states/categories/action';
@@ -7,24 +6,41 @@ import Container from '../../components/admin/CategoryPage/Container';
 
 function CategoryPage() {
   const dispatch = useDispatch();
-  const theme = useTheme();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [searchParams] = useSearchParams();
+  useEffect(() => {
+    setSearchParams({
+      search: searchParams.get('search') || '',
+      sortBy: searchParams.get('sortBy') || 'updatedAt',
+      orderBy: searchParams.get('orderBy') || 'desc',
+      page: searchParams.get('page') || 1,
+      perPage: searchParams.get('perPage') || 10,
+    });
+  }, []);
 
   useEffect(() => {
     dispatch(
       asyncGetCategories({
-        name: searchParams.get('name'),
+        search: searchParams.get('search'),
         sortBy: searchParams.get('sortBy'),
         orderBy: searchParams.get('orderBy'),
+        pagination: true,
+        page: searchParams.get('page'),
+        perPage: searchParams.get('perPage'),
       })
     );
-  }, [dispatch, searchParams.get('sortBy'), searchParams.get('orderBy')]);
+  }, [
+    dispatch,
+    searchParams.get('sortBy'),
+    searchParams.get('orderBy'),
+    searchParams.get('page'),
+    searchParams.get('perPage'),
+  ]);
 
   return (
     <main
       style={{
-        maxWidth: theme.breakpoints.values.lg,
+        maxWidth: 'fit-content',
         padding: '1rem',
         marginLeft: 'auto',
         marginRight: 'auto',

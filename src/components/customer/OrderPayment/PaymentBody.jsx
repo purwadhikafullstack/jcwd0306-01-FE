@@ -76,6 +76,7 @@ export function PaymentBody({ orderData, setOrderData }) {
               accept="image"
               id="inputPaymentProof"
               onChange={async (e) => {
+                if (e.target.files[0].type.split('/')[0] !== 'image') return;
                 await renderImage(e, 'paymentProof', setImgSrc);
                 setImage(e.target.files[0]);
                 setImageUrl(e.target.value);

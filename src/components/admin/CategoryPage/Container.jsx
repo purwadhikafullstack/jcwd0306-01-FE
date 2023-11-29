@@ -1,11 +1,14 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { AddRounded } from '@mui/icons-material';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import CategoryTable from './CategoryTable';
 import SearchInput from './SearchInput';
 import CreateDialog from './CreateDialog';
+import CategoryTableFooter from './CategoryTableFooter';
 
 function Container() {
+  const authUser = useSelector((states) => states.authUser);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   return (
@@ -18,35 +21,38 @@ function Container() {
           borderRadius: 1,
         }}
       >
-        {/* Title */}
         <Typography fontWeight={800} fontSize="1.2rem">
           Kategori
         </Typography>
 
         <Stack spacing={2} direction={{ xs: 'column', md: 'row' }}>
-          {/* Search Categories Input */}
           <SearchInput />
 
           {/* Create Category Button */}
-          <Button
-            onClick={() => setIsCreateDialogOpen(true)}
-            variant="contained"
-            startIcon={<AddRounded />}
-            sx={{ textTransform: 'none' }}
-          >
-            Kategori
-          </Button>
+          {authUser.isAdmin && (
+            <Button
+              onClick={() => setIsCreateDialogOpen(true)}
+              variant="contained"
+              startIcon={<AddRounded />}
+              sx={{ textTransform: 'none' }}
+            >
+              Kategori
+            </Button>
+          )}
         </Stack>
 
-        {/* Category Table */}
         <CategoryTable />
+
+        <CategoryTableFooter />
       </Stack>
 
       {/* Create Category Dialog */}
-      <CreateDialog
-        isCreateDialogOpen={isCreateDialogOpen}
-        setIsCreateDialogOpen={setIsCreateDialogOpen}
-      />
+      {authUser.isAdmin && (
+        <CreateDialog
+          isCreateDialogOpen={isCreateDialogOpen}
+          setIsCreateDialogOpen={setIsCreateDialogOpen}
+        />
+      )}
     </>
   );
 }
