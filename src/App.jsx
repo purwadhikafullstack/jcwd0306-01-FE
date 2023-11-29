@@ -28,7 +28,6 @@ import ChangePassword from './pages/ChangePassword';
 import { TransactionPage } from './pages/admin/TransactionPage';
 import { socketListener } from './utils/socketListener';
 import { CustomerAddressPage } from './pages/Address';
-import { AuthorizeUser } from './middlewares/auth';
 import { AdminChatRoom } from './components/Chat/AdminChatRoom';
 import { fetchCartItemAndNotif } from './utils/fetchCartItemAndNotif';
 import WarehouseDetailPage from './pages/admin/WarehouseDetailPage';
@@ -138,14 +137,7 @@ function App() {
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/user/address" element={<CustomerAddressPage />} />
           <Route path="/verify" element={<Verify />} />
-          <Route
-            path="/user/settings"
-            element={
-              <AuthorizeUser>
-                <ProfileDashoard />
-              </AuthorizeUser>
-            }
-          />
+          <Route path="/user/settings" element={<ProfileDashoard />} />
         </Routes>
         <CustomerNavBar />
       </>
