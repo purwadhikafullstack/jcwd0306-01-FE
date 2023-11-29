@@ -12,6 +12,7 @@ import { mixed, object, string } from 'yup';
 import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { bool, func } from 'prop-types';
+import { useMemo } from 'react';
 import FormikOutlinedInput from '../../FormikOutlinedInput';
 import {
   asyncCreateCategory,
@@ -25,26 +26,37 @@ function CreateDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
   const [searchParams] = useSearchParams();
   const Swal = useSwal();
 
-  const initialValues = {
-    name: '',
-    image: null,
-    imageURL: '',
-  };
+  const initialValues = useMemo(
+    () => ({
+      name: '',
+      image: null,
+      imageURL: '',
+    }),
+    []
+  );
 
-  const validationSchema = object({
-    name: string().required(),
-    image: mixed()
-      .required()
-      .test('is-file', 'Image must be a file', (value) => value instanceof File)
-      .test('is-image', 'File must be an image', (value) =>
-        value.type.startsWith('image/')
-      )
-      .test(
-        'file-size',
-        'File size must be ≤ 1MB',
-        (value) => value.size <= 1024 * 1024 // 1MB = 1024 * 1024 bytes
-      ),
-  });
+  const validationSchema = useMemo(
+    () =>
+      object({
+        name: string().required(),
+        image: mixed()
+          .required()
+          .test(
+            'is-file',
+            'Image must be a file',
+            (value) => value instanceof File
+          )
+          .test('is-image', 'File must be an image', (value) =>
+            value.type.startsWith('image/')
+          )
+          .test(
+            'file-size',
+            'File size must be ≤ 1MB',
+            (value) => value.size <= 1024 * 1024 // 1MB = 1024 * 1024 bytes
+          ),
+      }),
+    []
+  );
 
   const onSubmit = async (values, { resetForm }) => {
     await Swal.fire({

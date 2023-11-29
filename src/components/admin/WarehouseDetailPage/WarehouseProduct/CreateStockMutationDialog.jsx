@@ -16,7 +16,7 @@ import { Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { bool, func, number } from 'prop-types';
 import { object, number as num } from 'yup';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import FormikOutlinedInput from '../../../FormikOutlinedInput';
 import WarehouseSelect from './WarehouseSelect';
@@ -37,7 +37,6 @@ function CreateStockMutationDialog({
   const [searchParams] = useSearchParams();
   const [toWarehouseProduct, setToWarehouseProduct] = useState(null);
   const [fromWarehouseProduct, setfromWarehouseProduct] = useState(null);
-  const [validationSchema, setValidationSchema] = useState(null);
 
   useEffect(() => {
     dispatch(asyncGetProduct(productId));
@@ -53,20 +52,22 @@ function CreateStockMutationDialog({
     }
   }, [product]);
 
-  useEffect(() => {
-    if (fromWarehouseProduct !== null)
-      setValidationSchema(
-        object({
-          quantity: num()
-            .integer()
-            .min(1)
-            .max(fromWarehouseProduct.stock)
-            .required(),
-        })
-      );
-  }, [fromWarehouseProduct]);
+  const initialValues = useMemo(
+    () => ({ quantity: 0, fromWarehouseId: null }),
+    []
+  );
 
-  const initialValues = { quantity: 0, fromWarehouseId: null };
+  const validationSchema = useMemo(() => {
+    if (fromWarehouseProduct !== null)
+      return object({
+        quantity: num()
+          .integer()
+          .min(1)
+          .max(fromWarehouseProduct.stock)
+          .required(),
+      });
+    return null;
+  }, [fromWarehouseProduct]);
 
   const onSubmit = (values, { resetForm }) => {
     dispatch(

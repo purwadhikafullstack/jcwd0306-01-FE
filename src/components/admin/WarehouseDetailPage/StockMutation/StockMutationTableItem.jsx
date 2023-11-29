@@ -101,7 +101,7 @@ function StockMutationTableItem() {
             </TableCell>
 
             {/* Quantity column */}
-            <TableCell>
+            <TableCell align="center">
               <Box sx={{ minWidth: '1rem' }}>{val.quantity}</Box>
             </TableCell>
 

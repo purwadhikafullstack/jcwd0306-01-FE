@@ -2,8 +2,8 @@ import { EditNoteRounded } from '@mui/icons-material';
 import {
   Avatar,
   Box,
+  Chip,
   IconButton,
-  Stack,
   TableBody,
   TableCell,
   TableRow,
@@ -45,13 +45,15 @@ function ProductTableItem() {
         {products.map((val, idx) => (
           <TableRow key={val.id} hover>
             {/* No. column */}
-            <TableCell>{productPagination.offset + idx + 1}</TableCell>
+            <TableCell align="center">
+              {productPagination.offset + idx + 1}
+            </TableCell>
 
             {/* Status column */}
             <StatusTableCell product={val} />
 
             {/* Image column */}
-            <TableCell>
+            <TableCell align="center">
               <Avatar
                 variant="square"
                 alt={val.name}
@@ -66,23 +68,46 @@ function ProductTableItem() {
               <Box sx={{ width: '15rem' }}>{val.name}</Box>
             </TableCell>
 
+            {/* Action column */}
+            <TableCell align="center">
+              {/* Edit button */}
+              <Tooltip title="Edit produk" arrow>
+                <IconButton
+                  onClick={() => handleClickEditButton(val)}
+                  sx={{ '&:hover': { color: 'info.main' } }}
+                >
+                  <EditNoteRounded />
+                </IconButton>
+              </Tooltip>
+            </TableCell>
+
             {/* Price column */}
-            <TableCell>{val.price.toLocaleString('id-ID')}</TableCell>
+            <TableCell>
+              <Box sx={{ minWidth: '8rem' }}>
+                {val.price.toLocaleString('id-ID')}
+              </Box>
+            </TableCell>
 
             {/* Weight column */}
-            <TableCell>{val.weight}</TableCell>
+            <TableCell>
+              <Box sx={{ minWidth: '7rem' }}>{val.weight}</Box>
+            </TableCell>
 
             {/* Active Stock column */}
-            <TableCell>{val.stock}</TableCell>
+            <TableCell align="center">
+              <Box sx={{ minWidth: '9rem' }}>{val.stock}</Box>
+            </TableCell>
 
             {/* Inactive Stock column */}
-            <TableCell>{val.inactiveStock}</TableCell>
+            <TableCell align="center">
+              <Box sx={{ minWidth: '9rem' }}>{val.inactiveStock}</Box>
+            </TableCell>
 
             {/* Sold column */}
-            <TableCell>{val.sold}</TableCell>
+            <TableCell align="center">{val.sold}</TableCell>
 
             {/* Discount column */}
-            <TableCell>
+            <TableCell align="center">
               {new Intl.NumberFormat('id-ID', {
                 style: 'percent',
               }).format(val.discount)}
@@ -92,35 +117,34 @@ function ProductTableItem() {
             <DescriptionTableCell text={val.description} />
 
             {/* Category column */}
-            <TableCell>
-              <Box sx={{ width: '15rem' }}>
-                {val.Categories.map((category) => category.name).join(' , ')}
+            <TableCell align="center">
+              <Box sx={{ minWidth: '5rem' }}>
+                {val.Categories.map((category) => (
+                  <Chip
+                    key={category.name}
+                    label={category.name}
+                    sx={{ m: '0.1rem' }}
+                  />
+                ))}
               </Box>
             </TableCell>
 
             {/* createdAt column */}
-            <TableCell>
-              {new Date(val.createdAt).toLocaleDateString('id-ID')}
+            <TableCell align="center">
+              <Box sx={{ minWidth: '12rem' }}>
+                {new Date(val.createdAt).toLocaleString('id-ID', {
+                  timeZoneName: 'short',
+                })}
+              </Box>
             </TableCell>
 
             {/* updatedAt column */}
-            <TableCell>
-              {new Date(val.updatedAt).toLocaleDateString('id-ID')}
-            </TableCell>
-
-            {/* Action column */}
-            <TableCell>
-              <Stack direction="row">
-                {/* Edit button */}
-                <Tooltip title="Edit produk" arrow>
-                  <IconButton
-                    onClick={() => handleClickEditButton(val)}
-                    sx={{ '&:hover': { color: 'info.main' } }}
-                  >
-                    <EditNoteRounded />
-                  </IconButton>
-                </Tooltip>
-              </Stack>
+            <TableCell align="center">
+              <Box sx={{ minWidth: '12rem' }}>
+                {new Date(val.updatedAt).toLocaleString('id-ID', {
+                  timeZoneName: 'short',
+                })}
+              </Box>
             </TableCell>
           </TableRow>
         ))}
