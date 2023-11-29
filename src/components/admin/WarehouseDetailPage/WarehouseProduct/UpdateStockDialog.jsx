@@ -21,6 +21,7 @@ import {
 } from '../../../../states/product/action';
 import QuantityInput from './QuantityInput';
 import { asyncGetProducts } from '../../../../states/products/action';
+import useSwal from '../../../../hooks/useSwal';
 
 function UpdateStockDialog({
   productId,
@@ -32,6 +33,7 @@ function UpdateStockDialog({
   const { warehouseId } = useParams();
   const [searchParams] = useSearchParams();
   const [warehouseProduct, setWarehouseProduct] = useState(null);
+  const Swal = useSwal();
 
   useEffect(() => {
     dispatch(asyncGetProduct(productId));
@@ -61,31 +63,53 @@ function UpdateStockDialog({
     return null;
   }, [warehouseProduct]);
 
-  const onSubmit = (values, { resetForm }) => {
-    dispatch(
-      asyncUpdateWarehouseProductStock({
-        productId: product.id,
-        warehouseId: warehouseProduct.warehouseId,
-        quantity: values.quantity,
-      })
-    ).then((isSuccess) => {
-      if (isSuccess) {
-        resetForm();
-        setIsUpdateStockDialogOpen(false);
-        dispatch(
-          asyncGetProducts({
-            getType: 'REPLACE',
-            search: searchParams.get('search'),
-            categoryId: searchParams.get('categoryId'),
-            sortBy: searchParams.get('sortBy'),
-            orderBy: searchParams.get('orderBy'),
-            paranoid: false,
-            page: searchParams.get('page'),
-            perPage: searchParams.get('perPage'),
-            warehouseId,
+  const onSubmit = async (values, { resetForm }) => {
+    await Swal.fire({
+      icon: 'warning',
+      title: (
+        <Typography>
+          {`Stok ${product.name} akan`}
+          <Typography
+            component="span"
+            sx={{ fontWeight: 600, '&::before': { content: '" "' } }}
+          >
+            {`${values.quantity > 0 ? 'ditambah' : 'dikurangi'} ${Math.abs(
+              values.quantity
+            )}`}
+          </Typography>
+        </Typography>
+      ),
+      showDenyButton: true,
+      denyButtonText: 'Batalkan',
+      showConfirmButton: true,
+      confirmButtonText: 'Konfirmasi',
+      showLoaderOnConfirm: true,
+      preConfirm: async () => {
+        const isSuccess = await dispatch(
+          asyncUpdateWarehouseProductStock({
+            productId: product.id,
+            warehouseId: warehouseProduct.warehouseId,
+            quantity: values.quantity,
           })
         );
-      }
+        if (isSuccess) {
+          resetForm();
+          setIsUpdateStockDialogOpen(false);
+          await dispatch(
+            asyncGetProducts({
+              getType: 'REPLACE',
+              search: searchParams.get('search'),
+              categoryId: searchParams.get('categoryId'),
+              sortBy: searchParams.get('sortBy'),
+              orderBy: searchParams.get('orderBy'),
+              paranoid: false,
+              page: searchParams.get('page'),
+              perPage: searchParams.get('perPage'),
+              warehouseId,
+            })
+          );
+        }
+      },
     });
   };
 
@@ -140,17 +164,18 @@ function UpdateStockDialog({
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
               <Button
-                onClick={() => setIsUpdateStockDialogOpen(false)}
-                variant="outlined"
-              >
-                Batal
-              </Button>
-              <Button
                 type="submit"
                 variant="contained"
                 disabled={!formik.isValid || !formik.dirty}
               >
                 Simpan
+              </Button>
+              <Button
+                onClick={() => setIsUpdateStockDialogOpen(false)}
+                variant="contained"
+                color="error"
+              >
+                Batal
               </Button>
             </DialogActions>
           </Form>

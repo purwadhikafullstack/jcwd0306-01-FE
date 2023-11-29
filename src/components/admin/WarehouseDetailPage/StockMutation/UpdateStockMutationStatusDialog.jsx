@@ -22,6 +22,7 @@ import {
   asyncDeleteStockMutation,
   asyncUpdateStockMutationStatus,
 } from '../../../../states/stockMutations/action';
+import useSwal from '../../../../hooks/useSwal';
 
 const arrStatus = [
   { label: 'Diminta', value: 'requested' },
@@ -39,20 +40,64 @@ function UpdateStockMutationStatusDialog({
   const dispatch = useDispatch();
   const { warehouseId } = useParams();
   const [stockMutation, setStockMutation] = useState(null);
+  const Swal = useSwal();
 
   useEffect(() => {
     setStockMutation(stockMutations.find((val) => val.id === stockMutationId));
   }, [stockMutations, stockMutationId]);
 
-  const handleClickUpdateStockMutationStatus = (newStatus) => {
-    dispatch(
-      asyncUpdateStockMutationStatus(stockMutation.id, { status: newStatus })
-    );
+  const handleClickUpdateStockMutationStatus = async (newStatus) => {
+    await Swal.fire({
+      icon: 'warning',
+      title: (
+        <Typography>
+          Status mutasi stok akan diupdate menjadi
+          <Typography
+            component="span"
+            sx={{ fontWeight: 600, '&::before': { content: '" "' } }}
+          >
+            {newStatus}
+          </Typography>
+        </Typography>
+      ),
+      showDenyButton: true,
+      denyButtonText: 'Batalkan',
+      showConfirmButton: true,
+      confirmButtonText: 'Konfirmasi',
+      showLoaderOnConfirm: true,
+      preConfirm: async () => {
+        await dispatch(
+          asyncUpdateStockMutationStatus(stockMutation.id, {
+            status: newStatus,
+          })
+        );
+      },
+    });
   };
 
-  const handleClickDeleteStockMutation = () => {
-    dispatch(asyncDeleteStockMutation(stockMutation.id)).then(() => {
-      setIsUpdateStockMutationStatusDialogOpen(false);
+  const handleClickDeleteStockMutation = async () => {
+    await Swal.fire({
+      icon: 'warning',
+      title: (
+        <Typography>
+          Permintaan mutasi stok akan
+          <Typography
+            component="span"
+            sx={{ fontWeight: 600, '&::before': { content: '" "' } }}
+          >
+            dihapus
+          </Typography>
+        </Typography>
+      ),
+      showDenyButton: true,
+      denyButtonText: 'Batalkan',
+      showConfirmButton: true,
+      confirmButtonText: 'Konfirmasi',
+      showLoaderOnConfirm: true,
+      preConfirm: async () => {
+        await dispatch(asyncDeleteStockMutation(stockMutation.id));
+        setIsUpdateStockMutationStatusDialogOpen(false);
+      },
     });
   };
 
