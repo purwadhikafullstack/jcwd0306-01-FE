@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
@@ -40,6 +40,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-infinite-scroll-component": "^6.1.0",
+    "react-inner-image-zoom": "^3.0.2",
     "react-material-ui-carousel": "^3.4.2",
     "react-quill": "^2.0.0",
     "react-redux": "^8.1.3",
