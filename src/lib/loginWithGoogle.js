@@ -7,11 +7,9 @@ const loginWithGoogle = async (dispatch, nav) => {
   try {
     const provider = new GoogleAuthProvider();
     const res = await signInWithPopup(auth, provider);
-
     const nameArray = res.user.displayName.split(' ');
     const splittedFirstName = nameArray[0];
     const splittedLastName = nameArray[nameArray.length - 1];
-
     const authData = {
       email: res.user.email,
       providerId: res.providerId,
@@ -19,6 +17,7 @@ const loginWithGoogle = async (dispatch, nav) => {
       firstName: splittedFirstName,
       lastName: splittedLastName,
       uid: res.user.uid,
+      photoURL: res.user.photoURL,
     };
     dispatch(asyncSetAuthUser(authData));
     dispatch(

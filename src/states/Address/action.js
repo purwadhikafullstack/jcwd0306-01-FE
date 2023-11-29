@@ -1,5 +1,7 @@
+import { hideLoading, showLoading } from 'react-redux-loading-bar';
 import api from '../../constants/api';
 import { setAddressPaginationActionCreator } from '../AddressPagination/action';
+import { setAlertActionCreator } from '../alert/action';
 
 const ActionType = {
   GET_ADDRESS: 'GET_ADDRESS',
@@ -18,6 +20,7 @@ function getAddressActionCreator(addresses) {
 function asyncGetAddress({ userId, name, page, perPage }) {
   return async (dispatch) => {
     try {
+      dispatch(showLoading());
       const nameQ = name ? `name=${encodeURIComponent(name)}&` : '';
       const pageQ = page ? `page=${encodeURIComponent(page)}&` : '';
       const perPageQ = perPage ? `perPage=${encodeURIComponent(perPage)}&` : '';
@@ -28,8 +31,10 @@ function asyncGetAddress({ userId, name, page, perPage }) {
       );
       dispatch(getAddressActionCreator(data.data));
       dispatch(setAddressPaginationActionCreator(data.info));
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      dispatch(setAlertActionCreator({ err }));
+    } finally {
+      dispatch(hideLoading());
     }
   };
 }

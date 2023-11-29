@@ -62,16 +62,13 @@ function LoginPage() {
               },
             })
           );
-          return setTimeout(
-            () => nav(`/verify?email=${formik.values.email}`),
-            3000
-          );
+          setTimeout(() => nav(`/verify?email=${formik.values.email}`), 3000);
+          return;
         }
 
         dispatch(asyncSetAuthUser(authData));
       } catch (err) {
         dispatch(setAlertActionCreator({ err }));
-        console.log(err);
       } finally {
         setButtonDisabled(false);
       }
@@ -179,7 +176,10 @@ function LoginPage() {
             type={see ? 'text' : 'password'}
             defaultValue=""
             style={{
-              marginTop: '10px',
+              marginTop:
+                formik.touched.email && Boolean(formik.errors.email)
+                  ? '27px'
+                  : '8px',
               height: '40px',
               maxWidth: '100%',
               width: '500px',
@@ -211,7 +211,10 @@ function LoginPage() {
           <Typography
             fontSize="small"
             sx={{
-              m: 0.5,
+              m:
+                formik.touched.password && Boolean(formik.errors.password)
+                  ? '20px'
+                  : '8px',
               '& a': { color: 'primary.main', textDecoration: 'none' },
             }}
           >

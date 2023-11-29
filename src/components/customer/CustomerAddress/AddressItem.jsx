@@ -67,17 +67,10 @@ function AddressItem({ address, setOpen, setAddressToEdit }) {
           },
         })
       );
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
+    } catch (err) {
+      dispatch(setAlertActionCreator({ err }));
     }
   };
-
-  // useEffect(() => {
-  //   if (authUser && authUser?.id) {
-  //     dispatch(asyncGetAddress(authUser?.id));
-  //   }
-  // }, [authUser, setDefaultAddress]);
 
   return (
     <Card
