@@ -13,6 +13,7 @@ function SortLabelTableCell({ children, label }) {
 
   return (
     <TableCell
+      align="center"
       sortDirection={
         searchParams.get('sortBy') === label
           ? searchParams.get('orderBy')

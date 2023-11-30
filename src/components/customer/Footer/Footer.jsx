@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import BottomFooter from './BottomFooter';
 import TopFooter from './TopFooter';
-import MainFooter from './MainFooter/MainFooter';
+import MainFooter from './MainFooter';
 
 function Footer() {
   return (

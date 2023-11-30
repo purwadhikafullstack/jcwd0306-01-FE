@@ -10,7 +10,8 @@ import {
 import { Form, Formik } from 'formik';
 import { number, object, string } from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
+import { bool, func, shape } from 'prop-types';
 import { asyncEditWarehouse } from '../../../states/warehouses/action';
 import FormikOutlinedInput from '../../FormikOutlinedInput';
 import { asyncGetProvinces } from '../../../states/provinces/action';
@@ -27,25 +28,32 @@ function EditDialog({ warehouse, isEditDialogOpen, setIsEditDialogOpen }) {
     dispatch(asyncGetProvinces());
   }, []);
 
-  const initialValues = {
-    name: warehouse.name,
-    country: warehouse.WarehouseAddress.country,
-    provinceId: warehouse.WarehouseAddress.provinceId,
-    cityId: warehouse.WarehouseAddress.cityId,
-    district: warehouse.WarehouseAddress.district,
-    village: warehouse.WarehouseAddress.village,
-    detail: warehouse.WarehouseAddress.detail,
-  };
+  const initialValues = useMemo(
+    () => ({
+      name: warehouse.name,
+      country: warehouse.WarehouseAddress.country,
+      provinceId: warehouse.WarehouseAddress.provinceId,
+      cityId: warehouse.WarehouseAddress.cityId,
+      district: warehouse.WarehouseAddress.district,
+      village: warehouse.WarehouseAddress.village,
+      detail: warehouse.WarehouseAddress.detail,
+    }),
+    [warehouse]
+  );
 
-  const validationSchema = object({
-    name: string().required(),
-    country: string().required(),
-    provinceId: number().integer().min(1).required(),
-    cityId: number().integer().min(1).required(),
-    district: string().required(),
-    village: string().required(),
-    detail: string().required(),
-  });
+  const validationSchema = useMemo(
+    () =>
+      object({
+        name: string().required(),
+        country: string().required(),
+        provinceId: number().integer().min(1).required(),
+        cityId: number().integer().min(1).required(),
+        district: string().required(),
+        village: string().required(),
+        detail: string().required(),
+      }),
+    []
+  );
 
   const onSubmit = async (values, { resetForm }) => {
     await Swal.fire({
@@ -143,5 +151,11 @@ function EditDialog({ warehouse, isEditDialogOpen, setIsEditDialogOpen }) {
     </Dialog>
   );
 }
+
+EditDialog.propTypes = {
+  warehouse: shape({}).isRequired,
+  isEditDialogOpen: bool.isRequired,
+  setIsEditDialogOpen: func.isRequired,
+};
 
 export default EditDialog;

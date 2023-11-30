@@ -9,7 +9,6 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import api from '../../../constants/api';
 import { setAlertActionCreator } from '../../../states/alert/action';
@@ -17,17 +16,11 @@ import { asyncGetWarehouseAdmin } from '../../../states/Administrator/action';
 
 export function EditDialog({ isOpen, onClose, editData, email }) {
   const dispatch = useDispatch();
-  // console.log(editData);
-  // const email = editData?.User?.email;
-  // console.log(email);
 
   const formik = useFormik({
     initialValues: {
       warehouseDestination: 0,
     },
-    // validationSchema: Yup.object().shape({
-    //   warehouseDestination: Yup.number().required('required!'),
-    // }),
     onSubmit: async () => {
       try {
         const { id } = formik.values.warehouseDestination;
@@ -44,16 +37,8 @@ export function EditDialog({ isOpen, onClose, editData, email }) {
             },
           })
         );
-      } catch (error) {
-        console.log(error);
-        dispatch(
-          setAlertActionCreator({
-            val: {
-              status: 'error',
-              message: error?.response?.data?.message,
-            },
-          })
-        );
+      } catch (err) {
+        dispatch(setAlertActionCreator({ err }));
       }
     },
   });
@@ -66,7 +51,6 @@ export function EditDialog({ isOpen, onClose, editData, email }) {
       }}
     >
       <DialogTitle>Edit Warehouse Admin</DialogTitle>
-
       <DialogContent
         sx={{
           display: 'flex',
@@ -85,14 +69,11 @@ export function EditDialog({ isOpen, onClose, editData, email }) {
     </Dialog>
   );
 }
-
 /* Warehouse Edit Select */
-
 function WarehouseEditSelect({ formik }) {
   const [warehouses, setWarehouses] = useState([]);
-  //   console.log(warehouses);
   const [isLoading, setIsLoading] = useState(false);
-  // const [searchWarehouse, setSearchWarehouse] = useState('');
+  const dispatch = useDispatch();
 
   const fetchWarehouses = async () => {
     try {
@@ -102,7 +83,7 @@ function WarehouseEditSelect({ formik }) {
       setWarehouses(res);
       setIsLoading(false);
     } catch (err) {
-      console.log(err);
+      dispatch(setAlertActionCreator({ err }));
     }
   };
 
@@ -118,9 +99,9 @@ function WarehouseEditSelect({ formik }) {
       autoHighlight
       getOptionLabel={(option) => option.name || ''}
       isOptionEqualToValue={(option, value) => option.id === value?.id}
-      value={formik.values.warehouseDestination} // Assuming formik.values.warehouse represents the selected warehouse
+      value={formik.values.warehouseDestination}
       onChange={(e, value) => {
-        formik.setFieldValue('warehouseDestination', value); // Update formik with the selected warehouse
+        formik.setFieldValue('warehouseDestination', value);
       }}
       renderInput={(params) => (
         <TextField
@@ -130,16 +111,6 @@ function WarehouseEditSelect({ formik }) {
             ...params.inputProps,
             autoComplete: 'new-password', // disable autocomplete and autofill
           }}
-          // error={
-          //   formik.touched.warehouseDestination &&
-          //   Boolean(formik.errors.warehouseDestination)
-          // }
-          // helperText={
-          //   formik.touched.warehouseDestination &&
-          //   formik.errors.warehouseDestination
-          // }
-          // onChange={(e) => setSearchWarehouse(e.target.value)}
-          // onClick={() => setSearchWarehouse('')}
         />
       )}
     />

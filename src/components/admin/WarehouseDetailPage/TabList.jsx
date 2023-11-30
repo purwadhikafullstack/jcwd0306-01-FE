@@ -1,5 +1,5 @@
 import { Tab, Tabs } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import useCustomSearchParams from '../../../hooks/useCustomSearchParams';
 
@@ -35,23 +35,17 @@ function TabList() {
   const authUser = useSelector((states) => states.authUser);
   const warehouse = useSelector((states) => states.warehouse);
   const [searchParams, updateQueryParams] = useCustomSearchParams();
-  const [tabNames, setTabNames] = useState([
-    { label: 'Informasi', value: 'information' },
-    { label: 'Produk', value: 'products' },
-    { label: 'Mutasi Stok', value: 'stock-mutations' },
-  ]);
-
-  useEffect(() => {
+  const tabNames = useMemo(() => {
     if (
       !(authUser.isAdmin || authUser.WarehouseUser.warehouseId === warehouse.id)
     ) {
-      setTabNames((prevState) =>
-        prevState.filter(
-          // Only super admin or warehouse admin can see this tab
-          (val) => !['products', 'stock-mutations'].includes(val.value)
-        )
-      );
+      return [{ label: 'Informasi', value: 'information' }];
     }
+    return [
+      { label: 'Informasi', value: 'information' },
+      { label: 'Produk', value: 'products' },
+      { label: 'Mutasi Stok', value: 'stock-mutations' },
+    ];
   }, [authUser, warehouse]);
 
   return (

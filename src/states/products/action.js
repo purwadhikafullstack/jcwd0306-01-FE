@@ -62,23 +62,6 @@ function asyncGetProducts({
     try {
       dispatch(showLoading());
 
-      const newSortBy = [
-        'id',
-        'name',
-        'description',
-        'price',
-        'weight',
-        'discount',
-        'createdAt',
-        'updatedAt',
-        'deletedAt',
-        'stock',
-        'inactive-stock',
-        'sold',
-      ].includes(sortBy)
-        ? sortBy
-        : 'updatedAt';
-
       const searchQ = search ? `search=${encodeURIComponent(search)}&` : '';
       const categoryIdQ =
         categoryId && categoryId !== '0'
@@ -87,7 +70,7 @@ function asyncGetProducts({
       const warehouseIdQ = warehouseId
         ? `warehouseId=${encodeURIComponent(warehouseId)}&`
         : '';
-      const sortByQ = `sortBy=${encodeURIComponent(newSortBy)}&`;
+      const sortByQ = sortBy ? `sortBy=${encodeURIComponent(sortBy)}&` : '';
       const orderByQ = orderBy ? `orderBy=${encodeURIComponent(orderBy)}&` : '';
       const paranoidQ =
         paranoid === false ? `paranoid=${encodeURIComponent(false)}&` : '';

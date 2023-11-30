@@ -1,31 +1,27 @@
 import { Stack, Typography } from '@mui/material';
-// import { useState } from 'react';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import SearchInput from './SearchInput';
 import AllUsersTable from './AllUsersTable';
 import api from '../../../constants/api';
 import AllUsersFooter from './AllUsersFooter';
-// import SearchInput from './SearchInput';
-// import AdministratorTable from './AdministratorTable';
-// import { CreatedDialog } from './CreateDialog/CreateDialog';
+import { setAlertActionCreator } from '../../../states/alert/action';
 
 function ContainerAllUsersPage() {
   const [users, setUsers] = useState([]);
   const [whAdmin, setWhAdmin] = useState([]);
-  // console.log({ users, whAdmin });
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const data = await api.get('/user/getAll');
-        // console.log(data);
         setUsers(data.data.data);
         /* role */
         const res = await api.get('/warehouseusers');
-        // console.log(res);
         setWhAdmin(res.data.data);
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        dispatch(setAlertActionCreator({ err }));
       }
     };
 
@@ -49,6 +45,7 @@ function ContainerAllUsersPage() {
         {/* Search Users Input */}
         <SearchInput />
       </Stack>
+
       {/* All Users Table */}
       <AllUsersTable users={users} whAdmin={whAdmin} />
 

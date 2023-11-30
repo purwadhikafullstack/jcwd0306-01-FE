@@ -7,21 +7,24 @@ import {
   ListItemText,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { HeaderModal } from '../../../HeaderModal';
 import useCustomSearchParams from '../../../../hooks/useCustomSearchParams';
 import api from '../../../../constants/api';
+import { setAlertActionCreator } from '../../../../states/alert/action';
 
 export function SelectByProductName({ open, setOpen }) {
   // eslint-disable-next-line no-unused-vars
   const [searchParams, updateQueryParams] = useCustomSearchParams();
   const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
 
   const fetchProducts = async () => {
     try {
       const { data } = await api.get('/products');
       setProducts(data?.data);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      dispatch(setAlertActionCreator({ err }));
     }
   };
 

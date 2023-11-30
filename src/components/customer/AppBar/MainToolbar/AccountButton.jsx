@@ -55,6 +55,7 @@ function AccountButton() {
             onClick={() => nav('/user/settings')}
             variant="contained"
             startIcon={<AccountCircleRounded />}
+            sx={{ textTransform: 'none' }}
           >
             Akun
           </Button>

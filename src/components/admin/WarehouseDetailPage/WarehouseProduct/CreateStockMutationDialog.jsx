@@ -16,7 +16,7 @@ import { Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { bool, func, number } from 'prop-types';
 import { object, number as num } from 'yup';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import FormikOutlinedInput from '../../../FormikOutlinedInput';
 import WarehouseSelect from './WarehouseSelect';
@@ -25,6 +25,7 @@ import {
   asyncGetStockMutations,
 } from '../../../../states/stockMutations/action';
 import { asyncGetProduct } from '../../../../states/product/action';
+import useSwal from '../../../../hooks/useSwal';
 
 function CreateStockMutationDialog({
   productId,
@@ -37,7 +38,7 @@ function CreateStockMutationDialog({
   const [searchParams] = useSearchParams();
   const [toWarehouseProduct, setToWarehouseProduct] = useState(null);
   const [fromWarehouseProduct, setfromWarehouseProduct] = useState(null);
-  const [validationSchema, setValidationSchema] = useState(null);
+  const Swal = useSwal();
 
   useEffect(() => {
     dispatch(asyncGetProduct(productId));
@@ -53,47 +54,70 @@ function CreateStockMutationDialog({
     }
   }, [product]);
 
-  useEffect(() => {
+  const initialValues = useMemo(
+    () => ({ quantity: 0, fromWarehouseId: null }),
+    []
+  );
+
+  const validationSchema = useMemo(() => {
     if (fromWarehouseProduct !== null)
-      setValidationSchema(
-        object({
-          quantity: num()
-            .integer()
-            .min(1)
-            .max(fromWarehouseProduct.stock)
-            .required(),
-        })
-      );
+      return object({
+        quantity: num()
+          .integer()
+          .min(1)
+          .max(fromWarehouseProduct.stock)
+          .required(),
+      });
+    return null;
   }, [fromWarehouseProduct]);
 
-  const initialValues = { quantity: 0, fromWarehouseId: null };
-
-  const onSubmit = (values, { resetForm }) => {
-    dispatch(
-      asyncCreateStockMutation({
-        type: 'request',
-        productId: product.id,
-        fromWarehouseId: values.fromWarehouseId,
-        toWarehouseId: toWarehouseProduct.warehouseId,
-        quantity: values.quantity,
-      })
-    ).then((isSuccess) => {
-      if (isSuccess) {
-        resetForm();
-        setIsCreateStockMutationDialogOpen(false);
-        dispatch(
-          asyncGetStockMutations({
-            search: searchParams.get('search'),
-            status: searchParams.get('status'),
-            type: searchParams.get('type'),
-            sortBy: searchParams.get('sortBy'),
-            orderBy: searchParams.get('orderBy'),
-            page: searchParams.get('page'),
-            perPage: searchParams.get('perPage'),
-            warehouseId,
+  const onSubmit = async (values, { resetForm }) => {
+    await Swal.fire({
+      icon: 'warning',
+      title: (
+        <Typography>
+          {`Ajukan mutasi stok untuk produk ${product.name} sebanyak`}
+          <Typography
+            component="span"
+            sx={{ fontWeight: 600, '&::before, &::after': { content: '" "' } }}
+          >
+            {values.quantity}
+          </Typography>
+          stok
+        </Typography>
+      ),
+      showDenyButton: true,
+      denyButtonText: 'Batalkan',
+      showConfirmButton: true,
+      confirmButtonText: 'Konfirmasi',
+      showLoaderOnConfirm: true,
+      preConfirm: async () => {
+        const isSuccess = await dispatch(
+          asyncCreateStockMutation({
+            type: 'request',
+            productId: product.id,
+            fromWarehouseId: values.fromWarehouseId,
+            toWarehouseId: toWarehouseProduct.warehouseId,
+            quantity: values.quantity,
           })
         );
-      }
+        if (isSuccess) {
+          resetForm();
+          setIsCreateStockMutationDialogOpen(false);
+          await dispatch(
+            asyncGetStockMutations({
+              search: searchParams.get('search'),
+              status: searchParams.get('status'),
+              type: searchParams.get('type'),
+              sortBy: searchParams.get('sortBy'),
+              orderBy: searchParams.get('orderBy'),
+              page: searchParams.get('page'),
+              perPage: searchParams.get('perPage'),
+              warehouseId,
+            })
+          );
+        }
+      },
     });
   };
 
@@ -163,17 +187,18 @@ function CreateStockMutationDialog({
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'center' }}>
               <Button
-                onClick={() => setIsCreateStockMutationDialogOpen(false)}
-                variant="outlined"
-              >
-                Batal
-              </Button>
-              <Button
                 type="submit"
                 variant="contained"
                 disabled={!formik.isValid || !formik.dirty}
               >
                 Simpan
+              </Button>
+              <Button
+                onClick={() => setIsCreateStockMutationDialogOpen(false)}
+                variant="contained"
+                color="error"
+              >
+                Batal
               </Button>
             </DialogActions>
           </Form>

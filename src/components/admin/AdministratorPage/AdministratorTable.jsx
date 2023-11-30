@@ -8,7 +8,6 @@ import {
 } from '@mui/material';
 import AdministratorTableItem from './AdministratorTableItem';
 import SortLabelTableCell from './SortLabelTableCell';
-// import CategoryTableItem from './CategoryTableItem';
 
 function AdministratorTable() {
   return (

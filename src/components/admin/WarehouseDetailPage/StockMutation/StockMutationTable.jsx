@@ -12,20 +12,16 @@ import StockMutationTableItem from './StockMutationTableItem';
 function StockMutationTable() {
   return (
     <TableContainer component={Paper} sx={{ borderRadius: 0.5 }}>
-      <Table aria-label="Product Table" size="small">
+      <Table aria-label="Stock Mutation Table">
         <TableHead>
           <TableRow
             sx={{
               bgcolor: 'primary.main',
               '& *': { color: 'white !important' },
-              '& .MuiTableSortLabel-root': {
-                width: '100%',
-                justifyContent: 'center',
-              },
             }}
           >
             {/* No. */}
-            <TableCell>No.</TableCell>
+            <TableCell align="center">No.</TableCell>
 
             {/* Type */}
             <SortLabelTableCell label="type">Tipe</SortLabelTableCell>

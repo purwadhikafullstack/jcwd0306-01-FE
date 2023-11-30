@@ -12,29 +12,28 @@ import SortLabelTableCell from './SortLabelTableCell';
 function ProductTable() {
   return (
     <TableContainer component={Paper} sx={{ borderRadius: 0.5 }}>
-      <Table aria-label="Product Table" size="small">
+      <Table aria-label="Product Table">
         <TableHead>
           <TableRow
             sx={{
               bgcolor: 'primary.main',
               '& *': { color: 'white !important' },
-              '& .MuiTableSortLabel-root': {
-                width: '100%',
-                justifyContent: 'space-between',
-              },
             }}
           >
             {/* No. */}
-            <TableCell>No.</TableCell>
+            <TableCell align="center">No.</TableCell>
 
             {/* Status */}
             <SortLabelTableCell label="deletedAt">Status</SortLabelTableCell>
 
             {/* Image */}
-            <TableCell>Gambar</TableCell>
+            <TableCell align="center">Gambar</TableCell>
 
             {/* Name */}
             <SortLabelTableCell label="name">Nama</SortLabelTableCell>
+
+            {/* Actions */}
+            <TableCell align="center">Aksi</TableCell>
 
             {/* Price */}
             <SortLabelTableCell label="price">Harga (Rp)</SortLabelTableCell>
@@ -62,7 +61,7 @@ function ProductTable() {
             </SortLabelTableCell>
 
             {/* Categories */}
-            <TableCell>Kategori</TableCell>
+            <TableCell align="center">Kategori</TableCell>
 
             {/* CreatedAt */}
             <SortLabelTableCell label="createdAt">
@@ -73,9 +72,6 @@ function ProductTable() {
             <SortLabelTableCell label="updatedAt">
               Tanggal Diperbarui
             </SortLabelTableCell>
-
-            {/* Actions */}
-            <TableCell />
           </TableRow>
         </TableHead>
         <ProductTableItem />

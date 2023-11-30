@@ -25,7 +25,6 @@ export default function ChangePassword() {
   const [see, setSee] = useState(false);
   const [seeConfirm, setSeeConfirm] = useState(false);
   const [isTokenValid, setIsTokenValid] = useState(true);
-  console.log(isTokenExist, isTokenValid);
   const token = searchParams.get('token');
   const decodedToken = token ? jwtDecode(token) : null;
   const email = decodedToken?.email;
@@ -50,12 +49,11 @@ export default function ChangePassword() {
           newPassword: password,
           email,
         };
-        const res = await api.patch(`/user/forget-password`, data, {
+        await api.patch(`/user/forget-password`, data, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(res);
         dispatch(
           setAlertActionCreator({
             val: { status: 'success', message: 'Password Changed' },
@@ -64,13 +62,8 @@ export default function ChangePassword() {
         setIsLoading(false);
         nav('/login');
       } catch (err) {
-        console.log(err);
         setIsTokenValid(false);
-        dispatch(
-          setAlertActionCreator({
-            val: { status: 'error', message: err?.response?.data?.message },
-          })
-        );
+        dispatch(setAlertActionCreator({ err }));
         setIsLoading(false);
       }
     },
@@ -87,20 +80,14 @@ export default function ChangePassword() {
             },
           }
         );
-        console.log(checkToken);
         if (checkToken?.data?.data === null) {
           setIsTokenExist(null);
         } else {
           setIsTokenExist(checkToken.data.data);
         }
       } catch (err) {
-        console.log(err);
         setIsTokenValid(false);
-        dispatch(
-          setAlertActionCreator({
-            val: { status: 'error', message: err?.response?.data?.message },
-          })
-        );
+        dispatch(setAlertActionCreator({ err }));
       }
     };
 

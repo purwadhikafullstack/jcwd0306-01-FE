@@ -1,5 +1,6 @@
 import { Card, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { CartItemLine } from './CartItemLine';
 
 export function CartShowUp({ showCart, setShowCart }) {
@@ -21,13 +22,13 @@ export function CartShowUp({ showCart, setShowCart }) {
       }}
     >
       <Row className="m-0 p-2">
-        <a href="/cart" className="text-decoration-none text-secondary w-100">
+        <Link to="/cart" className="text-decoration-none text-secondary w-100">
           {cart.length === 0 ? (
             <span className="text-center">Phew, Your cart is empty</span>
           ) : (
             `Your Cart (${cart.length})`
           )}
-        </a>
+        </Link>
       </Row>
       {cart.map((item) => (
         <CartItemLine item={item} key={item.productId} />

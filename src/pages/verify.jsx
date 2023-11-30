@@ -95,7 +95,6 @@ export function Verify() {
             label="First Name"
             variant="outlined"
             size="small"
-            // value={formik.values.firstName}
             onChange={(e) => inputHandler(e, 'firstName')}
             error={formik.touched.firstName && Boolean(formik.errors.firstName)}
             helperText={formik.touched.firstName && formik.errors.firstName}
@@ -106,7 +105,6 @@ export function Verify() {
             variant="outlined"
             size="small"
             sx={{ marginTop: '10px' }}
-            // value={formik.values.lastName}
             onChange={(e) => inputHandler(e, 'lastName')}
             error={formik.touched.lastName && Boolean(formik.errors.lastName)}
             helperText={formik.touched.lastName && formik.errors.lastName}
@@ -117,7 +115,6 @@ export function Verify() {
             variant="outlined"
             size="small"
             sx={{ marginTop: '10px' }}
-            // value={formik.values.password}
             onChange={(e) => inputHandler(e, 'password')}
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
@@ -128,7 +125,6 @@ export function Verify() {
             variant="outlined"
             size="small"
             sx={{ marginTop: '10px' }}
-            // value={formik.values.confirmPassword}
             onChange={(e) => inputHandler(e, 'confirmPassword')}
             error={
               formik.touched.confirmPassword &&

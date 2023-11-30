@@ -13,7 +13,7 @@ export function MobileShoppingSummary({
   const [show, setShow] = useState(false);
 
   return (
-    <div>
+    <div style={{ color: 'black' }}>
       <MobileShoppingSummaryDialog
         open={show}
         setOpen={setShow}

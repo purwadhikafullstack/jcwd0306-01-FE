@@ -16,8 +16,6 @@ function SearchInput() {
     dispatch(
       asyncGetReports({
         name: searchParams.get('name'),
-        // sortBy: searchParams.get('sortBy'),
-        // orderBy: searchParams.get('orderBy'),
         page: searchParams.get('page'),
         perPage: searchParams.get('perPage'),
         warehouseId: id,

@@ -3,26 +3,14 @@ import {
   Button,
   Dialog,
   DialogActions,
-  DialogContent,
   DialogTitle,
-  Divider,
-  Drawer,
   IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Slide,
   Stack,
 } from '@mui/material';
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
 import CloseIcon from '@mui/icons-material/Close';
 import React, { useState } from 'react';
-import AddressAction, {
-  DefaultAddressDialog,
-} from '../actions/AddressCardAction';
+import { DefaultAddressDialog } from '../actions/AddressCardAction';
 import DeleteDialog from './DeleteDialog';
 
 const Transition = React.forwardRef((props, ref) => (
@@ -87,7 +75,6 @@ export default function DrawerActionDialog({
           <Button
             onClick={() => {
               handleDefaultDialogOpen();
-              // setDefaultAddress();
             }}
             sx={{ display: address.isDefault ? 'none' : 'inline-block' }}
           >

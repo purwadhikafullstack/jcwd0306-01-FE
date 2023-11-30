@@ -1,7 +1,6 @@
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
 
 function DeleteDialog({ isOpen, onClose, warehouseId, userIds, deleteAdmin }) {
-  // console.log({ whId: warehouseId, userIds });
   return (
     <Dialog open={isOpen} onClose={onClose}>
       <DialogTitle>

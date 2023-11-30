@@ -1,6 +1,6 @@
 import { Button, Divider, Stack, Typography } from '@mui/material';
 import { Form, Formik } from 'formik';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { number, string, object } from 'yup';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +19,6 @@ function ProductActionStack() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [stackTop, setStackTop] = useState(null);
-  const [validationSchema, setValidationSchema] = useState();
 
   const stackRef = useCallback((node) => {
     if (node !== null) {
@@ -42,8 +41,8 @@ function ProductActionStack() {
     []
   );
 
-  useEffect(() => {
-    setValidationSchema(
+  const validationSchema = useMemo(
+    () =>
       object({
         quantity: number()
           .integer()
@@ -52,9 +51,9 @@ function ProductActionStack() {
           .max(product.stock)
           .required(),
         note: string(),
-      })
-    );
-  }, [product]);
+      }),
+    [product]
+  );
 
   const onSubmit = (values, { resetForm }) => {
     if (values.submitButton === 'add-to-cart') {
@@ -68,10 +67,12 @@ function ProductActionStack() {
         if (isSuccess) resetForm();
       });
     } else if (values.submitButton === 'direct-buy') {
-      if (!authUser?.isVerified)
-        return dispatch(
+      if (!authUser?.isVerified) {
+        dispatch(
           constant.setError({ message: 'Your account is not verified' })
         );
+        return;
+      }
       navigate('/cart/shipment', {
         state: {
           productId: product.id,
@@ -113,12 +114,8 @@ function ProductActionStack() {
           >
             {/* Title */}
             <Typography fontWeight={700}>Atur jumlah dan catatan</Typography>
-
             <Stack spacing={1}>
-              {/* Quanitity input */}
               <QuantityInput />
-
-              {/* Note input */}
               <NoteInput />
             </Stack>
 

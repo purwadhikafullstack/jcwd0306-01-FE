@@ -11,9 +11,9 @@ function AccountButton() {
       startIcon={
         <Avatar
           alt={authUser.firstName}
-          // src={`${import.meta.env.VITE_API_BASE_URL}/api/users/${
-          //   authUser.id
-          // }/image`}
+          src={`${import.meta.env.VITE_API_BASE_URL}/user/${
+            authUser?.id
+          }/image`}
         />
       }
       sx={{ textTransform: 'none' }}
