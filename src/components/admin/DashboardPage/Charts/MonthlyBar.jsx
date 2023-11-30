@@ -2,11 +2,14 @@ import { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import { CategoryScale } from 'chart.js';
+import { useDispatch } from 'react-redux';
 import api from '../../../../constants/api';
+import { setAlertActionCreator } from '../../../../states/alert/action';
 
 Chart.register(CategoryScale);
 
 export function MonthlyBar() {
+  const dispatch = useDispatch();
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -35,26 +38,18 @@ export function MonthlyBar() {
 
   const transformData = (backendData) => {
     const transformedData = backendData.reduce((acc, item) => {
-      // Extract month from updatedAt (assuming updatedAt is a valid date string)
       const month = new Date(item.updatedAt).getMonth() + 1;
-
-      // Initialize or update the productSold for the corresponding month
       acc[month] = (acc[month] || 0) + item.quantity;
-
       return acc;
     }, {});
-
     const labels = Array.from({ length: 12 }, (_, index) => index + 1);
     const data = labels.map((month) => transformedData[month] || 0);
-
     return { labels, data };
   };
 
   const fetchData = async () => {
     try {
       const { data } = await api.get('/sales-reports/product-sold');
-
-      // Transform backend data and update chartData
       const { labels, data: productSoldData } = transformData(data?.data);
       setChartData((prevChartData) => ({
         ...prevChartData,
@@ -66,8 +61,8 @@ export function MonthlyBar() {
           },
         ],
       }));
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      dispatch(setAlertActionCreator({ err }));
     }
   };
 

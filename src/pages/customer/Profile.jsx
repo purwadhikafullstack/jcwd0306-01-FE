@@ -34,7 +34,6 @@ import { AvatarDetail } from '../../components/customer/ProfilePage/AvatarDetail
 
 export function ProfileDashoard() {
   const authUser = useSelector((states) => states.authUser);
-  console.log(authUser);
   const userImage = useSelector((states) => states.authUser?.imageUrl);
   const [isButtonDisabled, setButtonDisabled] = useState(false);
   const [see, setSee] = useState(false);
@@ -370,10 +369,9 @@ export function ProfileDashoard() {
                       formik2.touched.oldPassword && formik2.errors.oldPassword
                     }
                     onChange={(e) => inputHandler2(e, 'oldPassword')}
-                    // onBlur={formik2.handleBlur}
                     sx={{
-                      width: '100%', // Set width to 100% on small screens
-                      marginBottom: 1, // Add bottom margin for spacing
+                      width: '100%',
+                      marginBottom: 1,
                     }}
                   />
                 </FormControl>
@@ -419,8 +417,8 @@ export function ProfileDashoard() {
                     onChange={(e) => inputHandler2(e, 'newPassword')}
                     onBlur={formik2.handleBlur}
                     sx={{
-                      width: '100%', // Set width to 100% on small screens
-                      marginBottom: 1, // Add bottom margin for spacing
+                      width: '100%',
+                      marginBottom: 1,
                     }}
                   />
                 </FormControl>

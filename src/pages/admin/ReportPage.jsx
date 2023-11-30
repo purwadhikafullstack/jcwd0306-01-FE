@@ -8,10 +8,8 @@ import { asyncGetReports } from '../../states/salesReport/action';
 export function ReportPage() {
   const authUser = useSelector((states) => states.authUser);
   const id = authUser?.WarehouseUser?.warehouseId;
-  console.log(id);
   const theme = useTheme();
   const dispatch = useDispatch();
-
   const [searchParams, updateQueryParams] = useCustomSearchParams();
 
   useEffect(() => {

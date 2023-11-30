@@ -26,7 +26,6 @@ export function CreatedDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
     },
     validationSchema: Yup.object().shape({
       email: Yup.string().email('Invalid email address').required('Required'),
-      // warehouseDestination: Yup.string().required('required!'),
     }),
     enableReinitialize: true,
     onSubmit: async () => {
@@ -55,25 +54,11 @@ export function CreatedDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
         );
         setLoading(false);
       } catch (err) {
-        console.log(err);
         setLoading(false);
-        dispatch(
-          setAlertActionCreator({
-            val: { status: 'error', message: err.response.data.message },
-          })
-        );
+        dispatch(setAlertActionCreator({ err }));
       }
     },
   });
-
-  // console.log({
-  //   email: formik.values.email,
-  //   whdestinationId: formik.values.warehouseDestination.id,
-  // });
-
-  // console.log('Formik state:', formik.values, formik.touched, formik.errors);
-  // console.log(formik.values.warehouseDestination);
-
   function inputHandler(e, fieldName) {
     const { value } = e.target;
     formik.setFieldValue(fieldName, value);
@@ -92,7 +77,6 @@ export function CreatedDialog({ isCreateDialogOpen, setIsCreateDialogOpen }) {
         setIsCreateDialogOpen={setIsCreateDialogOpen}
         formik={formik}
       />
-
       <DialogContent
         sx={{
           justifyContent: 'center',

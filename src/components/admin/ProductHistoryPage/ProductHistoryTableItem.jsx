@@ -6,7 +6,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import { useState, useContext } from 'react';
@@ -16,6 +16,7 @@ import { ModalDetailTransaction } from '../../customer/OrderList/ModalDetailTran
 import { ModalLoading } from '../../customer/OrderList/ModalDetailTransaction/ModalLoading';
 import api from '../../../constants/api';
 import ModeContext from '../../../contexts/ModeContext';
+import { setAlertActionCreator } from '../../../states/alert/action';
 
 function ProductHistoryTableItem() {
   const productHistory = useSelector((states) => states.productHistory);
@@ -25,6 +26,7 @@ function ProductHistoryTableItem() {
   const [order, setOrder] = useState(false);
   const [stockMutationData, setStockMutationData] = useState({});
   const { mode } = useContext(ModeContext);
+  const dispatch = useDispatch();
 
   const isDarkMode = mode === 'dark';
   const evenRowColor = isDarkMode ? '#1a1a1a' : 'white';
@@ -36,8 +38,8 @@ function ProductHistoryTableItem() {
       setIsFetching(true);
       const { data } = await api.get(`/order/${orderId}`);
       setOrder(data);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      dispatch(setAlertActionCreator({ err }));
     } finally {
       setIsFetching(false);
     }
@@ -50,15 +52,14 @@ function ProductHistoryTableItem() {
         `/product-history/stock-mutation/${stockMutationId}`
       );
       setStockMutationData(data?.data[0]);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      dispatch(setAlertActionCreator({ err }));
     } finally {
       setIsFetching(false);
     }
   };
 
   const handleDetailOpen = (val) => {
-    // if (val?.type === 'manual') alert('manual');
     if (val?.type === 'stock-mutation') {
       fetchStockMutation(val?.stockMutationId);
       setSmOpen(true);

@@ -1,12 +1,14 @@
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import api from '../../../../constants/api';
+import { setAlertActionCreator } from '../../../../states/alert/action';
 
 export default function WarehouseSelect({ formik }) {
   const [warehouses, setWarehouses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  // const [searchWarehouse, setSearchWarehouse] = useState('');
+  const dispatch = useDispatch();
 
   const fetchWarehouses = async () => {
     try {
@@ -16,10 +18,9 @@ export default function WarehouseSelect({ formik }) {
       setWarehouses(res);
       setIsLoading(false);
     } catch (err) {
-      console.log(err);
+      dispatch(setAlertActionCreator({ err }));
     }
   };
-
   useEffect(() => {
     fetchWarehouses();
   }, []);
@@ -32,9 +33,9 @@ export default function WarehouseSelect({ formik }) {
       autoHighlight
       getOptionLabel={(option) => option.name}
       isOptionEqualToValue={(option, value) => option.id === value?.id}
-      value={formik.values.warehouse} // Assuming formik.values.warehouse represents the selected warehouse
+      value={formik.values.warehouse}
       onChange={(e, value) => {
-        formik.setFieldValue('warehouseDestination', value); // Update formik with the selected warehouse
+        formik.setFieldValue('warehouseDestination', value);
       }}
       renderInput={(params) => (
         <TextField
@@ -44,8 +45,6 @@ export default function WarehouseSelect({ formik }) {
             ...params.inputProps,
             autoComplete: 'new-password', // disable autocomplete and autofill
           }}
-          // onChange={(e) => setSearchWarehouse(e.target.value)}
-          // onClick={() => setSearchWarehouse('')}
         />
       )}
     />

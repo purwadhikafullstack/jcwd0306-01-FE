@@ -16,11 +16,9 @@ import api from '../../../constants/api';
 import { setAlertActionCreator } from '../../../states/alert/action';
 import { asyncGetWarehouseAdmin } from '../../../states/Administrator/action';
 import { EditDialog } from './EditDialog';
-// import EditDialog from './EditDialog';
 
 function AdministratorTableItem() {
   const warehouseAdmin = useSelector((states) => states.administrator);
-  console.log(warehouseAdmin);
   const dispatch = useDispatch();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
@@ -31,9 +29,6 @@ function AdministratorTableItem() {
   });
   const [editData, setEditData] = useState(null);
   const [email, setEmail] = useState(null);
-  // console.log(email);
-
-  // warehouseAdmin.map((val) => console.log(val));
 
   const handleDeleteDialogOpen = (warehouseId, userId) => {
     setIsDeleteDialogOpen(true);

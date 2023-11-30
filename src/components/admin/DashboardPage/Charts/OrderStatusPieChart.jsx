@@ -1,9 +1,12 @@
 import { Pie } from 'react-chartjs-2';
 import { useContext, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import api from '../../../../constants/api';
 import ModeContext from '../../../../contexts/ModeContext';
+import { setAlertActionCreator } from '../../../../states/alert/action';
 
 export function OrderStatusChart() {
+  const dispatch = useDispatch();
   const [orderStatusData, setOrderStatusData] = useState({
     unpaid: 0,
     verifying: 0,
@@ -38,8 +41,8 @@ export function OrderStatusChart() {
         );
 
         setOrderStatusData(updatedData);
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        dispatch(setAlertActionCreator({ err }));
       }
     };
 

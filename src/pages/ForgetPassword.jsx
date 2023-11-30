@@ -1,6 +1,6 @@
 import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import api from '../constants/api';
@@ -8,7 +8,6 @@ import { setAlertActionCreator } from '../states/alert/action';
 
 export default function ForgetPassword() {
   const [isLoading, setIsLoading] = useState(false);
-  // const [isTokenExist, setIsTokenExist] = useState(null);
   const [isEmailSent, setIsEmailSent] = useState(null);
   const dispatch = useDispatch();
 
@@ -27,12 +26,7 @@ export default function ForgetPassword() {
       setIsLoading(true);
       try {
         const { email } = formik.values;
-        const res = await api.post(`/user/request-fp?email=${email}`);
-        // console.log(res);
-        // const checkToken = await api.get(
-        //   `/user/forgetPasswordToken?email=${email}`
-        // );
-        // setIsTokenExist(checkToken.data.data);
+        await api.post(`/user/request-fp?email=${email}`);
         dispatch(
           setAlertActionCreator({
             val: { status: 'success', message: 'check your email' },
@@ -40,13 +34,8 @@ export default function ForgetPassword() {
         );
         setIsLoading(false);
       } catch (err) {
-        console.log(err);
         setIsEmailSent(err?.response.data.message);
-        dispatch(
-          setAlertActionCreator({
-            val: { status: 'error', message: err?.response.data.message },
-          })
-        );
+        dispatch(setAlertActionCreator({ err }));
         setIsLoading(false);
       }
     },
@@ -57,11 +46,6 @@ export default function ForgetPassword() {
     formik.setFieldValue(fieldName, value);
   }
 
-  // useEffect(() => {
-  //   if (userSelector.email) {
-  //     return nav('/');
-  //   }
-  // }, [userSelector]);
   return (
     <Box
       sx={{
@@ -96,7 +80,6 @@ export default function ForgetPassword() {
             sx={{ mt: 3 }}
             variant="contained"
             onClick={formik.handleSubmit}
-            // disabled={isTokenExist !== null || isEmailSent !== null}
           >
             Reset
           </Button>

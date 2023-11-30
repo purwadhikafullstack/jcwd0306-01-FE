@@ -9,17 +9,6 @@ function ReportFooter() {
     (states) => states.salesReportPagination
   );
   const [searchParams, updateQueryParams] = useCustomSearchParams();
-  const reportData = useSelector((states) => states.salesReport);
-
-  const isCategoryFilterActive = searchParams.get('category') !== '';
-
-  const filteredReportData = reportData.filter(
-    (val) =>
-      val?.OrderProducts?.reduce((sum, product) => sum + product.quantity, 0) >
-      0
-  );
-
-  // console.log(filteredReportData);
 
   return (
     <Stack direction="row" alignItems="center">
@@ -36,7 +25,6 @@ function ReportFooter() {
             justifyContent: 'center',
           },
         }}
-        // disabled={isCategoryFilterActive}
       />
 
       {/* PerPage Select */}
