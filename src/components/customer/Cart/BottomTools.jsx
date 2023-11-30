@@ -3,7 +3,8 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { SvgTrash } from '../../SVG/SVG_trash';
+import { DeleteRounded } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 import './Cart.css';
 import { deleteFromCart } from '../../../states/cart/action';
 import { ConfirmationModal } from '../../ConfirmationModal';
@@ -31,14 +32,13 @@ function BottomTools({
       <Col className="d-flex justify-content-between p-0">
         <div />
         <div className="d-flex gap-5 align-items-center">
-          <button
-            type="button"
+          <IconButton
             name="delete-item"
-            className="bg-transparent border border-0"
             onClick={() => setShow('DELETE')}
+            sx={{ '&:hover': { color: 'error.main' } }}
           >
-            <SvgTrash />
-          </button>
+            <DeleteRounded />
+          </IconButton>
           <ConfirmationModal
             action={async () => {
               await dispatch(
