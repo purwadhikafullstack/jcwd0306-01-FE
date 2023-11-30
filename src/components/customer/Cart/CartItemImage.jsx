@@ -1,8 +1,10 @@
+import { Link } from 'react-router-dom';
+
 export function CartItemImage({ product, width = '100px', index = 0 }) {
   if (window.location.pathname !== `/cart/shipment`)
     return (
-      <a
-        href={`/products/${product?.productId}`}
+      <Link
+        to={`/products/${product?.productId}`}
         className="text-decoration-none text-black"
       >
         <img
@@ -12,7 +14,7 @@ export function CartItemImage({ product, width = '100px', index = 0 }) {
           alt=""
           width={width}
         />
-      </a>
+      </Link>
     );
   return (
     <img

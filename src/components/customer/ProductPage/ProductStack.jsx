@@ -21,7 +21,7 @@ function ProductStack() {
         {products.map((product) => (
           <ProductCardItem key={product.id} product={product} />
         ))}
-        {loading > 0 &&
+        {loading !== 0 &&
           [1, 2, 3, 4, 5].map((val) => (
             <Stack
               key={val}
@@ -35,9 +35,10 @@ function ProductStack() {
             </Stack>
           ))}
       </ImageList>
-      {products.length > 0 ? (
-        <PaginationStack />
-      ) : (
+
+      {loading === 0 && products.length > 0 && <PaginationStack />}
+
+      {loading === 0 && products.length === 0 && (
         <Typography textAlign="center">Produk Tidak Ditemukan</Typography>
       )}
     </Stack>
