@@ -5,21 +5,11 @@ export function messagesPositionSetter(msg, userSelector) {
   const isAdminPage = window.location.pathname.split(`/`)[1] === `admin`;
   if (receiverId === userSelector?.id && senderId !== receiverId)
     return (
-      <MessageRight
+      <MessageLeft
         key={msg?.id}
         message={msg?.message}
         timestamp={msg?.createdAt}
         displayName="Admin"
-        avatarDisp
-      />
-    );
-  if (senderId === userSelector?.id && receiverId && isAdminPage)
-    return (
-      <MessageRight
-        key={msg?.id}
-        message={msg?.message}
-        timestamp={msg?.createdAt}
-        displayName={msg?.Sender?.firstName}
         avatarDisp
       />
     );
@@ -46,23 +36,19 @@ export function messagesPositionSetter(msg, userSelector) {
     );
   if (
     senderId === userSelector?.id &&
-    receiverId &&
-    window.location.pathname.split(`/`)[1] === `admin`
+    receiverId === userSelector?.id &&
+    !isAdminPage
   )
     return (
-      <MessageRight
+      <MessageLeft
         key={msg?.id}
         message={msg?.message}
         timestamp={msg?.createdAt}
-        displayName="テスト"
+        displayName={msg?.Sender?.firstName}
         avatarDisp
       />
     );
-  if (
-    senderId === userSelector?.id &&
-    receiverId === userSelector?.id &&
-    window.location.pathname.split(`/`)[1] !== `admin`
-  )
+  if (senderId === userSelector?.id && !receiverId)
     return (
       <MessageRight
         key={msg?.id}
