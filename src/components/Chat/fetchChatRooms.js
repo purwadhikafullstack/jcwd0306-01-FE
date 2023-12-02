@@ -5,7 +5,7 @@ export const fetchChatRooms = async (userId, setChatRooms, searchParams) => {
   const orderId = Number(searchParams.get('orderId'));
   const warehouseId = Number(searchParams.get('warehouseId'));
   const { data } = await api.get(`/chat/rooms/${userId}`);
-  if (!isRoomDisplayed(searchParams, data.rows))
+  if (!isRoomDisplayed(searchParams, data.rows) && orderId && warehouseId)
     setChatRooms([
       { orderId, warehouseId, id: Math.random() * 100000 },
       ...data.rows,
