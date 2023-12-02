@@ -1,9 +1,20 @@
-import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  IconButton,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import YupPassword from 'yup-password';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useState } from 'react';
 import api from '../constants/api';
 import { setAlertActionCreator } from '../states/alert/action';
 import GadgetGalleryLogo from '../components/GadgetGalleryLogo';
@@ -16,6 +27,9 @@ export function Verify() {
   const email = queryParams.get('email') || emailLoggedIn;
   const nav = useNavigate();
   const dispatch = useDispatch();
+  const [see, setSee] = useState(false);
+  const [seeConfirm, setSeeConfirm] = useState(false);
+  const [isLoading, setIsloading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -40,6 +54,7 @@ export function Verify() {
     }),
     onSubmit: async () => {
       try {
+        setIsloading(true);
         await api.patch('/user/verify', formik.values);
         dispatch(
           setAlertActionCreator({
@@ -49,11 +64,19 @@ export function Verify() {
         nav('/login');
         window.location.reload();
       } catch (err) {
+        setIsloading(false);
         dispatch(
           setAlertActionCreator({
-            val: { status: 'error', message: err?.message },
+            val: {
+              status: 'error',
+              message: err?.response?.data || err?.message,
+            },
           })
         );
+        if (err?.response?.data === 'token expired, please re-register')
+          nav('/register');
+      } finally {
+        setIsloading(false);
       }
     },
   });
@@ -115,6 +138,27 @@ export function Verify() {
             variant="outlined"
             size="small"
             sx={{ marginTop: '10px' }}
+            type={see ? 'text' : 'password'}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setSee(!see)}
+                    edge="end"
+                    tabIndex="-1"
+                  >
+                    <VisibilityOffIcon
+                      fontSize="small"
+                      sx={{ display: !see ? 'block' : 'none' }}
+                    />
+                    <VisibilityIcon
+                      fontSize="small"
+                      sx={{ display: see ? 'block' : 'none' }}
+                    />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
             onChange={(e) => inputHandler(e, 'password')}
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
@@ -125,6 +169,27 @@ export function Verify() {
             variant="outlined"
             size="small"
             sx={{ marginTop: '10px' }}
+            type={seeConfirm ? 'text' : 'password'}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setSeeConfirm(!seeConfirm)}
+                    edge="end"
+                    tabIndex="-1"
+                  >
+                    <VisibilityOffIcon
+                      fontSize="small"
+                      sx={{ display: !seeConfirm ? 'block' : 'none' }}
+                    />
+                    <VisibilityIcon
+                      fontSize="small"
+                      sx={{ display: seeConfirm ? 'block' : 'none' }}
+                    />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
             onChange={(e) => inputHandler(e, 'confirmPassword')}
             error={
               formik.touched.confirmPassword &&
@@ -140,6 +205,7 @@ export function Verify() {
           size="large"
           sx={{ marginTop: '10px', width: '220px' }}
           onClick={formik.handleSubmit}
+          disabled={isLoading}
         >
           Submit
         </Button>
