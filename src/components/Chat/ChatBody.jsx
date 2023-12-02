@@ -59,7 +59,7 @@ export function ChatBody({
   return (
     <Paper className="paper">
       <Typography variant="h6" pl={2}>
-        {orderId === 'null'
+        {searchParams.get('orderId') === 'null'
           ? 'Write message to our staff'
           : `Chat room for order-(${orderId})`}
       </Typography>
