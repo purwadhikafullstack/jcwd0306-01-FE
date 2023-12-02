@@ -34,7 +34,6 @@ export function ChatRoom() {
   const page = useRef(1);
   const theme = useTheme();
   const smallerScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  console.log(chatRooms);
 
   useEffect(() => {
     socketConn.connect();
