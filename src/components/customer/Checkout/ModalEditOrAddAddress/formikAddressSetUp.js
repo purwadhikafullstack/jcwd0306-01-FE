@@ -43,16 +43,20 @@ export async function addNewAddress(
   setAddress,
   config = {}
 ) {
-  values.userId = userId;
-  const { data } = await api.post(
-    `/user_address/new/${userId}`,
-    values,
-    config
-  );
-  const temp = [...addresses];
-  temp.unshift({ ...values, ...data });
-  setAddresses(temp);
-  setAddress({ ...values, ...data });
+  try {
+    values.userId = userId;
+    const { data } = await api.post(
+      `/user_address/new/${userId}`,
+      values,
+      config
+    );
+    const temp = [...addresses];
+    temp.unshift({ ...values, ...data });
+    setAddresses(temp);
+    setAddress({ ...values, ...data });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 const checkChanges = (initialValues, updateValues) => {
@@ -67,31 +71,29 @@ export async function updateAddress(
   addresses,
   setAddresses,
   addressToEdit,
+  setAddress,
+  address,
   config = {}
 ) {
-  if (checkChanges(addressToEdit, values)) {
-    const { data } = await api.patch(
-      `/user_address/${userId}/${values.id}`,
-      values,
-      config
-    );
-    /* Nazhif (to fix bug card increase after edit) */
-    // Find the index of the address to be updated in the addresses array
-    const indexToUpdate = addresses.findIndex(
-      (address) => address.id === values.id
-    );
-
-    if (indexToUpdate !== -1) {
-      // Update the address in the array without modifying the original array
-      const updatedAddresses = [...addresses];
-      updatedAddresses[indexToUpdate] = data;
-
-      // Set the updated addresses in the state
-      setAddresses(updatedAddresses);
+  try {
+    if (checkChanges(addressToEdit, values)) {
+      const { data } = await api.patch(
+        `/user_address/${userId}/${values.id}`,
+        values,
+        config
+      );
+      const indexToUpdate = addresses.findIndex(
+        (adrs) => adrs.id === values.id
+      );
+      if (indexToUpdate !== -1) {
+        const updatedAddresses = [...addresses];
+        updatedAddresses[indexToUpdate] = data;
+        setAddresses(updatedAddresses);
+      }
+      if (address.id === values.id) setAddress(data);
     }
-    // const temp = [...addresses];
-    // temp.splice(values.index, 1, data);
-    // setAddresses(temp);
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -101,10 +103,19 @@ export async function addressSubmit(
   addresses,
   setAddresses,
   setAddress,
-  addressToEdit
+  addressToEdit,
+  address
 ) {
   if (values.id) {
-    await updateAddress(values, userId, addresses, setAddresses, addressToEdit);
+    await updateAddress(
+      values,
+      userId,
+      addresses,
+      setAddresses,
+      addressToEdit,
+      setAddress,
+      address
+    );
   } else {
     await addNewAddress(values, userId, addresses, setAddresses, setAddress);
   }
