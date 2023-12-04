@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   Box,
   Button,
@@ -36,10 +37,15 @@ export default function ChangePassword() {
       confirmPassword: '',
     },
     validationSchema: Yup.object().shape({
-      password: Yup.string().required('Required'),
+      password: Yup.string()
+        .matches(/^(?=.*[A-Z])/, 'Must contain at least one uppercase')
+        .matches(/^(?=.*[a-z])/, 'Must contain at least one lowercase')
+        .min(8, 'Password minimum 8 characters')
+        .matches(/^(?=.*\d)/, 'Must contain at least one number')
+        .required('required'),
       confirmPassword: Yup.string()
-        .required('confirm your password')
-        .oneOf([Yup.ref('password'), null], "passwords don't match"),
+        .oneOf([Yup.ref('password'), null], 'Passwords must match')
+        .required('required'),
     }),
     onSubmit: async () => {
       setIsLoading(true);
@@ -120,7 +126,7 @@ export default function ChangePassword() {
         >
           <Typography variant="h5">ADD NEW PASSWORD</Typography>
           <Typography fontSize={14} mt={1.5}>
-            Enter your email to receive reset password Link
+            Please input your new password
           </Typography>
           <Stack sx={{ alignItems: 'center' }}>
             <TextField
@@ -302,7 +308,7 @@ export default function ChangePassword() {
             <Button
               sx={{ mt: 3 }}
               variant="contained"
-              disabled={isLoading}
+              disabled={isLoading || !formik.isValid}
               onClick={formik.handleSubmit}
             >
               Submit
