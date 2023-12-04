@@ -73,6 +73,7 @@ export function CheckOutHeader({
             setOpen={setShowModal}
             addresses={addresses}
             addressToEdit={addressToEdit}
+            address={address}
             setAddress={setAddress}
             setAddresses={setAddresses}
             setAddressToEdit={setAddressToEdit}
