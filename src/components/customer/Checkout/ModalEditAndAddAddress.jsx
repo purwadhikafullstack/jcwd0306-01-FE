@@ -34,6 +34,7 @@ export function ModalEditAndAddAddress({
   open,
   setOpen,
   addressToEdit,
+  address,
   addresses,
   setAddress,
   setAddresses,
@@ -58,7 +59,8 @@ export function ModalEditAndAddAddress({
           addresses,
           setAddresses,
           setAddress,
-          addressToEdit
+          addressToEdit,
+          address
         );
         if (window.location.pathname === '/user/address')
           if (authUser?.id) dispatch(asyncGetAddress({ userId: authUser?.id }));
