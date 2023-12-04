@@ -5,10 +5,11 @@ import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { constant } from '../../../../../constants/constant';
 
-export function ChatRoomItemLine({ item = {} }) {
+export function ChatRoomItemLine({ item = {}, setMessages, index }) {
   const pathnameList = window.location.pathname.split(`/`);
   const [searchParams, setSearchParams] = useSearchParams();
   const isAdminChatPage = pathnameList[1] + pathnameList[2] === 'adminmessages';
+  const { firstName, lastName } = item.Sender;
 
   const dispatch = useDispatch();
   return (
@@ -17,26 +18,35 @@ export function ChatRoomItemLine({ item = {} }) {
         className="text-decoration-none text-black d-flex justify-content-start"
         onClick={
           isAdminChatPage
-            ? () =>
+            ? () => {
                 setSearchParams((params) => {
                   params.set(`receiverId`, item?.senderId);
                   params.set(`orderId`, item?.orderId);
                   params.set(`warehouseId`, item?.warehouseId);
                   return params;
-                })
-            : () =>
+                });
+                setMessages((msgs) => {
+                  const temp = [...msgs];
+                  temp[index] = { ...item, isRead: true };
+                  return temp;
+                });
+              }
+            : () => {
                 dispatch({
                   type: constant.setChatRoom,
                   payload: new Map([
                     ['receiverId', item?.senderId],
                     ['orderId', item?.orderId],
                     ['warehouseId', item?.warehouseId],
-                    [
-                      'name',
-                      `${item?.Sender?.firstName} ${item?.Sender?.lastName}`,
-                    ],
+                    ['name', `${firstName} ${lastName}`],
                   ]),
-                })
+                });
+                setMessages((msgs) => {
+                  const temp = [...msgs];
+                  temp[index] = { ...item, isRead: true };
+                  return temp;
+                });
+              }
         }
       >
         <Row className="m-0 px-1 py-2 border-top border-secondary-subtle w-100">

@@ -63,6 +63,7 @@ function MessageButton() {
         showRoom={showRoom}
         setShowRoom={setShowRoom}
         messages={messages}
+        setMessages={setMessages}
       />
     </div>
   );

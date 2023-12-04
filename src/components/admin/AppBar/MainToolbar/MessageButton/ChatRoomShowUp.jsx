@@ -1,7 +1,12 @@
 import { Card, Row } from 'react-bootstrap';
 import { ChatRoomItemLine } from './ChatRoomItemLine';
 
-export function ChatRoomShowUp({ showRoom, setShowRoom, messages = [] }) {
+export function ChatRoomShowUp({
+  showRoom,
+  setShowRoom,
+  messages = [],
+  setMessages,
+}) {
   return (
     <Card
       className={
@@ -28,8 +33,13 @@ export function ChatRoomShowUp({ showRoom, setShowRoom, messages = [] }) {
           )}
         </a>
       </Row>
-      {messages.map((item) => (
-        <ChatRoomItemLine key={item.id} item={item} />
+      {messages.map((item, index) => (
+        <ChatRoomItemLine
+          key={item.id}
+          item={item}
+          setMessages={setMessages}
+          index={index}
+        />
       ))}
     </Card>
   );
