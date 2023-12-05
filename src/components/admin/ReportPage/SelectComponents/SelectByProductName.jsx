@@ -21,7 +21,7 @@ export function SelectByProductName({ open, setOpen }) {
 
   const fetchProducts = async () => {
     try {
-      const { data } = await api.get('/products');
+      const { data } = await api.get('/products/allProducts');
       setProducts(data?.data);
     } catch (err) {
       dispatch(setAlertActionCreator({ err }));
