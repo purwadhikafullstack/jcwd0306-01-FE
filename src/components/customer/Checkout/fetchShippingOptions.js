@@ -1,4 +1,5 @@
 import api from '../../../constants/api';
+import { constant } from '../../../constants/constant';
 
 const weightCalculator = (cart = []) =>
   cart.reduce((acc, val) => acc + val.quantity * val.Product.weight, 0);
@@ -35,6 +36,7 @@ export const fetchShippingOptions = async (
     const { data } = await api.post(`/user_address/shipping_option`, {
       longitude: address?.longitude,
       latitude: address?.latitude,
+      cityName: address?.City?.name,
       cityId: address?.cityId,
       postalCode: address?.postalCode,
       weight,
@@ -44,7 +46,7 @@ export const fetchShippingOptions = async (
     setOriginWarehouse(data.origin_details);
     setShippingMethod({});
   } catch (error) {
-    // if (typeof error?.message !== 'object') dispatch(constant.setError(error));
+    dispatch(constant.setError(error));
   } finally {
     setIsLoading(false);
     setDisableButton(false);

@@ -41,9 +41,9 @@ export function ChatPage() {
   useEffect(() => {
     warehouseIdSetter(
       setWhId,
-      userSelector?.WarehouseUser
-        ? [userSelector?.WarehouseUser]
-        : userSelector?.WarehouseUsers
+      userSelector?.isAdmin
+        ? userSelector?.WarehouseUsers
+        : [userSelector?.WarehouseUser]
     );
   }, [userSelector]);
 
