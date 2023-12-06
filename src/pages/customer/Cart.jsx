@@ -1,7 +1,7 @@
 import '../../components/customer/Cart/Cart.css';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { CartItemList } from '../../components/customer/Cart/CartItemList';
@@ -18,6 +18,8 @@ import { checkStockToQuantity } from '../../components/customer/Cart/checkStockT
 
 function Cart() {
   const cart = useSelector((state) => state.cart);
+  const userSelector = useSelector((state) => state.authUser);
+  const [disableButton, setDisableButton] = useState(false);
   const dispatch = useDispatch();
   const nav = useNavigate();
   const summaryTransaction = new Map([
@@ -32,7 +34,14 @@ function Cart() {
   cartCalculator(cart, summaryTransaction, {}, {});
   const grandTotal = grandTotalCalculator(summaryTransaction);
 
-  const checkQuantityToStock = () => checkStockToQuantity(dispatch, nav, cart);
+  const checkQuantityToStock = () =>
+    checkStockToQuantity(
+      userSelector?.id,
+      setDisableButton,
+      dispatch,
+      nav,
+      cart
+    );
 
   useEffect(() => {
     checkBoxHandler(`cart-item-checkboxes`, `check-all-products`);
@@ -52,7 +61,7 @@ function Cart() {
               <CartItemList
                 product={product}
                 cart={cart}
-                key={product.productId}
+                key={product?.productId}
               />
             ))
           ) : (
@@ -73,6 +82,7 @@ function Cart() {
             summaryTransaction={summaryTransaction}
             grandTotal={grandTotal}
             createNewOrder={checkQuantityToStock}
+            disableButton={disableButton}
           />
         </Col>
       </Row>
@@ -81,6 +91,7 @@ function Cart() {
           summaryTransaction={summaryTransaction}
           grandTotal={grandTotal}
           createNewOrder={checkQuantityToStock}
+          disableButton={disableButton}
         />
       </div>
     </Container>

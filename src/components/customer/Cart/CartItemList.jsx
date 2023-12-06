@@ -8,14 +8,16 @@ import { updatingCart } from './updatingCart';
 import { CartItemImage } from './CartItemImage';
 import { CartItemTitle } from './CartItemTitle';
 
-export function CartItemList({ cart, product, address }) {
+export function CartItemList({ cart, product }) {
   const [quantity, setQuantity] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
   const [note, setNote] = useState('');
   const { stock } = product;
   const dispatch = useDispatch();
   const userSelector = useSelector((state) => state.authUser);
-  const { price, discount } = product.Product;
+  const { price, discount } = product.Product
+    ? product.Product
+    : { price: 0, discount: 0 };
   const priceAfterDiscount = price * (1 - discount);
 
   const editQuantity = async (number) => {
@@ -76,10 +78,14 @@ export function CartItemList({ cart, product, address }) {
               <CartItemImage product={product} />
               <div className="d-flex flex-column gap-2">
                 <CartItemTitle product={product} stock={stock} />
-                <div>
-                  {quantity} item{quantity > 1 ? 's' : null} (
-                  {product.Product.weight * quantity} gram)
-                </div>
+                {product?.Product ? (
+                  <div>
+                    {quantity} item{quantity > 1 ? 's' : null} (
+                    {product.Product.weight * quantity} gram)
+                  </div>
+                ) : (
+                  <div>This item is currently not available</div>
+                )}
                 <div>
                   {discount ? (
                     <span className="d-flex gap-1">

@@ -29,7 +29,7 @@ export function ButtonShoppingSummary({ disableButton, createNewOrder }) {
       className="normal-button"
       onClick={() => createNewOrder()}
     >
-      <span className="text-white text-decoration-none">Payment</span>
+      <span className="text-white text-decoration-none">Choose Address</span>
     </Button>
   );
 }
