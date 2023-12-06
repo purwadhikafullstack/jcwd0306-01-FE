@@ -28,18 +28,19 @@ export function cartCalculator(
     return;
   }
   itemList.forEach((item) => {
+    const { price, discount } = item.Product
+      ? item.Product
+      : { price: 0, discount: 0 };
     if (item.isChecked) {
       accumulatorMap.set(`totalPrice`, {
         ...accumulatorMap.get(`totalPrice`),
-        amount:
-          accumulatorMap.get(`totalPrice`).amount +
-          item.Product.price * item.quantity,
+        amount: accumulatorMap.get(`totalPrice`).amount + price * item.quantity,
       });
       accumulatorMap.set(`totalDiscount`, {
         ...accumulatorMap.get(`totalDiscount`),
         amount:
           accumulatorMap.get(`totalDiscount`).amount +
-          item.Product.discount * item.Product.price * item.quantity,
+          discount * price * item.quantity,
       });
       accumulatorMap.set(`totalItems`, {
         ...accumulatorMap.get(`totalItems`),
